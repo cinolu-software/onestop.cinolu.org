@@ -7,7 +7,7 @@ import {
   NgZone,
   OnDestroy,
   signal,
-  viewChild,
+  viewChild
 } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
@@ -21,7 +21,7 @@ import { Calendar, LucideAngularModule } from 'lucide-angular';
 @Component({
   selector: 'app-dashboard-topbar',
   imports: [CommonModule, RouterLink, NgOptimizedImage, DesktopNav, MobileNav, LucideAngularModule],
-  templateUrl: './dashboard-topbar.html',
+  templateUrl: './dashboard-topbar.html'
 })
 export class DashboardTopbar implements OnDestroy {
   #elementRef = inject(ElementRef);

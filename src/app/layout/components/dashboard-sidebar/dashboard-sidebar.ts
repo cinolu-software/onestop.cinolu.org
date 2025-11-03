@@ -11,7 +11,7 @@ import { RoleEnum } from '../../../core/auth/role.enum';
 @Component({
   selector: 'app-dashboard-sidebar',
   imports: [CommonModule, ButtonModule, RouterModule, LucideAngularModule],
-  templateUrl: './dashboard-sidebar.html',
+  templateUrl: './dashboard-sidebar.html'
 })
 export class DashboardSidebar {
   #router = inject(Router);
@@ -24,13 +24,13 @@ export class DashboardSidebar {
   dashboardLinks: Record<string, ILink[]> = {
     [RoleEnum.User]: USER_LINKS,
     [RoleEnum.Staff]: ADMIN_LINKS,
-    [RoleEnum.Admin]: ADMIN_LINKS,
+    [RoleEnum.Admin]: ADMIN_LINKS
   };
   activeTab = computed(() => {
     const url = this.currentUrl();
     return (
       this.links().find(
-        (link) => link.path === url || link.children?.some((child) => child.path && url.startsWith(child.path)),
+        (link) => link.path === url || link.children?.some((child) => child.path && url.startsWith(child.path))
       )?.name ?? null
     );
   });

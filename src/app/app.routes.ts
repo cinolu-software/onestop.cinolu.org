@@ -6,11 +6,10 @@ export const routes: Route[] = [
   {
     path: 'dashboard',
     component: Layout,
-    data: { layout: 'dashboard-layout' },
+    data: { layout: 'x-layout' },
     canActivate: [authGuard],
-    loadChildren: () => import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes)
+    loadChildren: () => import('@features/dashboard.routes').then((m) => m.dashboardRoutes)
   },
-
   {
     path: '',
     component: Layout,

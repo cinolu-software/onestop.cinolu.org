@@ -39,7 +39,7 @@ export const EXPLORATION_LINKS: ILink[] = [
   {
     icon: LayoutGrid,
     name: 'Accueil',
-    path: '/home',
+    path: '',
     exactUrl: true
   }
 ];
@@ -196,7 +196,7 @@ export const SOCIAL_LINKS: ILink[] = [
   },
   {
     name: 'Twitter',
-    path: 'https://x.com/Lubumdigital?t=MYcaQ_OEdCO3KZDCQzMoeQ&s=09',
+    path: 'https://dashboard.com/Lubumdigital?t=MYcaQ_OEdCO3KZDCQzMoeQ&s=09',
     external: true
   },
   {

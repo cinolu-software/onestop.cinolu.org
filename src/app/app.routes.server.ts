@@ -5,7 +5,6 @@ export const serverRoutes: ServerRoute[] = [
     path: 'dashboard/programs/edit/:slug',
     renderMode: RenderMode.Client
   },
-
   {
     path: 'dashboard/ventures/update/:slug',
     renderMode: RenderMode.Client
@@ -31,14 +30,9 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
-    path: 'dashboard/blog/articles/edit/:slug',
-    renderMode: RenderMode.Client
-  },
-  {
     path: 'dashboard/ventures/view/:slug',
     renderMode: RenderMode.Client
   },
-
   {
     path: 'dashboard/products/update/:slug',
     renderMode: RenderMode.Client
