@@ -25,20 +25,20 @@ import { IEvent } from '../../../../../../shared/models';
 import { ApiImgPipe } from '../../../../../../shared/pipes';
 import { IndicatorsStore } from '@features/dashboard/pages/programs/store/programs/indicators.store';
 import { UnpaginatedSubprogramsStore } from '@features/dashboard/pages/programs/store/subprograms/unpaginated-subprograms.store';
-import { EventsStore } from '@features/events/store/events.store';
 import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
 import { AddMetricStore } from '../../store/events/add-metric.store';
 import { UpdateEventStore } from '../../store/events/update-event.store';
 import { DeleteGalleryStore } from '../../store/galleries/delete-gallery.store';
 import { GalleryStore } from '../../store/galleries/galeries.store';
 import { EventStore } from '../../store/events/event.store';
+import { EventsPublishStore } from '../../store/events/events-publish-params.store';
 
 @Component({
   selector: 'app-event-edit',
   templateUrl: './edit-event.html',
   providers: [
     IndicatorsStore,
-    EventsStore,
+    EventsPublishStore,
     EventStore,
     GalleryStore,
     DeleteGalleryStore,

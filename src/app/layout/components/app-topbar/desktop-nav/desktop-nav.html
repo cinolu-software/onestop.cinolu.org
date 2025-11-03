@@ -41,32 +41,6 @@
       }
     </div>
     }
-
-    <button class="group flex items-center relative hover:text-primary-500 hover:transition-colors hover:duration-200">
-      Programmes
-      <i-lucide
-        class="size-5 group-hover:mt-0 ml-0.5 transition-transform duration-300 group-hover:rotate-90"
-        [name]="icons.chevronRight" />
-      @if (programsStore.programs()) {
-      <div
-        class="absolute left-0 top-10 w-80 bg-white shadow-xl rounded-lg z-30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 origin-top">
-        <div class="flex flex-col divide-y divide-gray-200 py-2">
-          @for (p of programsStore.programs(); track $index) {
-          <div class="relative group/sub px-4 py-2 text-left">
-            <a
-              routerLinkActive="bg-primary-100 text-primary-600"
-              [routerLink]="['/our-programs/' + p.slug]"
-              [routerLinkActiveOptions]="{ exact: true }"
-              class="block px-4 py-2 text-gray-700 font-medium hover:bg-primary-100 hover:text-primary-600 rounded-lg transition-colors duration-200">
-              {{ p.name }}
-              <span class="block text-base font-normal text-gray-500"> {{ p?.category?.name }} </span>
-            </a>
-          </div>
-          }
-        </div>
-      </div>
-      }
-    </button>
   </div>
   <div>
     @let user = authStore.user(); @if (user) {

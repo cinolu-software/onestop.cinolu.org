@@ -4,82 +4,17 @@ import { Layout } from './layout/layout';
 
 export const routes: Route[] = [
   {
-    path: 'programs',
-    component: Layout,
-    data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/projects/projects.routes').then((m) => m.projectsRoutes)
-  },
-  {
-    path: 'partners',
-    component: Layout,
-    data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/our-parteners/parteners.routes').then((m) => m.OurParteners)
-  },
-  {
-    path: 'our-programs',
-    component: Layout,
-    data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/our-programs/programs.routes').then((m) => m.programsRoutes)
-  },
-  {
-    path: 'events',
-    component: Layout,
-    data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/events/events.routes').then((m) => m.eventsRoutes)
-  },
-  {
-    path: 'about-us',
-    component: Layout,
-    data: { layout: 'full-layout' },
-    loadChildren: () => import('./features/about-us/about-us.routes').then((m) => m.aboutRoutes)
-  },
-  {
-    path: 'entrepreneurs',
-    component: Layout,
-    data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/entrepreneurs/entrepreneurs.routes').then((m) => m.entrepreneursRoutes)
-  },
-  {
-    path: 'entrepreneurs/:id',
-    component: Layout,
-    data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/entrepreneurs/entrepreneurs.routes').then((m) => m.entrepreneursRoutes)
-  },
-  {
-    path: 'gallery',
-    component: Layout,
-    data: { layout: 'full-layout' },
-    loadChildren: () => import('./features/gallery/gallery.routes').then((m) => m.galleryRoutes)
-  },
-  {
-    path: 'contact-us',
-    component: Layout,
-    data: { layout: 'full-layout' },
-    loadChildren: () => import('./features/contact-us/contact-us.routes').then((m) => m.contactUsRoutes)
-  },
-  {
     path: 'dashboard',
     component: Layout,
     data: { layout: 'dashboard-layout' },
     canActivate: [authGuard],
     loadChildren: () => import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes)
   },
-  {
-    path: 'blog-ressources',
-    component: Layout,
-    data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/blog/blogs.routes').then((m) => m.blogsRoutes)
-  },
-  {
-    path: 'one-stop',
-    component: Layout,
-    data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/one-stop/one-stop.routes').then((m) => m.oneStopRoutes)
-  },
+
   {
     path: '',
     component: Layout,
-    data: { layout: 'full-layout' },
+    data: { layout: 'fixed-layout' },
     loadChildren: () => import('./features/landing/landing.routes').then((m) => m.landingRoutes)
   },
   {
@@ -91,7 +26,7 @@ export const routes: Route[] = [
   {
     path: '**',
     component: Layout,
-    data: { layout: 'full-layout' },
+    data: { layout: 'fixed-layout' },
     loadChildren: () => import('./features/landing/landing.routes').then((m) => m.landingRoutes)
   }
 ];

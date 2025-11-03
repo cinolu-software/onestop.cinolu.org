@@ -15,7 +15,6 @@ import { ActivatedRoute } from '@angular/router';
 import { UnpaginatedTagStore } from '../../store/tags/unpaginated-tag.store';
 import { environment } from '../../../../../../../environments/environment';
 import { ArticleStore } from '../../store/articles/article.store';
-import { ArticlesStore } from '../../../../../blog/store/articles/articles.store';
 import { QuillModule } from 'ngx-quill';
 import { GalleryStore } from '../../store/galleries/galeries.store';
 import { DeleteGalleryStore } from '../../store/galleries/delete-gallery.store';
@@ -30,8 +29,7 @@ import { Tabs } from '../../../../../../shared/components/tabs/tabs';
     DeleteGalleryStore,
     UnpaginatedArticlesStore,
     UpdateArticleStore,
-    ArticlesStore,
-    UnpaginatedTagStore,
+    UnpaginatedTagStore
   ],
   imports: [
     SelectModule,
@@ -47,9 +45,9 @@ import { Tabs } from '../../../../../../shared/components/tabs/tabs';
     LucideAngularModule,
     ApiImgPipe,
     QuillModule,
-    Tabs,
+    Tabs
   ],
-  templateUrl: './edit-article.html',
+  templateUrl: './edit-article.html'
 })
 export class EditArticle implements OnInit {
   #fb = inject(FormBuilder);
@@ -66,7 +64,7 @@ export class EditArticle implements OnInit {
   galleryUrl = `${environment.apiUrl}articles/gallery/`;
   tabs = [
     { label: "Modifier l'article", name: 'edit', icon: SquarePen },
-    { label: 'Gérer la galerie', name: 'gallery', icon: Images },
+    { label: 'Gérer la galerie', name: 'gallery', icon: Images }
   ];
   activeTab = signal('edit');
 
@@ -77,7 +75,7 @@ export class EditArticle implements OnInit {
       published_at: ['', Validators.required],
       content: ['', Validators.required],
       summary: ['', Validators.required],
-      tags: [[], Validators.required],
+      tags: [[], Validators.required]
     });
     effect(() => {
       const article = this.articleStore.article();
@@ -85,7 +83,7 @@ export class EditArticle implements OnInit {
       this.form.patchValue({
         ...article,
         published_at: new Date(article.published_at),
-        tags: article.tags?.map((c) => c.id),
+        tags: article.tags?.map((c) => c.id)
       });
     });
   }

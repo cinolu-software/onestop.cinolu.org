@@ -17,7 +17,7 @@ import { SECTORS } from '@features/dashboard/pages/ventures/data/sectors.data';
 import { STAGES } from '@features/dashboard/pages/ventures/data/stage.data';
 import { DeleteGalleryStore } from '@features/dashboard/pages/ventures/store/galleries/delete-gallery.store';
 import { GalleryStore } from '@features/dashboard/pages/ventures/store/galleries/galeries.store';
-import { VentureStore } from '@features/entrepreneurs/store/venture.store';
+import { VentureStore } from '../../store/venture.store';
 
 @Component({
   selector: 'app-edit-venture',

@@ -6,7 +6,6 @@ import {
   LayoutGrid,
   BookOpen,
   Group,
-  Image,
   Layers,
   Folders
 } from 'lucide-angular';
@@ -38,28 +37,10 @@ export const MY_CINOLU_LINKS: ILink[] = [
 
 export const EXPLORATION_LINKS: ILink[] = [
   {
-    icon: Calendar1,
-    name: 'One Stop',
-    path: '/one-stop',
+    icon: LayoutGrid,
+    name: 'Accueil',
+    path: '/home',
     exactUrl: true
-  },
-  {
-    icon: Info,
-    name: 'My Cinolu',
-    path: '/mycinolu',
-    children: [
-      { name: 'Nos entrepreneurs', path: '/entrepreneurs', exactUrl: true },
-      // { name: 'Jobs & Opportunités', path: '/jobs-opportunities' },
-      { name: 'Blog', path: '/blog-ressources', icon: BookOpen },
-      { name: 'Galerie', path: '/gallery', icon: Image },
-      { name: 'À propos', path: '/about-us' },
-      { name: 'Contacts', path: '/contact-us', icon: Image }
-    ]
-  },
-  {
-    icon: Calendar1,
-    name: 'Évènements',
-    path: '/events'
   }
 ];
 
