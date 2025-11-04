@@ -1,101 +1,100 @@
-<div class="hidden lg:flex justify-between gap-8 w-full text-sm font-bold">
-  <div class="flex items-center gap-6">
+<div class="hidden lg:flex justify-between items-center gap-8 w-full text-sm font-bold">
+  <!-- Navigation Links -->
+  <nav class="flex items-center gap-6">
     @for (link of links(); track $index) {
-    <div class="relative group text-sm">
+    <div class="relative group">
       @if (link.children?.length) {
+      <!-- Link with Dropdown -->
       <button
-        class="group flex items-center relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 hover:text-primary-500 hover:transition-colors hover:duration-200">
+        class="flex items-center gap-1 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 hover:text-primary-600 transition-colors duration-200">
         {{ link.name }}
-        <i-lucide
-          class="size-5 transition-transform duration-300 group-hover:rotate-90 ml-0.5"
-          [name]="icons.chevronRight" />
-        @if (link.children?.length) {
-        <div
-          class="absolute left-0 top-10 w-80 bg-white shadow-xl rounded-lg z-30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 origin-top">
-          <div class="flex text-left flex-col divide-y divide-gray-200 py-2">
-            @for (sublink of link.children; track $index) {
-            <div class="relative group/sub px-4 py-2">
-              <a
-                routerLinkActive="bg-primary-100 text-primary-600"
-                [routerLink]="sublink.path"
-                [routerLinkActiveOptions]="{
-                          exact: sublink.exactUrl || false,
-                        }"
-                class="block px-4 py-2 text-gray-700 font-medium hover:bg-primary-100 hover:text-primary-600 rounded-lg transition-colors duration-200">
-                {{ sublink.name }}
-              </a>
-            </div>
-            }
-          </div>
-        </div>
-        }
+        <i-lucide [name]="icons.chevronDown" class="size-5 transition-transform duration-300 group-hover:rotate-180" />
       </button>
+
+      <!-- Dropdown Menu -->
+      <div
+        class="absolute left-0 top-full mt-2 w-80 bg-white shadow-xl rounded-lg z-30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+        <div class="flex flex-col divide-y divide-gray-200 py-2">
+          @for (sublink of link.children; track $index) {
+          <div class="px-4 py-2">
+            <a
+              [routerLink]="sublink.path"
+              routerLinkActive="bg-primary-100 text-primary-600"
+              [routerLinkActiveOptions]="{ exact: sublink.exactUrl || false }"
+              class="block px-4 py-2 text-gray-700 font-medium rounded-lg hover:bg-primary-100 hover:text-primary-600 transition-colors duration-200">
+              {{ sublink.name }}
+            </a>
+          </div>
+          }
+        </div>
+      </div>
       } @else {
+      <!-- Simple Link -->
       <a
         [routerLink]="link.path"
-        routerLinkActive="after:bg-primary-500"
+        routerLinkActive="after:bg-primary-600"
         [routerLinkActiveOptions]="{ exact: link.exactUrl || false }"
-        class="group flex items-center relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 hover:text-primary-500 hover:transition-colors hover:duration-200">
+        class="flex items-center relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 hover:text-primary-600 transition-colors duration-200">
         {{ link.name }}
       </a>
       }
     </div>
     }
-  </div>
+  </nav>
+  <!-- User Actions -->
   <div>
     @let user = authStore.user(); @if (user) {
-    <div class="flex gap-3">
-      <button class="group relative flex items-center gap-1">
-        <div class="flex items-center gap-1">
-          <div class="relative h-8 w-8">
-            <img
-              [ngSrc]="user | apiIMG: 'user'"
-              alt="User Image"
-              class="aspect-video object-cover ring-2 ring-primary-600 bg-gray-200 rounded-full"
-              fill />
-          </div>
-          <i-lucide
-            [name]="icons.chevronRight"
-            class="transition-transform size-5 group-hover:mt-0 ml-0.5 duration-300 group-hover:rotate-90" />
+    <!-- Logged In User -->
+    <div class="group relative">
+      <button class="flex items-center gap-2 hover:opacity-80 transition-opacity duration-200">
+        <div class="relative h-8 w-8">
+          <img
+            [ngSrc]="user | apiIMG: 'user'"
+            alt="Photo de {{ user?.name }}"
+            class="aspect-square object-cover ring-2 ring-primary-600 bg-gray-200 rounded-full"
+            fill />
         </div>
-        <div
-          class="invisible absolute right-0 top-full mt-2 w-56 rounded-lg bg-white shadow-xl opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100">
-          <div class="text-left flex flex-col divide-y divide-gray-200 py-2">
-            <div class="flex flex-col px-4 py-2">
-              <a
-                [routerLink]="'/dashboard'"
-                class="block rounded-lg px-4 py-2 font-medium text-gray-700 transition-colors duration-200 hover:bg-primary-100 hover:text-primary-600">
-                Mon compte
-              </a>
-            </div>
-            <div class="flex flex-col px-4 py-2">
-              <button
-                class="flex rounded-lg px-4 py-2 font-medium text-gray-700 transition-colors duration-200 hover:bg-primary-100 hover:text-primary-600"
-                (click)="onSignOut()">
-                Se déconnecter
-              </button>
-            </div>
-          </div>
-        </div>
+        <i-lucide [name]="icons.chevronDown" class="size-5 transition-transform duration-300 group-hover:rotate-180" />
       </button>
+
+      <!-- User Dropdown -->
+      <div
+        class="invisible absolute right-0 top-full mt-2 w-56 rounded-lg bg-white shadow-xl opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100">
+        <div class="flex flex-col divide-y divide-gray-200 py-2">
+          <div class="px-4 py-2">
+            <a
+              routerLink="/dashboard"
+              class="block rounded-lg px-4 py-2 font-medium text-gray-700 hover:bg-primary-100 hover:text-primary-600 transition-colors duration-200">
+              Mon compte
+            </a>
+          </div>
+          <div class="px-4 py-2">
+            <button
+              (click)="onSignOut()"
+              class="w-full text-left rounded-lg px-4 py-2 font-medium text-gray-700 hover:bg-primary-100 hover:text-primary-600 transition-colors duration-200">
+              Se déconnecter
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
     } @else {
+    <!-- Guest User -->
     <div class="flex gap-4 items-center">
       <a
         routerLink="/sign-in"
-        class="relative inline-flex items-center justify-center px-6 py-2 rounded-full border-1 border-primary-500 font-semibold text-primary-500 overflow-hidden group transition duration-300 ease-out hover:text-white">
+        class="relative inline-flex items-center justify-center px-6 py-2 rounded-full border border-primary-500 font-semibold text-primary-600 overflow-hidden group transition duration-300">
         <span
-          class="absolute inset-0 bg-primary-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out">
-        </span>
-        <span class="relative">Connexion</span>
+          class="absolute inset-0 bg-primary-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+        <span class="relative group-hover:text-white">Connexion</span>
       </a>
 
       <a
         routerLink="/sign-up"
-        class="relative inline-flex items-center justify-center px-6 py-2 rounded-full border border-primary-500 font-semibold text-white overflow-hidden group transition duration-300 ease-out">
+        class="relative inline-flex items-center justify-center px-6 py-2 rounded-full bg-primary-500 font-semibold text-white overflow-hidden group transition duration-300">
         <span
-          class="absolute inset-0 bg-primary-500 scale-x-100 group-hover:scale-x-0 transition-transform origin-right duration-300 ease-out"></span>
-        <span class="relative group-hover:text-primary-500">Inscription</span>
+          class="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+        <span class="relative group-hover:text-primary-600">Inscription</span>
       </a>
     </div>
     }

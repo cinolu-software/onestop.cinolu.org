@@ -1,7 +1,7 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { LucideAngularModule, ChevronDown, Menu, X, ArrowLeft, ChevronRight, Minus } from 'lucide-angular';
+import { LucideAngularModule, Menu, X, ChevronRight, Plus } from 'lucide-angular';
 import { ILink } from '../../../data/links.data';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { AuthStore } from '@core/auth/auth.store';
@@ -12,19 +12,16 @@ import { AuthStore } from '@core/auth/auth.store';
   templateUrl: './mobile-nav.html'
 })
 export class MobileNav {
-  isOpen = signal<boolean>(false);
-  links = input.required<ILink[]>();
   authStore = inject(AuthStore);
+  links = input.required<ILink[]>();
+  isOpen = signal<boolean>(false);
+
   icons = {
     menu: Menu,
     close: X,
-    arrowDown: ChevronDown,
-    moveLeft: ArrowLeft,
     chevronRight: ChevronRight,
-    plus: Minus
-  };
-
-  programsOpen = signal<boolean>(false);
+    plus: Plus
+  } as const;
 
   toggleNav(): void {
     this.isOpen.update((isOpen) => !isOpen);
@@ -36,14 +33,12 @@ export class MobileNav {
 
   onSignOut(): void {
     this.authStore.signOut();
+    this.closeNav();
   }
 
   toggleLink(index: number): void {
-    this.links().forEach((l, i) => {
-      l.open = i === index ? !l.open : false;
+    this.links().forEach((link, i) => {
+      link.open = i === index ? !link.open : false;
     });
-  }
-  togglePrograms(): void {
-    this.programsOpen.update((v) => !v);
   }
 }
