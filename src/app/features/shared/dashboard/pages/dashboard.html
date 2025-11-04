@@ -1,6 +1,8 @@
 <section class="min-h-[110vh] w-full pb-12">
   @if (isAdmin()) {
-  <app-admin-stats class="-mt-10" />
+  <div class="-mt-10">
+    <app-admin-stats />
+  </div>
   } @else {
   <app-user-stats />
   }
