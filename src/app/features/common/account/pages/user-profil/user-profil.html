@@ -1,6 +1,6 @@
 <aside class="min-h-full">
   @if (store.user(); as user) {
-  <div class="px-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
+  <div class="px-4 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
     <div
       class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 text-center flex flex-col items-center h-fit border border-gray-100">
       <div class="relative flex items-center justify-center flex-col group">
@@ -31,7 +31,6 @@
           <lucide-icon [name]="icons.mapPin" class="w-4 h-4 text-primary-600"></lucide-icon>
           <p>{{ user.city || 'Ville non renseignée' }}@if (user.country) {<span>, {{ user.country }}</span>}</p>
         </div>
-
         <div class="space-y-2 mt-4 bg-gray-50 rounded-lg p-4">
           <div class="flex items-center gap-2 text-sm text-gray-700">
             <lucide-icon [name]="icons.mail" class="w-4 h-4 text-primary-600"></lucide-icon>

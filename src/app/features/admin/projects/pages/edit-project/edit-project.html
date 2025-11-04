@@ -115,7 +115,6 @@
     [metricsMap]="metricsMap"
     [existingMetrics]="project?.metrics ?? []"
     [isLoading]="addMetricsStore.isLoading()"
-    (saveKPIs)="onSaveMetrics()"
-    (saveReports)="onSaveMetrics()" />
+    (saveAll)="onSaveMetrics()" />
   }
 </section>

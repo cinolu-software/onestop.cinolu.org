@@ -9,7 +9,7 @@ import { SelectModule } from 'primeng/select';
 import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { UnpaginatedSubprogramsStore } from '@features/programs/store/subprograms/unpaginated-subprograms.store';
+import { UnpaginatedSubprogramsStore } from '@features/admin/programs/store/subprograms/unpaginated-subprograms.store';
 import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({

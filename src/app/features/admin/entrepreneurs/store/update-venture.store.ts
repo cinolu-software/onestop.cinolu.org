@@ -4,7 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, of, pipe, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { VentureDto } from '@features/ventures/dto/venture.dto';
+import { VentureDto } from '@features/user/ventures/dto/venture.dto';
 import { IVenture } from '@shared/models';
 import { ToastrService } from '@core/services/toast';
 

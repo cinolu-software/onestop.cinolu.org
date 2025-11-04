@@ -37,136 +37,101 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-    <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-      <div class="bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-3 border-b border-blue-200">
-        <h3 class="text-lg font-semibold text-blue-900 flex items-center gap-2">
-          <span>Indicateurs de Performance (KPIs)</span>
-        </h3>
-        <p class="text-sm text-blue-700 mt-1">Valeurs cibles définies - Non modifiables après enregistrement</p>
+    @for (group of groupedWithSummary(); track group.category) {
+    <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm bg-white">
+      <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-3 border-b border-gray-200">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="font-semibold text-gray-800">{{ group.category }}</h4>
+          <span class="text-xs text-gray-500">{{ group.indicators.length }} indicateur(s)</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              class="h-full transition-all duration-500 ease-out"
+              [class.bg-red-500]="group.summary.percentage < 50"
+              [class.bg-yellow-500]="group.summary.percentage >= 50 && group.summary.percentage < 80"
+              [class.bg-green-500]="group.summary.percentage >= 80"
+              [style.width.%]="group.summary.percentage > 100 ? 100 : group.summary.percentage"></div>
+          </div>
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center font-bold text-sm transition-all duration-300"
+              [class.text-red-500]="group.summary.percentage < 50"
+              [class.text-yellow-500]="group.summary.percentage >= 50 && group.summary.percentage < 80"
+              [class.text-green-500]="group.summary.percentage >= 80">
+              {{ group.summary.percentage }}%
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="p-4 bg-white">
-        <table class="min-w-full">
-          <thead class="bg-gray-50 border-b border-gray-200">
-            <tr class="text-left">
-              <th class="px-4 py-3 font-semibold text-gray-700">Indicateur</th>
-              <th class="px-4 py-3 font-semibold text-gray-700 w-1/4">Attendue</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100">
-            @for (indicator of indicators(); track indicator.id) {
-            <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-4 py-3">
-                <div class="flex items-center gap-2">
-                  <span class="font-medium text-gray-800">{{ indicator.name }}</span>
+      <div class="p-4">
+        <div class="flex flex-col gap-3">
+          @for (indicator of group.indicators; track indicator.id) {
+          <div class="flex flex-col gap-2 border-b border-gray-100 pb-3 last:border-0">
+            <div class="flex items-center justify-between gap-4">
+              <div class="flex-1">
+                <div class="font-medium text-gray-800 text-sm">{{ indicator.name }}</div>
+                @if (hasIndicatorTarget(indicator.id)) {
+                <div class="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                  <span>Cible globale: {{ indicator.target }}</span>
                 </div>
-              </td>
-              <td class="px-4 py-3">
-                <div class="flex items-center gap-2">
+                }
+              </div>
+              <div class="w-full md:w-64 flex items-center gap-2">
+                <div class="relative flex-1">
                   <input
                     pInputText
                     type="number"
                     [(ngModel)]="metricsMap()[indicator.id].target"
-                    (ngModelChange)="onMetricChange()"
+                    (ngModelChange)="onTargetChange(indicator.id)"
                     [disabled]="hasExistingTarget(indicator.id)"
-                    placeholder="0" />
+                    [max]="getIndicatorTargetLimit(indicator.id)"
+                    class="text-sm w-full"
+                    [class.border-orange-400]="
+                      hasIndicatorTarget(indicator.id) &&
+                      metricsMap()[indicator.id].target &&
+                      metricsMap()[indicator.id].target! > indicator.target!
+                    "
+                    placeholder="Attendu" />
                   @if (hasExistingTarget(indicator.id)) {
-                  <i class="pi pi-lock text-gray-400 text-sm" title="Valeur verrouillée"></i>
+                  <i class="pi pi-lock absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                   }
                 </div>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-        <div class="flex justify-end mt-4 pt-4 border-t border-gray-200">
-          <p-button
-            pButton
-            size="small"
-            severity="info"
-            [disabled]="isLoading() || !hasUnsavedKPIs()"
-            [loading]="isLoading()"
-            (click)="onSaveKPIs()">
-            Enregistrer les KPIs
-          </p-button>
-        </div>
-      </div>
-    </div>
-    <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-      <div class="bg-gradient-to-r from-green-50 to-green-100 px-4 py-3 border-b border-green-200">
-        <h3 class="text-lg font-semibold text-green-900 flex items-center gap-2">
-          <span>Rapports de Performance</span>
-        </h3>
-        <p class="text-sm text-green-700 mt-1">Valeurs réellement obtenues - Modifiable à tout moment</p>
-      </div>
-      <div class="p-4 bg-white">
-        <table class="min-w-full">
-          <thead class="bg-gray-50 border-b border-gray-200">
-            <tr class="text-left">
-              <th class="px-4 py-3 font-semibold text-gray-700">Indicateur</th>
-              <th class="px-4 py-3 font-semibold text-gray-700 w-1/4">Obtenue</th>
-              <th class="px-4 py-3 font-semibold text-gray-700 w-1/6 text-center">Performance</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100">
-            @for (indicator of indicators(); track indicator.id) {
-            <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-4 py-3">
-                <div class="flex items-center gap-2">
-                  <span class="font-medium text-gray-800">{{ indicator.name }}</span>
-                </div>
-              </td>
-              <td class="px-4 py-3">
                 <input
                   pInputText
                   type="number"
                   [(ngModel)]="metricsMap()[indicator.id].achieved"
                   (ngModelChange)="onMetricChange()"
-                  class="w-full"
-                  placeholder="0" />
-              </td>
-              <td class="px-4 py-3">
-                <div class="flex justify-center">
-                  @if (metricsMap()[indicator.id].target && metricsMap()[indicator.id].achieved !== null) { @let
-                  percentage = calculatePercentage(indicator.id);
-                  <div class="flex items-center gap-2">
-                    <div class="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        class="h-full transition-all duration-300"
-                        [class.bg-red-500]="percentage < 50"
-                        [class.bg-yellow-500]="percentage >= 50 && percentage < 80"
-                        [class.bg-green-500]="percentage >= 80"
-                        [style.width.%]="percentage > 100 ? 100 : percentage"></div>
-                    </div>
-                    <span
-                      class="text-sm font-semibold min-w-[3rem] text-right"
-                      [class.text-red-600]="percentage < 50"
-                      [class.text-yellow-600]="percentage >= 50 && percentage < 80"
-                      [class.text-green-600]="percentage >= 80">
-                      {{ percentage }}%
-                    </span>
-                  </div>
-                  } @else {
-                  <span class="text-gray-400 text-sm">-</span>
-                  }
-                </div>
-              </td>
-            </tr>
+                  class="text-sm flex-1"
+                  placeholder="Obtenu" />
+              </div>
+            </div>
+            @if (hasIndicatorTarget(indicator.id) && metricsMap()[indicator.id].target &&
+            metricsMap()[indicator.id].target! > indicator.target!) {
+            <div class="text-xs text-orange-600 flex items-center gap-1 ml-auto">
+              <i class="pi pi-exclamation-triangle"></i>
+              <span>La cible du projet ne peut pas dépasser la cible globale ({{ indicator.target }})</span>
+            </div>
             }
-          </tbody>
-        </table>
-        <div class="flex justify-end mt-4 pt-4 border-t border-gray-200">
-          <p-button
-            pButton
-            size="small"
-            severity="success"
-            [disabled]="isLoading()"
-            [loading]="isLoading()"
-            (click)="onSaveReports()">
-            Enregistrer les Rapports
-          </p-button>
+          </div>
+          }
         </div>
       </div>
     </div>
+    }
+  </div>
+
+  <div class="flex justify-end mt-4">
+    <p-button
+      pButton
+      size="small"
+      severity="info"
+      [disabled]="isLoading()"
+      [loading]="isLoading()"
+      (click)="onSaveAll()">
+      Enregistrer les indicateurs
+    </p-button>
   </div>
 </div>
 } @else {

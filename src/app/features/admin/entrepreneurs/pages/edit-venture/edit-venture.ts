@@ -13,10 +13,10 @@ import { UpdateVenturetore } from '../../store/update-venture.store';
 import { FileUpload, Tabs } from '@shared/components';
 import { ApiImgPipe } from '@shared/pipes';
 import { environment } from '@environments/environment';
-import { SECTORS } from '@features/ventures/data/sectors.data';
-import { STAGES } from '@features/ventures/data/stage.data';
-import { DeleteGalleryStore } from '@features/ventures/store/galleries/delete-gallery.store';
-import { GalleryStore } from '@features/ventures/store/galleries/galeries.store';
+import { SECTORS } from '@features/user/ventures/data/sectors.data';
+import { STAGES } from '@features/user/ventures/data/stage.data';
+import { DeleteGalleryStore } from '@features/user/ventures/store/galleries/delete-gallery.store';
+import { GalleryStore } from '@features/user/ventures/store/galleries/galeries.store';
 import { VentureStore } from '../../store/venture.store';
 
 @Component({

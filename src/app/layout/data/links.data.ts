@@ -154,8 +154,7 @@ export const COMMON_LINKS: ILink[] = [
   {
     name: 'Mes informations',
     path: '/dashboard/account',
-    icon: Info,
-    exactUrl: true
+    icon: Info
   }
 ];
 

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
-import { LucideAngularModule, ChartColumn } from 'lucide-angular';
-import { MetricsMap } from '../../helpers';
+import { LucideAngularModule, ChartColumn, ChevronDown } from 'lucide-angular';
+import { MetricsMap, groupIndicatorsByCategory, calculateGroupMetrics } from '../../helpers';
 import { IIndicator, IMetric } from '../../models';
 import { CircularProgressComponent } from '../circular-progress/circular-progress';
 
@@ -21,18 +21,31 @@ export class MetricsTableComponent {
   isLoading = input.required<boolean>();
   saveKPIs = output<void>();
   saveReports = output<void>();
+  saveAll = output<void>();
   icons = {
     barChart: ChartColumn
   };
 
-  // Signal to track changes in metrics values
-  private metricsVersion = signal(0);
-
+  iconsChevron = {
+    chevron: ChevronDown
+  };
+  #metricsVersion = signal(0);
   totalIndicators = computed(() => this.indicators().length);
+  groupedIndicators = computed(() => {
+    const inds = this.indicators() ?? [];
+    return groupIndicatorsByCategory(inds);
+  });
+  groupedWithSummary = computed(() => {
+    this.#metricsVersion();
+    const map = this.metricsMap();
+    return this.groupedIndicators().map((g) => ({
+      ...g,
+      summary: calculateGroupMetrics(map, g.indicators)
+    }));
+  });
 
   totalTarget = computed(() => {
-    // Track metrics version to ensure reactivity
-    this.metricsVersion();
+    this.#metricsVersion();
     return this.indicators().reduce((sum, indicator) => {
       const target = this.metricsMap()[indicator.id]?.target ?? 0;
       return sum + target;
@@ -40,8 +53,7 @@ export class MetricsTableComponent {
   });
 
   totalAchieved = computed(() => {
-    // Track metrics version to ensure reactivity
-    this.metricsVersion();
+    this.#metricsVersion();
     return this.indicators().reduce((sum, indicator) => {
       const achieved = this.metricsMap()[indicator.id]?.achieved ?? 0;
       return sum + achieved;
@@ -67,6 +79,27 @@ export class MetricsTableComponent {
     return this.#existingTargets().has(indicatorId);
   }
 
+  // Check if an indicator has its own predefined target
+  hasIndicatorTarget(indicatorId: string): boolean {
+    const indicator = this.indicators().find((i) => i.id === indicatorId);
+    return !!indicator?.target && indicator.target > 0;
+  }
+
+  // Get the indicator's predefined target limit
+  getIndicatorTargetLimit(indicatorId: string): number | null {
+    const indicator = this.indicators().find((i) => i.id === indicatorId);
+    return indicator?.target ?? null;
+  }
+
+  // Calculate impact percentage (how much of the indicator's global target this project contributes)
+  calculateImpactPercentage(indicatorId: string): number {
+    const indicatorLimit = this.getIndicatorTargetLimit(indicatorId);
+    if (!indicatorLimit || indicatorLimit === 0) return 0;
+
+    const projectAchieved = this.metricsMap()[indicatorId]?.achieved ?? 0;
+    return Math.round((projectAchieved / indicatorLimit) * 100);
+  }
+
   hasUnsavedKPIs(): boolean {
     return this.indicators().some((indicator) => {
       const hasTarget = !!this.metricsMap()[indicator.id]?.target;
@@ -85,8 +118,20 @@ export class MetricsTableComponent {
   }
 
   onMetricChange(): void {
-    // Trigger recalculation of computed signals
-    this.metricsVersion.update((v) => v + 1);
+    this.#metricsVersion.update((v) => v + 1);
+  }
+
+  // Validate and cap target value against indicator limit
+  onTargetChange(indicatorId: string): void {
+    const limit = this.getIndicatorTargetLimit(indicatorId);
+    const currentTarget = this.metricsMap()[indicatorId]?.target;
+
+    if (limit && currentTarget && currentTarget > limit) {
+      // Cap the target to the indicator's limit
+      this.metricsMap()[indicatorId].target = limit;
+    }
+
+    this.onMetricChange();
   }
 
   onSaveKPIs(): void {
@@ -95,5 +140,9 @@ export class MetricsTableComponent {
 
   onSaveReports(): void {
     this.saveReports.emit();
+  }
+
+  onSaveAll(): void {
+    this.saveAll.emit();
   }
 }

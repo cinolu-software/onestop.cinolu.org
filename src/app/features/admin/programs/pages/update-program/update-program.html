@@ -50,8 +50,8 @@
   </div>
   } @if (activeTab() === 'indicators') {
   <div class="bg-white max-w-3xl rounded-lg mt-6 p-4">
-    <div class="flex items-center justify-between mb-4">
-      <div class="flex items-center gap-3">
+    <div class="flex items-center gap-5 mb-4">
+      <div class="flex flex-col gap-2 w-2/6">
         <label for="indicator-year" class="font-medium">Année</label>
         <p-datepicker
           pSize="small"
@@ -61,31 +61,29 @@
           dateFormat="yy"
           [(ngModel)]="year" />
       </div>
+      <div class="flex flex-col gap-2 w-2/6">
+        <label for="category" class="font-medium">Catégorie</label>
+        <p-select
+          pSize="small"
+          inputId="category"
+          name="category"
+          [options]="indicatorsCategories()"
+          [(ngModel)]="selectedCategory" />
+      </div>
     </div>
-    @for (ind of indicatorsTab(); track $index) {
+    @for (ind of indicatorsTab()[selectedCategory()] ; track $index) {
     <div class="flex items-end gap-4 mb-3">
       <div class="flex flex-col gap-2 w-2/3">
-        <input
-          pInputText
-          placeholder="Indicateur"
-          name="indicator-name-{{$index}}"
-          [(ngModel)]="ind.name"
-          autocomplete="off" />
+        <input pInputText placeholder="Nom de l'indicateur" [(ngModel)]="ind.name" autocomplete="off" />
       </div>
       <div class="flex flex-col gap-2">
-        <input
-          pInputText
-          placeholder="KPI"
-          type="number"
-          name="indicator-target-{{$index}}"
-          [(ngModel)]="ind.target"
-          autocomplete="off" />
+        <input pInputText placeholder="Kpi" type="number" [(ngModel)]="ind.target" autocomplete="off" />
       </div>
       <p-button
         outlined
         type="button"
         severity="danger"
-        [disabled]="(indicatorsTab().length <= 1) "
+        [disabled]="((indicatorsTab()[selectedCategory()].length || 0) <= 1)"
         (click)="removeIndicator($index)">
         Supprimer
       </p-button>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AdvantageCard } from '../advantage-card/advantage-card';
-import { ADVANTAGES } from '@features/landing/data/advantages.data';
+import { ADVANTAGES } from '@features/guest/landing/data/advantages.data';
 
 @Component({
   selector: 'app-advantages',

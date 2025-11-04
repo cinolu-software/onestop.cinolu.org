@@ -14,18 +14,18 @@ export const routes: Route[] = [
     path: '',
     component: Layout,
     data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/landing/landing.routes').then((m) => m.landingRoutes)
+    loadChildren: () => import('@features/guest/landing/landing.routes').then((m) => m.landingRoutes)
   },
   {
     path: '',
     component: Layout,
     data: { layout: 'empty-layout' },
-    loadChildren: () => import('./features/auth/auth.routes').then((m) => m.authRoutes)
+    loadChildren: () => import('@features/guest/auth/auth.routes').then((m) => m.authRoutes)
   },
   {
     path: '**',
     component: Layout,
     data: { layout: 'fixed-layout' },
-    loadChildren: () => import('./features/landing/landing.routes').then((m) => m.landingRoutes)
+    loadChildren: () => import('@features/guest/landing/landing.routes').then((m) => m.landingRoutes)
   }
 ];

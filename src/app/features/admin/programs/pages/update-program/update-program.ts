@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { Textarea } from 'primeng/textarea';
 import { UpdateProgramStore } from '../../store/programs/update-program.store';
-import { AddIndicatorStore } from '../../store/programs/add-indicators.store';
+import { AddIndicatorStore } from '../../store/indicators/add-indicators.store';
 import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
 import { ChartColumn, SquarePen } from 'lucide-angular';
 import { environment } from '@environments/environment';
@@ -15,8 +15,10 @@ import { DatePicker } from 'primeng/datepicker';
 import { ProgramStore } from '../../store/programs/program.store';
 import { Tabs, FileUpload } from '@shared/components';
 import { IProgram } from '@shared/models';
+import { INDICATORS_CATEGORIES } from '../../data/indicators.data';
 
 interface IndicatorFormData {
+  indicatorId?: string;
   name: string;
   target: number | null;
 }
@@ -48,7 +50,9 @@ export class UpdateProgram {
   url = environment.apiUrl + 'programs/logo/';
   activeTab = signal('edit');
   addIndicatorStore = inject(AddIndicatorStore);
-  indicatorsTab = signal<IndicatorFormData[]>([]);
+  indicatorsTab = signal<Record<string, IndicatorFormData[]>>({});
+  indicatorsCategories = signal(INDICATORS_CATEGORIES);
+  selectedCategory = signal(this.indicatorsCategories()[0]);
   year = signal<Date>(new Date());
   selectedYear = computed(() => this.year().getFullYear());
   tabs = [
@@ -72,21 +76,34 @@ export class UpdateProgram {
       this.#initIndicatorsTab(program);
       this.#patchForm(program);
     });
+
+    effect(() => {
+      const cat = this.selectedCategory();
+      const map = this.indicatorsTab();
+      if (!map[cat]) {
+        this.indicatorsTab.update((m) => ({ ...m, [cat]: [{ name: '', target: null }] }));
+      }
+    });
   }
 
   #initIndicatorsTab(program: IProgram): void {
     const yearIndicators = program.indicators_grouped?.[this.selectedYear()];
+    const grouped: Record<string, IndicatorFormData[]> = {};
     if (yearIndicators && yearIndicators.length > 0) {
-      this.indicatorsTab.set(
-        yearIndicators.map((indicator) => ({
+      yearIndicators.forEach((indicator) => {
+        const cat = indicator.category || this.selectedCategory();
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push({
           indicatorId: indicator.id,
           name: indicator.name,
           target: indicator.target
-        }))
-      );
-    } else {
-      this.indicatorsTab.set([{ name: '', target: null }]);
+        });
+      });
     }
+    this.indicatorsCategories().forEach((cat) => {
+      if (!grouped[cat]) grouped[cat] = [{ name: '', target: null }];
+    });
+    this.indicatorsTab.set(grouped);
   }
 
   #patchForm(program: IProgram): void {
@@ -99,22 +116,37 @@ export class UpdateProgram {
   }
 
   addIndicator(): void {
-    this.indicatorsTab.update((indicators) => [...indicators, { indicatorId: '', name: '', target: null }]);
+    const key = this.selectedCategory();
+    this.indicatorsTab.update((map) => {
+      const list = map[key] ? [...map[key]] : [{ name: '', target: null }];
+      list.push({ indicatorId: '', name: '', target: null });
+      return { ...map, [key]: list };
+    });
   }
 
   removeIndicator(index: number): void {
-    this.indicatorsTab.update((indicators) => indicators.filter((_, i) => i !== index));
+    const key = this.selectedCategory();
+    this.indicatorsTab.update((map) => {
+      const list = map[key] ? map[key].filter((_, i) => i !== index) : [];
+      return { ...map, [key]: list.length ? list : [{ name: '', target: null }] };
+    });
   }
 
   onSaveIndicators(): void {
     const program = this.programStore.program();
     if (!program) return;
-    const validIndicators = this.indicatorsTab().filter((ind) => ind.name.trim() !== '' && ind.target !== null);
+    const key = this.selectedCategory();
+    const current = this.indicatorsTab()[key] ?? [];
+    const validIndicators = current.filter((ind) => ind.name.trim() !== '' && ind.target !== null);
     if (!validIndicators.length) return;
     const metrics: Record<string, number>[] = validIndicators.map((indicator) => ({
       [indicator.name]: indicator.target!
     }));
-    const indicators = { year: this.selectedYear(), metrics };
+    const indicators = {
+      year: this.selectedYear(),
+      category: this.selectedCategory(),
+      metrics
+    };
     this.addIndicatorStore.addIndicator({ id: program.id, indicators });
   }
 

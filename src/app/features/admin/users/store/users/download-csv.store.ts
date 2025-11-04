@@ -4,7 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, of, pipe, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { buildQueryParams } from '@shared/helpers';
-import { FilterEventsDto } from '@features/events/dto/categories/filter-events.dto';
+import { FilterEventsDto } from '@features/admin/events/dto/categories/filter-events.dto';
 
 interface IDownloadUsersStore {
   isLoading: boolean;

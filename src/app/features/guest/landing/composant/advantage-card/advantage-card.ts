@@ -1,6 +1,6 @@
 import { NgClass } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
-import { Advantage } from '@features/landing/data/advantages.data';
+import { Advantage } from '@features/guest/landing/data/advantages.data';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({

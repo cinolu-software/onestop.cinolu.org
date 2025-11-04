@@ -23,8 +23,8 @@ import {
 } from '@shared/helpers';
 import { IEvent } from '@shared/models';
 import { ApiImgPipe } from '@shared/pipes';
-import { IndicatorsStore } from '@features/programs/store/programs/indicators.store';
-import { UnpaginatedSubprogramsStore } from '@features/programs/store/subprograms/unpaginated-subprograms.store';
+import { IndicatorsStore } from '@features/admin/programs/store/indicators/indicators.store';
+import { UnpaginatedSubprogramsStore } from '@features/admin/programs/store/subprograms/unpaginated-subprograms.store';
 import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
 import { AddMetricStore } from '../../store/events/add-metric.store';
 import { UpdateEventStore } from '../../store/events/update-event.store';

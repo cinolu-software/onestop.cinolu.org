@@ -11,6 +11,7 @@ export interface ITag extends IBase {
 
 export interface IIndicator extends IBase {
   name: string;
+  category: string;
   target: number | null;
   year: number | null;
 }

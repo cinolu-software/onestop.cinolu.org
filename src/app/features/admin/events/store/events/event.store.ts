@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, of, pipe, switchMap, tap } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { IndicatorsStore } from '@features/programs/store/programs/indicators.store';
+import { IndicatorsStore } from '@features/admin/programs/store/indicators/indicators.store';
 import { IEvent } from '@shared/models';
 
 interface IEventStore {

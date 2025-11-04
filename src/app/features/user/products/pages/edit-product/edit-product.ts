@@ -6,7 +6,7 @@ import { Textarea } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { StepperModule } from 'primeng/stepper';
-import { unpaginatedVenturesStore } from '../../../ventures/store/ventures/venture-unpaginated.store';
+import { unpaginatedVenturesStore } from '@features/user/ventures/store/ventures/venture-unpaginated.store';
 import { ActivatedRoute } from '@angular/router';
 import { ProductStore } from '../../store/products/product.store';
 import { UpdateProductStore } from '../../store/products/update-product.store';

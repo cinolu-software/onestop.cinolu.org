@@ -4,7 +4,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '@environments/environment';
 import { AuthCard } from '../../components/auth-card/auth-card';
 import { SignInStore } from '../../store/sign-in.store';
 import { Password } from 'primeng/password';

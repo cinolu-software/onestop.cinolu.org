@@ -7,7 +7,7 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { StepperModule } from 'primeng/stepper';
 import { AddProductStore } from '../../store/products/add-product.store';
-import { unpaginatedVenturesStore } from '../../../ventures/store/ventures/venture-unpaginated.store';
+import { unpaginatedVenturesStore } from '@features/user/ventures/store/ventures/venture-unpaginated.store';
 
 @Component({
   selector: 'app-product-add',
