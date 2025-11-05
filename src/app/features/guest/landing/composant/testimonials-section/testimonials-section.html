@@ -1,0 +1,45 @@
+<section class="py-12 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-32 max-w-screen-2xl mx-auto bg-white">
+  <div class="mb-12 lg:mb-16">
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black font-satoshi mb-4 tracking-tight leading-tight text-center">
+      Témoignages & <span class="text-primary-600">Impact</span>
+    </h2>
+    <p class="text-base sm:text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto text-center">
+      Découvrez ce que disent nos entrepreneurs et l'impact de OneStop
+    </p>
+  </div>
+
+  <div class="mb-16 max-w-4xl mx-auto">
+    <div class="relative min-h-[200px]">
+      @for (testimonial of testimonials; track testimonial.id; let i = $index) {
+      <div
+        class="transition-all duration-500"
+        [class.opacity-100]="activeTestimonial() === i"
+        [class.opacity-0]="activeTestimonial() !== i"
+        [class.pointer-events-none]="activeTestimonial() !== i"
+        [class.absolute]="activeTestimonial() !== i"
+        [class.inset-0]="activeTestimonial() !== i">
+        <app-testimonial-card [testimonial]="testimonial" />
+      </div>
+      }
+    </div>
+
+    <div class="flex justify-center gap-3 mt-8">
+      @for (testimonial of testimonials; track testimonial.id; let i = $index) {
+      <button
+        (click)="setActiveTestimonial(i)"
+        [class.bg-primary-600]="activeTestimonial() === i"
+        [class.w-8]="activeTestimonial() === i"
+        [class.bg-gray-300]="activeTestimonial() !== i"
+        [class.w-3]="activeTestimonial() !== i"
+        [attr.aria-label]="'Afficher le témoignage ' + (i + 1)"
+        class="h-3 rounded-full transition-all duration-300 hover:bg-primary-400"></button>
+      }
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+    @for (stat of stats; track stat.id) {
+    <app-stat-counter [stat]="stat" />
+    }
+  </div>
+</section>
