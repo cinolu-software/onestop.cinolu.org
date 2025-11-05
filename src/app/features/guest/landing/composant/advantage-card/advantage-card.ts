@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Advantage } from '@features/guest/landing/data/advantages.data';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -10,8 +10,4 @@ import { LucideAngularModule } from 'lucide-angular';
 })
 export class AdvantageCard {
   advantage = input.required<Advantage>();
-
-  iconBgColor = computed(() => {
-    return this.advantage().iconColor.replace('text-', 'bg-');
-  });
 }
