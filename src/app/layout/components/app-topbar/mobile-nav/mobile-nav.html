@@ -1,7 +1,6 @@
 <div class="lg:hidden">
   @let user = authStore.user();
 
-  <!-- Toggle Button -->
   <button
     (click)="toggleNav()"
     aria-label="Toggle menu"
@@ -9,17 +8,14 @@
     <i-lucide [name]="isOpen() ? icons.close : icons.menu" class="size-6" />
   </button>
 
-  <!-- Mobile Menu -->
   <div
     class="fixed top-16 left-0 bottom-0 w-full bg-white transition-transform duration-300 border-t border-gray-200"
     [ngClass]="isOpen() ? 'translate-x-0' : 'translate-x-full'">
     <div class="flex flex-col justify-between py-10 px-8 h-full w-full">
-      <!-- Navigation Links -->
       <nav class="flex flex-col items-start gap-4 w-full">
         @for (link of links(); track $index; let i = $index) {
         <div class="w-full">
           @if (link.children?.length) {
-          <!-- Link with Children -->
           <button
             (click)="toggleLink(i)"
             class="flex justify-between items-center w-full px-4 py-2 text-lg font-medium text-gray-800 border-b border-gray-200 hover:text-primary-600 transition-colors duration-200">
@@ -30,7 +26,6 @@
               [ngClass]="{ 'rotate-90': link.open }" />
           </button>
 
-          <!-- Submenu -->
           <div
             class="flex flex-col bg-gray-50 transition-all duration-300 overflow-hidden"
             [style.maxHeight]="link.open ? (link.children?.length ?? 0) * 48 + 'px' : '0px'">
@@ -47,7 +42,6 @@
             }
           </div>
           } @else {
-          <!-- Simple Link -->
           <a
             [routerLink]="link.path"
             routerLinkActive="text-primary-600"
@@ -61,10 +55,8 @@
         }
       </nav>
 
-      <!-- User Section -->
       <div class="border-t border-gray-200 pt-6">
         @if (user) {
-        <!-- Logged In User -->
         <div class="space-y-3">
           <div class="flex items-center gap-3 px-4 py-2 border border-primary-500 rounded-lg">
             <div class="relative h-10 w-10 flex-shrink-0">
@@ -93,7 +85,6 @@
           </div>
         </div>
         } @else {
-        <!-- Guest User -->
         <div class="space-y-3">
           <a
             routerLink="/sign-in"
