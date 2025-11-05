@@ -1,0 +1,47 @@
+<section
+  class="py-12 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-32 max-w-screen-2xl mx-auto bg-gradient-to-br from-gray-50 via-white to-primary-50/30">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="mb-6 flex justify-center">
+      <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center animate-pulse">
+        <i-lucide [name]="icons.sparkles" class="w-8 h-8 text-primary-600" />
+      </div>
+    </div>
+
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black font-satoshi mb-6 tracking-tight leading-tight">
+      Prêt à accélérer votre <span class="text-primary-600">parcours entrepreneurial</span> ?
+    </h2>
+
+    <p class="text-base sm:text-lg text-gray-700 leading-relaxed mb-10 max-w-2xl mx-auto">
+      Créez votre compte OneStop dès aujourd'hui et accédez à l'écosystème CINOLU. Rejoignez des centaines
+      d'entrepreneurs qui ont déjà franchi le pas.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a
+        routerLink="/sign-up"
+        class="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold rounded-full bg-primary-600 text-white overflow-hidden group transition duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto">
+        <span
+          class="absolute inset-0 bg-primary-700 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+        <span class="relative">Créer un compte</span>
+        <i-lucide [name]="icons.arrow" class="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
+      </a>
+
+      <a
+        routerLink="/programs"
+        class="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold rounded-full border-2 border-primary-600 text-primary-600 overflow-hidden group transition duration-300 w-full sm:w-auto">
+        <span
+          class="absolute inset-0 bg-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+        <span class="relative group-hover:text-white transition-colors">Découvrir nos programmes</span>
+      </a>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500">
+        Une question ? Contactez-nous à
+        <a href="mailto:contact&#64;cinolu.org" class="text-primary-600 hover:underline font-semibold">
+          contact&#64;cinolu.org
+        </a>
+      </p>
+    </div>
+  </div>
+</section>
