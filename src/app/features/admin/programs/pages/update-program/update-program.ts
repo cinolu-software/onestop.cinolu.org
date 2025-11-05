@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,12 +16,7 @@ import { ProgramStore } from '../../store/programs/program.store';
 import { Tabs, FileUpload } from '@shared/components';
 import { IProgram } from '@shared/models';
 import { INDICATORS_CATEGORIES } from '../../data/indicators.data';
-
-interface IndicatorFormData {
-  indicatorId?: string;
-  name: string;
-  target: number | null;
-}
+import { IndicatorFormData } from '../../types/indicator-form.type';
 
 @Component({
   selector: 'app-update-program-page',
@@ -54,7 +49,6 @@ export class UpdateProgram {
   indicatorsCategories = signal(INDICATORS_CATEGORIES);
   selectedCategory = signal(this.indicatorsCategories()[0]);
   year = signal<Date>(new Date());
-  selectedYear = computed(() => this.year().getFullYear());
   tabs = [
     { label: 'Modifier le projet', name: 'edit', icon: SquarePen },
     { label: 'Les indicateurs', name: 'indicators', icon: ChartColumn }
@@ -87,7 +81,7 @@ export class UpdateProgram {
   }
 
   #initIndicatorsTab(program: IProgram): void {
-    const yearIndicators = program.indicators_grouped?.[this.selectedYear()];
+    const yearIndicators = program.indicators_grouped?.[this.year().getFullYear()];
     const grouped: Record<string, IndicatorFormData[]> = {};
     if (yearIndicators && yearIndicators.length > 0) {
       yearIndicators.forEach((indicator) => {
@@ -143,7 +137,7 @@ export class UpdateProgram {
       [indicator.name]: indicator.target!
     }));
     const indicators = {
-      year: this.selectedYear(),
+      year: this.year().getFullYear(),
       category: this.selectedCategory(),
       metrics
     };

@@ -29,7 +29,6 @@ export function initializeMetricsMap(indicators: IIndicator[], existingMetrics: 
   return indicators.reduce((acc, indicator) => {
     const metric = existingMetrics.find((m) => m?.indicator?.id === indicator.id);
     acc[indicator.id] = {
-      // Use existing metric target, or null (don't pre-fill with indicator target to avoid confusion)
       target: metric?.target ?? null,
       achieved: metric?.achieved ?? null
     };
@@ -37,12 +36,6 @@ export function initializeMetricsMap(indicators: IIndicator[], existingMetrics: 
   }, {} as MetricsMap);
 }
 
-/**
- * Converts metrics map to array of metric DTOs
- * @param metricsMap - Map of metrics
- * @param indicators - Array of indicators
- * @returns Array of metric DTOs
- */
 export function metricsMapToDto(metricsMap: MetricsMap, indicators: IIndicator[]): MetricDto[] {
   return indicators.map((indicator) => ({
     indicatorId: indicator.id,
@@ -99,15 +92,11 @@ export function getMetricsSummary(metricsMap: MetricsMap) {
   };
 }
 
-/**
- * Calculate metrics summary for a given group of indicators using the provided metrics map.
- */
 export function calculateGroupMetrics(metricsMap: MetricsMap, indicators: IIndicator[]) {
   const totalTargeted = indicators.reduce((sum, ind) => sum + (metricsMap[ind.id]?.target ?? 0), 0);
   const totalAchieved = indicators.reduce((sum, ind) => sum + (metricsMap[ind.id]?.achieved ?? 0), 0);
   const percentage = calculateAchievementPercentage(totalTargeted, totalAchieved);
   const status = getPerformanceStatus(percentage);
-
   return {
     totalTargeted,
     totalAchieved,
@@ -117,19 +106,12 @@ export function calculateGroupMetrics(metricsMap: MetricsMap, indicators: IIndic
   };
 }
 
-/**
- * Group indicators by their category string.
- * Returns an array of groups where each group has a category id/string and its indicators.
- * If an indicator has no category, it will be grouped under the key 'Autres'.
- */
 export function groupIndicatorsByCategory(indicators: IIndicator[]) {
   const groups: Record<string, IIndicator[]> = {};
-
   indicators.forEach((indicator) => {
     const key = indicator.category ?? 'Autres';
     if (!groups[key]) groups[key] = [];
     groups[key].push(indicator);
   });
-
   return Object.keys(groups).map((key) => ({ category: key, indicators: groups[key] }));
 }

@@ -22,6 +22,7 @@ export const AdminReportStore = signalStore(
         switchMap((year) => {
           return _http.get<{ data: ProgramReport[] }>(`programs/report/${year}`).pipe(
             tap(({ data }) => {
+              console.log('Admin Report Data:', data[0]);
               patchState(store, { isLoading: false, report: data });
             }),
             catchError(() => {

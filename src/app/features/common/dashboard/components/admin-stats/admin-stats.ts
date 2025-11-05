@@ -31,29 +31,45 @@ import { EmptyStateComponent } from '../empty-state/empty-state';
 export class AdminStats {
   reportStore = inject(AdminReportStore);
   year = signal<Date>(new Date());
-  selectedYear = computed(() => this.year().getFullYear());
   icons = {
     calendar: Calendar
   };
 
-  totalIndicators = computed(() => {
-    return this.reportStore.report().reduce((sum, program) => {
-      return sum + program.indicators.length;
-    }, 0);
-  });
-
   averagePerformance = computed(() => {
     const reports = this.reportStore.report();
-    if (reports.length === 0) return 0;
+    if (!reports || reports.length === 0) return 0;
+
     const totalPerformance = reports.reduce((sum, program) => {
-      return sum + program.performance;
+      const programPerformance =
+        program.categories.length > 0
+          ? program.categories.reduce((catSum, cat) => catSum + (cat.performance || 0), 0) / program.categories.length
+          : 0;
+      return sum + programPerformance;
     }, 0);
+
     return Math.round(totalPerformance / reports.length);
+  });
+
+  sortedPrograms = computed(() => {
+    const reports = this.reportStore.report();
+    if (!reports || reports.length === 0) return [];
+
+    return [...reports].sort((a, b) => {
+      const perfA =
+        a.categories.length > 0
+          ? a.categories.reduce((sum, cat) => sum + (cat.performance || 0), 0) / a.categories.length
+          : 0;
+      const perfB =
+        b.categories.length > 0
+          ? b.categories.reduce((sum, cat) => sum + (cat.performance || 0), 0) / b.categories.length
+          : 0;
+      return perfB - perfA; // Descending order (highest first)
+    });
   });
 
   constructor() {
     effect(() => {
-      this.reportStore.getAdminReport(this.selectedYear());
+      this.reportStore.getAdminReport(this.year().getFullYear());
     });
   }
 }

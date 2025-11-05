@@ -1,20 +1,26 @@
-import { Component, input } from '@angular/core';
-import { LucideAngularModule, BarChart3, Flag, Check } from 'lucide-angular';
+import { Component, computed, input } from '@angular/core';
+import { LucideAngularModule, Flag, Check, ChartColumn, FolderKanban } from 'lucide-angular';
 import { ProgramReport } from '../../types/stats.type';
-import { CircularProgressComponent } from '@shared/components/circular-progress/circular-progress';
 
 @Component({
   selector: 'app-program-card',
-  imports: [LucideAngularModule, CircularProgressComponent],
+  imports: [LucideAngularModule],
   templateUrl: './program-card.html'
 })
 export class ProgramCardComponent {
   program = input.required<ProgramReport>();
-  index = input.required<number>();
+
+  overallPerformance = computed(() => {
+    const categories = this.program().categories;
+    if (!categories || categories.length === 0) return 0;
+    const totalPerformance = categories.reduce((sum, cat) => sum + (cat.performance || 0), 0);
+    return Math.round(totalPerformance / categories.length);
+  });
 
   readonly icons = {
-    barChart: BarChart3,
+    barChart: ChartColumn,
     flag: Flag,
-    check: Check
+    check: Check,
+    folder: FolderKanban
   };
 }

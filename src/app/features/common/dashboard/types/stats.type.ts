@@ -3,15 +3,16 @@ export interface IUserStats {
   referralsCount: number;
 }
 
-export interface IndicatorReport {
-  name: string;
-  target: number | null;
-  achieved: number;
+export interface CategoryReport {
+  category: string;
+  totalIndicators: number;
+  totalTarget: number;
+  totalAchieved: number;
   performance: number;
 }
 
 export interface ProgramReport {
   name: string;
-  indicators: IndicatorReport[];
-  performance: number;
+  categories: CategoryReport[];
+  performance?: number;
 }

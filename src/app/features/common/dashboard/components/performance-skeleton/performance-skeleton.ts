@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   templateUrl: './performance-skeleton.html'
 })
 export class PerformanceSkeletonComponent {
-  skeletonArray = Array(5);
+  skeletonArray = Array(3);
   cardSkeletonArray = Array(6);
   indicatorSkeletonArray = Array(2);
 }

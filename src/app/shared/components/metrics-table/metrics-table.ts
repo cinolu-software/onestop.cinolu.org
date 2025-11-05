@@ -70,7 +70,7 @@ export class MetricsTableComponent {
   #existingTargets = computed(() => {
     return new Set(
       this.existingMetrics()
-        .filter((m) => m.target && m.target > 0)
+        .filter((m) => m.indicator && m.target && m.target > 0)
         .map((m) => m.indicator.id)
     );
   });

@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { LucideAngularModule, ChartColumn, CircleCheck, TriangleAlert } from 'lucide-angular';
+import { LucideAngularModule, FolderKanban, TrendingUp, Award } from 'lucide-angular';
 
 @Component({
   selector: 'app-performance-overview',
@@ -9,12 +9,11 @@ import { LucideAngularModule, ChartColumn, CircleCheck, TriangleAlert } from 'lu
 export class PerformanceOverviewComponent {
   year = input.required<number>();
   programCount = input.required<number>();
-  totalIndicators = input.required<number>();
   averagePerformance = input.required<number>();
 
   icons = {
-    alertTriangle: TriangleAlert,
-    barChart: ChartColumn,
-    checkCircle: CircleCheck
+    programs: FolderKanban,
+    trending: TrendingUp,
+    award: Award
   };
 }
