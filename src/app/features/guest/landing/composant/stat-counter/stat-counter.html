@@ -1,0 +1,11 @@
+@if (stat(); as item) {
+<div class="text-center group">
+  <div class="mb-4">
+    <span
+      class="text-5xl lg:text-6xl font-black text-primary-600 font-satoshi group-hover:scale-110 transition-transform duration-300 inline-block">
+      {{ item.suffix === '+' ? currentValue() + '+' : currentValue() }}
+    </span>
+  </div>
+  <p class="text-lg lg:text-xl font-semibold text-gray-700">{{ item.label }}</p>
+</div>
+}
