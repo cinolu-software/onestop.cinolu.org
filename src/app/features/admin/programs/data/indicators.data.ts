@@ -1,1 +1,1 @@
-export const INDICATORS_CATEGORIES: string[] = ['Entrants', 'Produits(Outputs)', 'Résultats(Outcomes)', 'Impact'];
+export const INDICATORS_CATEGORIES: string[] = ['Ressources', 'Produits', 'Activités', 'Résultats', 'Impact'];
