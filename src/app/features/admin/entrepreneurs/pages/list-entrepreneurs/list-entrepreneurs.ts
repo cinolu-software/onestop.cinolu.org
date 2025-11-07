@@ -89,7 +89,7 @@ export class ListEntrepreneurs implements OnInit {
 
   updateRoute(): void {
     const queryParams = this.queryParams();
-    this.#router.navigate(['/dashboard/entrepreneurs'], { queryParams }).then();
+    this.#router.navigate(['/entrepreneurs'], { queryParams }).then();
   }
 
   updateRouteAndUsers(): void {

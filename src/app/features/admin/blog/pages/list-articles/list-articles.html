@@ -16,12 +16,7 @@
             } @else { [{{ articleCount | json }}] }
           </span>
         </h5>
-        <a
-          pButton
-          outlined
-          [size]="'small'"
-          [routerLink]="['/dashboard/blog/articles/add']"
-          class="flex items-center gap-2">
+        <a pButton outlined [size]="'small'" [routerLink]="['/blog/articles/add']" class="flex items-center gap-2">
           <i-lucide [name]="icons.plus" class="size-4" />
           Ajouter un article
         </a>
@@ -77,7 +72,7 @@
                   <i-lucide [name]="icons.starOff" class="size-4" />
                   }
                 </button>
-                <a pButton outlined severity="info" [routerLink]="['/dashboard/blog/articles/edit', article.slug]">
+                <a pButton outlined severity="info" [routerLink]="['/blog/articles/edit', article.slug]">
                   <i-lucide [name]="icons.edit" class="size-4" />
                 </a>
                 <button pButton outlined severity="danger" (click)="onDeleteArticle(article.id, $event)">

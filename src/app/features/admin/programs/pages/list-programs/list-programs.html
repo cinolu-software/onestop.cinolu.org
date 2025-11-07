@@ -15,7 +15,7 @@ programList = store.programs()[0];
           } @else { ({{ programCount }}) }
         </span>
       </h5>
-      <a [routerLink]="'/dashboard/programs/add'" pButton [outlined]="true" [size]="'small'">
+      <a [routerLink]="'/programs/add'" pButton [outlined]="true" [size]="'small'">
         <i-lucide [name]="icons.plus" class="size-4" />
         Ajouter un programme
       </a>
@@ -38,7 +38,7 @@ programList = store.programs()[0];
     <a
       pButton
       [size]="'small'"
-      [routerLink]="'/dashboard/programs/add'"
+      [routerLink]="'/programs/add'"
       class="flex items-center gap-2 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200">
       <i-lucide [name]="icons.plus" class="size-4" />
       <span class="font-medium">Créer un programme</span>
@@ -100,7 +100,7 @@ programList = store.programs()[0];
                 <i-lucide [name]="icons.eye" class="size-4" />
                 }
               </button>
-              <a [routerLink]="['/dashboard/programs/edit', program.slug]" pButton outlined severity="info">
+              <a [routerLink]="['/programs/edit', program.slug]" pButton outlined severity="info">
                 <i-lucide [name]="icons.edit" class="size-4" />
               </a>
               <button pButton outlined severity="danger" (click)="onDeleteRole(program.id, $event)">

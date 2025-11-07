@@ -7,7 +7,7 @@ import { AdminReportStore } from '../store/admin-report.store';
 import { AdminStats } from '../components/admin-stats/admin-stats';
 
 @Component({
-  selector: 'app-x',
+  selector: 'app-dashboard',
   templateUrl: './dashboard.html',
   providers: [AdminReportStore],
   imports: [CommonModule, FormsModule, UserStats, AdminStats]

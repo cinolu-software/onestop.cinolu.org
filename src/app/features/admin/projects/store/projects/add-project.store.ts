@@ -18,7 +18,7 @@ export const AddProjectStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _router: inject(Router),
-    _toast: inject(ToastrService),
+    _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _router, _toast, ...store }) => ({
     addProject: rxMethod<ProjectDto>(
@@ -28,17 +28,17 @@ export const AddProjectStore = signalStore(
           return _http.post<{ data: IProject }>('projects', project).pipe(
             map(({ data }) => {
               _toast.showSuccess('Le projet a été ajouté avec succès');
-              _router.navigate(['/dashboard/projects']);
+              _router.navigate(['/projects']);
               patchState(store, { isLoading: false, project: data });
             }),
             catchError(() => {
               _toast.showError("Une erreur s'est produite lors de l'ajout du projet");
               patchState(store, { isLoading: false, project: null });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

@@ -47,97 +47,97 @@ export const EXPLORATION_LINKS: ILink[] = [
 export const ADMIN_LINKS: ILink[] = [
   {
     name: 'Les programmes',
-    path: '/dashboard/list-programs',
+    path: '/list-programs',
     icon: Layers,
     children: [
       {
         name: 'Tous les programmes',
-        path: '/dashboard/programs'
+        path: '/programs'
       },
       {
         name: 'Les catégories',
-        path: '/dashboard/program-categories'
+        path: '/program-categories'
       },
       {
         name: 'Sous programmes',
-        path: '/dashboard/subprograms'
+        path: '/subprograms'
       }
     ]
   },
   {
     name: 'Les projets',
-    path: '/dashboard/list-programs',
+    path: '/list-programs',
     icon: Folders,
     children: [
       {
         name: 'Tous les projets',
-        path: '/dashboard/projects'
+        path: '/projects'
       },
       {
         name: 'Les catégories',
-        path: '/dashboard/project-categories'
+        path: '/project-categories'
       }
     ]
   },
   {
     name: 'Les événements',
-    path: '/dashboard/list-programs',
+    path: '/list-programs',
     icon: Calendar1,
     children: [
       {
         name: 'Tous les événements',
-        path: '/dashboard/events'
+        path: '/events'
       },
       {
         name: 'Les catégories',
-        path: '/dashboard/event-categories'
+        path: '/event-categories'
       }
     ]
   },
   {
     name: 'Le blog',
-    path: '/dashboard/blog',
+    path: '/blog',
     icon: BookOpen,
     children: [
       {
         name: 'Tous les articles',
-        path: '/dashboard/blog/articles'
+        path: '/blog/articles'
       },
       {
         name: 'Les tags',
-        path: '/dashboard/blog/tags'
+        path: '/blog/tags'
       }
     ]
   },
 
   {
     name: 'Les utilisateurs',
-    path: '/dashboard/users',
+    path: '/users',
     icon: UserCheck,
     children: [
       {
         name: 'Les utilisateurs',
-        path: '/dashboard/users'
+        path: '/users'
       },
       {
         name: 'Les rôles',
-        path: '/dashboard/roles'
+        path: '/roles'
       }
     ]
   },
   {
     name: 'Les entrepreneurs',
-    path: '/dashboard/entrepreneurs',
+    path: '/entrepreneurs',
     icon: UserCheck,
     children: [
       {
         name: 'Les entrepreneurs',
-        path: '/dashboard/entrepreneurs',
+        path: '/entrepreneurs',
         exactUrl: true
       },
       {
         name: 'Les entreprises',
-        path: '/dashboard/entrepreneurs/ventures',
+        path: '/entrepreneurs/ventures',
         exactUrl: true
       }
     ]
@@ -147,13 +147,13 @@ export const ADMIN_LINKS: ILink[] = [
 export const COMMON_LINKS: ILink[] = [
   {
     name: 'Dashboard',
-    path: '/dashboard',
+    path: '',
     icon: LayoutGrid,
     exactUrl: true
   },
   {
     name: 'Mes informations',
-    path: '/dashboard/account',
+    path: '/account',
     icon: Info
   }
 ];
@@ -161,27 +161,27 @@ export const COMMON_LINKS: ILink[] = [
 export const USER_LINKS: ILink[] = [
   {
     name: 'One Stop',
-    path: '/dashboard/community',
+    path: '/community',
     icon: Group,
     children: [
       {
         name: 'Vulgarisation',
-        path: '/dashboard/community/outreach'
+        path: '/community/outreach'
       }
     ]
   },
   {
     name: 'Mes entreprises',
-    path: '/dashboard/ventures',
+    path: '/ventures',
     icon: Folders,
     children: [
       {
         name: 'Liste entreprises',
-        path: '/dashboard/ventures'
+        path: '/ventures'
       },
       {
         name: 'Liste produits',
-        path: '/dashboard/products'
+        path: '/products'
       }
     ]
   }
@@ -195,7 +195,7 @@ export const SOCIAL_LINKS: ILink[] = [
   },
   {
     name: 'Twitter',
-    path: 'https://dashboard.com/Lubumdigital?t=MYcaQ_OEdCO3KZDCQzMoeQ&s=09',
+    path: 'https://twitter.com/Lubumdigital?t=MYcaQ_OEdCO3KZDCQzMoeQ&s=09',
     external: true
   },
   {

@@ -27,7 +27,7 @@
             <i-lucide [name]="icons.download" class="size-4" />
             }
           </p-button>
-          <p-button [outlined]="true" [severity]="'secondary'" [size]="'small'" [routerLink]="'/dashboard/users/add'">
+          <p-button [outlined]="true" [severity]="'secondary'" [size]="'small'" [routerLink]="'/users/add'">
             <i-lucide [name]="icons.plus" class="size-4" />
             Ajouter un utilisateur
           </p-button>
@@ -52,7 +52,7 @@
       </p>
       @if (!hasQuery) {
       <p-button
-        [routerLink]="'/dashboard/users/add'"
+        [routerLink]="'/users/add'"
         [size]="'small'"
         class="flex items-center gap-2 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200">
         <i-lucide [name]="icons.plus" class="size-4" />
@@ -92,7 +92,7 @@
             <td class="px-6 py-2">{{ user.created_at | date: 'shortDate' }}</td>
             <td class="px-6 py-2">
               <div class="flex items-center gap-2">
-                <a pButton outlined severity="info" [routerLink]="['/dashboard/users/edit', user.email]">
+                <a pButton outlined severity="info" [routerLink]="['/users/edit', user.email]">
                   <i-lucide [name]="icons.edit" class="size-4" />
                 </a>
                 <button pButton outlined severity="danger" (click)="onDeleteUser(user.id, $event)">

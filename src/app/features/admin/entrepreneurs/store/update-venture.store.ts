@@ -32,7 +32,7 @@ export const UpdateVenturetore = signalStore(
               tap(() => {
                 patchState(store, { isLoading: false });
                 _toast.showSuccess('Entreprise mise à jour');
-                _router.navigate(['/dashboard/entrepreneurs/ventures']);
+                _router.navigate(['/entrepreneurs/ventures']);
               }),
               catchError(() => {
                 patchState(store, { isLoading: false });

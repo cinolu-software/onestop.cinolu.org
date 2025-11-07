@@ -18,7 +18,7 @@ export const UpdateArticleStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _router: inject(Router),
-    _toast: inject(ToastrService),
+    _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _router, _toast, ...store }) => ({
     updateArticle: rxMethod<ArticleDto>(
@@ -28,17 +28,17 @@ export const UpdateArticleStore = signalStore(
           return _http.patch<{ data: IArticle }>(`articles/${article.id}`, article).pipe(
             map(({ data }) => {
               _toast.showSuccess("L'article a été mis à jour avec succès");
-              _router.navigate(['/dashboard/blog/articles']);
+              _router.navigate(['/blog/articles']);
               patchState(store, { isLoading: false, article: data });
             }),
             catchError(() => {
               _toast.showError("Une erreur s'est produite lors de la mise à jour");
               patchState(store, { isLoading: false, article: null });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

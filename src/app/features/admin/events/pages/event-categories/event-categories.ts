@@ -32,8 +32,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     ReactiveFormsModule,
     Dialog,
     ConfirmPopup,
-    ProgressSpinner,
-  ],
+    ProgressSpinner
+  ]
 })
 export class EventCategories implements OnInit {
   #route = inject(ActivatedRoute);
@@ -56,23 +56,23 @@ export class EventCategories implements OnInit {
     edit: SquarePen,
     trash: Trash,
     plus: Plus,
-    search: Search,
+    search: Search
   };
   queryParams = signal<FilterEventCategoriesDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q'),
+    q: this.#route.snapshot.queryParamMap.get('q')
   });
 
   constructor() {
     this.searchForm = this.#fb.group({
-      q: [this.queryParams().q || ''],
+      q: [this.queryParams().q || '']
     });
     this.addCategoryForm = this.#fb.group({
-      name: ['', Validators.required],
+      name: ['', Validators.required]
     });
     this.updateCategoryForm = this.#fb.group({
       id: [''],
-      name: ['', Validators.required],
+      name: ['', Validators.required]
     });
   }
 
@@ -100,7 +100,7 @@ export class EventCategories implements OnInit {
   onToggleEditModal(category: ICategory | null): void {
     this.updateCategoryForm.patchValue({
       id: category?.id || '',
-      name: category?.name || '',
+      name: category?.name || ''
     });
     this.showEditModal.update((v) => !v);
   }
@@ -112,7 +112,7 @@ export class EventCategories implements OnInit {
 
   updateRoute(): void {
     const queryParams = this.queryParams();
-    this.#router.navigate(['/dashboard/event-categories'], { queryParams }).then();
+    this.#router.navigate(['/event-categories'], { queryParams }).then();
   }
 
   updateRouteAndCategories(): void {
@@ -124,7 +124,7 @@ export class EventCategories implements OnInit {
     if (this.addCategoryForm.invalid) return;
     this.addCategoryStore.addCategory({
       payload: this.addCategoryForm.value,
-      onSuccess: () => this.onToggleAddModal(),
+      onSuccess: () => this.onToggleAddModal()
     });
   }
 
@@ -133,7 +133,7 @@ export class EventCategories implements OnInit {
     this.updateCategoryStore.updateCategory({
       id: this.updateCategoryForm.value.id,
       payload: this.updateCategoryForm.value,
-      onSuccess: () => this.onToggleEditModal(null),
+      onSuccess: () => this.onToggleEditModal(null)
     });
   }
 
@@ -144,15 +144,15 @@ export class EventCategories implements OnInit {
       rejectButtonProps: {
         label: 'Annuler',
         severity: 'secondary',
-        outlined: true,
+        outlined: true
       },
       acceptButtonProps: {
         label: 'Confirmer',
-        severity: 'danger',
+        severity: 'danger'
       },
       accept: () => {
         this.deleteCategoryStore.deleteCategory({ id: categoryId });
-      },
+      }
     });
   }
 }

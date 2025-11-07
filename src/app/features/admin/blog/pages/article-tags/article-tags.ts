@@ -31,9 +31,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     ProgressSpinnerModule,
     ButtonModule,
     NgxPaginationModule,
-    CommonModule,
+    CommonModule
   ],
-  templateUrl: './article-tags.html',
+  templateUrl: './article-tags.html'
 })
 export class ArticleTags implements OnInit {
   #route = inject(ActivatedRoute);
@@ -57,23 +57,23 @@ export class ArticleTags implements OnInit {
     edit: SquarePen,
     trash: Trash,
     plus: Plus,
-    search: Search,
+    search: Search
   };
   queryParams = signal<FilterArticlesTagsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q'),
+    q: this.#route.snapshot.queryParamMap.get('q')
   });
 
   constructor() {
     this.searchForm = this.#fb.group({
-      q: [this.queryParams().q || ''],
+      q: [this.queryParams().q || '']
     });
     this.addTagForm = this.#fb.group({
-      name: ['', Validators.required],
+      name: ['', Validators.required]
     });
     this.updateTagForm = this.#fb.group({
       id: [''],
-      name: ['', Validators.required],
+      name: ['', Validators.required]
     });
   }
 
@@ -101,7 +101,7 @@ export class ArticleTags implements OnInit {
   onToggleEditModal(tag: ITag | null): void {
     this.updateTagForm.patchValue({
       id: tag?.id || '',
-      name: tag?.name || '',
+      name: tag?.name || ''
     });
     this.showEditModal.update((v) => !v);
   }
@@ -113,7 +113,7 @@ export class ArticleTags implements OnInit {
 
   async updateRoute(): Promise<void> {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/dashboard/blog/tags'], { queryParams });
+    await this.#router.navigate(['/blog/tags'], { queryParams });
   }
 
   async updateRouteAndTags(): Promise<void> {
@@ -125,7 +125,7 @@ export class ArticleTags implements OnInit {
     if (this.addTagForm.invalid) return;
     this.addTagStore.addTag({
       payload: this.addTagForm.value,
-      onSuccess: () => this.onToggleAddModal(),
+      onSuccess: () => this.onToggleAddModal()
     });
   }
 
@@ -134,7 +134,7 @@ export class ArticleTags implements OnInit {
     this.updateTagStore.updateTag({
       id: this.updateTagForm.value.id,
       payload: this.updateTagForm.value,
-      onSuccess: () => this.onToggleEditModal(null),
+      onSuccess: () => this.onToggleEditModal(null)
     });
   }
 
@@ -145,15 +145,15 @@ export class ArticleTags implements OnInit {
       rejectButtonProps: {
         label: 'Annuler',
         severity: 'secondary',
-        outlined: true,
+        outlined: true
       },
       acceptButtonProps: {
         label: 'Confirmer',
-        severity: 'danger',
+        severity: 'danger'
       },
       accept: () => {
         this.deleteTagStore.deleteTag({ id: tagId });
-      },
+      }
     });
   }
 }

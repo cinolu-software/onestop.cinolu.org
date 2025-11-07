@@ -13,7 +13,7 @@ import {
   SquarePen,
   Star,
   StarOff,
-  Trash,
+  Trash
 } from 'lucide-angular';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ConfirmationService } from 'primeng/api';
@@ -44,9 +44,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     RouterLink,
     AvatarModule,
     ApiImgPipe,
-    ConfirmPopup,
+    ConfirmPopup
   ],
-  templateUrl: './list-articles.html',
+  templateUrl: './list-articles.html'
 })
 export class ListArticles implements OnInit {
   #route = inject(ActivatedRoute);
@@ -68,16 +68,16 @@ export class ListArticles implements OnInit {
     eye: Eye,
     eyeOff: EyeOff,
     star: Star,
-    starOff: StarOff,
+    starOff: StarOff
   };
   queryParams = signal<FilterArticleDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q'),
+    q: this.#route.snapshot.queryParamMap.get('q')
   });
 
   constructor() {
     this.searchForm = this.#fb.group({
-      q: [this.queryParams().q || ''],
+      q: [this.queryParams().q || '']
     });
   }
 
@@ -104,7 +104,7 @@ export class ListArticles implements OnInit {
 
   async updateRoute(): Promise<void> {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/dashboard/blog/articles'], { queryParams });
+    await this.#router.navigate(['/blog/articles'], { queryParams });
   }
 
   highlightArticle(articleId: string): void {
@@ -123,15 +123,15 @@ export class ListArticles implements OnInit {
       rejectButtonProps: {
         label: 'Annuler',
         severity: 'secondary',
-        outlined: true,
+        outlined: true
       },
       acceptButtonProps: {
         label: 'Confirmer',
-        severity: 'danger',
+        severity: 'danger'
       },
       accept: () => {
         this.deleteArticleStore.deleteArticle(articleId);
-      },
+      }
     });
   }
 

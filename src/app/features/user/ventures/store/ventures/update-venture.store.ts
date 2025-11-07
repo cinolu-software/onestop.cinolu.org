@@ -17,7 +17,7 @@ export const UpdateVenturetore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _toast: inject(ToastrService),
-    _router: inject(Router),
+    _router: inject(Router)
   })),
   withMethods(({ _http, _toast, _router, ...store }) => ({
     updateVenture: rxMethod<{ slug: string; payload: VentureDto }>(
@@ -32,16 +32,16 @@ export const UpdateVenturetore = signalStore(
               tap(() => {
                 patchState(store, { isLoading: false });
                 _toast.showSuccess('Entreprise mise à jour');
-                _router.navigate(['/dashboard/ventures']);
+                _router.navigate(['/ventures']);
               }),
               catchError(() => {
                 patchState(store, { isLoading: false });
                 _toast.showError('Erreur lors de la mise à jour');
                 return of(null);
-              }),
+              })
             );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

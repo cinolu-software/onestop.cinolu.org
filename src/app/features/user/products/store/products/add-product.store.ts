@@ -17,7 +17,7 @@ export const AddProductStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _toast: inject(ToastrService),
-    _router: inject(Router),
+    _router: inject(Router)
   })),
   withMethods(({ _http, _toast, _router, ...store }) => ({
     addProduct: rxMethod<ProductDto>(
@@ -28,16 +28,16 @@ export const AddProductStore = signalStore(
             tap(() => {
               patchState(store, { isLoading: false });
               _toast.showSuccess('Produit ajouté');
-              _router.navigate(['/dashboard/products']);
+              _router.navigate(['/products']);
             }),
             catchError(() => {
               _toast.showError("Erreur lors de l'ajout");
               patchState(store, { isLoading: false });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

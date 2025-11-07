@@ -1,18 +1,16 @@
 import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subject, filter, takeUntil } from 'rxjs';
-import { AppConfigService } from '../core/services/config/config.service';
-import { AppConfig } from '../core/services/config/config.types';
+import { AppConfigService } from '@core/services/config/config.service';
+import { AppConfig } from '@core/services/config/config.types';
 import { DashboardLayout } from './pages/dashboard-layout/dashboard-layout';
-import { EmptyLayout } from './pages/empty-layout/empty-layout';
-import { FixedLayout } from './pages/fixed-layout/fixed-layout';
-import { FullLayout } from './pages/full-layout/full-layout';
 import { Loader } from './components/loader/loader';
+import { EmptyLayout } from './pages/empty-layout/empty-layout';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.html',
-  imports: [FixedLayout, EmptyLayout, FullLayout, DashboardLayout, Loader],
+  imports: [DashboardLayout, Loader, EmptyLayout],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Layout implements OnInit, OnDestroy {

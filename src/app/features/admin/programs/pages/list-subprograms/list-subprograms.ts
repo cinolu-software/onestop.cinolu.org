@@ -162,7 +162,7 @@ export class ListSubprograms implements OnInit {
 
   async updateRoute(): Promise<void> {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/dashboard/subprograms'], { queryParams });
+    await this.#router.navigate(['/subprograms'], { queryParams });
   }
 
   async updateRouteAndSubrograms(): Promise<void> {

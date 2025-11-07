@@ -22,7 +22,7 @@
           [class.text-yellow-700]="overallPerformance() >= 50 && overallPerformance() < 80"
           [class.bg-green-50]="overallPerformance() >= 80"
           [class.text-green-700]="overallPerformance() >= 80">
-          {{ overallPerformance() < 50 ? 'Faible' : (overallPerformance() < 80 ? 'Moyen' : 'Excellent') }}
+          {{ overallPerformance() }} %
         </div>
       </div>
 

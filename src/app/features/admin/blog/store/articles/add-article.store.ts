@@ -18,7 +18,7 @@ export const AddArticleStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _router: inject(Router),
-    _toast: inject(ToastrService),
+    _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _router, _toast, ...store }) => ({
     addArticle: rxMethod<ArticleDto>(
@@ -28,17 +28,17 @@ export const AddArticleStore = signalStore(
           return _http.post<{ data: IArticle }>('articles', article).pipe(
             map(({ data }) => {
               _toast.showSuccess("L'article a été ajouté avec succès");
-              _router.navigate(['/dashboard/blog/articles']);
+              _router.navigate(['/blog/articles']);
               patchState(store, { isLoading: false, articles: data });
             }),
             catchError(() => {
               _toast.showError("Une erreur s'est produite lors de l'ajout");
               patchState(store, { isLoading: false, articles: null });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

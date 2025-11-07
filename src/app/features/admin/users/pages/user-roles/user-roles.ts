@@ -32,8 +32,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     NgxPaginationModule,
     ReactiveFormsModule,
     Dialog,
-    ConfirmPopup,
-  ],
+    ConfirmPopup
+  ]
 })
 export class UserRoles implements OnInit {
   #route = inject(ActivatedRoute);
@@ -56,23 +56,23 @@ export class UserRoles implements OnInit {
     edit: SquarePen,
     trash: Trash,
     plus: Plus,
-    search: Search,
+    search: Search
   };
   queryParams = signal<FilterRolesDto>({
     page: this.#route.snapshot.params['page'],
-    q: this.#route.snapshot.params['q'],
+    q: this.#route.snapshot.params['q']
   });
 
   constructor() {
     this.searchForm = this.#fb.group({
-      q: [this.queryParams().q || ''],
+      q: [this.queryParams().q || '']
     });
     this.addRoleForm = this.#fb.group({
-      name: ['', Validators.required],
+      name: ['', Validators.required]
     });
     this.updateRoleForm = this.#fb.group({
       id: [''],
-      name: ['', Validators.required],
+      name: ['', Validators.required]
     });
   }
 
@@ -108,7 +108,7 @@ export class UserRoles implements OnInit {
 
   updateRoute(): void {
     const queryParams = this.queryParams();
-    this.#router.navigate(['/dashboard/roles'], { queryParams }).then();
+    this.#router.navigate(['/roles'], { queryParams }).then();
   }
 
   updateRouteAndRoles(): void {
@@ -123,7 +123,7 @@ export class UserRoles implements OnInit {
       onSuccess: () => {
         this.onToggleAddModal();
         this.addRoleForm.reset();
-      },
+      }
     });
   }
 
@@ -131,7 +131,7 @@ export class UserRoles implements OnInit {
     if (this.updateRoleForm.invalid) return;
     this.updateRoleStore.updateRole({
       payload: this.updateRoleForm.value,
-      onSuccess: () => this.onToggleEditModal(null),
+      onSuccess: () => this.onToggleEditModal(null)
     });
   }
 
@@ -142,15 +142,15 @@ export class UserRoles implements OnInit {
       rejectButtonProps: {
         label: 'Annuler',
         severity: 'secondary',
-        outlined: true,
+        outlined: true
       },
       acceptButtonProps: {
         label: 'Confirmer',
-        severity: 'danger',
+        severity: 'danger'
       },
       accept: () => {
         this.deleteRoleStore.deleteRole(roleId);
-      },
+      }
     });
   }
 }

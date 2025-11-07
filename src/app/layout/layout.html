@@ -2,15 +2,7 @@
 <app-empty-layout />
 } @placeholder {
 <app-loader />
-} } @if (layout === 'full-layout') { @defer (on immediate) {
-<app-full-layout />
-} @placeholder {
-<app-loader />
-} } @if (layout === 'fixed-layout') { @defer (on immediate) {
-<app-fixed-topbar-layout />
-} @placeholder {
-<app-loader />
-} } @if (layout === 'x-layout') { @defer (on idle) {
+} } @if (layout === 'dashboard-layout') { @defer (on immediate) {
 <app-dashboard-layout />
 } @placeholder {
 <app-loader />

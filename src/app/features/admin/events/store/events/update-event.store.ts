@@ -18,7 +18,7 @@ export const UpdateEventStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _router: inject(Router),
-    _toast: inject(ToastrService),
+    _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _router, _toast, ...store }) => ({
     updateEvent: rxMethod<EventDto>(
@@ -28,17 +28,17 @@ export const UpdateEventStore = signalStore(
           return _http.patch<{ data: IEvent }>(`events/${event.id}`, event).pipe(
             map(({ data }) => {
               _toast.showSuccess("L'événement a été mis à jour avec succès");
-              _router.navigate(['/dashboard/events']);
+              _router.navigate(['/events']);
               patchState(store, { isLoading: false, event: data });
             }),
             catchError(() => {
               _toast.showError("Une erreur s'est produite lors de la mise à jour");
               patchState(store, { isLoading: false, event: null });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

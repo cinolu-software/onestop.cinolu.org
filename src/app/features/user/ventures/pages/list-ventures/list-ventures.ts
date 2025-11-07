@@ -27,8 +27,8 @@ import { VentureCardSkeleton } from '../../components/venture-card-skeleton/vent
     NgxPaginationModule,
     ConfirmPopupModule,
     VentureCard,
-    VentureCardSkeleton,
-  ],
+    VentureCardSkeleton
+  ]
 })
 export class ListVentures implements OnInit {
   icons = { plus: Plus, company: Building2 };
@@ -36,7 +36,7 @@ export class ListVentures implements OnInit {
   #router = inject(Router);
   store = inject(VenturesStore);
   queryParams = signal<FilterVenturesDto>({
-    page: this.#route.snapshot.queryParams?.['page'],
+    page: this.#route.snapshot.queryParams?.['page']
   });
 
   ngOnInit(): void {
@@ -51,7 +51,7 @@ export class ListVentures implements OnInit {
   async updateRoute(): Promise<void> {
     const { page } = this.queryParams();
     const queryParams = { page };
-    await this.#router.navigate(['/dashboard/ventures'], { queryParams });
+    await this.#router.navigate(['/ventures'], { queryParams });
   }
 
   async updateRouteAndEnterprises(): Promise<void> {

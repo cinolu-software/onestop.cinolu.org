@@ -101,7 +101,7 @@ export class ListPrograms implements OnInit {
 
   updateRoute(): void {
     const queryParams = this.queryParams();
-    this.#router.navigate(['/dashboard/programs'], { queryParams });
+    this.#router.navigate(['/programs'], { queryParams });
   }
 
   highlightProgram(id: string): void {

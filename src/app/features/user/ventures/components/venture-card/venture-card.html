@@ -11,10 +11,10 @@
     <p class="text-gray-700 line-clamp-2">{{ venture().description }}</p>
   </div>
   <div class="flex items-center flex-wrap w-full gap-2 px-5 pb-6">
-    <a pButton severity="primary" outlined [routerLink]="['/dashboard/ventures/view', venture().slug]">
+    <a pButton severity="primary" outlined [routerLink]="['/ventures/view', venture().slug]">
       <i-lucide [name]="icons.eye" class="size-4 text-inherit" />
     </a>
-    <a pButton severity="secondary" outlined [routerLink]="['/dashboard/ventures/update', venture().slug]">
+    <a pButton severity="secondary" outlined [routerLink]="['/ventures/update', venture().slug]">
       <i-lucide [name]="icons.edit" class="size-4 text-inheri" />
     </a>
     <p-button severity="danger" outlined (click)="onDeleteVenture(venture().id, $event)">

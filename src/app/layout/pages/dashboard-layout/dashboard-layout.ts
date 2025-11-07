@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DashboardSidebar } from '../../components/dashboard-sidebar/dashboard-sidebar';
-import { DashboardTopbar } from '../../components/dashboard-topbar/dashboard-topbar';
-import { BackButton } from '../../../shared/components/back-button/back-button';
+import { Sidebar } from '../../components/sidebar/sidebar';
+import { Topbar } from '../../components/topbar/topbar';
+import { BackButton } from '@shared/components/back-button/back-button';
 
 @Component({
   selector: 'app-dashboard-layout',
   templateUrl: './dashboard-layout.html',
-  imports: [RouterOutlet, DashboardTopbar, DashboardSidebar, BackButton],
+  imports: [RouterOutlet, Topbar, Sidebar, BackButton],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardLayout {}

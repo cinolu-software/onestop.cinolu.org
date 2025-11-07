@@ -27,8 +27,8 @@ import { ProductCardSkeleton } from '../../components/product-card-skeleton/prod
     NgxPaginationModule,
     ConfirmPopupModule,
     ProductCard,
-    ProductCardSkeleton,
-  ],
+    ProductCardSkeleton
+  ]
 })
 export class ListVentures implements OnInit {
   icons = { plus: Plus, shopping: ShoppingBasket };
@@ -36,7 +36,7 @@ export class ListVentures implements OnInit {
   #router = inject(Router);
   store = inject(ProductsStore);
   queryParams = signal<FilterProductsDto>({
-    page: this.#route.snapshot.queryParams?.['page'],
+    page: this.#route.snapshot.queryParams?.['page']
   });
 
   ngOnInit(): void {
@@ -51,7 +51,7 @@ export class ListVentures implements OnInit {
   async updateRoute(): Promise<void> {
     const { page } = this.queryParams();
     const queryParams = { page };
-    await this.#router.navigate(['/dashboard/ventures'], { queryParams });
+    await this.#router.navigate(['/ventures'], { queryParams });
   }
 
   async updateRouteAndEnterprises(): Promise<void> {

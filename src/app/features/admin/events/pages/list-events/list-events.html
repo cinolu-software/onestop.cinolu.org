@@ -16,12 +16,7 @@
             } @else { [{{ eventCount | json }}] }
           </span>
         </h5>
-        <a
-          pButton
-          [outlined]="true"
-          [size]="'small'"
-          [routerLink]="['/dashboard/events/add']"
-          class="flex items-center gap-2">
+        <a pButton [outlined]="true" [size]="'small'" [routerLink]="['/events/add']" class="flex items-center gap-2">
           <i-lucide [name]="icons.plus" class="size-4" />
           Ajouter un événement
         </a>
@@ -47,7 +42,7 @@
       <a
         pButton
         [size]="'small'"
-        [routerLink]="['/dashboard/events/add']"
+        [routerLink]="['/events/add']"
         class="flex items-center gap-2 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200">
         <i-lucide [name]="icons.plus" class="size-4" />
         <span class="font-medium">Créer un événement</span>
@@ -108,7 +103,7 @@
                   <i-lucide [name]="icons.eye" class="size-4" />
                   }
                 </button>
-                <a pButton outlined severity="info" [routerLink]="['/dashboard/events/edit', event.slug]">
+                <a pButton outlined severity="info" [routerLink]="['/events/edit', event.slug]">
                   <i-lucide [name]="icons.edit" class="size-4" />
                 </a>
                 <button pButton outlined severity="danger" (click)="onDeleteProject(event.id, $event)">

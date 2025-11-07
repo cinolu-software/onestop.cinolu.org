@@ -33,8 +33,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NgxPaginationModule,
     ReactiveFormsModule,
     ConfirmPopup,
-    RouterLink,
-  ],
+    RouterLink
+  ]
 })
 export class ListUsers implements OnInit {
   #route = inject(ActivatedRoute);
@@ -53,16 +53,16 @@ export class ListUsers implements OnInit {
     trash: Trash,
     download: Download,
     search: Search,
-    plus: Plus,
+    plus: Plus
   };
   queryParams = signal<FilterUsersDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q'),
+    q: this.#route.snapshot.queryParamMap.get('q')
   });
 
   constructor() {
     this.searchForm = this.#fb.group({
-      q: [this.queryParams().q || ''],
+      q: [this.queryParams().q || '']
     });
   }
 
@@ -89,7 +89,7 @@ export class ListUsers implements OnInit {
 
   updateRoute(): void {
     const queryParams = this.queryParams();
-    this.#router.navigate(['/dashboard/users'], { queryParams }).then();
+    this.#router.navigate(['/users'], { queryParams }).then();
   }
 
   updateRouteAndUsers(): void {
@@ -108,15 +108,15 @@ export class ListUsers implements OnInit {
       rejectButtonProps: {
         label: 'Annuler',
         severity: 'secondary',
-        outlined: true,
+        outlined: true
       },
       acceptButtonProps: {
         label: 'Confirmer',
-        severity: 'danger',
+        severity: 'danger'
       },
       accept: () => {
         this.deleteStore.deleteUser(userId);
-      },
+      }
     });
   }
 }

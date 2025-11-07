@@ -7,6 +7,8 @@ export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (authStore.user()) return true;
-  router.navigate(['/sign-in']);
+
+  // Redirect to unauthorized page
+  router.navigate(['/unauthorized']);
   return false;
 };

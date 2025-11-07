@@ -16,7 +16,7 @@ export const AddProgramStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _toast: inject(ToastrService),
-    _router: inject(Router),
+    _router: inject(Router)
   })),
   withMethods(({ _http, _toast, _router, ...store }) => ({
     addProgram: rxMethod<ProgramDto>(
@@ -25,7 +25,7 @@ export const AddProgramStore = signalStore(
         switchMap((payload) => {
           return _http.post('programs', payload).pipe(
             tap(() => {
-              _router.navigate(['/dashboard/programs']);
+              _router.navigate(['/programs']);
               _toast.showSuccess('Programme ajouté');
               patchState(store, { isLoading: false });
             }),
@@ -33,10 +33,10 @@ export const AddProgramStore = signalStore(
               _toast.showError("Échec de l'ajout du rôle");
               patchState(store, { isLoading: false });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

@@ -17,7 +17,7 @@ export const AddVentureStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _toast: inject(ToastrService),
-    _router: inject(Router),
+    _router: inject(Router)
   })),
   withMethods(({ _http, _toast, _router, ...store }) => ({
     addVenture: rxMethod<VentureDto>(
@@ -28,16 +28,16 @@ export const AddVentureStore = signalStore(
             tap(() => {
               patchState(store, { isLoading: false });
               _toast.showSuccess('Entreprise ajoutée');
-              _router.navigate(['/dashboard/ventures']);
+              _router.navigate(['/ventures']);
             }),
             catchError(() => {
               _toast.showError("Erreur lors de l'ajout");
               patchState(store, { isLoading: false });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

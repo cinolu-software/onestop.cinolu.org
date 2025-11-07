@@ -4,8 +4,8 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap, catchError, of, exhaustMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { ToastrService } from '../services/toast/toastr.service';
+import { Router } from '@angular/router';
 
 interface IAuthStore {
   user: IUser | null;
@@ -16,10 +16,10 @@ export const AuthStore = signalStore(
   withState<IAuthStore>({ user: null }),
   withProps(() => ({
     _http: inject(HttpClient),
-    _router: inject(Router),
     _toast: inject(ToastrService),
+    _router: inject(Router)
   })),
-  withMethods(({ _http, _router, _toast, ...store }) => ({
+  withMethods(({ _http, _toast, _router, ...store }) => ({
     getProfile: rxMethod<void>(
       pipe(
         exhaustMap(() =>
@@ -28,28 +28,28 @@ export const AuthStore = signalStore(
             catchError(() => {
               patchState(store, { user: null });
               return of(null);
-            }),
-          ),
-        ),
-      ),
+            })
+          )
+        )
+      )
     ),
     signOut: rxMethod<void>(
       pipe(
         exhaustMap(() =>
           _http.post<void>('auth/sign-out', {}).pipe(
             tap(() => {
-              _router.navigate(['/sign-in']);
+              _router.navigate(['/unauthorized']);
               _toast.showSuccess('Déconnexion réussie');
               patchState(store, { user: null });
             }),
             catchError(() => {
               _toast.showError('Erreur lors de la déconnexion');
               return of(null);
-            }),
-          ),
-        ),
-      ),
+            })
+          )
+        )
+      )
     ),
-    setUser: (user: IUser | null) => patchState(store, { user }),
-  })),
+    setUser: (user: IUser | null) => patchState(store, { user })
+  }))
 );

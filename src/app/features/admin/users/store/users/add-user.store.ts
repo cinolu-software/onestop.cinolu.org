@@ -18,7 +18,7 @@ export const AddUserStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _toast: inject(ToastrService),
-    _router: inject(Router),
+    _router: inject(Router)
   })),
   withMethods(({ _http, _toast, _router, ...store }) => ({
     addUser: rxMethod<UserDto>(
@@ -27,7 +27,7 @@ export const AddUserStore = signalStore(
         switchMap((dto) => {
           return _http.post<{ data: IUser }>('users', dto).pipe(
             map(({ data }) => {
-              _router.navigate(['/dashboard/users']);
+              _router.navigate(['/users']);
               _toast.showSuccess('Utilisateur ajouté avec succès');
               patchState(store, { isLoading: false, user: data });
             }),
@@ -35,10 +35,10 @@ export const AddUserStore = signalStore(
               _toast.showError("Erreur lors de l'ajout de l'utilisateur");
               patchState(store, { isLoading: false, user: null });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

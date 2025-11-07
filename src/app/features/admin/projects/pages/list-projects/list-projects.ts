@@ -9,7 +9,7 @@ import {
   Eye,
   EyeOff,
   Star,
-  StarOff,
+  StarOff
 } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -45,8 +45,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     ConfirmPopup,
     AvatarModule,
     ApiImgPipe,
-    ProgressSpinner,
-  ],
+    ProgressSpinner
+  ]
 })
 export class ListProjects implements OnInit {
   #route = inject(ActivatedRoute);
@@ -69,16 +69,16 @@ export class ListProjects implements OnInit {
     eye: Eye,
     eyeOff: EyeOff,
     star: Star,
-    starOff: StarOff,
+    starOff: StarOff
   };
   queryParams = signal<FilterProjectsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q'),
+    q: this.#route.snapshot.queryParamMap.get('q')
   });
 
   constructor() {
     this.searchForm = this.#fb.group({
-      q: [this.queryParams().q || ''],
+      q: [this.queryParams().q || '']
     });
   }
 
@@ -109,7 +109,7 @@ export class ListProjects implements OnInit {
 
   async updateRoute(): Promise<void> {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/dashboard/projects'], { queryParams });
+    await this.#router.navigate(['/projects'], { queryParams });
   }
 
   async updateRouteAndProjects(): Promise<void> {
@@ -128,15 +128,15 @@ export class ListProjects implements OnInit {
       rejectButtonProps: {
         label: 'Annuler',
         severity: 'secondary',
-        outlined: true,
+        outlined: true
       },
       acceptButtonProps: {
         label: 'Confirmer',
-        severity: 'danger',
+        severity: 'danger'
       },
       accept: () => {
         this.deleteProjectStore.deleteProject(projectId);
-      },
+      }
     });
   }
 }

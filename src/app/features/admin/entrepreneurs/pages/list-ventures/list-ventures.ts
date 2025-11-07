@@ -114,7 +114,7 @@ export class ListVentures implements OnInit {
 
   async updateRoute(): Promise<void> {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/dashboard/entrepreneurs/ventures'], { queryParams });
+    await this.#router.navigate(['/entrepreneurs/ventures'], { queryParams });
   }
 
   onDeleteVenture(ventureId: string, event: Event): void {
