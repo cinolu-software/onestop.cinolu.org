@@ -26,10 +26,7 @@
         [ngClass]="{ 'rotate-180 text-white': isTabOpen(link.name), 'text-primary-200': !isTabOpen(link.name) }" />
     </button>
     @if (isTabOpen(link.name)) {
-    <div
-      class="ml-5 pl-4 border-l-2 border-primary-600/40 flex flex-col gap-1.5"
-      [@expandCollapse]
-      [attr.id]="panelId(link.name)">
+    <div class="ml-5 pl-4 border-l-2 border-primary-600/40 flex flex-col gap-1.5" [attr.id]="panelId(link.name)">
       @for (child of link.children; track child.name) {
       <a
         class="group relative flex items-center gap-2 my-0.5 text-primary-100/90 text-sm rounded-lg hover:text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/40 group-[.active-link]:bg-primary-600/50 group-[.active-link]:text-white group-[.active-link]:font-medium"

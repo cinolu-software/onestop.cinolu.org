@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { LucideAngularModule, ChevronDown, House } from 'lucide-angular';
@@ -13,19 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-sidebar',
   imports: [CommonModule, ButtonModule, RouterModule, LucideAngularModule],
-  templateUrl: './sidebar.html',
-  animations: [
-    trigger('expandCollapse', [
-      transition(':enter', [
-        style({ height: 0, opacity: 0, overflow: 'hidden' }),
-        animate('220ms cubic-bezier(0.2, 0, 0, 1)', style({ height: '*', opacity: 1 }))
-      ]),
-      transition(':leave', [
-        style({ height: '*', opacity: 1, overflow: 'hidden' }),
-        animate('180ms cubic-bezier(0.4, 0, 1, 1)', style({ height: 0, opacity: 0 }))
-      ])
-    ])
-  ]
+  templateUrl: './sidebar.html'
 })
 export class Sidebar {
   #router = inject(Router);
