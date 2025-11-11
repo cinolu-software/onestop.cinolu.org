@@ -13,7 +13,8 @@
           class="size-4 text-gray-500 transition-transform duration-200 group-hover:rotate-180" />
       </div>
     </button>
-    <div
+    <a
+      [routerLink]="'/account'"
       class="invisible absolute right-0 top-full mt-2 w-52 rounded-xl bg-white border border-gray-100 shadow-lg opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 overflow-hidden">
       <div class="px-4 py-3 border-b border-gray-100 bg-gray-50/50">
         <p class="text-sm font-semibold text-gray-900 truncate">{{ user.name }}</p>
@@ -27,7 +28,7 @@
           <span>Se déconnecter</span>
         </button>
       </div>
-    </div>
+    </a>
   </div>
   }
 </div>

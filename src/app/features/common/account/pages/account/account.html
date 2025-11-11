@@ -1,0 +1,11 @@
+<aside class="min-h-full">
+  @if (store.user(); as user) {
+  <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+  @if (activeTab() === 'overview') {
+  <app-account-overview [user]="user" />
+  } @if (activeTab() === 'edit') {
+  <div class="w-full md:w-5/6">
+    <app-account-edit />
+  </div>
+  } }
+</aside>

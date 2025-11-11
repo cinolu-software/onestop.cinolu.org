@@ -1,14 +1,4 @@
-import {
-  LucideIconData,
-  Info,
-  UserCheck,
-  Calendar1,
-  LayoutGrid,
-  BookOpen,
-  Group,
-  Layers,
-  Folders
-} from 'lucide-angular';
+import { LucideIconData, UserCheck, Calendar1, LayoutGrid, BookOpen, Group, Layers, Folders } from 'lucide-angular';
 
 export interface ILink {
   name: string;
@@ -150,11 +140,6 @@ export const COMMON_LINKS: ILink[] = [
     path: '',
     icon: LayoutGrid,
     exactUrl: true
-  },
-  {
-    name: 'Mes informations',
-    path: '/account',
-    icon: Info
   }
 ];
 
