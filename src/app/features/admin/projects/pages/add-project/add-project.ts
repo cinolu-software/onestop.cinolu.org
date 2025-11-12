@@ -10,12 +10,12 @@ import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-c
 import { DatePickerModule } from 'primeng/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { UnpaginatedSubprogramsStore } from '../../../programs/store/subprograms/unpaginated-subprograms.store';
-import { QuillEditorComponent } from 'ngx-quill';
+import { StaffStore } from '@features/admin/users/store/users/staff.store';
 
 @Component({
   selector: 'app-project-add',
   templateUrl: './add-project.html',
-  providers: [AddProjectStore, UnpaginatedSubprogramsStore, UnpaginatedCategoriesStore],
+  providers: [AddProjectStore, UnpaginatedSubprogramsStore, UnpaginatedCategoriesStore, StaffStore],
   imports: [
     SelectModule,
     MultiSelectModule,
@@ -24,9 +24,8 @@ import { QuillEditorComponent } from 'ngx-quill';
     Button,
     InputText,
     DatePickerModule,
-    ReactiveFormsModule,
-    QuillEditorComponent,
-  ],
+    ReactiveFormsModule
+  ]
 })
 export class AddProjectComponent {
   #fb = inject(FormBuilder);
@@ -34,16 +33,21 @@ export class AddProjectComponent {
   store = inject(AddProjectStore);
   categoriesStore = inject(UnpaginatedCategoriesStore);
   programsStore = inject(UnpaginatedSubprogramsStore);
+  staffStore = inject(StaffStore);
 
   constructor() {
     this.form = this.#fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      form_link: [''],
+      context: [''],
+      objectives: [''],
+      duration_hours: [null],
+      selection_criteria: [''],
       started_at: [null, Validators.required],
       ended_at: [null, Validators.required],
       program: ['', Validators.required],
       categories: [[], Validators.required],
+      project_manager: ['']
     });
   }
 

@@ -1,9 +1,24 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { OnInit, inject, signal, effect, Component, computed } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { LucideAngularModule, Trash2, SquarePen, Images, ChartColumn } from 'lucide-angular';
-import { QuillEditorComponent } from 'ngx-quill';
+import {
+  LucideAngularModule,
+  Trash2,
+  SquarePen,
+  Images,
+  ChartColumn,
+  ChevronDown,
+  FolderOpen,
+  User,
+  Clock,
+  Calendar,
+  Flag,
+  FileText,
+  BookOpen,
+  Target,
+  CheckSquare
+} from 'lucide-angular';
 import { Button } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputText } from 'primeng/inputtext';
@@ -13,18 +28,18 @@ import { TextareaModule } from 'primeng/textarea';
 import { environment } from '@environments/environment';
 import { FileUpload, Tabs, MetricsTableComponent } from '@shared/components';
 import {
-  MetricsMap,
   calculateMetricsTotal,
   calculateAchievementPercentage,
   initializeMetricsMap,
   metricsMapToDto,
   parseDate,
-  extractCategoryIds
+  extractCategoryIds,
+  type MetricsMap
 } from '@shared/helpers';
-import { IProject } from '@shared/models';
 import { ApiImgPipe } from '@shared/pipes';
 import { IndicatorsStore } from '@features/admin/programs/store/indicators/indicators.store';
 import { UnpaginatedSubprogramsStore } from '@features/admin/programs/store/subprograms/unpaginated-subprograms.store';
+import { StaffStore } from '@features/admin/users/store/users/staff.store';
 import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
 import { DeleteGalleryStore } from '../../store/galleries/delete-gallery.store';
 import { GalleryStore } from '../../store/galleries/galeries.store';
@@ -35,6 +50,7 @@ import { ProjectStore } from '../../store/projects/project.store';
 @Component({
   selector: 'app-project-edit',
   templateUrl: './edit-project.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     IndicatorsStore,
     GalleryStore,
@@ -43,7 +59,8 @@ import { ProjectStore } from '../../store/projects/project.store';
     UpdateProjectStore,
     UnpaginatedSubprogramsStore,
     UnpaginatedCategoriesStore,
-    AddMetricStore
+    AddMetricStore,
+    StaffStore
   ],
   imports: [
     CommonModule,
@@ -59,7 +76,6 @@ import { ProjectStore } from '../../store/projects/project.store';
     FileUpload,
     NgOptimizedImage,
     ApiImgPipe,
-    QuillEditorComponent,
     Tabs,
     MetricsTableComponent
   ]
@@ -76,14 +92,28 @@ export class EditProjectComponent implements OnInit {
   programsStore = inject(UnpaginatedSubprogramsStore);
   addMetricsStore = inject(AddMetricStore);
   indicatorsStore = inject(IndicatorsStore);
-  form!: FormGroup;
+  staffStore = inject(StaffStore);
+  form = this.#initForm();
   metricsMap: MetricsMap = {};
-  activeTab = signal('edit');
+  activeTab = signal('details');
   url = `${environment.apiUrl}projects/cover/`;
   galleryUrl = `${environment.apiUrl}projects/gallery/`;
-  icons = { trash: Trash2 };
+  icons = {
+    trash: Trash2,
+    chevronDown: ChevronDown,
+    folder: FolderOpen,
+    user: User,
+    clock: Clock,
+    calendar: Calendar,
+    flag: Flag,
+    fileText: FileText,
+    bookOpen: BookOpen,
+    target: Target,
+    checkSquare: CheckSquare
+  } as const;
   tabs = [
-    { label: 'Modifier le projet', name: 'edit', icon: SquarePen },
+    { label: "Fiche d'activité", name: 'details', icon: ChartColumn },
+    { label: 'Mettre à jour', name: 'edit', icon: SquarePen },
     { label: 'Gérer la galerie', name: 'gallery', icon: Images },
     { label: 'Les indicateurs', name: 'indicators', icon: ChartColumn }
   ];
@@ -92,7 +122,6 @@ export class EditProjectComponent implements OnInit {
   achievementPercentage = computed(() => calculateAchievementPercentage(this.totalTargeted(), this.totalAchieved()));
 
   constructor() {
-    this.form = this.#initForm();
     this.#watchProjectChanges();
   }
 
@@ -106,11 +135,15 @@ export class EditProjectComponent implements OnInit {
       id: ['', Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
-      form_link: [''],
+      context: [''],
+      objectives: [''],
+      duration_hours: [null],
+      selection_criteria: [''],
       started_at: ['', Validators.required],
       ended_at: ['', Validators.required],
       program: ['', Validators.required],
-      categories: [[], Validators.required]
+      categories: [[], Validators.required],
+      project_manager: [null]
     });
   }
 
@@ -118,14 +151,17 @@ export class EditProjectComponent implements OnInit {
     effect(() => {
       const project = this.projectStore.project();
       if (!project) return;
-      this.#initMetrics(project);
-      this.#patchForm(project);
+      const indicators = this.indicatorsStore.indicators();
+      this.metricsMap = initializeMetricsMap(indicators, project.metrics);
+      this.form.patchValue({
+        ...project,
+        started_at: parseDate(project.started_at),
+        ended_at: parseDate(project.ended_at),
+        program: project.program.id,
+        categories: extractCategoryIds(project.categories),
+        project_manager: project.project_manager?.id || null
+      });
     });
-  }
-
-  #initMetrics(project: IProject): void {
-    const indicators = this.indicatorsStore.indicators();
-    this.metricsMap = initializeMetricsMap(indicators, project.metrics);
   }
 
   onSaveMetrics(): void {
@@ -134,16 +170,6 @@ export class EditProjectComponent implements OnInit {
     const indicators = this.indicatorsStore.indicators();
     const metrics = metricsMapToDto(this.metricsMap, indicators);
     this.addMetricsStore.addMetrics({ id: project.id, metrics });
-  }
-
-  #patchForm(project: IProject): void {
-    this.form.patchValue({
-      ...project,
-      started_at: parseDate(project.started_at),
-      ended_at: parseDate(project.ended_at),
-      program: project.program.id,
-      categories: extractCategoryIds(project.categories)
-    });
   }
 
   onUpdateProject(): void {

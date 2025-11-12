@@ -43,40 +43,70 @@ export interface IArticle extends IBase {
 export interface IUser extends IBase {
   email: string;
   name: string;
-  password?: string;
-  biography?: string;
-  gender?: string;
+  password: string;
+  biography: string;
+  phone_number: string;
+  city: string;
+  country: string;
+  gender: string;
+  birth_date: Date;
+  google_image: string;
+  profile: string;
+  referral_code: string;
+  referred_by: IUser;
   referralsCount?: number;
-  phone_number?: string;
-  city?: string;
-  country?: string;
-  birth_date?: Date;
-  referral_code?: string;
-  referrals?: IUser[];
-  referred_by?: IUser;
-  reason: string;
-  google_image?: string;
-  profile?: string;
-  roles: IRole[];
+  referrals: IUser[];
   ventures: IVenture[];
+  roles: IRole[];
+  participated_projects: IProject[];
+  participated_events: IEvent[];
+  managed_projects: IProject[];
+  managed_events: IEvent[];
+  articles: IArticle[];
+  comments: IComment[];
 }
 
 export interface IProject extends IBase {
   name: string;
+  is_highlighted: boolean;
   slug: string;
-  cover?: string;
+  cover: string;
   description: string;
   started_at: Date;
   ended_at: Date;
-  form_link?: string;
-  report?: JSON;
   is_published: boolean;
-  place?: string;
-  is_highlighted?: boolean;
+  context: string;
+  objectives: string;
+  duration_hours: number;
+  selection_criteria: string;
+  project_manager?: IUser;
   program: ISubprogram;
   categories: ICategory[];
   gallery: IImage[];
   metrics: IMetric[];
+  participants: IUser[];
+}
+
+export interface IEvent extends IBase {
+  name: string;
+  slug: string;
+  is_highlighted: boolean;
+  cover: string;
+  place: string;
+  description: string;
+  context: string;
+  objectives: string;
+  duration_hours: number;
+  event_manager: IUser;
+  selection_criteria: string;
+  started_at: Date;
+  is_published: boolean;
+  ended_at: Date;
+  program: ISubprogram;
+  categories: ICategory[];
+  gallery: IImage[];
+  metrics: IMetric[];
+  participants: IUser[];
 }
 
 export interface IVenture extends IBase {
@@ -124,23 +154,6 @@ export interface ISubprogram extends IBase {
   program: IProgram;
   projects: IProject[];
   events: IEvent[];
-}
-
-export interface IEvent extends IBase {
-  name: string;
-  slug: string;
-  cover: string;
-  place: string;
-  description: string;
-  started_at: Date;
-  is_published: boolean;
-  is_highlighted: boolean;
-  link: string;
-  ended_at: Date;
-  program: ISubprogram;
-  categories: ICategory[];
-  gallery: IImage[];
-  metrics: IMetric[];
 }
 
 export interface IMetric extends IBase {

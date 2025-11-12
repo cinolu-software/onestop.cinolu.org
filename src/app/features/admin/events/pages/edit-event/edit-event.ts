@@ -8,8 +8,24 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ActivatedRoute } from '@angular/router';
-import { QuillEditorComponent } from 'ngx-quill';
-import { ChartColumn, Images, LucideAngularModule, SquarePen, Trash2 } from 'lucide-angular';
+import {
+  ChartColumn,
+  Images,
+  LucideAngularModule,
+  SquarePen,
+  Trash2,
+  ChevronDown,
+  FolderOpen,
+  User,
+  Clock,
+  Calendar,
+  Flag,
+  FileText,
+  BookOpen,
+  Target,
+  MapPin,
+  SquareCheckBig
+} from 'lucide-angular';
 import { environment } from '@environments/environment';
 import { FileUpload, Tabs, MetricsTableComponent } from '@shared/components';
 import {
@@ -25,6 +41,7 @@ import { IEvent } from '@shared/models';
 import { ApiImgPipe } from '@shared/pipes';
 import { IndicatorsStore } from '@features/admin/programs/store/indicators/indicators.store';
 import { UnpaginatedSubprogramsStore } from '@features/admin/programs/store/subprograms/unpaginated-subprograms.store';
+import { StaffStore } from '@features/admin/users/store/users/staff.store';
 import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
 import { AddMetricStore } from '../../store/events/add-metric.store';
 import { UpdateEventStore } from '../../store/events/update-event.store';
@@ -45,7 +62,8 @@ import { EventsPublishStore } from '../../store/events/events-publish-params.sto
     UpdateEventStore,
     UnpaginatedSubprogramsStore,
     UnpaginatedCategoriesStore,
-    AddMetricStore
+    AddMetricStore,
+    StaffStore
   ],
   imports: [
     SelectModule,
@@ -60,7 +78,6 @@ import { EventsPublishStore } from '../../store/events/events-publish-params.sto
     FileUpload,
     NgOptimizedImage,
     ApiImgPipe,
-    QuillEditorComponent,
     LucideAngularModule,
     Tabs,
     MetricsTableComponent
@@ -78,15 +95,29 @@ export class EditEventComponent implements OnInit {
   deleteGalleryStore = inject(DeleteGalleryStore);
   galleryStore = inject(GalleryStore);
   addMetricsStore = inject(AddMetricStore);
+  staffStore = inject(StaffStore);
   form!: FormGroup;
   metricsMap: MetricsMap = {};
-  activeTab = signal('edit');
-
+  activeTab = signal('details');
   url = `${environment.apiUrl}events/cover/`;
   galleryUrl = `${environment.apiUrl}events/gallery/`;
-  icons = { trash: Trash2 };
+  icons = {
+    trash: Trash2,
+    chevronDown: ChevronDown,
+    folder: FolderOpen,
+    user: User,
+    clock: Clock,
+    calendar: Calendar,
+    flag: Flag,
+    fileText: FileText,
+    bookOpen: BookOpen,
+    target: Target,
+    checkSquare: SquareCheckBig,
+    mapPin: MapPin
+  };
   tabs = [
-    { label: "Modifier l'événement", name: 'edit', icon: SquarePen },
+    { label: "Fiche d'activité", name: 'details', icon: ChartColumn },
+    { label: 'Mettre à jour', name: 'edit', icon: SquarePen },
     { label: 'Gérer la galerie', name: 'gallery', icon: Images },
     { label: 'Les indicateurs', name: 'indicators', icon: ChartColumn }
   ];
@@ -110,11 +141,15 @@ export class EditEventComponent implements OnInit {
       name: ['', Validators.required],
       place: [''],
       description: ['', Validators.required],
-      form_link: [''],
+      context: [''],
+      objectives: [''],
+      duration_hours: [null],
+      selection_criteria: [''],
       started_at: ['', Validators.required],
       ended_at: ['', Validators.required],
       program: ['', Validators.required],
-      categories: [[], Validators.required]
+      categories: [[], Validators.required],
+      event_manager: ['']
     });
   }
 
@@ -124,7 +159,8 @@ export class EditEventComponent implements OnInit {
       started_at: parseDate(event.started_at),
       ended_at: parseDate(event.ended_at),
       program: event.program.id,
-      categories: extractCategoryIds(event.categories)
+      categories: extractCategoryIds(event.categories),
+      event_manager: event.event_manager?.id ?? ''
     });
   }
 
