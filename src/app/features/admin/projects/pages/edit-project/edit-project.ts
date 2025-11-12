@@ -19,6 +19,7 @@ import {
   Target,
   CheckSquare
 } from 'lucide-angular';
+import { AccordionModule } from 'primeng/accordion';
 import { Button } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputText } from 'primeng/inputtext';
@@ -73,6 +74,7 @@ import { ProjectStore } from '../../store/projects/project.store';
     Button,
     InputText,
     DatePickerModule,
+    AccordionModule,
     FileUpload,
     NgOptimizedImage,
     ApiImgPipe,

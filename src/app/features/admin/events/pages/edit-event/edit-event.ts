@@ -1,4 +1,5 @@
 import { Component, effect, inject, OnInit, signal, computed } from '@angular/core';
+import { AccordionModule } from 'primeng/accordion';
 import { Button } from 'primeng/button';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { InputText } from 'primeng/inputtext';
@@ -75,6 +76,7 @@ import { EventsPublishStore } from '../../store/events/events-publish-params.sto
     InputText,
     DatePickerModule,
     ReactiveFormsModule,
+    AccordionModule,
     FileUpload,
     NgOptimizedImage,
     ApiImgPipe,

@@ -2,171 +2,241 @@
   @let event = eventStore.event();
   <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
   @if (activeTab() === 'details') {
-  <!-- Event Title Section -->
-  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-      <div class="flex-1">
-        <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ event?.name }}</h1>
-        <div class="flex flex-wrap gap-2">
-          @for (category of event?.categories; track category.id) {
-          <span
-            class="px-4 py-1.5 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium border border-primary-100">
-            {{ category.name }}
-          </span>
+  <!-- Hero Section with Gradient -->
+  <div
+    class="relative bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 rounded-2xl shadow-lg overflow-hidden">
+    <div class="absolute inset-0 bg-[url('/patterns/grid.svg')] opacity-10"></div>
+    <div class="relative px-8 py-10">
+      <div class="flex items-start justify-between gap-6">
+        <div class="flex-1">
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+            <i-lucide [name]="icons.folder" class="w-4 h-4 text-white" />
+            <span class="text-sm font-medium text-white">{{ event?.program?.name || 'Programme' }}</span>
+          </div>
+          <h1 class="text-4xl font-bold text-white mb-4 leading-tight">{{ event?.name }}</h1>
+          <div class="flex flex-wrap gap-2">
+            @for (category of event?.categories; track category.id) {
+            <span class="px-4 py-2 bg-white/90 text-primary-700 rounded-full text-sm font-semibold shadow-sm">
+              {{ category.name }}
+            </span>
+            }
+          </div>
+        </div>
+        @if (event?.event_manager) {
+        <div class="hidden lg:block bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+          <div class="text-xs text-white/80 mb-2">Responsable</div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+              <i-lucide [name]="icons.user" class="w-5 h-5 text-white" />
+            </div>
+            <div class="font-semibold text-white">{{ event?.event_manager?.name }}</div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Metrics Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Duration Card -->
+    <div
+      class="group relative bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md hover:border-primary-300 transition-all duration-300">
+      <div
+        class="absolute top-0 right-0 w-24 h-24 bg-primary-50 rounded-full -mr-12 -mt-12 opacity-40 group-hover:opacity-60 transition-opacity"></div>
+      <div class="relative">
+        <div
+          class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl mb-3 group-hover:scale-105 transition-transform">
+          <i-lucide [name]="icons.clock" class="w-5 h-5 text-primary-600" />
+        </div>
+        <div class="text-xs font-medium text-gray-500 mb-1.5">Durée estimée</div>
+        <div class="text-2xl font-semibold text-gray-900">
+          {{ event?.duration_hours || '—' }} @if (event?.duration_hours) {
+          <span class="text-base text-gray-500 font-normal ml-1">heures</span>
           }
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <i-lucide [name]="icons.folder" class="w-5 h-5 text-primary-600" />
-        </div>
-        <div class="text-sm font-medium text-gray-500">Programme</div>
-      </div>
-      <div class="text-base font-semibold text-gray-900">{{ event?.program?.name || '—' }}</div>
-    </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+    <!-- Event Manager Card -->
+    <div
+      class="group relative bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md hover:border-primary-300 transition-all duration-300">
+      <div
+        class="absolute top-0 right-0 w-24 h-24 bg-primary-50 rounded-full -mr-12 -mt-12 opacity-40 group-hover:opacity-60 transition-opacity"></div>
+      <div class="relative">
+        <div
+          class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl mb-3 group-hover:scale-105 transition-transform">
           <i-lucide [name]="icons.user" class="w-5 h-5 text-primary-600" />
         </div>
-        <div class="text-sm font-medium text-gray-500">Responsable</div>
-      </div>
-      <div class="text-base font-semibold text-gray-900">{{ event?.event_manager?.name || 'Non assigné' }}</div>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <i-lucide [name]="icons.clock" class="w-5 h-5 text-primary-600" />
+        <div class="text-xs font-medium text-gray-500 mb-1.5">Responsable</div>
+        <div class="text-base font-semibold text-gray-900 truncate">
+          {{ event?.event_manager?.name || 'Non assigné' }}
         </div>
-        <div class="text-sm font-medium text-gray-500">Durée estimée</div>
-      </div>
-      <div class="text-base font-semibold text-gray-900">
-        {{ event?.duration_hours ? (event?.duration_hours + ' h') : 'Non spécifiée' }}
       </div>
     </div>
 
-    <!-- Lieu -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+    <!-- Place Card -->
+    <div
+      class="group relative bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md hover:border-primary-300 transition-all duration-300">
+      <div
+        class="absolute top-0 right-0 w-24 h-24 bg-primary-50 rounded-full -mr-12 -mt-12 opacity-40 group-hover:opacity-60 transition-opacity"></div>
+      <div class="relative">
+        <div
+          class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl mb-3 group-hover:scale-105 transition-transform">
           <i-lucide [name]="icons.mapPin" class="w-5 h-5 text-primary-600" />
         </div>
-        <div class="text-sm font-medium text-gray-500">Lieu</div>
+        <div class="text-xs font-medium text-gray-500 mb-1.5">Lieu</div>
+        <div class="text-base font-semibold text-gray-900 truncate">{{ event?.place || 'Non spécifié' }}</div>
       </div>
-      <div class="text-base font-semibold text-gray-900">{{ event?.place || 'Non spécifié' }}</div>
     </div>
-  </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <i-lucide [name]="icons.calendar" class="w-6 h-6 text-primary-600" />
+    <!-- Program Card -->
+    <div
+      class="group relative bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md hover:border-primary-300 transition-all duration-300">
+      <div
+        class="absolute top-0 right-0 w-24 h-24 bg-primary-50 rounded-full -mr-12 -mt-12 opacity-40 group-hover:opacity-60 transition-opacity"></div>
+      <div class="relative">
+        <div
+          class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl mb-3 group-hover:scale-105 transition-transform">
+          <i-lucide [name]="icons.folder" class="w-5 h-5 text-primary-600" />
         </div>
-        <div class="flex-1">
-          <div class="text-sm font-medium text-gray-500 mb-1">Date de début</div>
-          <div class="text-lg font-bold text-gray-900">{{ event?.started_at | date: 'fullDate' }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <i-lucide [name]="icons.flag" class="w-6 h-6 text-primary-600" />
-        </div>
-        <div class="flex-1">
-          <div class="text-sm font-medium text-gray-500 mb-1">Date de fin</div>
-          <div class="text-lg font-bold text-gray-900">{{ event?.ended_at | date: 'fullDate' }}</div>
-        </div>
+        <div class="text-xs font-medium text-gray-500 mb-1.5">Programme</div>
+        <div class="text-base font-semibold text-gray-900 truncate">{{ event?.program?.name || 'Non défini' }}</div>
       </div>
     </div>
   </div>
 
-  <div class="space-y-3">
-    @if (event?.description) {
-    <details class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <summary class="flex items-center justify-between cursor-pointer px-6 py-4 hover:bg-gray-50 transition-colors">
-        <div class="flex items-center gap-4">
-          <span class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i-lucide [name]="icons.fileText" class="w-5 h-5 text-primary-600" />
-          </span>
-          <span class="font-semibold text-gray-900 text-lg">Présentation générale</span>
+  <!-- Timeline Section -->
+  <div
+    class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md hover:border-primary-300 transition-all duration-300">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl">
+        <i-lucide [name]="icons.calendar" class="w-5 h-5 text-primary-600" />
+      </div>
+      <h3 class="text-base font-semibold text-gray-900">Calendrier de l'événement</h3>
+    </div>
+
+    <div class="relative">
+      <div class="absolute left-5 top-5 bottom-5 w-px bg-gradient-to-b from-primary-300 to-primary-500"></div>
+
+      <div class="space-y-4">
+        <!-- Start Date -->
+        <div class="relative flex items-start gap-3">
+          <div
+            class="relative z-10 flex items-center justify-center w-11 h-11 bg-primary-500 rounded-xl shadow-sm flex-shrink-0">
+            <i-lucide [name]="icons.calendar" class="w-5 h-5 text-white" />
+          </div>
+          <div class="pt-1.5">
+            <div class="text-xs font-medium text-gray-500 mb-1">Début</div>
+            <div class="text-lg text-gray-900">{{ event?.started_at | date: 'dd MMM yyyy' }}</div>
+          </div>
         </div>
-        <i-lucide
-          [name]="icons.chevronDown"
-          class="w-5 h-5 text-gray-400 transition-transform duration-300 group-open:rotate-180" />
-      </summary>
-      <div class="px-6 py-6 border-t border-gray-200 bg-gray-50">
-        <div class="prose prose-sm max-w-none">
-          <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ event?.description }}</p>
+
+        <!-- End Date -->
+        <div class="relative flex items-start gap-3">
+          <div
+            class="relative z-10 flex items-center justify-center w-11 h-11 bg-primary-600 rounded-xl shadow-sm flex-shrink-0">
+            <i-lucide [name]="icons.flag" class="w-5 h-5 text-white" />
+          </div>
+          <div class="pt-1.5">
+            <div class="text-xs font-medium text-gray-500 mb-1">Fin</div>
+            <div class="text-lg font-semibold text-gray-900">{{ event?.ended_at | date: 'dd MMM yyyy' }}</div>
+          </div>
         </div>
       </div>
-    </details>
-    } @if (event?.context) {
-    <details class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <summary class="flex items-center justify-between cursor-pointer px-6 py-4 hover:bg-gray-50 transition-colors">
-        <div class="flex items-center gap-4">
-          <span class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i-lucide [name]="icons.bookOpen" class="w-5 h-5 text-primary-600" />
-          </span>
-          <span class="font-semibold text-gray-900 text-lg">Contexte et justification</span>
-        </div>
-        <i-lucide
-          [name]="icons.chevronDown"
-          class="w-5 h-5 text-gray-400 transition-transform duration-300 group-open:rotate-180" />
-      </summary>
-      <div class="px-6 py-6 border-t border-gray-200 bg-gray-50">
-        <div class="prose prose-sm max-w-none">
-          <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ event?.context }}</p>
-        </div>
-      </div>
-    </details>
-    } @if (event?.objectives) {
-    <details class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <summary class="flex items-center justify-between cursor-pointer px-6 py-4 hover:bg-gray-50 transition-colors">
-        <div class="flex items-center gap-4">
-          <span class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i-lucide [name]="icons.target" class="w-5 h-5 text-primary-600" />
-          </span>
-          <span class="font-semibold text-gray-900 text-lg">Objectifs visés</span>
-        </div>
-        <i-lucide
-          [name]="icons.chevronDown"
-          class="w-5 h-5 text-gray-400 transition-transform duration-300 group-open:rotate-180" />
-      </summary>
-      <div class="px-6 py-6 border-t border-gray-200 bg-gray-50">
-        <div class="prose prose-sm max-w-none">
-          <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ event?.objectives }}</p>
-        </div>
-      </div>
-    </details>
-    } @if (event?.selection_criteria) {
-    <details class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <summary class="flex items-center justify-between cursor-pointer px-6 py-4 hover:bg-gray-50 transition-colors">
-        <div class="flex items-center gap-4">
-          <span class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i-lucide [name]="icons.checkSquare" class="w-5 h-5 text-primary-600" />
-          </span>
-          <span class="font-semibold text-gray-900 text-lg">Critères d'éligibilité</span>
-        </div>
-        <i-lucide
-          [name]="icons.chevronDown"
-          class="w-5 h-5 text-gray-400 transition-transform duration-300 group-open:rotate-180" />
-      </summary>
-      <div class="px-6 py-6 border-t border-gray-200 bg-gray-50">
-        <div class="prose prose-sm max-w-none">
-          <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ event?.selection_criteria }}</p>
-        </div>
-      </div>
-    </details>
-    }
+    </div>
   </div>
+
+  <!-- Content Sections with Enhanced Design -->
+  <p-accordion [multiple]="true">
+    <p-accordion-panel value="0">
+      <p-accordion-header>
+        <div class="flex items-center gap-5 w-full">
+          <div
+            class="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl shadow-md flex-shrink-0">
+            <i-lucide [name]="icons.fileText" class="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <span class="text-gray-800 text-lg">Présentation générale</span>
+            <p class="text-sm text-gray-500 mt-0.5">Vue d'ensemble de l'événement</p>
+          </div>
+        </div>
+      </p-accordion-header>
+      <p-accordion-content>
+        <div class="prose prose-sm max-w-none">
+          <p class="text-gray-700 text-base leading-relaxed whitespace-pre-line">
+            {{ event?.description || 'Aucune présentation disponible pour le moment.' }}
+          </p>
+        </div>
+      </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="1">
+      <p-accordion-header>
+        <div class="flex items-center gap-5 w-full">
+          <div
+            class="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl shadow-md flex-shrink-0">
+            <i-lucide [name]="icons.bookOpen" class="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <span class="text-gray-800 text-lg">Contexte et justification</span>
+            <p class="text-sm text-gray-500 mt-0.5">Pourquoi cet événement existe</p>
+          </div>
+        </div>
+      </p-accordion-header>
+      <p-accordion-content>
+        <div class="prose prose-sm max-w-none">
+          <p class="text-gray-700 text-base leading-relaxed whitespace-pre-line">
+            {{ event?.context || 'Aucun contexte défini pour le moment.' }}
+          </p>
+        </div>
+      </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="2">
+      <p-accordion-header>
+        <div class="flex items-center gap-5 w-full">
+          <div
+            class="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl shadow-md flex-shrink-0">
+            <i-lucide [name]="icons.target" class="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <span class="text-gray-800 text-lg">Objectifs visés</span>
+            <p class="text-sm text-gray-500 mt-0.5">Ce que nous voulons accomplir</p>
+          </div>
+        </div>
+      </p-accordion-header>
+      <p-accordion-content>
+        <div class="prose prose-sm max-w-none">
+          <p class="text-gray-700 text-base leading-relaxed whitespace-pre-line">
+            {{ event?.objectives || 'Aucun objectif défini pour le moment.' }}
+          </p>
+        </div>
+      </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="3">
+      <p-accordion-header>
+        <div class="flex items-center gap-5 w-full">
+          <div
+            class="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl shadow-md flex-shrink-0">
+            <i-lucide [name]="icons.checkSquare" class="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <span class="text-gray-800 text-lg">Critères d'éligibilité</span>
+            <p class="text-sm text-gray-500 mt-0.5">Conditions de participation</p>
+          </div>
+        </div>
+      </p-accordion-header>
+      <p-accordion-content>
+        <div class="prose prose-sm max-w-none">
+          <p class="text-gray-700 text-base leading-relaxed whitespace-pre-line">
+            {{ event?.selection_criteria || 'Aucun critère d\'éligibilité défini pour le moment.' }}
+          </p>
+        </div>
+      </p-accordion-content>
+    </p-accordion-panel>
+  </p-accordion>
   } @if (activeTab() === 'gallery') {
   <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
     <!-- Section: Image de présentation -->
@@ -323,7 +393,6 @@
               placeholder="Sélectionner un responsable"
               class="w-full" />
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="categories" class="text-sm font-semibold text-gray-700">
               Catégories<span class="text-red-500 ml-1">*</span>
