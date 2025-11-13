@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { getPerformanceStatus, getPerformanceColor } from '../helpers/metrics.helper';
+import { performanceStatus, performanceColor } from '../helpers/metrics.helper';
 
 @Pipe({
   name: 'performanceStatus',
@@ -7,7 +7,7 @@ import { getPerformanceStatus, getPerformanceColor } from '../helpers/metrics.he
 })
 export class PerformanceStatusPipe implements PipeTransform {
   transform(percentage: number): string {
-    const status = getPerformanceStatus(percentage);
-    return getPerformanceColor(status);
+    const status = performanceStatus(percentage);
+    return performanceColor(status);
   }
 }

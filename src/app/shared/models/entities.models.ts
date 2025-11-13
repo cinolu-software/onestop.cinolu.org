@@ -97,7 +97,7 @@ export interface IEvent extends IBase {
   context: string;
   objectives: string;
   duration_hours: number;
-  event_manager: IUser;
+  event_manager?: IUser;
   selection_criteria: string;
   started_at: Date;
   is_published: boolean;

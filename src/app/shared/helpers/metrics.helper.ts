@@ -25,7 +25,7 @@ const DEFAULT_THRESHOLDS: PerformanceThresholds = {
   high: 80
 };
 
-export function initializeMetricsMap(indicators: IIndicator[], existingMetrics: IMetric[] = []): MetricsMap {
+export function metricsMap(indicators: IIndicator[], existingMetrics: IMetric[] = []): MetricsMap {
   return indicators.reduce((acc, indicator) => {
     const metric = existingMetrics.find((m) => m?.indicator?.id === indicator.id);
     acc[indicator.id] = {
@@ -44,16 +44,16 @@ export function metricsMapToDto(metricsMap: MetricsMap, indicators: IIndicator[]
   }));
 }
 
-export function calculateMetricsTotal(metricsMap: MetricsMap, field: 'target' | 'achieved'): number {
+export function totalMetrics(metricsMap: MetricsMap, field: 'target' | 'achieved'): number {
   return Object.values(metricsMap).reduce((sum, metric) => sum + (metric[field] ?? 0), 0);
 }
 
-export function calculateAchievementPercentage(totalTargeted: number, totalAchieved: number): number {
+export function achievementPercentage(totalTargeted: number, totalAchieved: number): number {
   if (!totalTargeted || !totalAchieved) return 0;
   return Math.round((totalAchieved / totalTargeted) * 100);
 }
 
-export function getPerformanceStatus(
+export function performanceStatus(
   percentage: number,
   thresholds: PerformanceThresholds = DEFAULT_THRESHOLDS
 ): PerformanceStatus {
@@ -62,7 +62,7 @@ export function getPerformanceStatus(
   return 'high';
 }
 
-export function getPerformanceColor(status: PerformanceStatus): string {
+export function performanceColor(status: PerformanceStatus): string {
   const colorMap: Record<PerformanceStatus, string> = {
     low: 'bg-red-500',
     medium: 'bg-yellow-500',
@@ -77,32 +77,32 @@ export function validateMetrics(metricsMap: MetricsMap): boolean {
   );
 }
 
-export function getMetricsSummary(metricsMap: MetricsMap) {
-  const totalTargeted = calculateMetricsTotal(metricsMap, 'target');
-  const totalAchieved = calculateMetricsTotal(metricsMap, 'achieved');
-  const percentage = calculateAchievementPercentage(totalTargeted, totalAchieved);
-  const status = getPerformanceStatus(percentage);
+export function metricsSummary(metricsMap: MetricsMap) {
+  const totalTargeted = totalMetrics(metricsMap, 'target');
+  const totalAchieved = totalMetrics(metricsMap, 'achieved');
+  const percentage = achievementPercentage(totalTargeted, totalAchieved);
+  const status = performanceStatus(percentage);
 
   return {
     totalTargeted,
     totalAchieved,
     percentage,
     status,
-    color: getPerformanceColor(status)
+    color: performanceColor(status)
   };
 }
 
 export function calculateGroupMetrics(metricsMap: MetricsMap, indicators: IIndicator[]) {
   const totalTargeted = indicators.reduce((sum, ind) => sum + (metricsMap[ind.id]?.target ?? 0), 0);
   const totalAchieved = indicators.reduce((sum, ind) => sum + (metricsMap[ind.id]?.achieved ?? 0), 0);
-  const percentage = calculateAchievementPercentage(totalTargeted, totalAchieved);
-  const status = getPerformanceStatus(percentage);
+  const percentage = achievementPercentage(totalTargeted, totalAchieved);
+  const status = performanceStatus(percentage);
   return {
     totalTargeted,
     totalAchieved,
     percentage,
     status,
-    color: getPerformanceColor(status)
+    color: performanceColor(status)
   };
 }
 
