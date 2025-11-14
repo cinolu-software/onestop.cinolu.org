@@ -1,31 +1,87 @@
-<div class="bg-white max-w-3xl rounded-lg p-6">
-  <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="flex flex-col gap-1.5">
-        <label for="categories" class="block font-medium text-gray-700">Catégories</label>
-        <p-select
-          [inputId]="'categories'"
-          [options]="categoriesStore.categories()"
-          [optionValue]="'id'"
-          [optionLabel]="'name'"
-          formControlName="category"></p-select>
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+  <div class="bg-gradient-to-r from-primary-50 to-primary-100/50 px-6 py-5 border-b border-primary-200/50">
+    <h3 class="text-xl font-bold text-gray-900 mb-1">Créer un nouveau programme</h3>
+    <p class="text-sm text-gray-600">Remplissez les informations ci-dessous pour ajouter un programme</p>
+  </div>
+
+  <form class="p-6 space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="space-y-2">
+        <label for="categories" class="block text-sm font-semibold text-gray-700"> Catégorie </label>
+        <div class="relative">
+          <p-select
+            [inputId]="'categories'"
+            [options]="categoriesStore.categories()"
+            [optionValue]="'id'"
+            [optionLabel]="'name'"
+            formControlName="category"
+            placeholder="Sélectionner une catégorie"
+            class="w-full" />
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Choisissez la catégorie appropriée</p>
       </div>
-      <div class="flex flex-col gap-1.5">
-        <label for="name" class="font-medium">Nom du programme<span class="text-red-500">*</span></label>
-        <input pInputText id="name" formControlName="name" />
-      </div>
-      <div class="flex flex-col gap-1.5 col-span-2">
-        <label for="description" class="font-medium">Description<span class="text-red-500">*</span></label>
-        <textarea pTextarea id="description" formControlName="description" rows="8" cols="30"></textarea>
+
+      <div class="space-y-2">
+        <label for="name" class="block text-sm font-semibold text-gray-700">
+          Nom du programme
+          <span class="text-red-500 ml-0.5">*</span>
+        </label>
+        <div class="relative">
+          <input pInputText id="name" formControlName="name" placeholder="Ex: Programme d'Innovation" class="w-full" />
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Donnez un nom clair et descriptif</p>
       </div>
     </div>
-    <p-button
-      size="small"
-      severity="primary"
-      [disabled]="form.invalid || addProgramStore.isLoading()"
-      [loading]="addProgramStore.isLoading()"
-      (onClick)="onSubmit()">
-      Ajouter le programme
-    </p-button>
+
+    <div class="space-y-2">
+      <label for="description" class="block text-sm font-semibold text-gray-700">
+        Description
+        <span class="text-red-500 ml-0.5">*</span>
+      </label>
+      <div class="relative">
+        <textarea
+          pTextarea
+          id="description"
+          formControlName="description"
+          rows="6"
+          placeholder="Décrivez le programme en détail..."
+          class="w-full resize-none"></textarea>
+      </div>
+      <p class="text-xs text-gray-500 mt-1">Fournissez une description complète du programme</p>
+    </div>
+
+    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+        <span>Champs obligatoires</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button
+          type="submit"
+          [disabled]="form.invalid || addProgramStore.isLoading()"
+          class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all duration-200">
+          @if (addProgramStore.isLoading()) {
+          <svg
+            class="animate-spin h-4 w-4 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Création en cours...</span>
+          } @else {
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>Créer le programme</span>
+          }
+        </button>
+      </div>
+    </div>
   </form>
 </div>
