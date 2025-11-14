@@ -9,7 +9,10 @@ import {
   Eye,
   EyeOff,
   Star,
-  StarOff
+  StarOff,
+  Filter,
+  FileX,
+  Sparkles
 } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -26,9 +29,9 @@ import { PublishProjectStore } from '../../store/projects/publish-project.store'
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { HighlightProjectStore } from '../../store/projects/highlight-project.store';
 import { FilterProjectsDto } from '../../dto/projects/filter-projects.dto';
-import { ProgressSpinner } from 'primeng/progressspinner';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { Tabs } from '@shared/components/tabs/tabs';
 
 @Component({
   selector: 'app-projects-list',
@@ -45,7 +48,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     ConfirmPopup,
     AvatarModule,
     ApiImgPipe,
-    ProgressSpinner
+    Tabs
   ]
 })
 export class ListProjects implements OnInit {
@@ -58,7 +61,7 @@ export class ListProjects implements OnInit {
   deleteProjectStore = inject(DeleteProjectStore);
   publishProjectStore = inject(PublishProjectStore);
   highlightStore = inject(HighlightProjectStore);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
     refresh: RefreshCcw,
@@ -69,12 +72,23 @@ export class ListProjects implements OnInit {
     eye: Eye,
     eyeOff: EyeOff,
     star: Star,
-    starOff: StarOff
+    starOff: StarOff,
+    filter: Filter,
+    fileX: FileX,
+    sparkles: Sparkles
   };
   queryParams = signal<FilterProjectsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q')
+    q: this.#route.snapshot.queryParamMap.get('q'),
+    filter: (this.#route.snapshot.queryParamMap.get('filter') as FilterProjectsDto['filter']) || 'all'
   });
+  activeTab = signal<string>(this.#route.snapshot.queryParamMap.get('filter') || 'all');
+  tabsConfig = signal([
+    { label: 'Tous les projets', name: 'all' },
+    { label: 'Publiés', name: 'published' },
+    { label: 'Brouillons', name: 'drafts' },
+    { label: 'En vedette', name: 'highlighted' }
+  ]);
 
   constructor() {
     this.searchForm = this.#fb.group({
@@ -92,6 +106,13 @@ export class ListProjects implements OnInit {
         this.queryParams().page = null;
         this.updateRouteAndProjects();
       });
+  }
+
+  onTabChange(tabName: string): void {
+    this.activeTab.set(tabName);
+    this.queryParams().filter = tabName as FilterProjectsDto['filter'];
+    this.queryParams().page = null;
+    this.updateRouteAndProjects();
   }
 
   loadProjects(): void {
