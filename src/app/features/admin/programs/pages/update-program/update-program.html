@@ -25,9 +25,7 @@
       </div>
       <p class="text-xs text-gray-500">Format recommandé: PNG, JPG (max 2MB)</p>
     </div>
-
     <div class="border-t border-gray-100"></div>
-
     <form class="space-y-6" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="space-y-2">
@@ -80,17 +78,12 @@
           <span>Champs obligatoires</span>
         </div>
         <p-button
+          [size]="'small'"
           type="submit"
           [disabled]="updateForm.invalid || updateProgramStore.isLoading()"
           [loading]="updateProgramStore.isLoading()"
-          severity="primary"
-          styleClass="font-semibold">
-          <span class="flex items-center gap-2">
-            @if (!updateProgramStore.isLoading()) {
-            <i-lucide [name]="icons.check" class="size-4" />
-            }
-            <span>{{ updateProgramStore.isLoading() ? 'Mise à jour...' : 'Mettre à jour' }}</span>
-          </span>
+          severity="primary">
+          Mettre à jour
         </p-button>
       </div>
     </form>
@@ -133,7 +126,6 @@
         </div>
       </div>
     </div>
-
     <div class="space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-gray-200">
         <div class="flex items-center gap-2">
@@ -144,20 +136,15 @@
           {{ indicatorsTab()[selectedCategory()].length || 0 }} indicateur(s)
         </span>
       </div>
-
       @for (ind of indicatorsTab()[selectedCategory()] ; track $index) {
       <div
         class="group relative bg-white border-2 border-gray-200 rounded-xl p-5 hover:border-primary-300 hover:shadow-md transition-all duration-200">
-        <!-- Number Badge -->
         <div
           class="absolute -left-3 -top-3 w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-lg">
           {{ $index + 1 }}
         </div>
-
         <div class="flex items-start gap-4 ml-4">
-          <!-- Form Fields -->
           <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Indicator Name -->
             <div class="space-y-2">
               <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-700 uppercase tracking-wide">
                 <i-lucide [name]="icons.tag" class="size-3.5 text-gray-500" />
@@ -170,8 +157,6 @@
                 autocomplete="off"
                 class="w-full" />
             </div>
-
-            <!-- KPI Target -->
             <div class="space-y-2">
               <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-700 uppercase tracking-wide">
                 <i-lucide [name]="icons.barChart" class="size-3.5 text-gray-500" />
@@ -186,16 +171,12 @@
                 class="w-full" />
             </div>
           </div>
-
-          <!-- Delete Button -->
           <p-button
             type="button"
             [disabled]="((indicatorsTab()[selectedCategory()].length || 0) <= 1)"
             (onClick)="removeIndicator($index)"
             severity="danger"
-            [text]="true"
-            size="small"
-            title="Supprimer l'indicateur">
+            size="small">
             <i-lucide [name]="icons.trash" class="size-5" />
           </p-button>
         </div>
@@ -215,12 +196,12 @@
       }
     </div>
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t-2 border-gray-200">
-      <p-button type="button" (onClick)="addIndicator()" severity="secondary" [outlined]="true">
+      <p-button type="button" [size]="'small'" (onClick)="addIndicator()" severity="secondary" [outlined]="true">
         Ajouter un indicateur
       </p-button>
-
       <p-button
         type="button"
+        [size]="'small'"
         [disabled]="addIndicatorStore.isLoading()"
         [loading]="addIndicatorStore.isLoading()"
         (onClick)="onSaveIndicators()"
