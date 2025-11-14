@@ -15,7 +15,6 @@ import { DeleteCategoryStore } from '../../store/categories/delete-category.stor
 import { UpdateCategoryStore } from '../../store/categories/update-category.store';
 import { ICategory } from '@shared/models/entities.models';
 import { FilterEventCategoriesDto } from '../../dto/categories/filter-categories.dto';
-import { ProgressSpinner } from 'primeng/progressspinner';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -31,8 +30,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     NgxPaginationModule,
     ReactiveFormsModule,
     Dialog,
-    ConfirmPopup,
-    ProgressSpinner
+    ConfirmPopup
   ]
 })
 export class EventCategories implements OnInit {
