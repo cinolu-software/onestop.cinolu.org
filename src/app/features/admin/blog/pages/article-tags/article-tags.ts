@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { LucideAngularModule, Plus, RefreshCcw, Search, SquarePen, Trash } from 'lucide-angular';
+import { LucideAngularModule, Plus, RefreshCcw, Search, SquarePen, Trash, X } from 'lucide-angular';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { ConfirmPopup } from 'primeng/confirmpopup';
@@ -40,7 +40,6 @@ export class ArticleTags implements OnInit {
   #router = inject(Router);
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
-
   searchForm: FormGroup;
   addTagForm: FormGroup;
   updateTagForm: FormGroup;
@@ -57,7 +56,8 @@ export class ArticleTags implements OnInit {
     edit: SquarePen,
     trash: Trash,
     plus: Plus,
-    search: Search
+    search: Search,
+    x: X
   };
   queryParams = signal<FilterArticlesTagsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
