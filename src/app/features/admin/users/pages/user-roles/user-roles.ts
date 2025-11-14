@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { LucideAngularModule, RefreshCcw, SquarePen, Plus, Trash, Search } from 'lucide-angular';
+import { LucideAngularModule, X, SquarePen, Plus, Trash, Search } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -50,9 +50,9 @@ export class UserRoles implements OnInit {
   showAddModal = signal(false);
   showEditModal = signal(false);
   #destroyRef = inject(DestroyRef);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   icons = {
-    refresh: RefreshCcw,
+    x: X,
     edit: SquarePen,
     trash: Trash,
     plus: Plus,

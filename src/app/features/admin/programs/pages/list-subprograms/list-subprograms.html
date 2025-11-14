@@ -1,7 +1,6 @@
 @let isLoading = store.isLoading(); @let hasQuery = queryParams().q; @let subprogramList = store.subprograms()[0]; @let
 subprogramCount = store.subprograms()[1];
 <div class="relative bg-white rounded-xl shadow-sm pb-12">
-  <!-- Header Section -->
   <div class="px-6 pt-6 pb-4 border-b border-gray-100">
     <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
       <div>
@@ -12,15 +11,11 @@ subprogramCount = store.subprograms()[1];
           }
         </p>
       </div>
-      <button
-        (click)="onToggleAddModal()"
-        class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm">
+      <p-button size="small" (onClick)="onToggleAddModal()">
         <i-lucide [name]="icons.plus" class="size-4" />
         Nouveau sous-programme
-      </button>
+      </p-button>
     </div>
-
-    <!-- Search Bar -->
     <form [formGroup]="searchForm" class="search-input-wrapper">
       <div class="search-input-group">
         <div class="search-input-icon">
@@ -32,10 +27,11 @@ subprogramCount = store.subprograms()[1];
           placeholder="Rechercher un sous-programme par nom..."
           class="search-input" />
         @if (searchForm.get('q')?.value) {
-        <button type="button" (click)="searchForm.patchValue({ q: '' })" class="search-input-clear">
-          <svg class="search-input-clear-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+        <button
+          type="button"
+          (click)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndSubrograms()"
+          class="search-input-clear">
+          <i-lucide name="x" class="search-input-clear-icon" />
         </button>
         }
       </div>
@@ -44,7 +40,6 @@ subprogramCount = store.subprograms()[1];
   @if (subprogramCount === 0 && !isLoading) {
   <div class="mx-6 mt-12 flex flex-col items-center justify-center py-20 px-6 rounded-xl">
     @if (hasQuery) {
-    <!-- Search/Filter No Results State -->
     <div class="w-20 h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl flex items-center justify-center mb-5">
       <i-lucide [name]="icons.search" class="text-blue-500 w-9 h-9 stroke-[1.5]" />
     </div>
@@ -55,12 +50,16 @@ subprogramCount = store.subprograms()[1];
         >{{ hasQuery }}</span
       >". Essayez avec d'autres mots-clés ou réinitialisez les filtres.
     </p>
-    <button
-      (click)="searchForm.patchValue({ q: '' })"
-      class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-lg transition-colors duration-200">
-      <i-lucide [name]="icons.refresh" class="size-4" />
-      Réinitialiser les filtres
-    </button>
+    <p-button
+      (onClick)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndSubrograms()"
+      severity="secondary"
+      [outlined]="true"
+      styleClass="text-sm">
+      <span class="flex items-center gap-2">
+        <i-lucide [name]="icons.search" class="size-4" />
+        <span>Réinitialiser les filtres</span>
+      </span>
+    </p-button>
     } @else {
     <div
       class="w-20 h-20 bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl flex items-center justify-center mb-5">
@@ -70,16 +69,15 @@ subprogramCount = store.subprograms()[1];
     <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
       Commencez par créer votre premier sous-programme pour organiser vos programmes et structurer vos initiatives.
     </p>
-    <button
-      (click)="onToggleAddModal()"
-      class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-      <i-lucide [name]="icons.plus" class="size-4" />
-      Créer un sous-programme
-    </button>
+    <p-button (onClick)="onToggleAddModal()" severity="primary" styleClass="text-sm">
+      <span class="flex items-center gap-2">
+        <i-lucide [name]="icons.plus" class="size-4" />
+        <span>Créer un sous-programme</span>
+      </span>
+    </p-button>
     }
   </div>
   } @if (isLoading) {
-  <!-- Mobile Skeleton -->
   <div class="px-6 mt-6 space-y-4 lg:hidden">
     @for (i of skeletonArray; track $index) {
     <div class="bg-white border border-gray-200 rounded-xl p-4">
@@ -103,8 +101,6 @@ subprogramCount = store.subprograms()[1];
     </div>
     }
   </div>
-
-  <!-- Desktop Skeleton -->
   <div class="hidden lg:block px-6 mt-6">
     <div class="overflow-x-auto rounded-xl border border-gray-200">
       <table class="w-full">
@@ -146,7 +142,6 @@ subprogramCount = store.subprograms()[1];
   </div>
   } @if (subprogramCount > 0 && !isLoading) {
   <div class="px-4 sm:px-6 mt-6">
-    <!-- Mobile View -->
     <div class="block lg:hidden space-y-4">
       @for ( program of subprogramList | paginate : { itemsPerPage: 40, currentPage: queryParams().page || 1,
       totalItems: subprogramCount, }; track program.id ) {
@@ -182,49 +177,34 @@ subprogramCount = store.subprograms()[1];
             }
           </div>
         </div>
-
         <div class="flex items-center justify-between pt-3 border-t border-gray-100">
           <span class="text-xs text-gray-500">{{ program.created_at | date: 'dd MMM yyyy' }}</span>
           <div class="flex items-center gap-1">
-            <button
-              (click)="highlightSubprogram(program.id)"
-              class="group relative p-2 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                     {{ program.is_highlighted 
-                        ? 'bg-amber-400 text-white shadow-sm hover:bg-amber-500' 
-                        : 'bg-gray-100 text-amber-500 hover:bg-amber-50' }}">
+            <p-button
+              (onClick)="highlightSubprogram(program.id)"
+              [severity]="program.is_highlighted ? 'contrast' : 'secondary'"
+              size="small">
               <i-lucide [name]="program.is_highlighted ? icons.star : icons.starOff" class="size-4" />
-            </button>
-
-            <button
-              (click)="onPublishProgram(program.id)"
-              class="group relative p-2 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                     {{ program.is_published 
-                        ? 'bg-emerald-400 text-white shadow-sm hover:bg-emerald-500' 
-                        : 'bg-gray-100 text-gray-400 hover:bg-emerald-50 hover:text-emerald-500' }}">
+            </p-button>
+            <p-button
+              (onClick)="onPublishProgram(program.id)"
+              [severity]="program.is_published ? 'success' : 'secondary'"
+              size="small">
               <i-lucide [name]="program.is_published ? icons.eye : icons.eyeOff" class="size-4" />
-            </button>
-
-            <button
-              (click)="onToggleEditModal(program)"
-              class="group relative p-2 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 transition-all duration-200 hover:scale-110 active:scale-95">
+            </p-button>
+            <p-button (onClick)="onToggleEditModal(program)" severity="info" size="small" title="Modifier">
               <i-lucide [name]="icons.edit" class="size-4" />
-            </button>
-
-            <button
-              (click)="onDeleteRole(program.id, $event)"
-              class="group relative p-2 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
-              <div class="relative">
-                <p-confirmpopup />
-                <i-lucide [name]="icons.trash" class="size-4" />
-              </div>
-            </button>
+            </p-button>
+            <p-button (onClick)="onDeleteRole(program.id, $event)" severity="danger" size="small" title="Supprimer">
+              <i-lucide [name]="icons.trash" class="size-4" />
+            </p-button>
+            <p-confirmpopup />
           </div>
         </div>
       </div>
       }
     </div>
 
-    <!-- Desktop View -->
     <div class="hidden lg:block overflow-x-auto rounded-xl border border-gray-200">
       <table class="w-full">
         <thead class="text-left">
@@ -277,38 +257,25 @@ subprogramCount = store.subprograms()[1];
 
             <td class="px-6 py-4">
               <div class="flex items-center gap-1">
-                <button
-                  (click)="highlightSubprogram(program.id)"
-                  class="group relative p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                         {{ program.is_highlighted 
-                            ? 'bg-amber-400 text-white shadow-sm hover:bg-amber-500' 
-                            : 'bg-gray-100 text-amber-500 hover:bg-amber-50' }}">
+                <p-button
+                  (onClick)="highlightSubprogram(program.id)"
+                  [severity]="program.is_highlighted ? 'contrast' : 'secondary'"
+                  size="small">
                   <i-lucide [name]="program.is_highlighted ? icons.star : icons.starOff" class="size-4" />
-                </button>
-
-                <button
-                  (click)="onPublishProgram(program.id)"
-                  class="group relative p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                         {{ program.is_published 
-                            ? 'bg-emerald-400 text-white shadow-sm hover:bg-emerald-500' 
-                            : 'bg-gray-100 text-gray-400 hover:bg-emerald-50 hover:text-emerald-500' }}">
+                </p-button>
+                <p-button
+                  (onClick)="onPublishProgram(program.id)"
+                  [severity]="program.is_published ? 'success' : 'secondary'"
+                  size="small">
                   <i-lucide [name]="program.is_published ? icons.eye : icons.eyeOff" class="size-4" />
-                </button>
-
-                <button
-                  (click)="onToggleEditModal(program)"
-                  class="group relative p-1.5 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 transition-all duration-200 hover:scale-110 active:scale-95">
+                </p-button>
+                <p-button (onClick)="onToggleEditModal(program)" severity="info" size="small" title="Modifier">
                   <i-lucide [name]="icons.edit" class="size-4" />
-                </button>
-
-                <button
-                  (click)="onDeleteRole(program.id, $event)"
-                  class="group relative p-1.5 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
-                  <div class="relative">
-                    <p-confirmpopup />
-                    <i-lucide [name]="icons.trash" class="size-4" />
-                  </div>
-                </button>
+                </p-button>
+                <p-button (onClick)="onDeleteRole(program.id, $event)" severity="danger" size="small">
+                  <i-lucide [name]="icons.trash" class="size-4" />
+                </p-button>
+                <p-confirmpopup />
               </div>
             </td>
           </tr>
@@ -317,10 +284,7 @@ subprogramCount = store.subprograms()[1];
       </table>
     </div>
   </div>
-  }
-
-  <!-- Pagination -->
-  @if (subprogramCount > 40) {
+  } @if (subprogramCount > 40) {
   <div class="flex justify-center items-center gap-3 py-8 px-6">
     <pagination-controls
       nextLabel=""
@@ -353,7 +317,7 @@ subprogramCount = store.subprograms()[1];
       <textarea pTextarea id="description" formControlName="description" rows="6" cols="30"> </textarea>
     </div>
     <div class="flex justify-end gap-4 flex-wrap">
-      <p-button size="small" outlined severity="danger" class="font-satoshi" (onClick)="onToggleAddModal()">
+      <p-button size="small" [outlined]="true" severity="danger" class="font-satoshi" (onClick)="onToggleAddModal()">
         Annuler
       </p-button>
       <p-button
@@ -396,7 +360,7 @@ subprogramCount = store.subprograms()[1];
     <div class="flex justify-end gap-4 flex-wrap">
       <p-button
         size="small"
-        variant="outlined"
+        [outlined]="true"
         severity="danger"
         class="font-satoshi"
         (onClick)="onToggleEditModal(null)">

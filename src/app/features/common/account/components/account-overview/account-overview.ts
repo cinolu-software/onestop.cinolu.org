@@ -1,6 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { LucideAngularModule, User, Phone, FileText, Camera, MapPin, Calendar } from 'lucide-angular';
+import { LucideAngularModule, User, Phone, FileText, Camera, MapPin, Calendar, Mail } from 'lucide-angular';
 import { IUser } from '@shared/models';
 import { environment } from '@environments/environment';
 import { FileUpload } from '@shared/components';
@@ -9,7 +9,6 @@ import { AuthStore } from '@core/auth';
 
 @Component({
   selector: 'app-account-overview',
-  standalone: true,
   templateUrl: './account-overview.html',
   imports: [CommonModule, LucideAngularModule, NgOptimizedImage, FileUpload, ApiImgPipe]
 })
@@ -23,9 +22,9 @@ export class AccountOverviewComponent {
     fileText: FileText,
     camera: Camera,
     mapPin: MapPin,
-    calendar: Calendar
+    calendar: Calendar,
+    mail: Mail
   };
-
   genderLabel(user: IUser): string {
     switch (user.gender) {
       case 'male':

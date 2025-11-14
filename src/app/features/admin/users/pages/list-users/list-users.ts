@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { LucideAngularModule, RefreshCw, SquarePen, Trash, Download, Search, Plus } from 'lucide-angular';
+import { LucideAngularModule, X, SquarePen, Trash, Download, Search, Plus } from 'lucide-angular';
 import { UsersStore } from '../../store/users/users.store';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -45,10 +45,10 @@ export class ListUsers implements OnInit {
   store = inject(UsersStore);
   deleteStore = inject(DeleteUserStore);
   downloadStore = inject(DownloadUsersStore);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
-    refresh: RefreshCw,
+    x: X,
     edit: SquarePen,
     trash: Trash,
     download: Download,

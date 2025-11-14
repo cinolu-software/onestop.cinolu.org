@@ -1,102 +1,186 @@
-<section class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
-  <div class="flex flex-col gap-8">
-    <div class="w-full md:w-2/5">
-      <p class="font-medium mb-2">Photo de profil</p>
-      <app-file-upload [name]="'profile'" [url]="url" (loaded)="handleLoaded()"></app-file-upload>
+<div class="space-y-6">
+  <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center">
+        <i-lucide [name]="icons.user" class="size-6 text-primary-600" />
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900">Photo de profil</h3>
+        <p class="text-sm text-gray-600">Téléchargez votre photo de profil</p>
+      </div>
+    </div>
+    <div class="w-full md:w-1/2 lg:w-1/3">
+      <app-file-upload [name]="'profile'" [url]="url" (loaded)="handleLoaded()" />
+    </div>
+  </div>
+  <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+    <div class="flex items-center gap-4 mb-8">
+      <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center">
+        <i-lucide [name]="icons.user" class="size-6 text-primary-600" />
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900">Informations personnelles</h3>
+        <p class="text-sm text-gray-600">Modifiez vos informations de profil</p>
+      </div>
     </div>
 
-    <form class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6" (ngSubmit)="onUpdateInfo()" [formGroup]="infoForm">
-      <div class="flex flex-col gap-1.5">
-        <label for="name" class="font-medium text-gray-700">Nom complet</label>
-        <input pInputText id="name" formControlName="name" class="w-full" placeholder="Entrez votre nom complet" />
-      </div>
-
-      <div class="flex flex-col gap-1.5">
-        <label for="email" class="font-medium text-gray-700">Adresse e-mail</label>
-        <input
-          pInputText
-          type="email"
-          id="email"
-          formControlName="email"
-          class="w-full"
-          placeholder="exemple@mail.com" />
-      </div>
-
-      <div class="flex flex-col md:flex-row gap-4 md:col-span-2">
-        <div class="flex-1 flex flex-col gap-1.5">
-          <label for="phone_number" class="font-medium text-gray-700">Numéro de téléphone</label>
-          <input pInputText id="phone_number" formControlName="phone_number" class="w-full" placeholder="+243..." />
+    <form [formGroup]="infoForm" (ngSubmit)="onUpdateInfo()">
+      <div class="space-y-8">
+        <div>
+          <h4 class="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Identité</h4>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2">
+              <label for="name" class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <i-lucide [name]="icons.user" class="size-4 text-gray-500" />
+                Nom complet<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input pInputText id="name" formControlName="name" placeholder="Entrez votre nom complet" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="gender" class="text-sm font-semibold text-gray-700">
+                Genre<span class="text-red-500 ml-1">*</span>
+              </label>
+              <p-select
+                inputId="gender"
+                [options]="genderOptions"
+                [optionLabel]="'label'"
+                [optionValue]="'value'"
+                formControlName="gender"
+                placeholder="Sélectionner votre genre" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="birth_date" class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <i-lucide [name]="icons.calendar" class="size-4 text-gray-500" />
+                Date de naissance<span class="text-red-500 ml-1">*</span>
+              </label>
+              <p-datepicker
+                inputId="birth_date"
+                formControlName="birth_date"
+                showIcon
+                iconDisplay="input"
+                placeholder="JJ/MM/AAAA" />
+            </div>
+          </div>
         </div>
-
-        <div class="flex-1 flex flex-col gap-1.5">
-          <label for="gender" class="font-medium text-gray-700">Genre</label>
-          <p-select
-            [inputId]="'gender'"
-            [options]="genderOptions"
-            [optionLabel]="'label'"
-            [optionValue]="'value'"
-            formControlName="gender"
-            class="w-full"></p-select>
+        <div>
+          <h4 class="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Coordonnées</h4>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2">
+              <label for="email" class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <i-lucide [name]="icons.mail" class="size-4 text-gray-500" />
+                Adresse e-mail<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input pInputText type="email" id="email" formControlName="email" placeholder="exemple@mail.com" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="phone_number" class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <i-lucide [name]="icons.phone" class="size-4 text-gray-500" />
+                Numéro de téléphone<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input pInputText id="phone_number" formControlName="phone_number" placeholder="+243 XXX XXX XXX" />
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Localisation</h4>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2">
+              <label for="country" class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <i-lucide [name]="icons.mapPin" class="size-4 text-gray-500" />
+                Pays<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                id="country"
+                formControlName="country"
+                placeholder="Ex: République Démocratique du Congo" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="city" class="text-sm font-semibold text-gray-700">
+                Ville<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input pInputText id="city" formControlName="city" placeholder="Ex: Kinshasa" />
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">À propos</h4>
+          <div class="flex flex-col gap-2">
+            <label for="biography" class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+              <i-lucide [name]="icons.fileText" class="size-4 text-gray-500" />
+              Biographie
+            </label>
+            <textarea
+              pTextarea
+              id="biography"
+              formControlName="biography"
+              rows="5"
+              placeholder="Parlez un peu de vous..."
+              class="resize-none"></textarea>
+            <p class="text-xs text-gray-500">Présentez-vous en quelques lignes</p>
+          </div>
         </div>
       </div>
-
-      <div class="flex flex-col gap-1.5 md:col-span-2">
-        <label for="biography" class="font-medium text-gray-700">Biographie</label>
-        <textarea
-          pTextarea
-          id="biography"
-          formControlName="biography"
-          rows="6"
-          placeholder="Parlez un peu de vous..."
-          class="w-full resize-none"></textarea>
-      </div>
-
-      <div class="flex flex-col gap-1.5">
-        <label for="country" class="font-medium text-gray-700">Pays</label>
-        <input pInputText id="country" formControlName="country" class="w-full" placeholder="Ex: RDC" />
-      </div>
-
-      <div class="flex flex-col gap-1.5">
-        <label for="city" class="font-medium text-gray-700">Ville</label>
-        <input pInputText id="city" formControlName="city" class="w-full" placeholder="Lubumbashi" />
-      </div>
-
-      <div class="flex flex-col gap-1.5 md:col-span-2 md:w-1/2">
-        <label for="birth_date" class="font-medium text-gray-700">Date de naissance</label>
-        <p-datepicker [inputId]="'birth_date'" formControlName="birth_date" class="w-full"></p-datepicker>
-      </div>
-
-      <div class="md:col-span-2 flex items-center gap-3">
+      <div class="flex justify-end gap-3 pt-8 mt-8 border-t border-gray-200">
         <p-button
-          size="small"
+          [size]="'small'"
           [loading]="infoStore.isLoading()"
           [disabled]="infoStore.isLoading() || infoForm.invalid"
+          severity="primary"
           type="submit">
           Mettre à jour mon profil
         </p-button>
       </div>
     </form>
-    <form
-      class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6"
-      (ngSubmit)="onUpdatePassword()"
-      [formGroup]="passwordForm">
-      <div class="flex flex-col gap-1.5">
-        <label for="password" class="font-medium">Mot de passe</label>
-        <input pInputText type="password" id="password" formControlName="password" />
+  </div>
+  <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+    <div class="flex items-center gap-4 mb-8">
+      <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
+        <i-lucide [name]="icons.lock" class="size-6 text-red-600" />
       </div>
-      <div class="flex flex-col gap-1.5">
-        <label for="password_confirm" class="font-medium">Confirmer le mot de passe</label>
-        <input pInputText type="password" id="password_confirm" formControlName="password_confirm" />
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900">Sécurité</h3>
+        <p class="text-sm text-gray-600">Modifiez votre mot de passe</p>
       </div>
-      <div class="md:col-span-2 flex items-center gap-3">
+    </div>
+    <form [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="flex flex-col gap-2">
+            <label for="password" class="text-sm font-semibold text-gray-700">
+              Nouveau mot de passe<span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              pInputText
+              type="password"
+              id="password"
+              formControlName="password"
+              placeholder="Entrez votre nouveau mot de passe" />
+            <p class="text-xs text-gray-500">Minimum 6 caractères</p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="password_confirm" class="text-sm font-semibold text-gray-700">
+              Confirmer le mot de passe<span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              pInputText
+              type="password"
+              id="password_confirm"
+              formControlName="password_confirm"
+              placeholder="Confirmez votre mot de passe" />
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 pt-8 mt-8 border-t border-gray-200">
         <p-button
-          size="small"
+          [size]="'small'"
           [loading]="passwordStore.isLoading()"
           [disabled]="passwordStore.isLoading() || passwordForm.invalid"
+          severity="danger"
           type="submit">
           Modifier le mot de passe
         </p-button>
       </div>
     </form>
   </div>
-</section>
+</div>

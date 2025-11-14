@@ -1,17 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import {
-  LucideAngularModule,
-  RefreshCcw,
-  SquarePen,
-  Trash,
-  Plus,
-  Search,
-  Eye,
-  EyeOff,
-  Star,
-  StarOff
-} from 'lucide-angular';
+import { LucideAngularModule, SquarePen, Trash, Plus, Search, Eye, EyeOff, Star, StarOff, X } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -85,11 +74,10 @@ export class ListSubprograms implements OnInit {
   publishSubrogramStore = inject(PublishSubprogramsStore);
   highlightStore = inject(HighlightSubprogramStore);
   subprogram = signal<ISubprogram | null>(null);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   url = environment.apiUrl + 'subprograms/logo/';
   #destroyRef = inject(DestroyRef);
   icons = {
-    refresh: RefreshCcw,
     edit: SquarePen,
     trash: Trash,
     plus: Plus,
@@ -97,7 +85,8 @@ export class ListSubprograms implements OnInit {
     eye: Eye,
     eyeOff: EyeOff,
     star: Star,
-    starOff: StarOff
+    starOff: StarOff,
+    x: X
   };
   showAddModal = signal(false);
   showEditModal = signal(false);
@@ -147,9 +136,9 @@ export class ListSubprograms implements OnInit {
     this.store.loadPrograms(this.queryParams());
   }
 
-  async onPageChange(currentPage: number): Promise<void> {
+  onPageChange(currentPage: number): void {
     this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
-    await this.updateRouteAndSubrograms();
+    this.updateRouteAndSubrograms();
   }
 
   onPublishProgram(id: string): void {
@@ -160,13 +149,13 @@ export class ListSubprograms implements OnInit {
     this.loadSubprograms();
   }
 
-  async updateRoute(): Promise<void> {
+  updateRoute(): void {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/subprograms'], { queryParams });
+    this.#router.navigate(['/subprograms'], { queryParams });
   }
 
-  async updateRouteAndSubrograms(): Promise<void> {
-    await this.updateRoute();
+  updateRouteAndSubrograms(): void {
+    this.updateRoute();
     this.loadSubprograms();
   }
 
@@ -209,13 +198,13 @@ export class ListSubprograms implements OnInit {
     this.#confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       message: 'Etes-vous sûr ?',
+      acceptLabel: 'Confirmer',
+      rejectLabel: 'Annuler',
       rejectButtonProps: {
-        label: 'Annuler',
         severity: 'secondary',
         outlined: true
       },
       acceptButtonProps: {
-        label: 'Confirmer',
         severity: 'danger'
       },
       accept: () => {

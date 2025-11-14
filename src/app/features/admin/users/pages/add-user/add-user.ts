@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { LucideAngularModule, MoveLeft } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { AvatarModule } from 'primeng/avatar';
@@ -19,7 +18,6 @@ import { GENDERS } from '@shared/data/genders.data';
   templateUrl: './add-user.html',
   providers: [AddUserStore, UnpaginatedRolesStore],
   imports: [
-    LucideAngularModule,
     CommonModule,
     ButtonModule,
     InputTextModule,
@@ -29,15 +27,14 @@ import { GENDERS } from '@shared/data/genders.data';
     ReactiveFormsModule,
     DatePicker,
     MultiSelectModule,
-    Select,
-  ],
+    Select
+  ]
 })
 export class AddUserComponent {
   #fb = inject(FormBuilder);
   addUserForm: FormGroup;
   store = inject(AddUserStore);
   rolesStore = inject(UnpaginatedRolesStore);
-  icons = { back: MoveLeft };
   genders = GENDERS;
 
   constructor() {
@@ -49,7 +46,7 @@ export class AddUserComponent {
       city: ['', Validators.required],
       country: ['', Validators.required],
       birth_date: ['', Validators.required],
-      roles: [[], Validators.required],
+      roles: [[], Validators.required]
     });
   }
 

@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import {
   LucideAngularModule,
-  RefreshCcw,
+  X,
   SquarePen,
   Trash,
   Search,
@@ -10,9 +10,9 @@ import {
   EyeOff,
   Star,
   StarOff,
-  Filter,
   FileX,
-  Sparkles
+  Sparkles,
+  Funnel
 } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -64,7 +64,7 @@ export class ListEvents implements OnInit {
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
-    refresh: RefreshCcw,
+    x: X,
     edit: SquarePen,
     trash: Trash,
     search: Search,
@@ -73,7 +73,7 @@ export class ListEvents implements OnInit {
     eyeOff: EyeOff,
     star: Star,
     starOff: StarOff,
-    filter: Filter,
+    filter: Funnel,
     fileX: FileX,
     sparkles: Sparkles
   };
@@ -84,7 +84,7 @@ export class ListEvents implements OnInit {
   });
   activeTab = signal<string>(this.#route.snapshot.queryParamMap.get('filter') || 'all');
   tabsConfig = signal([
-    { label: 'Tous les événements', name: 'all' },
+    { label: 'Tous', name: 'all' },
     { label: 'Publiés', name: 'published' },
     { label: 'Brouillons', name: 'drafts' },
     { label: 'En vedette', name: 'highlighted' }
@@ -124,9 +124,9 @@ export class ListEvents implements OnInit {
     this.updateRouteAndEvents();
   }
 
-  async updateRoute(): Promise<void> {
+  updateRoute(): void {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/events'], { queryParams });
+    this.#router.navigate(['/events'], { queryParams });
   }
 
   highlightEvent(eventId: string): void {
@@ -134,7 +134,7 @@ export class ListEvents implements OnInit {
   }
 
   updateRouteAndEvents(): void {
-    this.updateRoute().then();
+    this.updateRoute();
     this.loadEvents();
   }
 
@@ -147,14 +147,14 @@ export class ListEvents implements OnInit {
       target: event.currentTarget as EventTarget,
       message: 'Etes-vous sûr ?',
       rejectButtonProps: {
-        label: 'Annuler',
         severity: 'secondary',
         outlined: true
       },
       acceptButtonProps: {
-        label: 'Confirmer',
         severity: 'danger'
       },
+      acceptLabel: 'Confirmer',
+      rejectLabel: 'Annuler',
       accept: () => {
         this.deleteEventStore.deleteEvent(projectId);
       }

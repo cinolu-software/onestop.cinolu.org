@@ -11,6 +11,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { UnpaginatedSubprogramsStore } from '../../../programs/store/subprograms/unpaginated-subprograms.store';
 import { StaffStore } from '@features/admin/users/store/users/staff.store';
+import { LucideAngularModule, Check } from 'lucide-angular';
 
 @Component({
   selector: 'app-project-add',
@@ -24,7 +25,8 @@ import { StaffStore } from '@features/admin/users/store/users/staff.store';
     Button,
     InputText,
     DatePickerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LucideAngularModule
   ]
 })
 export class AddProjectComponent {
@@ -34,6 +36,9 @@ export class AddProjectComponent {
   categoriesStore = inject(UnpaginatedCategoriesStore);
   programsStore = inject(UnpaginatedSubprogramsStore);
   staffStore = inject(StaffStore);
+  icons = {
+    check: Check
+  };
 
   constructor() {
     this.form = this.#fb.group({

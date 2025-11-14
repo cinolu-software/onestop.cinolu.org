@@ -9,7 +9,8 @@ import { Textarea } from 'primeng/textarea';
 import { UpdateProgramStore } from '../../store/programs/update-program.store';
 import { AddIndicatorStore } from '../../store/indicators/add-indicators.store';
 import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
-import { ChartColumn, SquarePen } from 'lucide-angular';
+import { ChartColumn, SquarePen, Check, Trash2, Funnel, Tag, Save } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { environment } from '@environments/environment';
 import { DatePicker } from 'primeng/datepicker';
 import { ProgramStore } from '../../store/programs/program.store';
@@ -32,7 +33,8 @@ import { IndicatorFormData } from '../../types/indicator-form.type';
     Textarea,
     FormsModule,
     Select,
-    FileUpload
+    FileUpload,
+    LucideAngularModule
   ],
   templateUrl: './update-program.html'
 })
@@ -49,9 +51,17 @@ export class UpdateProgram {
   indicatorsCategories = signal(INDICATORS_CATEGORIES);
   selectedCategory = signal(this.indicatorsCategories()[0]);
   year = signal<Date>(new Date());
+  icons = {
+    check: Check,
+    trash: Trash2,
+    filter: Funnel,
+    tag: Tag,
+    barChart: ChartColumn,
+    save: Save
+  };
   tabs = [
-    { label: 'Modifier le programme', name: 'edit', icon: SquarePen },
-    { label: 'Les indicateurs', name: 'indicators', icon: ChartColumn }
+    { label: 'Modifier', name: 'edit', icon: SquarePen },
+    { label: 'Indicateurs', name: 'indicators', icon: ChartColumn }
   ];
   updateForm: FormGroup = this.#fb.group({
     id: ['', Validators.required],

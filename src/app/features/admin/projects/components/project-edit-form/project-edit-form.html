@@ -125,12 +125,15 @@
         </div>
       </div>
     </div>
-    <p-button
-      [size]="'small'"
-      [loading]="updateProjectStore.isLoading()"
-      [disabled]="updateProjectStore.isLoading() || form.invalid"
-      type="submit"
-      class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200"
-      label="Enregistrer les modifications" />
+    <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
+      <p-button
+        [size]="'small'"
+        [loading]="updateProjectStore.isLoading()"
+        [disabled]="updateProjectStore.isLoading() || form.invalid"
+        type="submit"
+        severity="primary">
+        Modifier
+      </p-button>
+    </div>
   </div>
 </form>

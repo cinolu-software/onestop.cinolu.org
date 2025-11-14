@@ -1,7 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import {
   LucideAngularModule,
-  RefreshCcw,
   SquarePen,
   Trash,
   Search,
@@ -12,7 +11,8 @@ import {
   StarOff,
   Filter,
   FileX,
-  Sparkles
+  Sparkles,
+  X
 } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -64,7 +64,6 @@ export class ListProjects implements OnInit {
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
-    refresh: RefreshCcw,
     edit: SquarePen,
     trash: Trash,
     search: Search,
@@ -75,7 +74,8 @@ export class ListProjects implements OnInit {
     starOff: StarOff,
     filter: Filter,
     fileX: FileX,
-    sparkles: Sparkles
+    sparkles: Sparkles,
+    x: X
   };
   queryParams = signal<FilterProjectsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
@@ -119,22 +119,22 @@ export class ListProjects implements OnInit {
     this.store.loadProjects(this.queryParams());
   }
 
-  async onPageChange(currentPage: number): Promise<void> {
+  onPageChange(currentPage: number): void {
     this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
-    await this.updateRouteAndProjects();
+    this.updateRouteAndProjects();
   }
 
   highlightProject(projectId: string): void {
     this.highlightStore.highlight(projectId);
   }
 
-  async updateRoute(): Promise<void> {
+  updateRoute(): void {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/projects'], { queryParams });
+    this.#router.navigate(['/projects'], { queryParams });
   }
 
-  async updateRouteAndProjects(): Promise<void> {
-    await this.updateRoute();
+  updateRouteAndProjects(): void {
+    this.updateRoute();
     this.loadProjects();
   }
 
@@ -146,13 +146,13 @@ export class ListProjects implements OnInit {
     this.#confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       message: 'Etes-vous sûr ?',
+      acceptLabel: 'Confirmer',
+      rejectLabel: 'Annuler',
       rejectButtonProps: {
-        label: 'Annuler',
         severity: 'secondary',
         outlined: true
       },
       acceptButtonProps: {
-        label: 'Confirmer',
         severity: 'danger'
       },
       accept: () => {

@@ -1,0 +1,48 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+  <form class="flex flex-col gap-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="flex flex-col gap-1.5">
+      <label for="title" class="font-medium text-gray-700">
+        Titre de l'article<span class="text-red-500">*</span>
+      </label>
+      <input pInputText id="title" formControlName="title" />
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="name" class="font-medium text-gray-700">Tags de l'article<span class="text-red-500">*</span></label>
+      <p-multiSelect
+        [inputId]="'name'"
+        [showHeader]="false"
+        [options]="tagsStore.tags()"
+        [optionValue]="'id'"
+        [optionLabel]="'name'"
+        formControlName="tags" />
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="font-medium text-gray-700" for="published_at">
+        Date de publication<span class="text-red-500">*</span>
+      </label>
+      <p-datePicker showIcon="true" name="published_at" id="published_at" formControlName="published_at" />
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="summary" class="font-medium text-gray-700">Résumé<span class="text-red-500">*</span></label>
+      <textarea id="summary" pTextarea formControlName="summary" rows="6" cols="30"></textarea>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="content" class="font-medium text-gray-700">Contenu<span class="text-red-500">*</span></label>
+      <quill-editor formControlName="content" [style]="{ height: '500px' }" />
+    </div>
+
+    <div class="flex justify-end pt-4 border-t border-gray-200">
+      <p-button
+        [loading]="updateStore.isLoading()"
+        [disabled]="updateStore.isLoading() || form.invalid"
+        size="small"
+        type="submit">
+        Mettre à jour
+      </p-button>
+    </div>
+  </form>
+</div>

@@ -6,7 +6,6 @@
 
   <form class="w-full" [formGroup]="form" (ngSubmit)="onAddProject()">
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-      <!-- Section: Informations de base -->
       <div class="mb-8">
         <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">
           Informations essentielles
@@ -23,7 +22,6 @@
               class="w-full"
               placeholder="Ex: Programme d'incubation 2024" />
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="duration_hours" class="text-sm font-semibold text-gray-700">Durée estimée (en heures)</label>
             <input
@@ -34,7 +32,6 @@
               class="w-full"
               placeholder="Ex: 120" />
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="program" class="text-sm font-semibold text-gray-700">
               Programme associé<span class="text-red-500 ml-1">*</span>
@@ -48,7 +45,6 @@
               placeholder="Sélectionner un programme"
               class="w-full" />
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="project_manager" class="text-sm font-semibold text-gray-700">Chef de projet</label>
             <p-select
@@ -60,7 +56,6 @@
               placeholder="Sélectionner un responsable"
               class="w-full" />
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="categories" class="text-sm font-semibold text-gray-700">
               Catégories<span class="text-red-500 ml-1">*</span>
@@ -72,19 +67,16 @@
               [options]="categoriesStore.categories()"
               [optionValue]="'id'"
               [optionLabel]="'name'"
-              [showClear]="true"
               formControlName="categories"
               placeholder="Choisir une ou plusieurs catégories"
               class="w-full" />
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="started_at" class="text-sm font-semibold text-gray-700">
               Date de lancement<span class="text-red-500 ml-1">*</span>
             </label>
             <p-datePicker showIcon iconDisplay="input" formControlName="started_at" class="w-full" />
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="ended_at" class="text-sm font-semibold text-gray-700">
               Date de clôture<span class="text-red-500 ml-1">*</span>
@@ -93,8 +85,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Section: Descriptions détaillées -->
       <div>
         <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">Présentation détaillée</h6>
         <div class="grid grid-cols-1 gap-6">
@@ -110,7 +100,6 @@
               class="w-full"
               placeholder="Présentez le projet de manière claire et concise..."></textarea>
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="context" class="text-sm font-semibold text-gray-700">Contexte et justification</label>
             <textarea
@@ -121,7 +110,6 @@
               class="w-full"
               placeholder="Décrivez le contexte dans lequel s'inscrit ce projet..."></textarea>
           </div>
-
           <div class="flex flex-col gap-2">
             <label for="objectives" class="text-sm font-semibold text-gray-700">Objectifs visés</label>
             <textarea
@@ -145,16 +133,14 @@
           </div>
         </div>
       </div>
-
-      <!-- Submit Button -->
       <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
         <p-button
           [loading]="store.isLoading()"
           [disabled]="store.isLoading() || form.invalid"
           severity="primary"
-          type="submit"
-          icon="pi pi-check"
-          label="Créer le projet" />
+          type="submit">
+          Créer le projet
+        </p-button>
       </div>
     </div>
   </form>

@@ -12,9 +12,7 @@ programList = store.programs()[0];
           }
         </p>
       </div>
-      <a
-        [routerLink]="'/programs/add'"
-        class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm">
+      <a pButton size="small" [routerLink]="'/programs/add'">
         <i-lucide [name]="icons.plus" class="size-4" />
         Nouveau programme
       </a>
@@ -32,9 +30,7 @@ programList = store.programs()[0];
           type="button"
           (click)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndPrograms()"
           class="search-input-clear">
-          <svg class="search-input-clear-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <i-lucide name="x" class="search-input-clear-icon" />
         </button>
         }
       </div>
@@ -64,12 +60,16 @@ programList = store.programs()[0];
         >{{ hasQuery }}</span
       >". Essayez avec d'autres mots-clés ou réinitialisez les filtres.
     </p>
-    <button
-      (click)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndPrograms()"
-      class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-lg transition-colors duration-200">
-      <i-lucide [name]="icons.filter" class="size-4" />
-      Réinitialiser les filtres
-    </button>
+    <p-button
+      (onClick)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndPrograms()"
+      severity="secondary"
+      [outlined]="true"
+      styleClass="text-sm">
+      <span class="flex items-center gap-2">
+        <i-lucide [name]="icons.filter" class="size-4" />
+        <span>Réinitialiser les filtres</span>
+      </span>
+    </p-button>
     } @else if (activeTab() === 'published') {
     <div
       class="w-20 h-20 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl flex items-center justify-center mb-5">
@@ -105,16 +105,15 @@ programList = store.programs()[0];
     <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
       Commencez par créer votre premier programme pour structurer vos activités et organiser vos initiatives.
     </p>
-    <a
-      [routerLink]="'/programs/add'"
-      class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-      <i-lucide [name]="icons.plus" class="size-4" />
-      Créer un programme
+    <a pButton [routerLink]="'/programs/add'" severity="primary" styleClass="text-sm">
+      <span class="flex items-center gap-2">
+        <i-lucide [name]="icons.plus" class="size-4" />
+        <span>Créer un programme</span>
+      </span>
     </a>
     }
   </div>
   } @if (isLoading) {
-  <!-- Mobile Skeleton -->
   <div class="px-6 mt-6 space-y-4 lg:hidden">
     @for (i of skeletonArray; track $index) {
     <div class="bg-white border border-gray-200 rounded-xl p-4">
@@ -138,8 +137,6 @@ programList = store.programs()[0];
     </div>
     }
   </div>
-
-  <!-- Desktop Skeleton -->
   <div class="hidden lg:block px-6 mt-6">
     <div class="overflow-x-auto rounded-xl border border-gray-200">
       <table class="w-full">
@@ -220,44 +217,29 @@ programList = store.programs()[0];
         <div class="flex items-center justify-between pt-3 border-t border-gray-100">
           <span class="text-xs text-gray-500">{{ program.created_at | date: 'dd MMM yyyy' }}</span>
           <div class="flex items-center gap-1">
-            <button
-              (click)="highlightProgram(program.id)"
-              class="group relative p-2 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                     {{ program.is_highlighted 
-                        ? 'bg-amber-400 text-white shadow-sm hover:bg-amber-500' 
-                        : 'bg-gray-100 text-amber-500 hover:bg-amber-50' }}">
+            <p-button
+              (onClick)="highlightProgram(program.id)"
+              [severity]="program.is_highlighted ? 'contrast' : 'secondary'"
+              [text]="!program.is_highlighted"
+              size="small"
+              [attr.title]="program.is_highlighted ? 'Retirer de la vedette' : 'Mettre en vedette'">
               <i-lucide [name]="program.is_highlighted ? icons.star : icons.starOff" class="size-4" />
-              <span class="sr-only">{{ program.is_highlighted ? 'Retirer de la vedette' : 'Mettre en vedette' }}</span>
-            </button>
-
-            <button
-              (click)="onPublishProgram(program.id)"
-              class="group relative p-2 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                     {{ program.is_published 
-                        ? 'bg-emerald-400 text-white shadow-sm hover:bg-emerald-500' 
-                        : 'bg-gray-100 text-gray-400 hover:bg-emerald-50 hover:text-emerald-500' }}">
+            </p-button>
+            <p-button
+              (onClick)="onPublish(program.id)"
+              [severity]="program.is_published ? 'success' : 'secondary'"
+              [text]="!program.is_published"
+              size="small"
+              [attr.title]="program.is_published ? 'Dépublier' : 'Publier'">
               <i-lucide [name]="program.is_published ? icons.eye : icons.eyeOff" class="size-4" />
-              <span class="sr-only">{{ program.is_published ? 'Dépublier' : 'Publier' }}</span>
-            </button>
-
-            <!-- Edit Button Mobile -->
-            <a
-              [routerLink]="['/programs/edit', program.slug]"
-              class="group relative p-2 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 transition-all duration-200 hover:scale-110 active:scale-95">
+            </p-button>
+            <a pButton [routerLink]="['/programs/edit', program.slug]" severity="info" size="small" title="Modifier">
               <i-lucide [name]="icons.edit" class="size-4" />
-              <span class="sr-only">Modifier</span>
             </a>
-
-            <!-- Delete Button Mobile -->
-            <button
-              (click)="onDeleteRole(program.id, $event)"
-              class="group relative p-2 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
-              <div class="relative">
-                <p-confirmpopup />
-                <i-lucide [name]="icons.trash" class="size-4" />
-              </div>
-              <span class="sr-only">Supprimer</span>
-            </button>
+            <p-button (onClick)="onDelete(program.id, $event)" severity="danger" size="small" title="Supprimer">
+              <i-lucide [name]="icons.trash" class="size-4" />
+            </p-button>
+            <p-confirmpopup />
           </div>
         </div>
       </div>
@@ -297,7 +279,6 @@ programList = store.programs()[0];
               </div>
             </td>
 
-            <!-- Status -->
             <td class="px-6 py-4">
               @if (program.is_published) {
               <span
@@ -313,48 +294,32 @@ programList = store.programs()[0];
               </span>
               }
             </td>
-            <!-- Actions Desktop -->
             <td class="px-6 py-4">
               <div class="flex items-center gap-1">
-                <!-- Highlight Button Desktop -->
-                <button
-                  (click)="highlightProgram(program.id)"
-                  class="group relative p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                         {{ program.is_highlighted 
-                            ? 'bg-amber-400 text-white shadow-sm hover:bg-amber-500 hover:shadow' 
-                            : 'text-amber-500 hover:bg-amber-50' }}"
-                  [attr.title]="program.is_highlighted ? 'Retirer de la vedette' : 'Mettre en vedette'">
-                  <i-lucide [name]="program.is_highlighted ? icons.star : icons.starOff" class="size-[18px]" />
-                </button>
-                <!-- Publish Button Desktop -->
-                <button
-                  (click)="onPublishProgram(program.id)"
-                  class="group relative p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                         {{ program.is_published 
-                            ? 'bg-emerald-400 text-white shadow-sm hover:bg-emerald-500 hover:shadow' 
-                            : 'text-gray-400 hover:bg-emerald-50 hover:text-emerald-500' }}"
-                  [attr.title]="program.is_published ? 'Dépublier' : 'Publier'">
-                  <i-lucide [name]="program.is_published ? icons.eye : icons.eyeOff" class="size-[18px]" />
-                </button>
-
-                <!-- Edit Button Desktop -->
+                <p-button
+                  (onClick)="highlightProgram(program.id)"
+                  [severity]="program.is_highlighted ? 'contrast' : 'secondary'"
+                  size="small">
+                  <i-lucide [name]="program.is_highlighted ? icons.star : icons.starOff" class="size-4" />
+                </p-button>
+                <p-button
+                  (onClick)="onPublish(program.id)"
+                  [severity]="program.is_published ? 'success' : 'secondary'"
+                  size="small">
+                  <i-lucide [name]="program.is_published ? icons.eye : icons.eyeOff" class="size-4" />
+                </p-button>
                 <a
+                  pButton
                   [routerLink]="['/programs/edit', program.slug]"
-                  class="group relative p-1.5 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 hover:shadow transition-all duration-200 hover:scale-110 active:scale-95"
+                  severity="info"
+                  size="small"
                   title="Modifier">
-                  <i-lucide [name]="icons.edit" class="size-[18px]" />
+                  <i-lucide [name]="icons.edit" class="size-4" />
                 </a>
-
-                <!-- Delete Button Desktop -->
-                <button
-                  (click)="onDeleteRole(program.id, $event)"
-                  class="group relative p-1.5 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 hover:shadow transition-all duration-200 hover:scale-110 active:scale-95"
-                  title="Supprimer">
-                  <div class="relative">
-                    <p-confirmpopup />
-                    <i-lucide [name]="icons.trash" class="size-[18px]" />
-                  </div>
-                </button>
+                <p-button (onClick)="onDelete(program.id, $event)" severity="danger" size="small">
+                  <i-lucide [name]="icons.trash" class="size-4" />
+                </p-button>
+                <p-confirmpopup />
               </div>
             </td>
           </tr>
@@ -363,10 +328,7 @@ programList = store.programs()[0];
       </table>
     </div>
   </div>
-  }
-
-  <!-- Pagination -->
-  @if (programCount > 40) {
+  } @if (programCount > 40) {
   <div class="flex justify-center items-center gap-3 py-8 px-6">
     <pagination-controls
       nextLabel=""

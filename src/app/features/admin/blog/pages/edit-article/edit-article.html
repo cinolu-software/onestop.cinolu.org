@@ -1,91 +1,16 @@
-<section class="dashboard-main-content flex flex-col gap-4">
+<section class="pt-32 dashboard-main-content flex flex-col gap-4">
   @let article = articleStore.article();
   <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
-  @if (activeTab() === 'gallery') {
-  <div class="flex flex-col gap-4">
-    <div class="w-full md:w-1/3">
-      @if (articleStore.isLoading()) {
-      <div class="h-20 bg-gray-200 animate-pulse rounded-lg w-full mb-4"></div>
-      } @else {
-      <app-file-upload
-        [multiple]="true"
-        [name]="'image'"
-        [url]="galleryUrl + article?.id"
-        (loaded)="onGalleryUploaded()" />
-      }
-    </div>
-    <div class="flex flex-wrap gap-3">
-      @for (img of galleryStore.gallery(); track img.id) {
-      <div
-        class="relative w-36 h-28 bg-gray-200 aspect-square rounded overflow-hidden border-2 border-slate-200/10 group last:mb-10">
-        <img class="object-cover" priority fill [ngSrc]="img | apiIMG: 'gallery'" [alt]="article?.title" />
-        <button
-          type="button"
-          (click)="onDeleteImage(img.id)"
-          class="absolute top-2 right-2 p-1.5 z-90 bg-red-500/80 hover:bg-red-600 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition">
-          <i-lucide [name]="icons.trash" class="w-4 h-4 text-white" />
-        </button>
-      </div>
-      }
-    </div>
-  </div>
-  } @if (activeTab() === 'edit') {
-  <form class="w-full grid grid-cols-1 md:grid-cols-5 gap-5" [formGroup]="form" (ngSubmit)="onUpdateArticle()">
-    <div class="col-span-2">
-      <p class="font-medium mb-2">Photo de couverture</p>
-      <div
-        class="relative h-52 md:h-80 mb-6 w-full pb-8 px-8 lg:px-16 xl:px-24 2xl:px-32 max-w-screen-2xl mx-auto bg-gray-200 rounded">
-        @if (article?.image) {
-        <img
-          fill
-          priority
-          [ngSrc]="article | apiIMG: 'article'"
-          [alt]="article?.title"
-          class="object-cover h-full opacity-90 rounded border-2 border-slate-200/10" />
-        }
-      </div>
-      @if (articleStore.isLoading()) {
-      <div class="h-20 bg-gray-200 animate-pulse rounded-lg w-full mb-4"></div>
-      } @else {
-      <app-file-upload [name]="'article'" [url]="url + article?.id" (loaded)="onCoverUploaded()" />
-      }
-    </div>
-    <div class="flex flex-col gap-4 col-span-3">
-      <div class="flex flex-col gap-1.5">
-        <label for="title" class="font-medium"> Titre de l'article<span class="text-red-500">*</span> </label>
-        <input pInputText id="title" formControlName="title" />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <p class="font-medium">Tags de l'article</p>
-        <p-multiSelect
-          [inputId]="'id'"
-          [autocomplete]="'off'"
-          [showHeader]="false"
-          [options]="tagsStore.tags()"
-          [optionValue]="'id'"
-          [optionLabel]="'name'"
-          formControlName="tags" />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <label class="font-medium" for="published_at">Date de publication</label>
-        <p-datePicker showIcon="true" name="published_at" id="published_at" formControlName="published_at" />
-      </div>
-      <div class="flex flex-col gap-4">
-        <div class="flex flex-col gap-1.5">
-          <label for="summary" class="font-medium"> Résumé<span class="text-red-500">*</span> </label>
-          <textarea id="summary" pTextarea formControlName="summary" rows="6" cols="30"></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="flex flex-col gap-1.5 mb-10 col-span-5">
-      <label for="content">Contenu</label>
-      <quill-editor formControlName="content" [style]="{ height: '500px' }" />
-    </div>
-    <div class="flex py-6 justify-between">
-      <p-button [loading]="store.isLoading()" [disabled]="store.isLoading() || form.invalid" size="small" type="submit">
-        Mettre à jour
-      </p-button>
-    </div>
-  </form>
+
+  @if (activeTab() === 'edit' && article) {
+  <app-article-edit-form [article]="article" />
+  } @if (activeTab() === 'gallery' && article) {
+  <app-article-gallery
+    [article]="article"
+    [gallery]="galleryStore.gallery()"
+    [isLoading]="articleStore.isLoading()"
+    (coverUploaded)="onCoverUploaded()"
+    (galleryUploaded)="onGalleryUploaded()"
+    (deleteImage)="onDeleteImage($event)" />
   }
 </section>

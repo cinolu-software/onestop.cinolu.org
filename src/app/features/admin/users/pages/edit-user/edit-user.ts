@@ -1,6 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { LucideAngularModule, Save, MoveLeft, Locate, TriangleAlert, Phone, Mail } from 'lucide-angular';
+import { LucideAngularModule, Locate, TriangleAlert, Phone, Mail, User, Calendar, MapPin } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule, Location, NgOptimizedImage } from '@angular/common';
 import { AvatarModule } from 'primeng/avatar';
@@ -15,6 +15,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { SelectModule } from 'primeng/select';
 import { GENDERS } from '@shared/data/genders.data';
+import { TabsModule } from 'primeng/tabs';
 
 @Component({
   selector: 'app-user-edit',
@@ -34,7 +35,8 @@ import { GENDERS } from '@shared/data/genders.data';
     DatePickerModule,
     MultiSelectModule,
     SelectModule,
-  ],
+    TabsModule
+  ]
 })
 export class EditUser {
   #fb = inject(FormBuilder);
@@ -44,7 +46,15 @@ export class EditUser {
   store = inject(UsersStore);
   updateStore = inject(UpdateUserStore);
   rolesStore = inject(UnpaginatedRolesStore);
-  icons = { save: Save, back: MoveLeft, locate: Locate, alert: TriangleAlert, phone: Phone, email: Mail };
+  icons = {
+    locate: Locate,
+    alert: TriangleAlert,
+    phone: Phone,
+    email: Mail,
+    user: User,
+    calendar: Calendar,
+    mapPin: MapPin
+  };
 
   constructor() {
     this.updateUserForm = this.#fb.group({
@@ -56,7 +66,7 @@ export class EditUser {
       city: ['', Validators.required],
       country: ['', Validators.required],
       birth_date: ['', Validators.required],
-      roles: [[], Validators.required],
+      roles: [[], Validators.required]
     });
     effect(() => {
       const user = this.store.user();
@@ -64,7 +74,7 @@ export class EditUser {
       this.updateUserForm.patchValue({
         ...user,
         birth_date: user.birth_date ? new Date(user.birth_date) : '',
-        roles: user.roles.map((role) => role.id),
+        roles: user.roles.map((role) => role.id)
       });
     });
   }

@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { LucideAngularModule, RefreshCcw, SquarePen, Plus, Trash, Search } from 'lucide-angular';
+import { LucideAngularModule, X, SquarePen, Plus, Trash, Search } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -47,10 +47,10 @@ export class EventCategories implements OnInit {
   updateCategoryStore = inject(UpdateCategoryStore);
   showAddModal = signal(false);
   showEditModal = signal(false);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
-    refresh: RefreshCcw,
+    x: X,
     edit: SquarePen,
     trash: Trash,
     plus: Plus,

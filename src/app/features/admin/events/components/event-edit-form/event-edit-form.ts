@@ -1,5 +1,6 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LucideAngularModule, Save } from 'lucide-angular';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TextareaModule } from 'primeng/textarea';
@@ -25,7 +26,8 @@ import { StaffStore } from '@features/admin/users/store/users/staff.store';
     TextareaModule,
     DatePickerModule,
     InputText,
-    Button
+    Button,
+    LucideAngularModule
   ]
 })
 export class EventEditFormComponent {
@@ -36,6 +38,10 @@ export class EventEditFormComponent {
   staffStore = inject(StaffStore);
   updateEventStore = inject(UpdateEventStore);
   form = this.#initForm();
+
+  icons = {
+    save: Save
+  };
 
   #initForm(): FormGroup {
     return this.#fb.group({

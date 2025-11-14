@@ -79,30 +79,19 @@
           <span class="w-2 h-2 bg-red-500 rounded-full"></span>
           <span>Champs obligatoires</span>
         </div>
-        <button
+        <p-button
           type="submit"
           [disabled]="updateForm.invalid || updateProgramStore.isLoading()"
-          class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all duration-200">
-          @if (updateProgramStore.isLoading()) {
-          <svg
-            class="animate-spin h-4 w-4 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span>Mise à jour...</span>
-          } @else {
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-          <span>Mettre à jour</span>
-          }
-        </button>
+          [loading]="updateProgramStore.isLoading()"
+          severity="primary"
+          styleClass="font-semibold">
+          <span class="flex items-center gap-2">
+            @if (!updateProgramStore.isLoading()) {
+            <i-lucide [name]="icons.check" class="size-4" />
+            }
+            <span>{{ updateProgramStore.isLoading() ? 'Mise à jour...' : 'Mettre à jour' }}</span>
+          </span>
+        </p-button>
       </div>
     </form>
   </div>
@@ -111,13 +100,7 @@
     <!-- Filters Section -->
     <div class="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-5 border border-gray-200">
       <div class="flex items-center gap-2 mb-4">
-        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-        </svg>
+        <i-lucide [name]="icons.filter" class="size-5 text-gray-600" />
         <h4 class="text-sm font-bold text-gray-900">Filtres</h4>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -154,13 +137,7 @@
     <div class="space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-gray-200">
         <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-          </svg>
+          <i-lucide [name]="icons.barChart" class="size-5 text-primary-600" />
           <h4 class="text-base font-medium text-gray-900">Indicateurs de performance</h4>
         </div>
         <span class="px-3 py-1 text-xs font-bold bg-primary-100 text-primary-700 rounded-full">
@@ -183,13 +160,7 @@
             <!-- Indicator Name -->
             <div class="space-y-2">
               <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-700 uppercase tracking-wide">
-                <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                </svg>
+                <i-lucide [name]="icons.tag" class="size-3.5 text-gray-500" />
                 Nom de l'indicateur
               </div>
               <input
@@ -203,13 +174,7 @@
             <!-- KPI Target -->
             <div class="space-y-2">
               <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-700 uppercase tracking-wide">
-                <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                </svg>
+                <i-lucide [name]="icons.barChart" class="size-3.5 text-gray-500" />
                 Objectif (KPI)
               </div>
               <input
@@ -223,88 +188,45 @@
           </div>
 
           <!-- Delete Button -->
-          <button
+          <p-button
             type="button"
             [disabled]="((indicatorsTab()[selectedCategory()].length || 0) <= 1)"
-            (click)="removeIndicator($index)"
-            class="flex-shrink-0 p-2.5 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95"
+            (onClick)="removeIndicator($index)"
+            severity="danger"
+            [text]="true"
+            size="small"
             title="Supprimer l'indicateur">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-            </svg>
-          </button>
+            <i-lucide [name]="icons.trash" class="size-5" />
+          </p-button>
         </div>
       </div>
-      }
-
-      @if (!indicatorsTab()[selectedCategory()].length) {
+      } @if (!indicatorsTab()[selectedCategory()].length) {
       <div
         class="text-center py-16 bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl border-2 border-dashed border-gray-300">
         <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
-          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-          </svg>
+          <i-lucide [name]="icons.barChart" class="size-8 text-gray-400" />
         </div>
         <h5 class="text-base font-bold text-gray-900 mb-2">Aucun indicateur</h5>
         <p class="text-sm text-gray-500 mb-4">Commencez par ajouter votre premier indicateur de performance</p>
-        <button
-          type="button"
-          (click)="addIndicator()"
-          class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-primary-700 bg-primary-50 border border-primary-200 rounded-lg hover:bg-primary-100 transition-colors duration-200">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
-          <span>Ajouter un indicateur</span>
-        </button>
+        <p-button type="button" (onClick)="addIndicator()" severity="primary" [outlined]="true" styleClass="text-sm">
+          Ajouter un indicateur
+        </p-button>
       </div>
       }
     </div>
-
-    <!-- Actions Footer -->
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t-2 border-gray-200">
-      <button
-        type="button"
-        (click)="addIndicator()"
-        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 hover:shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-        </svg>
-        <span>Ajouter un indicateur</span>
-      </button>
+      <p-button type="button" (onClick)="addIndicator()" severity="secondary" [outlined]="true">
+        Ajouter un indicateur
+      </p-button>
 
-      <button
+      <p-button
         type="button"
         [disabled]="addIndicatorStore.isLoading()"
-        (click)="onSaveIndicators()"
-        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-100">
-        @if (addIndicatorStore.isLoading()) {
-        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <span>Enregistrement...</span>
-        } @else {
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
-        </svg>
-        <span>Enregistrer les indicateurs</span>
-        }
-      </button>
+        [loading]="addIndicatorStore.isLoading()"
+        (onClick)="onSaveIndicators()"
+        severity="primary">
+        Enregistrer les indicateurs
+      </p-button>
     </div>
   </div>
   }

@@ -2,7 +2,6 @@
   @let isLoading = store.isLoading(); @let hasQuery = queryParams().q; @let roleCount = store.roles()[1]; @let roleList
   = store.roles()[0];
   <div class="relative bg-white rounded-xl shadow-sm pb-12">
-    <!-- Header Section -->
     <div class="px-6 pt-6 pb-4 border-b border-gray-100">
       <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
         <div>
@@ -13,15 +12,13 @@
             }
           </p>
         </div>
-        <button
-          (click)="onToggleAddModal()"
-          class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm">
-          <i-lucide [name]="icons.plus" class="size-4" />
-          Nouveau rôle
-        </button>
+        <p-button (onClick)="onToggleAddModal()" [size]="'small'" severity="primary" styleClass="font-semibold">
+          <span class="flex items-center gap-2">
+            <i-lucide [name]="icons.plus" class="size-4" />
+            <span>Nouveau rôle</span>
+          </span>
+        </p-button>
       </div>
-
-      <!-- Search Bar -->
       <form [formGroup]="searchForm" class="search-input-wrapper">
         <div class="search-input-group">
           <div class="search-input-icon">
@@ -30,9 +27,7 @@
           <input type="text" formControlName="q" placeholder="Rechercher un rôle..." class="search-input" />
           @if (searchForm.get('q')?.value) {
           <button type="button" (click)="searchForm.patchValue({ q: '' })" class="search-input-clear">
-            <svg class="search-input-clear-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <i-lucide [name]="icons.x" class="search-input-clear-icon" />
           </button>
           }
         </div>
@@ -41,7 +36,6 @@
     @if (roleCount === 0 && !isLoading) {
     <div class="mx-6 mt-12 flex flex-col items-center justify-center py-20 px-6 rounded-xl">
       @if (hasQuery) {
-      <!-- Search/Filter No Results State -->
       <div
         class="w-20 h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl flex items-center justify-center mb-5">
         <i-lucide [name]="icons.search" class="text-blue-500 w-9 h-9 stroke-[1.5]" />
@@ -53,12 +47,17 @@
           >{{ hasQuery }}</span
         >". Essayez avec d'autres mots-clés ou réinitialisez les filtres.
       </p>
-      <button
-        (click)="searchForm.patchValue({ q: '' })"
-        class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-lg transition-colors duration-200">
-        <i-lucide [name]="icons.refresh" class="size-4" />
-        Réinitialiser les filtres
-      </button>
+      <p-button
+        (onClick)="searchForm.patchValue({ q: '' })"
+        [size]="'small'"
+        severity="secondary"
+        [outlined]="true"
+        styleClass="font-semibold">
+        <span class="flex items-center gap-2">
+          <i-lucide [name]="icons.search" class="size-4" />
+          <span>Réinitialiser les filtres</span>
+        </span>
+      </p-button>
       } @else {
       <div
         class="w-20 h-20 bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl flex items-center justify-center mb-5">
@@ -68,12 +67,12 @@
       <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
         Commencez par créer votre premier rôle pour gérer les permissions des utilisateurs.
       </p>
-      <button
-        (click)="onToggleAddModal()"
-        class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-        <i-lucide [name]="icons.plus" class="size-4" />
-        Créer un rôle
-      </button>
+      <p-button (onClick)="onToggleAddModal()" [size]="'small'" severity="primary" styleClass="font-semibold">
+        <span class="flex items-center gap-2">
+          <i-lucide [name]="icons.plus" class="size-4" />
+          <span>Créer un rôle</span>
+        </span>
+      </p-button>
       }
     </div>
     } @if (isLoading) {
@@ -121,19 +120,13 @@
               <td class="px-6 py-4 font-semibold text-gray-900">{{ role.name | titlecase }}</td>
               <td class="px-6 py-4">
                 <div class="flex items-center gap-1">
-                  <button
-                    (click)="onToggleEditModal(role)"
-                    class="group relative p-1.5 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 transition-all duration-200 hover:scale-110 active:scale-95">
+                  <p-button (onClick)="onToggleEditModal(role)" severity="info" size="small" title="Modifier">
                     <i-lucide [name]="icons.edit" class="size-4" />
-                  </button>
-                  <button
-                    (click)="onDeleteRole(role.id, $event)"
-                    class="group relative p-1.5 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
-                    <div class="relative">
-                      <p-confirmpopup />
-                      <i-lucide [name]="icons.trash" class="size-4" />
-                    </div>
-                  </button>
+                  </p-button>
+                  <p-button (onClick)="onDeleteRole(role.id, $event)" severity="danger" size="small" title="Supprimer">
+                    <i-lucide [name]="icons.trash" class="size-4" />
+                  </p-button>
+                  <p-confirmpopup />
                 </div>
               </td>
             </tr>
@@ -160,17 +153,22 @@
         <input pInputText id="name" formControlName="name" />
       </div>
       <div class="flex justify-end gap-4 flex-wrap">
-        <p-button size="small" variant="outlined" severity="danger" class="font-satoshi" (onClick)="onToggleAddModal()">
-          Annuler
-        </p-button>
         <p-button
           size="small"
+          [outlined]="true"
+          severity="secondary"
+          styleClass="font-satoshi"
+          (onClick)="onToggleAddModal()">
+          <span>Annuler</span>
+        </p-button>
+        <p-button
+          type="submit"
+          size="small"
           severity="primary"
-          class="font-satoshi"
+          styleClass="font-satoshi"
           [disabled]="!addRoleForm.valid || addRoleStore.isLoading()"
-          [loading]="addRoleStore.isLoading()"
-          (onClick)="onAddRole()">
-          Ajouter le rôle
+          [loading]="addRoleStore.isLoading()">
+          <span>Ajouter le rôle</span>
         </p-button>
       </div>
     </form>
@@ -184,20 +182,20 @@
       <div class="flex justify-end gap-4 flex-wrap">
         <p-button
           size="small"
-          variant="outlined"
-          severity="danger"
-          class="font-satoshi"
+          [outlined]="true"
+          severity="secondary"
+          styleClass="font-satoshi"
           (onClick)="onToggleEditModal(null)">
-          Annuler
+          <span>Annuler</span>
         </p-button>
         <p-button
+          type="submit"
           size="small"
           severity="primary"
-          class="font-satoshi"
+          styleClass="font-satoshi"
           [disabled]="!updateRoleForm.valid || updateRoleStore.isLoading()"
-          [loading]="updateRoleStore.isLoading()"
-          (onClick)="onUpdateRole()">
-          Modifier le rôle
+          [loading]="updateRoleStore.isLoading()">
+          <span>Modifier le rôle</span>
         </p-button>
       </div>
     </form>

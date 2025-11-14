@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { LucideAngularModule, RefreshCcw, SquarePen, Plus, Trash, Search } from 'lucide-angular';
+import { LucideAngularModule, SquarePen, Plus, Trash, Search, X } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -47,14 +47,14 @@ export class ProjectCategories implements OnInit {
   updateCategoryStore = inject(UpdateCategoryStore);
   showAddModal = signal(false);
   showEditModal = signal(false);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
-    refresh: RefreshCcw,
     edit: SquarePen,
     trash: Trash,
     plus: Plus,
-    search: Search
+    search: Search,
+    x: X
   };
   queryParams = signal<FilterProjectCategoriesDto>({
     page: this.#route.snapshot.params['page'],
@@ -143,13 +143,13 @@ export class ProjectCategories implements OnInit {
     this.#confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       message: 'Etes-vous sûr ?',
+      acceptLabel: 'Confirmer',
+      rejectLabel: 'Annuler',
       rejectButtonProps: {
-        label: 'Annuler',
         severity: 'secondary',
         outlined: true
       },
       acceptButtonProps: {
-        label: 'Confirmer',
         severity: 'danger'
       },
       accept: () => {

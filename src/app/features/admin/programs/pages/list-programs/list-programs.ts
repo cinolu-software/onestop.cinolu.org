@@ -84,7 +84,7 @@ export class ListPrograms implements OnInit {
   });
   activeTab = signal<string>(this.#route.snapshot.queryParamMap.get('filter') || 'all');
   tabsConfig = signal([
-    { label: 'Tous les programmes', name: 'all' },
+    { label: 'Tous', name: 'all' },
     { label: 'Publiés', name: 'published' },
     { label: 'Brouillons', name: 'drafts' },
     { label: 'En vedette', name: 'highlighted' }
@@ -130,7 +130,7 @@ export class ListPrograms implements OnInit {
     this.updateRouteAndPrograms();
   }
 
-  onPublishProgram(id: string): void {
+  onPublish(id: string): void {
     this.publishProgramStore.publishProgram(id);
   }
 
@@ -152,7 +152,7 @@ export class ListPrograms implements OnInit {
     this.loadPrograms();
   }
 
-  onDeleteRole(roleId: string, event: Event): void {
+  onDelete(roleId: string, event: Event): void {
     this.#confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       message: 'Etes-vous sûr ?',

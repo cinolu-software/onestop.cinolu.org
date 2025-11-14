@@ -136,8 +136,14 @@
         [disabled]="updateEventStore.isLoading() || form.invalid"
         severity="primary"
         type="submit"
-        icon="pi pi-check"
-        label="Enregistrer les modifications" />
+        styleClass="font-semibold">
+        <span class="flex items-center gap-2">
+          @if (!updateEventStore.isLoading()) {
+          <i-lucide [name]="icons.save" class="size-4" />
+          }
+          <span>{{ updateEventStore.isLoading() ? 'Enregistrement...' : 'Enregistrer les modifications' }}</span>
+        </span>
+      </p-button>
     </div>
   </div>
 </form>
