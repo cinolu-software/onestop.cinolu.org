@@ -32,74 +32,27 @@
   --color-secondary-800: #075985;
   --color-secondary-900: #0c4a6e;
   --color-secondary-950: #082f49;
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(5px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes fadeInScale {
-    from {
-      opacity: 0;
-      transform: scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes shimmer {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
-  }
-
-  --animate-fadeIn: fadeIn 300ms ease-in-out;
-  --animate-fadeInScale: fadeInScale 350ms ease-out;
-  --animate-shimmer: shimmer 2s infinite;
 }
 
 @layer base {
   html {
-    /* overscroll-behavior: contain !important; */
     @apply scroll-smooth hyphens-auto;
   }
 
   .filepond--drop-label {
-    color: #4c4e53;
+    @apply text-gray-700;
   }
 
   .filepond--label-action {
-    text-decoration-color: #babdc0;
+    @apply decoration-gray-400;
   }
 
   .filepond--panel-root {
-    border-radius: 2em;
-    background-color: #edf0f4;
-    height: 1em;
+    @apply rounded-2xl bg-gray-100 h-1;
   }
 
   .filepond--item-panel {
-    background-color: #595e68;
+    @apply rounded-2xl bg-gray-700;
   }
 
   .ql-editor {
@@ -107,7 +60,7 @@
   }
 
   .filepond--drip-blob {
-    background-color: #7f8a9a;
+    @apply bg-primary-500;
   }
 
   ::-webkit-scrollbar {
@@ -144,90 +97,49 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  html,
-  body {
-    overflow-x: hidden;
-  }
-
   .dashboard-main-content {
     @apply bg-white rounded-lg shadow-md px-8 py-10;
-  }
-
-  @keyframes pulse-ring {
-    0% {
-      transform: scale(1);
-      opacity: 0.6;
-    }
-    80% {
-      transform: scale(1.8);
-      opacity: 0;
-    }
-    100% {
-      transform: scale(1.8);
-      opacity: 0;
-    }
-  }
-
-  .ring-pulse::before {
-    content: '';
-    position: absolute;
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: 9999px;
-    border: 2px solid rgba(34, 197, 94, 0.5);
-    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    z-index: -1;
-  }
-
-  .bg-grid {
-    background-image:
-      repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.05) 0px,
-        rgba(255, 255, 255, 0.05) 1px,
-        transparent 1px,
-        transparent 80px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.05) 0px,
-        rgba(0, 0, 0, 0.05) 1px,
-        transparent 1px,
-        transparent 80px
-      );
-    background-size: 80px 80px;
-    z-index: 10;
-  }
-
-  .fade-left-init {
-    @apply opacity-0 -translate-x-12 transition-all duration-700 ease-out;
-  }
-
-  .fade-right-init {
-    @apply opacity-0 translate-x-12 transition-all duration-700 ease-out;
-  }
-
-  .animate-slide-in {
-    @apply opacity-100 translate-x-0 transition-all duration-700 ease-out;
   }
 }
 
 @layer components {
-  .carousel-nav-btn {
-    @apply h-8 w-8  text-primary-700 flex flex-col items-center justify-center border border-primary-700 hover:bg-primary-700 hover:text-white transition-colors duration-300 rounded-full;
+  .search-input-wrapper {
+    @apply relative;
   }
 
-  .primary-link {
-    @apply font-semibold text-white px-4 py-1.5 rounded-sm bg-primary-500/95 hover:bg-primary-600/95 transition-colors duration-300;
+  .search-input-group {
+    @apply relative;
   }
 
-  .secondary-link {
-    @apply border border-white rounded-sm px-4 py-1.5 text-white hover:bg-white hover:text-primary-500 transition-colors duration-300;
+  .search-input-group:focus-within .search-input-icon-svg {
+    @apply text-primary-500;
+  }
+
+  .search-input-icon {
+    @apply absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none;
+  }
+
+  .search-input-icon-svg {
+    @apply size-5 text-gray-400 transition-colors duration-200;
+  }
+
+  .search-input {
+    @apply w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400;
+    @apply focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none;
+    @apply transition-all duration-200;
+  }
+
+  .search-input-clear {
+    @apply absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 transition-colors duration-200;
+  }
+
+  .search-input-clear-icon {
+    @apply size-5;
   }
 }
