@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ChevronsLeft, ChevronsRight, LucideAngularModule } from 'lucide-angular';
+import { Calendar, Check, FileText, Info, List, PenLine, Tag, LucideAngularModule } from 'lucide-angular';
 import { Button } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputText } from 'primeng/inputtext';
@@ -25,9 +25,9 @@ import { QuillModule } from 'ngx-quill';
     InputText,
     DatePickerModule,
     ReactiveFormsModule,
-    QuillModule,
+    QuillModule
   ],
-  templateUrl: './add-article.html',
+  templateUrl: './add-article.html'
 })
 export class AddArticle {
   #fb = inject(FormBuilder);
@@ -35,8 +35,13 @@ export class AddArticle {
   store = inject(AddArticleStore);
   tagsStore = inject(UnpaginatedTagStore);
   icons = {
-    next: ChevronsRight,
-    previous: ChevronsLeft,
+    penLine: PenLine,
+    tag: Tag,
+    calendar: Calendar,
+    list: List,
+    fileText: FileText,
+    info: Info,
+    check: Check
   };
 
   constructor() {
@@ -45,7 +50,7 @@ export class AddArticle {
       published_at: [new Date(), Validators.required],
       content: ['', Validators.required],
       summary: ['', Validators.required],
-      tags: [[], Validators.required],
+      tags: [[], Validators.required]
     });
   }
 
