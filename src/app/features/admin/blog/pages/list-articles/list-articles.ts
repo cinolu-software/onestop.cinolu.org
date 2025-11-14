@@ -6,10 +6,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   Eye,
   EyeOff,
+  FileX,
   LucideAngularModule,
   Plus,
   RefreshCcw,
   Search,
+  Sparkles,
   SquarePen,
   Star,
   StarOff,
@@ -29,6 +31,7 @@ import { IArticle } from '@shared/models/entities.models';
 import { HighlightArticleStore } from '../../store/articles/highlight-article.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { Tabs } from '@shared/components/tabs/tabs';
 
 @Component({
   selector: 'app-article-list',
@@ -44,7 +47,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     RouterLink,
     AvatarModule,
     ApiImgPipe,
-    ConfirmPopup
+    ConfirmPopup,
+    Tabs
   ],
   templateUrl: './list-articles.html'
 })
@@ -68,12 +72,24 @@ export class ListArticles implements OnInit {
     eye: Eye,
     eyeOff: EyeOff,
     star: Star,
-    starOff: StarOff
+    starOff: StarOff,
+    fileX: FileX,
+    sparkles: Sparkles
   };
   queryParams = signal<FilterArticleDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q')
+    q: this.#route.snapshot.queryParamMap.get('q'),
+    filter: (this.#route.snapshot.queryParamMap.get('filter') as FilterArticleDto['filter']) || 'all'
   });
+  activeTab = signal<string>(
+    (this.#route.snapshot.queryParamMap.get('filter') as 'all' | 'published' | 'drafts' | 'highlighted') || 'all'
+  );
+  tabsConfig = signal([
+    { name: 'all', label: 'Tous' },
+    { name: 'published', label: 'Publiés' },
+    { name: 'drafts', label: 'Brouillons' },
+    { name: 'highlighted', label: 'En vedette' }
+  ]);
 
   constructor() {
     this.searchForm = this.#fb.group({
@@ -95,6 +111,13 @@ export class ListArticles implements OnInit {
 
   loadArticles(): void {
     this.store.loadArticles(this.queryParams());
+  }
+
+  onTabChange(tabName: string): void {
+    this.activeTab.set(tabName);
+    this.queryParams().filter = tabName as FilterArticleDto['filter'];
+    this.queryParams().page = null;
+    this.updateRouteAndArticles();
   }
 
   onPageChange(currentPage: number): void {
