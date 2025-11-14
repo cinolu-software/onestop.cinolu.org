@@ -114,23 +114,6 @@ export const ADMIN_LINKS: ILink[] = [
         path: '/roles'
       }
     ]
-  },
-  {
-    name: 'Les entrepreneurs',
-    path: '/entrepreneurs',
-    icon: UserCheck,
-    children: [
-      {
-        name: 'Les entrepreneurs',
-        path: '/entrepreneurs',
-        exactUrl: true
-      },
-      {
-        name: 'Les entreprises',
-        path: '/entrepreneurs/ventures',
-        exactUrl: true
-      }
-    ]
   }
 ];
 
