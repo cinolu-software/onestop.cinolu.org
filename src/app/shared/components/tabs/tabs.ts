@@ -9,9 +9,11 @@ import { LucideAngularModule, LucideIconData } from 'lucide-angular';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Tabs {
-  tabs = input.required<{ label: string; name: string; icon: LucideIconData }[]>();
+  tabs = input.required<{ label: string; name: string; icon?: LucideIconData }[]>();
+  activeCount = input<number>();
   activeTab = input<string>();
   tabChange = output<string>();
+  isLoading = input<boolean>(false);
 
   onTabChange(tabName: string) {
     this.tabChange.emit(tabName);
