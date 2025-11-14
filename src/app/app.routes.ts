@@ -80,13 +80,6 @@ export const routes: Route[] = [
     loadChildren: () => import('@features/admin/blog/blog.routes').then((c) => c.blogRoutes)
   },
   {
-    path: '',
-    component: Layout,
-    data: { layout: 'dashboard-layout' },
-    canActivate: [authGuard],
-    loadChildren: () => import('@features/admin/entrepreneurs/entrepreneurs.routes').then((c) => c.entrepreneursRoutes)
-  },
-  {
     path: 'unauthorized',
     title: 'Accès non autorisé',
     loadComponent: () => import('@features/common/unauthorized/unauthorized').then((c) => c.UnauthorizedPage)
