@@ -1,6 +1,19 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { LucideAngularModule, SquarePen, Trash, Plus, Search, Eye, EyeOff, Star, StarOff } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  SquarePen,
+  Trash,
+  Plus,
+  Search,
+  Eye,
+  EyeOff,
+  Star,
+  StarOff,
+  FileX,
+  Sparkles,
+  Funnel
+} from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -18,6 +31,7 @@ import { PublishProgramStore } from '../../store/programs/publish-program.store'
 import { HighlightProgramStore } from '../../store/programs/highlight-program.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { Tabs } from '@shared/components/tabs/tabs';
 
 @Component({
   selector: 'app-list-programs',
@@ -34,7 +48,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     ConfirmPopup,
     ApiImgPipe,
     AvatarModule,
-    RouterLink
+    RouterLink,
+    Tabs
   ]
 })
 export class ListPrograms implements OnInit {
@@ -47,7 +62,7 @@ export class ListPrograms implements OnInit {
   deleteProgramStore = inject(DeleteProgramStore);
   publishProgramStore = inject(PublishProgramStore);
   highlightStore = inject(HighlightProgramStore);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
     edit: SquarePen,
@@ -57,12 +72,23 @@ export class ListPrograms implements OnInit {
     eye: Eye,
     eyeOff: EyeOff,
     star: Star,
-    starOff: StarOff
+    starOff: StarOff,
+    filter: Funnel,
+    fileX: FileX,
+    sparkles: Sparkles
   };
   queryParams = signal<FilterProgramsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q')
+    q: this.#route.snapshot.queryParamMap.get('q'),
+    filter: (this.#route.snapshot.queryParamMap.get('filter') as FilterProgramsDto['filter']) || 'all'
   });
+  activeTab = signal<string>(this.#route.snapshot.queryParamMap.get('filter') || 'all');
+  tabsConfig = signal([
+    { label: 'Tous les programmes', name: 'all' },
+    { label: 'Publiés', name: 'published' },
+    { label: 'Brouillons', name: 'drafts' },
+    { label: 'En vedette', name: 'highlighted' }
+  ]);
 
   constructor() {
     this.searchForm = this.#fb.group({
@@ -72,6 +98,7 @@ export class ListPrograms implements OnInit {
 
   ngOnInit(): void {
     this.loadPrograms();
+    this.updateTabCounts();
     const searchInput = this.searchForm.get('q');
     searchInput?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
@@ -80,6 +107,18 @@ export class ListPrograms implements OnInit {
         this.queryParams().page = null;
         this.updateRouteAndPrograms();
       });
+  }
+
+  updateTabCounts(): void {
+    const tabs = this.tabsConfig();
+    this.tabsConfig.set([...tabs]);
+  }
+
+  onTabChange(tabName: string): void {
+    this.activeTab.set(tabName);
+    this.queryParams().filter = tabName as FilterProgramsDto['filter'];
+    this.queryParams().page = null;
+    this.updateRouteAndPrograms();
   }
 
   loadPrograms(): void {

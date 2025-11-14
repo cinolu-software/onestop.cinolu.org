@@ -1,123 +1,373 @@
 @let isLoading = store.isLoading(); @let hasQuery = queryParams().q; @let programCount = store.programs()[1]; @let
 programList = store.programs()[0];
-<div class="relative bg-white rounded-lg pb-12">
-  <div class="flex flex-col gap-3 mb-10 pt-6">
-    <div class="px-6 flex flex-col md:flex-row gap-2 md:justify-between md:items-center mb-6 md:mb-0">
-      <h5 class="text-lg font-bold">
-        Liste des programmes
-        <span class="text-gray-500">
-          @if (isLoading) {
-          <p-progress-spinner
-            strokeWidth="5"
-            animationDuration=".5s"
-            fill="transparent"
-            [style]="{ width: '0.8rem', height: '0.8rem' }" />
-          } @else { ({{ programCount }}) }
-        </span>
-      </h5>
-      <a [routerLink]="'/programs/add'" pButton [outlined]="true" [size]="'small'">
+<div class="relative bg-white rounded-xl shadow-sm pb-12">
+  <!-- Header Section -->
+  <div class="px-6 pt-6 pb-4 border-b border-gray-100">
+    <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
+      <div>
+        <h5 class="text-2xl font-bold text-gray-900 mb-1">Programmes</h5>
+        <p class="text-sm text-gray-500">
+          Gérez et organisez vos programmes @if (!isLoading) {
+          <span class="text-gray-400">• {{ programCount }} au total</span>
+          }
+        </p>
+      </div>
+      <a
+        [routerLink]="'/programs/add'"
+        class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm">
         <i-lucide [name]="icons.plus" class="size-4" />
-        Ajouter un programme
+        Nouveau programme
       </a>
     </div>
+
+    <!-- Search Bar -->
+    <form [formGroup]="searchForm" class="search-input-wrapper">
+      <div class="search-input-group">
+        <div class="search-input-icon">
+          <i-lucide [name]="icons.search" class="search-input-icon-svg" />
+        </div>
+        <input type="text" formControlName="q" placeholder="Rechercher un programme par nom..." class="search-input" />
+        @if (searchForm.get('q')?.value) {
+        <button
+          type="button"
+          (click)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndPrograms()"
+          class="search-input-clear">
+          <svg class="search-input-clear-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        }
+      </div>
+    </form>
   </div>
+
+  <div class="px-6 my-4">
+    <app-tabs
+      [activeCount]="programCount"
+      [tabs]="tabsConfig()"
+      [activeTab]="activeTab()"
+      [isLoading]="isLoading"
+      (tabChange)="onTabChange($event)" />
+  </div>
+
   @if (programCount === 0 && !isLoading) {
-  <div
-    class="mx-6 flex flex-col items-center justify-center py-16 px-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border-2 border-dashed border-gray-300">
-    <div class="bg-white rounded-full w-20 h-20 flex items-center justify-center shadow-sm mb-6">
-      <i-lucide [name]="icons.plus" class="text-gray-400 w-10 h-10 stroke-[1.5]" />
+  <div class="mx-6 mt-12 flex flex-col items-center justify-center py-20 px-6 rounded-xl">
+    @if (hasQuery) {
+    <!-- Search/Filter No Results State -->
+    <div class="w-20 h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl flex items-center justify-center mb-5">
+      <i-lucide [name]="icons.search" class="text-blue-500 w-9 h-9 stroke-[1.5]" />
     </div>
-    <h3 class="text-2xl font-bold text-gray-800 mb-3">
-      {{ hasQuery ? 'Aucun programme trouvé avec ce filtre' : 'Aucun programme trouvé' }}
-    </h3>
-    <p class="text-gray-600 text-center max-w-md mb-6">
-      @if (hasQuery) { Essayez de modifier vos critères de recherche pour trouver des programmes. } @else { Commencez
-      par créer votre premier programme pour structurer vos activités. }
+    <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun programme trouvé</h3>
+    <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+      Nous n'avons trouvé aucun programme correspondant à vos critères de recherche "<span
+        class="font-semibold text-gray-700"
+        >{{ hasQuery }}</span
+      >". Essayez avec d'autres mots-clés ou réinitialisez les filtres.
     </p>
-    @if (!hasQuery) {
+    <button
+      (click)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndPrograms()"
+      class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-lg transition-colors duration-200">
+      <i-lucide [name]="icons.filter" class="size-4" />
+      Réinitialiser les filtres
+    </button>
+    } @else if (activeTab() === 'published') {
+    <div
+      class="w-20 h-20 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl flex items-center justify-center mb-5">
+      <i-lucide [name]="icons.eye" class="text-emerald-500 w-9 h-9 stroke-[1.5]" />
+    </div>
+    <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun programme publié</h3>
+    <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+      Vous n'avez pas encore de programmes publiés. Publiez vos brouillons pour les rendre visibles au public.
+    </p>
+    } @else if (activeTab() === 'drafts') {
+    <div class="w-20 h-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl flex items-center justify-center mb-5">
+      <i-lucide [name]="icons.fileX" class="text-gray-400 w-9 h-9 stroke-[1.5]" />
+    </div>
+    <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun brouillon</h3>
+    <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+      Tous vos programmes sont publiés. Les brouillons apparaîtront ici lorsque vous dépubliez un programme.
+    </p>
+    } @else if (activeTab() === 'highlighted') {
+    <div
+      class="w-20 h-20 bg-gradient-to-br from-amber-50 to-amber-100 rounded-3xl flex items-center justify-center mb-5">
+      <i-lucide [name]="icons.sparkles" class="text-amber-500 w-9 h-9 stroke-[1.5]" />
+    </div>
+    <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun programme en vedette</h3>
+    <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+      Mettez vos meilleurs programmes en vedette pour les mettre en avant. Cliquez sur l'étoile pour les ajouter.
+    </p>
+    } @else {
+    <div
+      class="w-20 h-20 bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl flex items-center justify-center mb-5">
+      <i-lucide [name]="icons.plus" class="text-primary-600 w-10 h-10 stroke-[1.5]" />
+    </div>
+    <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun programme</h3>
+    <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+      Commencez par créer votre premier programme pour structurer vos activités et organiser vos initiatives.
+    </p>
     <a
-      pButton
-      [size]="'small'"
       [routerLink]="'/programs/add'"
-      class="flex items-center gap-2 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200">
+      class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
       <i-lucide [name]="icons.plus" class="size-4" />
-      <span class="font-medium">Créer un programme</span>
+      Créer un programme
     </a>
     }
   </div>
   } @if (isLoading) {
-  <div class="grid grid-cols-5 overflow-x-auto mx-6 my-6 border border-gray-200 rounded-lg">
+  <!-- Mobile Skeleton -->
+  <div class="px-6 mt-6 space-y-4 lg:hidden">
     @for (i of skeletonArray; track $index) {
-    <div class="border-y border-gray-200 py-3 px-6">
-      <div class="h-4 rounded-lg bg-gray-200 animate-pulse mb-2"></div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <div class="flex items-start gap-3 mb-4">
+        <div class="w-14 h-14 rounded-xl bg-gray-200 animate-pulse flex-shrink-0"></div>
+        <div class="flex-1 space-y-2">
+          <div class="h-5 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+          <div class="h-3 w-32 bg-gray-200 rounded animate-pulse"></div>
+          <div class="h-6 w-20 bg-gray-200 rounded-full animate-pulse mt-2"></div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+        <div class="h-3 w-24 bg-gray-200 rounded animate-pulse"></div>
+        <div class="flex gap-1">
+          <div class="h-8 w-8 bg-gray-200 rounded-md animate-pulse"></div>
+          <div class="h-8 w-8 bg-gray-200 rounded-md animate-pulse"></div>
+          <div class="h-8 w-8 bg-gray-200 rounded-md animate-pulse"></div>
+          <div class="h-8 w-8 bg-gray-200 rounded-md animate-pulse"></div>
+        </div>
+      </div>
     </div>
     }
   </div>
+
+  <!-- Desktop Skeleton -->
+  <div class="hidden lg:block px-6 mt-6">
+    <div class="overflow-x-auto rounded-xl border border-gray-200">
+      <table class="w-full">
+        <thead class="text-left">
+          <tr class="border-b border-gray-200">
+            <th class="px-6 py-3 font-bold text-gray-900 bg-white">Programme</th>
+            <th class="px-6 py-3 font-bold text-gray-900 bg-white">Statut</th>
+            <th class="px-6 py-3 font-bold text-gray-900 bg-white">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          @for (i of skeletonArray; track $index) {
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-lg bg-gray-200 animate-pulse flex-shrink-0"></div>
+                <div class="flex-1 space-y-2">
+                  <div class="h-4 w-48 bg-gray-200 rounded animate-pulse"></div>
+                  <div class="h-3 w-32 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <div class="h-6 w-20 bg-gray-200 rounded-full animate-pulse"></div>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-1">
+                <div class="h-7 w-7 bg-gray-200 rounded-md animate-pulse"></div>
+                <div class="h-7 w-7 bg-gray-200 rounded-md animate-pulse"></div>
+                <div class="h-7 w-7 bg-gray-200 rounded-md animate-pulse"></div>
+                <div class="h-7 w-7 bg-gray-200 rounded-md animate-pulse"></div>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
   } @if (programCount > 0 && !isLoading) {
-  <div class="relative flex flex-col overflow-x-auto mx-6 my-6 border border-gray-200 rounded-lg">
-    <table class="text-left rtl:text-right text-gray-500">
-      <thead class="font-black text-gray-800 border-y border-gray-200 bg-gray-100">
-        <tr>
-          <th class="px-6 py-3">Logo</th>
-          <th class="px-6 py-3">Nom</th>
-          <th class="px-6 py-3">Status</th>
-          <th class="px-6 py-3">Créé le</th>
-          <th class="px-6 py-3">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for ( program of programList | paginate : { itemsPerPage: 40, currentPage: queryParams().page || 1, totalItems:
-        programCount, }; track program.id ) {
-        <tr class="border-b border-gray-200 last:border-none">
-          <td class="px-6 py-2">
+  <div class="px-4 sm:px-6 mt-6">
+    <div class="block lg:hidden space-y-4">
+      @for ( program of programList | paginate : { itemsPerPage: 40, currentPage: queryParams().page || 1, totalItems:
+      programCount, }; track program.id ) {
+      <div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow duration-200">
+        <div class="flex items-start gap-3 mb-4">
+          <div class="relative flex-shrink-0">
             <p-avatar
               [image]="program | apiIMG: 'program'"
               [size]="'large'"
-              [style]="{ width: '48px', height: '48px' }" />
-          </td>
-          <td class="px-6 py-2 font-medium text-gray-900 w-80 hyphens-auto">{{ program.name | titlecase }}</td>
-          <td class="px-6 py-2 text-xs capitalize font-medium w-32">
-            @if (program.is_published) {
-            <span class="text-primary-500 bg-primary-400/20 rounded py-1 px-1.5"> publié </span>
-            } @else {
-            <span class="text-red-500 bg-red-400/20 rounded py-1 px-2"> dépublié </span>
-            }
-          </td>
-          <td class="px-6 py-2">{{ program.created_at | date: 'longDate' }}</td>
-          <td class="px-6 py-2">
-            <div class="flex items-center gap-2">
-              <button pButton outlined severity="success" (click)="highlightProgram(program.id)">
-                @if (program.is_highlighted) {
-                <i-lucide [name]="icons.star" class="size-4" />
-                } @else {
-                <i-lucide [name]="icons.starOff" class="size-4" />
-                }
-              </button>
-              <button pButton outlined severity="primary" (click)="onPublishProgram(program.id)">
-                @if (!program.is_published) {
-                <i-lucide [name]="icons.eyeOff" class="size-4" />
-                } @else {
-                <i-lucide [name]="icons.eye" class="size-4" />
-                }
-              </button>
-              <a [routerLink]="['/programs/edit', program.slug]" pButton outlined severity="info">
-                <i-lucide [name]="icons.edit" class="size-4" />
-              </a>
-              <button pButton outlined severity="danger" (click)="onDeleteRole(program.id, $event)">
-                <div class="relative">
-                  <p-confirmpopup />
-                  <i-lucide [name]="icons.trash" class="size-4" />
-                </div>
-              </button>
+              [style]="{ width: '56px', height: '56px', 'border-radius': '12px' }" />
+            @if (program.is_highlighted) {
+            <div
+              class="absolute -top-1 -right-1 w-6 h-6 bg-amber-400 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+              <i-lucide [name]="icons.star" class="size-3 text-white" />
             </div>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+            }
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-semibold text-gray-900 mb-1 line-clamp-2">{{ program.name | titlecase }}</h3>
+            <p class="text-xs text-gray-500 mb-2">{{ program.created_at | date: 'dd MMMM yyyy' }}</p>
+            @if (program.is_published) {
+            <span
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+              Publié
+            </span>
+            } @else {
+            <span
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+              <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+              Brouillon
+            </span>
+            }
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+          <span class="text-xs text-gray-500">{{ program.created_at | date: 'dd MMM yyyy' }}</span>
+          <div class="flex items-center gap-1">
+            <button
+              (click)="highlightProgram(program.id)"
+              class="group relative p-2 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
+                     {{ program.is_highlighted 
+                        ? 'bg-amber-400 text-white shadow-sm hover:bg-amber-500' 
+                        : 'bg-gray-100 text-amber-500 hover:bg-amber-50' }}">
+              <i-lucide [name]="program.is_highlighted ? icons.star : icons.starOff" class="size-4" />
+              <span class="sr-only">{{ program.is_highlighted ? 'Retirer de la vedette' : 'Mettre en vedette' }}</span>
+            </button>
+
+            <button
+              (click)="onPublishProgram(program.id)"
+              class="group relative p-2 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
+                     {{ program.is_published 
+                        ? 'bg-emerald-400 text-white shadow-sm hover:bg-emerald-500' 
+                        : 'bg-gray-100 text-gray-400 hover:bg-emerald-50 hover:text-emerald-500' }}">
+              <i-lucide [name]="program.is_published ? icons.eye : icons.eyeOff" class="size-4" />
+              <span class="sr-only">{{ program.is_published ? 'Dépublier' : 'Publier' }}</span>
+            </button>
+
+            <!-- Edit Button Mobile -->
+            <a
+              [routerLink]="['/programs/edit', program.slug]"
+              class="group relative p-2 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 transition-all duration-200 hover:scale-110 active:scale-95">
+              <i-lucide [name]="icons.edit" class="size-4" />
+              <span class="sr-only">Modifier</span>
+            </a>
+
+            <!-- Delete Button Mobile -->
+            <button
+              (click)="onDeleteRole(program.id, $event)"
+              class="group relative p-2 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
+              <div class="relative">
+                <p-confirmpopup />
+                <i-lucide [name]="icons.trash" class="size-4" />
+              </div>
+              <span class="sr-only">Supprimer</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    <div class="hidden lg:block overflow-x-auto rounded-xl border border-gray-200">
+      <table class="w-full">
+        <thead class="text-left">
+          <tr class="border-b border-gray-200">
+            <th class="px-6 py-3 font-bold text-gray-900 bg-white">Programme</th>
+            <th class="px-6 py-3 font-bold text-gray-900 bg-white">Statut</th>
+            <th class="px-6 py-3 font-bold text-gray-900 bg-white">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          @for ( program of programList | paginate : { itemsPerPage: 40, currentPage: queryParams().page || 1,
+          totalItems: programCount, }; track program.id ) {
+          <tr class="hover:bg-gray-50 transition-colors duration-150">
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="relative">
+                  <p-avatar
+                    [image]="program | apiIMG: 'program'"
+                    [size]="'large'"
+                    [style]="{ width: '48px', height: '48px', 'border-radius': '10px' }" />
+                  @if (program.is_highlighted) {
+                  <div
+                    class="absolute -top-1 -right-1 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center border-2 border-white">
+                    <i-lucide [name]="icons.star" class="size-3 text-white" />
+                  </div>
+                  }
+                </div>
+                <div class="min-w-0">
+                  <p class="font-semibold text-gray-900 truncate">{{ program.name | titlecase }}</p>
+                  <p class="text-xs text-gray-500 mt-0.5">Créé {{ program.created_at | date: 'dd MMM yyyy' }}</p>
+                </div>
+              </div>
+            </td>
+
+            <!-- Status -->
+            <td class="px-6 py-4">
+              @if (program.is_published) {
+              <span
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                Publié
+              </span>
+              } @else {
+              <span
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                Brouillon
+              </span>
+              }
+            </td>
+            <!-- Actions Desktop -->
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-1">
+                <!-- Highlight Button Desktop -->
+                <button
+                  (click)="highlightProgram(program.id)"
+                  class="group relative p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
+                         {{ program.is_highlighted 
+                            ? 'bg-amber-400 text-white shadow-sm hover:bg-amber-500 hover:shadow' 
+                            : 'text-amber-500 hover:bg-amber-50' }}"
+                  [attr.title]="program.is_highlighted ? 'Retirer de la vedette' : 'Mettre en vedette'">
+                  <i-lucide [name]="program.is_highlighted ? icons.star : icons.starOff" class="size-[18px]" />
+                </button>
+                <!-- Publish Button Desktop -->
+                <button
+                  (click)="onPublishProgram(program.id)"
+                  class="group relative p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
+                         {{ program.is_published 
+                            ? 'bg-emerald-400 text-white shadow-sm hover:bg-emerald-500 hover:shadow' 
+                            : 'text-gray-400 hover:bg-emerald-50 hover:text-emerald-500' }}"
+                  [attr.title]="program.is_published ? 'Dépublier' : 'Publier'">
+                  <i-lucide [name]="program.is_published ? icons.eye : icons.eyeOff" class="size-[18px]" />
+                </button>
+
+                <!-- Edit Button Desktop -->
+                <a
+                  [routerLink]="['/programs/edit', program.slug]"
+                  class="group relative p-1.5 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 hover:shadow transition-all duration-200 hover:scale-110 active:scale-95"
+                  title="Modifier">
+                  <i-lucide [name]="icons.edit" class="size-[18px]" />
+                </a>
+
+                <!-- Delete Button Desktop -->
+                <button
+                  (click)="onDeleteRole(program.id, $event)"
+                  class="group relative p-1.5 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 hover:shadow transition-all duration-200 hover:scale-110 active:scale-95"
+                  title="Supprimer">
+                  <div class="relative">
+                    <p-confirmpopup />
+                    <i-lucide [name]="icons.trash" class="size-[18px]" />
+                  </div>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
-  } @if (programCount > 40) {
-  <div class="flex justify-center items-center gap-3 py-8">
+  }
+
+  <!-- Pagination -->
+  @if (programCount > 40) {
+  <div class="flex justify-center items-center gap-3 py-8 px-6">
     <pagination-controls
       nextLabel=""
       previousLabel=""
