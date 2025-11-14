@@ -50,7 +50,7 @@ export class UpdateProgram {
   selectedCategory = signal(this.indicatorsCategories()[0]);
   year = signal<Date>(new Date());
   tabs = [
-    { label: 'Modifier le projet', name: 'edit', icon: SquarePen },
+    { label: 'Modifier le programme', name: 'edit', icon: SquarePen },
     { label: 'Les indicateurs', name: 'indicators', icon: ChartColumn }
   ];
   updateForm: FormGroup = this.#fb.group({

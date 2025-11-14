@@ -1,104 +1,310 @@
-<div class="p-6 bg-white rounded-lg">
+<div class="bg-white rounded-xl shadow-sm border border-gray-100">
   @let program = programStore.program();
-  <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
-  @if (activeTab() === 'edit') {
-  <div class="bg-white max-w-3xl rounded-lg mt-6">
-    <div class="w-1/2">
-      @if (programStore.isLoading()) {
-      <div class="h-20 bg-gray-200 animate-pulse rounded-lg w-full mb-4"></div>
-      } @else {
-      <app-file-upload [name]="'logo'" [url]="url + program?.id" />
-      }
+  <div class="border-b border-gray-100">
+    <div class="px-6 pt-6 pb-0">
+      <h3 class="text-xl font-bold text-gray-900 mb-1">Modifier le programme</h3>
+      <p class="text-sm text-gray-600 mb-4">Gérez les informations et indicateurs du programme</p>
     </div>
-    <form class="flex flex-col gap-4" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="flex flex-col gap-1.5">
-          <label for="categories" class="block font-medium text-gray-700">Catégories</label>
+    <div class="px-6 my-4">
+      <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+    </div>
+  </div>
+  @if (activeTab() === 'edit') {
+  <div class="p-6 space-y-6">
+    <div class="space-y-3">
+      <div class="block text-sm font-semibold text-gray-700">Logo du programme</div>
+      <div class="max-w-md">
+        @if (programStore.isLoading()) {
+        <div class="h-32 bg-gray-200 animate-pulse rounded-xl"></div>
+        } @else {
+        <div
+          class="p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-primary-400 transition-colors duration-200">
+          <app-file-upload [name]="'logo'" [url]="url + program?.id" />
+        </div>
+        }
+      </div>
+      <p class="text-xs text-gray-500">Format recommandé: PNG, JPG (max 2MB)</p>
+    </div>
+
+    <div class="border-t border-gray-100"></div>
+
+    <form class="space-y-6" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label for="categories" class="block text-sm font-semibold text-gray-700"> Catégorie </label>
           <p-select
             inputId="categories"
             [options]="categoriesStore.categories()"
             [optionValue]="'id'"
             [optionLabel]="'name'"
-            formControlName="category"></p-select>
+            formControlName="category"
+            placeholder="Sélectionner une catégorie"
+            class="w-full" />
+          <p class="text-xs text-gray-500">Catégorie du programme</p>
         </div>
-        <div class="flex flex-col gap-1.5">
-          <label for="name" class="font-medium">Nom du programme<span class="text-red-500">*</span></label>
-          <input pInputText id="name" name="name" formControlName="name" autocomplete="off" />
-        </div>
-        <div class="flex flex-col gap-1.5 col-span-2">
-          <label for="description" class="font-medium">Description<span class="text-red-500">*</span></label>
-          <textarea
-            pTextarea
-            id="description"
-            name="description"
-            formControlName="description"
-            rows="8"
-            cols="30"
-            autocomplete="off"></textarea>
+        <div class="space-y-2">
+          <label for="name" class="block text-sm font-semibold text-gray-700">
+            Nom du programme
+            <span class="text-red-500 ml-0.5">*</span>
+          </label>
+          <input
+            pInputText
+            id="name"
+            name="name"
+            formControlName="name"
+            autocomplete="off"
+            placeholder="Nom du programme"
+            class="w-full" />
+          <p class="text-xs text-gray-500">Le nom affiché du programme</p>
         </div>
       </div>
-      <p-button
-        size="small"
-        severity="primary"
-        class="font-satoshi"
-        [disabled]="updateForm.invalid || updateProgramStore.isLoading()"
-        [loading]="updateProgramStore.isLoading()"
-        (onClick)="onSubmit()">
-        Mettre à jour
-      </p-button>
+      <div class="space-y-2">
+        <label for="description" class="block text-sm font-semibold text-gray-700">
+          Description
+          <span class="text-red-500 ml-0.5">*</span>
+        </label>
+        <textarea
+          pTextarea
+          id="description"
+          name="description"
+          formControlName="description"
+          rows="6"
+          autocomplete="off"
+          placeholder="Description détaillée du programme..."
+          class="w-full resize-none"></textarea>
+        <p class="text-xs text-gray-500">Description complète du programme</p>
+      </div>
+      <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div class="flex items-center gap-2 text-sm text-gray-500">
+          <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+          <span>Champs obligatoires</span>
+        </div>
+        <button
+          type="submit"
+          [disabled]="updateForm.invalid || updateProgramStore.isLoading()"
+          class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all duration-200">
+          @if (updateProgramStore.isLoading()) {
+          <svg
+            class="animate-spin h-4 w-4 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Mise à jour...</span>
+          } @else {
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span>Mettre à jour</span>
+          }
+        </button>
+      </div>
     </form>
   </div>
   } @if (activeTab() === 'indicators') {
-  <div class="bg-white max-w-3xl rounded-lg mt-6 p-4">
-    <div class="flex items-center gap-5 mb-4">
-      <div class="flex flex-col gap-2 w-2/6">
-        <label for="indicator-year" class="font-medium">Année</label>
-        <p-datepicker
-          pSize="small"
-          inputId="indicator-year"
-          name="indicator-year"
-          view="year"
-          dateFormat="yy"
-          [(ngModel)]="year" />
+  <div class="p-6 space-y-6">
+    <!-- Filters Section -->
+    <div class="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-5 border border-gray-200">
+      <div class="flex items-center gap-2 mb-4">
+        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+        </svg>
+        <h4 class="text-sm font-bold text-gray-900">Filtres</h4>
       </div>
-      <div class="flex flex-col gap-2 w-2/6">
-        <label for="category" class="font-medium">Catégorie</label>
-        <p-select
-          pSize="small"
-          inputId="category"
-          name="category"
-          [options]="indicatorsCategories()"
-          [(ngModel)]="selectedCategory" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label for="indicator-year" class="block text-xs font-semibold text-gray-700 uppercase tracking-wide">
+            Année
+          </label>
+          <p-datepicker
+            pSize="small"
+            inputId="indicator-year"
+            name="indicator-year"
+            view="year"
+            dateFormat="yy"
+            [(ngModel)]="year"
+            placeholder="Sélectionner l'année"
+            class="w-full" />
+        </div>
+        <div class="space-y-2">
+          <label for="category" class="block text-xs font-semibold text-gray-700 uppercase tracking-wide">
+            Catégorie d'indicateurs
+          </label>
+          <p-select
+            pSize="small"
+            inputId="category"
+            name="category"
+            [options]="indicatorsCategories()"
+            [(ngModel)]="selectedCategory"
+            placeholder="Sélectionner une catégorie"
+            class="w-full" />
+        </div>
       </div>
     </div>
-    @for (ind of indicatorsTab()[selectedCategory()] ; track $index) {
-    <div class="flex items-end gap-4 mb-3">
-      <div class="flex flex-col gap-2 w-2/3">
-        <input pInputText placeholder="Nom de l'indicateur" [(ngModel)]="ind.name" autocomplete="off" />
+
+    <div class="space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          <h4 class="text-base font-medium text-gray-900">Indicateurs de performance</h4>
+        </div>
+        <span class="px-3 py-1 text-xs font-bold bg-primary-100 text-primary-700 rounded-full">
+          {{ indicatorsTab()[selectedCategory()].length || 0 }} indicateur(s)
+        </span>
       </div>
-      <div class="flex flex-col gap-2">
-        <input pInputText placeholder="Kpi" type="number" [(ngModel)]="ind.target" autocomplete="off" />
+
+      @for (ind of indicatorsTab()[selectedCategory()] ; track $index) {
+      <div
+        class="group relative bg-white border-2 border-gray-200 rounded-xl p-5 hover:border-primary-300 hover:shadow-md transition-all duration-200">
+        <!-- Number Badge -->
+        <div
+          class="absolute -left-3 -top-3 w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-lg">
+          {{ $index + 1 }}
+        </div>
+
+        <div class="flex items-start gap-4 ml-4">
+          <!-- Form Fields -->
+          <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Indicator Name -->
+            <div class="space-y-2">
+              <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                Nom de l'indicateur
+              </div>
+              <input
+                pInputText
+                placeholder="Ex: Nombre de participants"
+                [(ngModel)]="ind.name"
+                autocomplete="off"
+                class="w-full" />
+            </div>
+
+            <!-- KPI Target -->
+            <div class="space-y-2">
+              <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                Objectif (KPI)
+              </div>
+              <input
+                pInputText
+                placeholder="Ex: 100"
+                type="number"
+                [(ngModel)]="ind.target"
+                autocomplete="off"
+                class="w-full" />
+            </div>
+          </div>
+
+          <!-- Delete Button -->
+          <button
+            type="button"
+            [disabled]="((indicatorsTab()[selectedCategory()].length || 0) <= 1)"
+            (click)="removeIndicator($index)"
+            class="flex-shrink-0 p-2.5 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95"
+            title="Supprimer l'indicateur">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+            </svg>
+          </button>
+        </div>
       </div>
-      <p-button
-        outlined
+      }
+
+      @if (!indicatorsTab()[selectedCategory()].length) {
+      <div
+        class="text-center py-16 bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl border-2 border-dashed border-gray-300">
+        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+        <h5 class="text-base font-bold text-gray-900 mb-2">Aucun indicateur</h5>
+        <p class="text-sm text-gray-500 mb-4">Commencez par ajouter votre premier indicateur de performance</p>
+        <button
+          type="button"
+          (click)="addIndicator()"
+          class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-primary-700 bg-primary-50 border border-primary-200 rounded-lg hover:bg-primary-100 transition-colors duration-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>Ajouter un indicateur</span>
+        </button>
+      </div>
+      }
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t-2 border-gray-200">
+      <button
         type="button"
-        severity="danger"
-        [disabled]="((indicatorsTab()[selectedCategory()].length || 0) <= 1)"
-        (click)="removeIndicator($index)">
-        Supprimer
-      </p-button>
-    </div>
-    }
-    <div class="flex justify-between items-center gap-2 mt-4">
-      <p-button size="small" outlined type="button" (click)="addIndicator()"> Ajouter un indicateur </p-button>
-      <p-button
-        size="small"
-        severity="primary"
+        (click)="addIndicator()"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 hover:shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>Ajouter un indicateur</span>
+      </button>
+
+      <button
+        type="button"
         [disabled]="addIndicatorStore.isLoading()"
-        [loading]="addIndicatorStore.isLoading()"
-        (onClick)="onSaveIndicators()">
-        Enregistrer les indicateurs
-      </p-button>
+        (click)="onSaveIndicators()"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-100">
+        @if (addIndicatorStore.isLoading()) {
+        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Enregistrement...</span>
+        } @else {
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+        </svg>
+        <span>Enregistrer les indicateurs</span>
+        }
+      </button>
     </div>
   </div>
   }
