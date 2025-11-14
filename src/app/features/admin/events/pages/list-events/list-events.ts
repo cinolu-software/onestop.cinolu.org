@@ -9,7 +9,10 @@ import {
   Eye,
   EyeOff,
   Star,
-  StarOff
+  StarOff,
+  Filter,
+  FileX,
+  Sparkles
 } from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -26,9 +29,9 @@ import { PublishEventStore } from '../../store/events/publish-event.store';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { HighlightEventStore } from '../../store/events/highlight-event.store';
 import { FilterEventsDto } from '../../dto/categories/filter-events.dto';
-import { ProgressSpinner } from 'primeng/progressspinner';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { Tabs } from '@shared/components/tabs/tabs';
 
 @Component({
   selector: 'app-events-list',
@@ -45,7 +48,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     ConfirmPopup,
     AvatarModule,
     ApiImgPipe,
-    ProgressSpinner
+    Tabs
   ]
 })
 export class ListEvents implements OnInit {
@@ -58,7 +61,7 @@ export class ListEvents implements OnInit {
   deleteEventStore = inject(DeleteEventStore);
   publishEventStore = inject(PublishEventStore);
   highlightStore = inject(HighlightEventStore);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
     refresh: RefreshCcw,
@@ -69,12 +72,23 @@ export class ListEvents implements OnInit {
     eye: Eye,
     eyeOff: EyeOff,
     star: Star,
-    starOff: StarOff
+    starOff: StarOff,
+    filter: Filter,
+    fileX: FileX,
+    sparkles: Sparkles
   };
   queryParams = signal<FilterEventsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
-    q: this.#route.snapshot.queryParamMap.get('q')
+    q: this.#route.snapshot.queryParamMap.get('q'),
+    filter: (this.#route.snapshot.queryParamMap.get('filter') as FilterEventsDto['filter']) || 'all'
   });
+  activeTab = signal<string>(this.#route.snapshot.queryParamMap.get('filter') || 'all');
+  tabsConfig = signal([
+    { label: 'Tous les événements', name: 'all' },
+    { label: 'Publiés', name: 'published' },
+    { label: 'Brouillons', name: 'drafts' },
+    { label: 'En vedette', name: 'highlighted' }
+  ]);
 
   constructor() {
     this.searchForm = this.#fb.group({
@@ -92,6 +106,13 @@ export class ListEvents implements OnInit {
         this.queryParams().page = null;
         this.updateRouteAndEvents();
       });
+  }
+
+  onTabChange(tabName: string): void {
+    this.activeTab.set(tabName);
+    this.queryParams().filter = tabName as FilterEventsDto['filter'];
+    this.queryParams().page = null;
+    this.updateRouteAndEvents();
   }
 
   loadEvents(): void {
