@@ -7,6 +7,7 @@ import {
   Eye,
   EyeOff,
   FileX,
+  Funnel,
   LucideAngularModule,
   Plus,
   RefreshCcw,
@@ -74,6 +75,7 @@ export class ListArticles implements OnInit {
     star: Star,
     starOff: StarOff,
     fileX: FileX,
+    filter: Funnel,
     sparkles: Sparkles
   };
   queryParams = signal<FilterArticleDto>({

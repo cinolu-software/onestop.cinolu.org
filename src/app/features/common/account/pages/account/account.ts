@@ -17,8 +17,8 @@ export class AccountPage implements OnInit {
   url = environment.apiUrl + 'users/image-profile';
   activeTab = signal<string>('overview');
   tabs = [
-    { label: 'Aperçu', name: 'overview', icon: User },
-    { label: 'Edition', name: 'edit', icon: SquarePen }
+    { label: 'Mon compte', name: 'overview', icon: User },
+    { label: 'Mettre à jour', name: 'edit', icon: SquarePen }
   ];
   icons = {
     user: User,

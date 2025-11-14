@@ -2,23 +2,20 @@
   @let isLoading = store.isLoading(); @let hasQuery = queryParams().q; @let articleCount = store.articles()[1]; @let
   articleList = store.articles()[0];
   <div class="relative bg-white rounded-xl shadow-sm pb-12">
-    <!-- Header Section -->
     <div class="px-6 pt-6 pb-4 border-b border-gray-100">
       <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
         <div>
           <h5 class="text-2xl font-bold text-gray-900 mb-1">Articles</h5>
           <p class="text-sm text-gray-500">
             Gérez et organisez vos articles @if (!isLoading) {
-            <span class="text-gray-400">• {{ articleCount | json }} au total</span>
+            <span class="text-gray-400">• {{ articleCount }} au total</span>
             }
           </p>
         </div>
-        <a
-          [routerLink]="['/blog/articles/add']"
-          class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm">
+        <p-button size="small" [routerLink]="'/blog/articles/add'">
           <i-lucide [name]="icons.plus" class="size-4" />
           Nouvel article
-        </a>
+        </p-button>
       </div>
 
       <!-- Search Bar -->
@@ -37,9 +34,7 @@
             type="button"
             (click)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndArticles()"
             class="search-input-clear">
-            <svg class="search-input-clear-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <i-lucide name="x" class="search-input-clear-icon" />
           </button>
           }
         </div>
@@ -69,12 +64,16 @@
           >{{ hasQuery }}</span
         >". Essayez avec d'autres mots-clés ou réinitialisez les filtres.
       </p>
-      <button
-        (click)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndArticles()"
-        class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-lg transition-colors duration-200">
-        <i-lucide [name]="icons.refresh" class="size-4" />
-        Réinitialiser les filtres
-      </button>
+      <p-button
+        (onClick)="searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndArticles()"
+        severity="secondary"
+        [outlined]="true"
+        styleClass="text-sm">
+        <span class="flex items-center gap-2">
+          <i-lucide [name]="icons.filter" class="size-4" />
+          <span>Réinitialiser les filtres</span>
+        </span>
+      </p-button>
       } @else if (activeTab() === 'published') {
       <div
         class="w-20 h-20 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl flex items-center justify-center mb-5">
@@ -111,46 +110,23 @@
       <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
         Commencez par créer votre premier article pour partager votre contenu avec votre audience.
       </p>
-      <a
-        [routerLink]="['/blog/articles/add']"
-        class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-        <i-lucide [name]="icons.plus" class="size-4" />
-        Créer un article
-      </a>
+      <p-button [routerLink]="'/blog/articles/add'" severity="primary" styleClass="text-sm">
+        <span class="flex items-center gap-2">
+          <i-lucide [name]="icons.plus" class="size-4" />
+          <span>Créer un article</span>
+        </span>
+      </p-button>
       }
     </div>
     } @if (isLoading) {
-    <!-- Mobile Skeleton -->
-    <div class="px-6 mt-6 space-y-4 lg:hidden">
-      @for (i of skeletonArray; track $index) {
-      <div class="bg-white border border-gray-200 rounded-xl p-4">
-        <div class="flex items-start gap-3 mb-4">
-          <div class="w-14 h-14 rounded-xl bg-gray-200 animate-pulse flex-shrink-0"></div>
-          <div class="flex-1 space-y-2">
-            <div class="h-5 w-3/4 bg-gray-200 rounded animate-pulse"></div>
-            <div class="h-3 w-32 bg-gray-200 rounded animate-pulse"></div>
-            <div class="h-6 w-20 bg-gray-200 rounded-full animate-pulse mt-2"></div>
-          </div>
-        </div>
-        <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-          <div class="h-3 w-24 bg-gray-200 rounded animate-pulse"></div>
-          <div class="flex gap-1">
-            <div class="h-8 w-8 bg-gray-200 rounded-md animate-pulse"></div>
-            <div class="h-8 w-8 bg-gray-200 rounded-md animate-pulse"></div>
-            <div class="h-8 w-8 bg-gray-200 rounded-md animate-pulse"></div>
-          </div>
-        </div>
-      </div>
-      }
-    </div>
-
-    <!-- Desktop Skeleton -->
-    <div class="hidden lg:block px-6 mt-6">
+    <div class="px-6 mt-6">
       <div class="overflow-x-auto rounded-xl border border-gray-200">
-        <table class="w-full">
+        <table class="w-full text-left">
           <thead class="text-left">
             <tr class="border-b border-gray-200">
-              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Article</th>
+              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Image</th>
+              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Titre</th>
+              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Date</th>
               <th class="px-6 py-3 font-bold text-gray-900 bg-white">Statut</th>
               <th class="px-6 py-3 font-bold text-gray-900 bg-white">Actions</th>
             </tr>
@@ -159,22 +135,22 @@
             @for (i of skeletonArray; track $index) {
             <tr class="hover:bg-gray-50">
               <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 rounded-lg bg-gray-200 animate-pulse flex-shrink-0"></div>
-                  <div class="flex-1 space-y-2">
-                    <div class="h-4 w-48 bg-gray-200 rounded animate-pulse"></div>
-                    <div class="h-3 w-32 bg-gray-200 rounded animate-pulse"></div>
-                  </div>
-                </div>
+                <div class="w-10 h-10 rounded-full bg-gray-200 animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-48 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
               </td>
               <td class="px-6 py-4">
                 <div class="h-6 w-20 bg-gray-200 rounded-full animate-pulse"></div>
               </td>
               <td class="px-6 py-4">
-                <div class="flex items-center gap-1">
-                  <div class="h-7 w-7 bg-gray-200 rounded-md animate-pulse"></div>
-                  <div class="h-7 w-7 bg-gray-200 rounded-md animate-pulse"></div>
-                  <div class="h-7 w-7 bg-gray-200 rounded-md animate-pulse"></div>
+                <div class="flex items-center gap-2">
+                  <div class="h-8 w-8 bg-gray-200 rounded animate-pulse"></div>
+                  <div class="h-8 w-8 bg-gray-200 rounded animate-pulse"></div>
+                  <div class="h-8 w-8 bg-gray-200 rounded animate-pulse"></div>
                 </div>
               </td>
             </tr>
@@ -184,143 +160,61 @@
       </div>
     </div>
     } @if (articleCount > 0 && !isLoading) {
-    <div class="px-4 sm:px-6 mt-6">
-      <!-- Mobile View -->
-      <div class="block lg:hidden space-y-4">
-        @for ( article of articleList | paginate : { itemsPerPage: 40, currentPage: queryParams().page || 1, totalItems:
-        articleCount, }; track article.id ) {
-        <div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow duration-200">
-          <div class="flex items-start gap-3 mb-4">
-            <div class="relative flex-shrink-0">
-              <p-avatar
-                [image]="article | apiIMG: 'article'"
-                [size]="'large'"
-                [style]="{ width: '56px', height: '56px', 'border-radius': '12px' }" />
-              @if (article.is_highlighted) {
-              <div
-                class="absolute -top-1 -right-1 w-6 h-6 bg-amber-400 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                <i-lucide [name]="icons.star" class="size-3 text-white" />
-              </div>
-              }
-            </div>
-            <div class="flex-1 min-w-0 max-w-lg">
-              <h3 class="font-semibold text-gray-900 mb-1 truncate">{{ article.title }}</h3>
-              <p class="text-xs text-gray-500 mb-2">{{ article.created_at | date: 'dd MMMM yyyy' }}</p>
-              @if (isPublished(article)) {
-              <span
-                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-                Publié
-              </span>
-              } @else {
-              <span
-                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
-                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
-                Brouillon
-              </span>
-              }
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-            <span class="text-xs text-gray-500">{{ article.created_at | date: 'dd MMM yyyy' }}</span>
-            <div class="flex items-center gap-1">
-              <button
-                (click)="highlightArticle(article.id)"
-                class="group relative p-2 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                       {{ article.is_highlighted 
-                          ? 'bg-amber-400 text-white shadow-sm hover:bg-amber-500' 
-                          : 'bg-gray-100 text-amber-500 hover:bg-amber-50' }}">
-                <i-lucide [name]="article.is_highlighted ? icons.star : icons.starOff" class="size-4" />
-              </button>
-
-              <a
-                [routerLink]="['/blog/articles/edit', article.slug]"
-                class="group relative p-2 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 transition-all duration-200 hover:scale-110 active:scale-95">
-                <i-lucide [name]="icons.edit" class="size-4" />
-              </a>
-              <button
-                (click)="onDeleteArticle(article.id, $event)"
-                class="group relative p-2 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
-                <p-confirmpopup />
-                <i-lucide [name]="icons.trash" class="size-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-        }
-      </div>
-
-      <div class="hidden lg:block overflow-x-auto rounded-xl border border-gray-200">
-        <table class="w-full table-fixed">
+    <div class="px-6 mt-6">
+      <div class="overflow-x-auto rounded-xl border border-gray-200">
+        <table class="w-full text-left">
           <thead class="text-left">
             <tr class="border-b border-gray-200">
-              <th class="px-6 py-3 font-bold text-gray-900 bg-white w-[70%]">Article</th>
-              <th class="px-6 py-3 font-bold text-gray-900 bg-white text-right w-[30%]">Actions</th>
+              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Image</th>
+              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Titre</th>
+              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Date</th>
+              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Statut</th>
+              <th class="px-6 py-3 font-bold text-gray-900 bg-white">Actions</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-100">
             @for ( article of articleList | paginate : { itemsPerPage: 40, currentPage: queryParams().page || 1,
             totalItems: articleCount, }; track article.id ) {
-            <tr class="hover:bg-gray-50 transition-colors duration-150">
+            <tr class="border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors duration-150">
               <td class="px-6 py-4">
-                <div class="flex items-center gap-3 min-w-0">
-                  <div class="relative flex-shrink-0">
-                    <img
-                      [src]="article | apiIMG: 'article'"
-                      alt="{{ article.title }}"
-                      class="w-12 h-12 object-cover rounded-lg border border-gray-200" />
-                    @if (article.is_highlighted) {
-                    <div
-                      class="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                      <i-lucide [name]="icons.star" class="size-2 text-white" />
-                    </div>
-                    }
-                  </div>
-                  <div class="min-w-0 flex-1">
-                    <p class="font-semibold text-gray-900 truncate mb-1 text-sm">{{ article.title }}</p>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                      <span class="truncate">{{ article.created_at | date: 'dd MMM yyyy' }}</span>
-                      <span class="text-gray-300 flex-shrink-0">•</span>
-                      @if (isPublished(article)) {
-                      <span class="inline-flex items-center gap-1 text-emerald-600 flex-shrink-0">
-                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-                        Publié
-                      </span>
-                      } @else {
-                      <span class="inline-flex items-center gap-1 text-gray-500 flex-shrink-0">
-                        <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
-                        Brouillon
-                      </span>
-                      }
-                    </div>
-                  </div>
-                </div>
+                @if (article) {
+                <p-avatar [image]="article | apiIMG: 'article'" [size]="'large'" />
+                }
               </td>
-
               <td class="px-6 py-4">
-                <div class="flex items-center justify-end gap-1">
-                  <button
-                    (click)="highlightArticle(article.id)"
-                    class="group relative p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95
-                           {{ article.is_highlighted 
-                              ? 'bg-amber-400 text-white shadow-sm hover:bg-amber-500' 
-                              : 'bg-gray-100 text-amber-500 hover:bg-amber-50' }}">
+                <p class="font-semibold text-gray-900 w-full md:w-48 line-clamp-2">{{ article.title | titlecase }}</p>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-600">{{ article.created_at | date: 'dd MMM yyyy' }}</td>
+              <td class="px-6 py-4">
+                @if (isPublished(article)) {
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  Publié
+                </span>
+                } @else {
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  Brouillon
+                </span>
+                }
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-1">
+                  <p-button
+                    (onClick)="highlightArticle(article.id)"
+                    [severity]="article.is_highlighted ? 'contrast' : 'secondary'"
+                    size="small">
                     <i-lucide [name]="article.is_highlighted ? icons.star : icons.starOff" class="size-4" />
-                  </button>
-
-                  <a
-                    [routerLink]="['/blog/articles/edit', article.slug]"
-                    class="group relative p-1.5 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 transition-all duration-200 hover:scale-110 active:scale-95">
+                  </p-button>
+                  <a pButton [routerLink]="['/blog/articles/edit', article.slug]" severity="info" size="small">
                     <i-lucide [name]="icons.edit" class="size-4" />
                   </a>
-
-                  <button
-                    (click)="onDeleteArticle(article.id, $event)"
-                    class="group relative p-1.5 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
-                    <p-confirmpopup />
+                  <p-button (onClick)="onDeleteArticle(article.id, $event)" severity="danger" size="small">
                     <i-lucide [name]="icons.trash" class="size-4" />
-                  </button>
+                  </p-button>
+                  <p-confirmpopup />
                 </div>
               </td>
             </tr>
@@ -329,10 +223,7 @@
         </table>
       </div>
     </div>
-    }
-
-    <!-- Pagination -->
-    @if (articleCount > 40) {
+    } @if (articleCount > 40) {
     <div class="flex justify-center items-center gap-3 py-8 px-6">
       <pagination-controls
         nextLabel=""

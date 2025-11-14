@@ -1,19 +1,18 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { LucideAngularModule, User, Phone, FileText, Camera, MapPin, Calendar, Mail } from 'lucide-angular';
 import { IUser } from '@shared/models';
 import { environment } from '@environments/environment';
-import { FileUpload } from '@shared/components';
 import { ApiImgPipe } from '@shared/pipes';
 import { AuthStore } from '@core/auth';
 
 @Component({
   selector: 'app-account-overview',
   templateUrl: './account-overview.html',
-  imports: [CommonModule, LucideAngularModule, NgOptimizedImage, FileUpload, ApiImgPipe]
+  imports: [CommonModule, LucideAngularModule, NgOptimizedImage, ApiImgPipe]
 })
 export class AccountOverviewComponent {
-  @Input({ required: true }) user!: IUser;
+  user = input.required<IUser>();
   url = environment.apiUrl + 'users/image-profile';
   #authStore = inject(AuthStore);
   icons = {
