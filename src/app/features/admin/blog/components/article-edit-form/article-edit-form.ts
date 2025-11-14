@@ -7,6 +7,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { QuillModule } from 'ngx-quill';
+import { Calendar, Check, FileText, Info, List, PenLine, Tag, LucideAngularModule } from 'lucide-angular';
 import { IArticle } from '@shared/models';
 import { UpdateArticleStore } from '../../store/articles/update-article.store';
 import { UnpaginatedTagStore } from '../../store/tags/unpaginated-tag.store';
@@ -23,7 +24,8 @@ import { UnpaginatedTagStore } from '../../store/tags/unpaginated-tag.store';
     DatePickerModule,
     InputText,
     Button,
-    QuillModule
+    QuillModule,
+    LucideAngularModule
   ]
 })
 export class ArticleEditFormComponent {
@@ -32,6 +34,15 @@ export class ArticleEditFormComponent {
   tagsStore = inject(UnpaginatedTagStore);
   updateStore = inject(UpdateArticleStore);
   form = this.#initForm();
+  icons = {
+    penLine: PenLine,
+    tag: Tag,
+    calendar: Calendar,
+    list: List,
+    fileText: FileText,
+    info: Info,
+    check: Check
+  };
 
   #initForm(): FormGroup {
     return this.#fb.group({
