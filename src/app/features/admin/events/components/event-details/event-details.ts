@@ -15,16 +15,14 @@ import {
   User
 } from 'lucide-angular';
 import { AccordionModule } from 'primeng/accordion';
-import { EventDetailsSkeletonComponent } from '../event-details-skeleton/event-details-skeleton';
 
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.html',
-  imports: [AccordionModule, LucideAngularModule, CommonModule, EventDetailsSkeletonComponent]
+  imports: [AccordionModule, LucideAngularModule, CommonModule]
 })
 export class EventDetailsComponent {
   event = input.required<IEvent>();
-  isLoading = input<boolean>(false);
   icons = {
     folder: FolderOpen,
     user: User,
