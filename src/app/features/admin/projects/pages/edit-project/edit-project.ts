@@ -13,6 +13,7 @@ import { ProjectStore } from '../../store/projects/project.store';
 import { ProjectDetailsComponent } from '../../components/project-details/project-details';
 import { ProjectGalleryComponent } from '../../components/project-gallery/project-gallery';
 import { ProjectEditFormComponent } from '../../components/project-edit-form/project-edit-form';
+import { ProjectDetailsSkeletonComponent } from '../../components/project-details-skeleton/project-details-skeleton';
 
 @Component({
   selector: 'app-project-edit',
@@ -25,7 +26,8 @@ import { ProjectEditFormComponent } from '../../components/project-edit-form/pro
     MetricsTableComponent,
     ProjectDetailsComponent,
     ProjectGalleryComponent,
-    ProjectEditFormComponent
+    ProjectEditFormComponent,
+    ProjectDetailsSkeletonComponent
   ]
 })
 export class EditProjectComponent implements OnInit {

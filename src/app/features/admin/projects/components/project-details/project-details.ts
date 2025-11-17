@@ -14,16 +14,14 @@ import {
   User
 } from 'lucide-angular';
 import { AccordionModule } from 'primeng/accordion';
-import { ProjectDetailsSkeletonComponent } from '../project-details-skeleton/project-details-skeleton';
 
 @Component({
   selector: 'app-project-details',
   templateUrl: './project-details.html',
-  imports: [AccordionModule, LucideAngularModule, CommonModule, ProjectDetailsSkeletonComponent]
+  imports: [AccordionModule, LucideAngularModule, CommonModule]
 })
 export class ProjectDetailsComponent {
   project = input.required<IProject>();
-  isLoading = input<boolean>(false);
   icons = {
     folder: FolderOpen,
     user: User,
