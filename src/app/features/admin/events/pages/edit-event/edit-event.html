@@ -1,8 +1,10 @@
 <section class="pt-32 dashboard-main-content flex flex-col gap-4">
   @let event = eventStore.event();
   <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
-  @if (activeTab() === 'details' && event) {
-  <app-event-details [event]="event" [isLoading]="eventStore.isLoading()" />
+  @if (eventStore.isLoading()) {
+  <app-event-details-skeleton />
+  } @if (activeTab() === 'details' && event) {
+  <app-event-details [event]="event" />
   } @if (activeTab() === 'gallery' && event) {
   <app-event-gallery
     [event]="event"

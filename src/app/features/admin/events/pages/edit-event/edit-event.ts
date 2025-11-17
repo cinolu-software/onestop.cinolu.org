@@ -13,6 +13,7 @@ import { EventStore } from '../../store/events/event.store';
 import { EventDetailsComponent } from '../../components/event-details/event-details';
 import { EventGalleryComponent } from '../../components/event-gallery/event-gallery';
 import { EventEditFormComponent } from '../../components/event-edit-form/event-edit-form';
+import { EventDetailsSkeletonComponent } from '../../components/event-details-skeleton/event-details-skeleton';
 
 @Component({
   selector: 'app-event-edit',
@@ -24,7 +25,8 @@ import { EventEditFormComponent } from '../../components/event-edit-form/event-e
     MetricsTableComponent,
     EventDetailsComponent,
     EventGalleryComponent,
-    EventEditFormComponent
+    EventEditFormComponent,
+    EventDetailsSkeletonComponent
   ]
 })
 export class EditEventComponent implements OnInit {
