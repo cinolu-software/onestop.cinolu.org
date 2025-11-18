@@ -5,11 +5,10 @@ import { SquarePen, Images, ChartColumn } from 'lucide-angular';
 import { Tabs, MetricsTableComponent } from '@shared/components';
 import { totalMetrics, achievementPercentage, metricsMap, metricsMapToDto } from '@shared/helpers';
 import { IProject } from '@shared/models';
-import { IndicatorsStore } from '@features/admin/programs/store/indicators/indicators.store';
-import { DeleteGalleryStore } from '../../store/galleries/delete-gallery.store';
-import { GalleryStore } from '../../store/galleries/galeries.store';
-import { AddMetricStore } from '../../store/projects/add-metric.store';
-import { ProjectStore } from '../../store/projects/project.store';
+import { IndicatorsStore } from '@features/admin/programs/store/indicators.store';
+import { GalleryStore } from '../../store/project-gallery.store';
+import { ProjectsStore } from '../../store/projects.store';
+import { ProjectMetricsStore } from '../../store/project-metrics.store';
 import { ProjectDetailsComponent } from '../../components/project-details/project-details';
 import { ProjectGalleryComponent } from '../../components/project-gallery/project-gallery';
 import { ProjectEditFormComponent } from '../../components/project-edit-form/project-edit-form';
@@ -19,7 +18,7 @@ import { ProjectDetailsSkeletonComponent } from '../../components/project-detail
   selector: 'app-project-edit',
   templateUrl: './edit-project.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [IndicatorsStore, GalleryStore, DeleteGalleryStore, ProjectStore, AddMetricStore],
+  providers: [IndicatorsStore, GalleryStore, ProjectsStore, ProjectMetricsStore],
   imports: [
     CommonModule,
     Tabs,
@@ -33,10 +32,9 @@ import { ProjectDetailsSkeletonComponent } from '../../components/project-detail
 export class EditProjectComponent implements OnInit {
   #route = inject(ActivatedRoute);
   #slug = this.#route.snapshot.params['slug'];
-  projectStore = inject(ProjectStore);
+  projectStore = inject(ProjectsStore);
   galleryStore = inject(GalleryStore);
-  deleteImageStore = inject(DeleteGalleryStore);
-  addMetricsStore = inject(AddMetricStore);
+  metricsStore = inject(ProjectMetricsStore);
   indicatorsStore = inject(IndicatorsStore);
   metricsMap = {};
   activeTab = signal('details');
@@ -77,7 +75,7 @@ export class EditProjectComponent implements OnInit {
     if (!project) return;
     const indicators = this.indicatorsStore.indicators();
     const metrics = metricsMapToDto(this.metricsMap, indicators);
-    this.addMetricsStore.addMetrics({ id: project.id, metrics });
+    this.metricsStore.addMetrics({ id: project.id, metrics });
   }
 
   onCoverUploaded(): void {
@@ -89,7 +87,7 @@ export class EditProjectComponent implements OnInit {
   }
 
   onDeleteImage(id: string): void {
-    this.deleteImageStore.deleteImage(id);
+    this.galleryStore.deleteImage(id);
   }
 
   onTabChange(tab: string): void {

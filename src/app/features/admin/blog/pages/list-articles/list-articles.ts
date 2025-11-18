@@ -25,18 +25,16 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
-import { DeleteArticleStore } from '../../store/articles/delete-article.store';
-import { ArticlesStore } from '../../store/articles/articles.store';
+import { ArticlesStore } from '../../store/articles.store';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { IArticle } from '@shared/models/entities.models';
-import { HighlightArticleStore } from '../../store/articles/highlight-article.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Tabs } from '@shared/components/tabs/tabs';
 
 @Component({
   selector: 'app-article-list',
-  providers: [ConfirmationService, ArticlesStore, DeleteArticleStore, HighlightArticleStore],
+  providers: [ConfirmationService, ArticlesStore],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -60,8 +58,6 @@ export class ListArticles implements OnInit {
   #confirmationService = inject(ConfirmationService);
   searchForm: FormGroup;
   store = inject(ArticlesStore);
-  deleteArticleStore = inject(DeleteArticleStore);
-  highlightStore = inject(HighlightArticleStore);
   #destroyRef = inject(DestroyRef);
   skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
   icons = {
@@ -133,7 +129,7 @@ export class ListArticles implements OnInit {
   }
 
   highlightArticle(articleId: string): void {
-    this.highlightStore.highlight(articleId);
+    this.store.highlight(articleId);
   }
 
   async updateRouteAndArticles(): Promise<void> {
@@ -155,7 +151,7 @@ export class ListArticles implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteArticleStore.deleteArticle(articleId);
+        this.store.deleteArticle(articleId);
       }
     });
   }

@@ -6,22 +6,21 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { LucideAngularModule, CircleAlert } from 'lucide-angular';
-import { AddProgramStore } from '../../store/programs/add-program.store';
-import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
+import { ProgramsStore } from '../../store/programs.store';
 import { ProgramDto } from '../../dto/programs/program.dto';
+import { CategoriesStore } from '@features/admin/projects/store/project-categories.store';
 
 @Component({
   selector: 'app-add-program',
-  providers: [AddProgramStore, UnpaginatedCategoriesStore],
+  providers: [ProgramsStore, CategoriesStore],
   imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule, Textarea, Select, LucideAngularModule],
   templateUrl: './add-program.html'
 })
 export class AddProgramPage {
   #fb = inject(FormBuilder);
-  addProgramStore = inject(AddProgramStore);
-  categoriesStore = inject(UnpaginatedCategoriesStore);
+  store = inject(ProgramsStore);
+  categoriesStore = inject(CategoriesStore);
   icons = { alert: CircleAlert };
-
   form = this.#fb.group({
     name: ['', Validators.required],
     description: ['', Validators.required],
@@ -30,6 +29,10 @@ export class AddProgramPage {
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    this.addProgramStore.addProgram(this.form.value as ProgramDto);
+    this.store.addProgram(this.form.value as ProgramDto);
+  }
+
+  constructor() {
+    this.categoriesStore.loadUnpaginatedCategories();
   }
 }

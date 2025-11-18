@@ -8,11 +8,11 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { StepperModule } from 'primeng/stepper';
 import { SECTORS } from '../../data/sectors.data';
 import { STAGES } from '../../data/stage.data';
-import { AddVentureStore } from '../../store/ventures/add-venture.store';
+import { VenturesStore } from '../../store/ventures/ventures.store';
 
 @Component({
   selector: 'app-venture-add',
-  providers: [AddVentureStore],
+  providers: [VenturesStore],
   imports: [
     ReactiveFormsModule,
     SelectModule,
@@ -20,16 +20,16 @@ import { AddVentureStore } from '../../store/ventures/add-venture.store';
     DatePickerModule,
     Textarea,
     InputTextModule,
-    StepperModule,
+    StepperModule
   ],
-  templateUrl: './add-venture.html',
+  templateUrl: './add-venture.html'
 })
 export class AddVenture {
   #fb = inject(FormBuilder);
   form: FormGroup;
   sectors = SECTORS;
   stages = STAGES;
-  store = inject(AddVentureStore);
+  store = inject(VenturesStore);
 
   constructor() {
     this.form = this.#fb.group({
@@ -44,7 +44,7 @@ export class AddVenture {
       sector: [''],
       founded_at: [''],
       location: [''],
-      stage: [''],
+      stage: ['']
     });
   }
 

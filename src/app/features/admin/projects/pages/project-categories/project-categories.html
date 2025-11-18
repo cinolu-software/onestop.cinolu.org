@@ -12,7 +12,7 @@
             }
           </p>
         </div>
-        <p-button size="small" (onClick)="onToggleAddModal()" severity="primary" styleClass="font-semibold">
+        <p-button size="small" (onClick)="onToggleAddModal()" severity="primary">
           <span class="flex items-center gap-2">
             <i-lucide [name]="icons.plus" class="size-4" />
             <span>Nouvelle catégorie</span>
@@ -171,8 +171,8 @@
           size="small"
           severity="primary"
           styleClass="font-satoshi"
-          [disabled]="!addCategoryForm.valid || addCategoryStore.isLoading()"
-          [loading]="addCategoryStore.isLoading()">
+          [disabled]="!addCategoryForm.valid || store.isLoading()"
+          [loading]="store.isLoading()">
           <span>Ajouter la catégorie</span>
         </p-button>
       </div>
@@ -199,8 +199,8 @@
           size="small"
           severity="primary"
           styleClass="font-satoshi"
-          [disabled]="!updateCategoryForm.valid || updateCategoryStore.isLoading()"
-          [loading]="updateCategoryStore.isLoading()">
+          [disabled]="!updateCategoryForm.valid || store.isLoading()"
+          [loading]="store.isLoading()">
           <span>Modifier la catégorie</span>
         </p-button>
       </div>

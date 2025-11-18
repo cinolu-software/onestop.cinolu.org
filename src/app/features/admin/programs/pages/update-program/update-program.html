@@ -1,5 +1,5 @@
 <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-  @let program = programStore.program();
+  @let program = store.program();
   <div class="border-b border-gray-100">
     <div class="px-6 pt-6 pb-0">
       <h3 class="text-xl font-bold text-gray-900 mb-1">Modifier le programme</h3>
@@ -14,7 +14,7 @@
     <div class="space-y-3">
       <div class="block text-sm font-semibold text-gray-700">Logo du programme</div>
       <div class="max-w-md">
-        @if (programStore.isLoading()) {
+        @if (store.isLoading()) {
         <div class="h-32 bg-gray-200 animate-pulse rounded-xl"></div>
         } @else {
         <div
@@ -32,7 +32,7 @@
           <label for="categories" class="block text-sm font-semibold text-gray-700"> Catégorie </label>
           <p-select
             inputId="categories"
-            [options]="categoriesStore.categories()"
+            [options]="categoriesStore.allCategories()"
             [optionValue]="'id'"
             [optionLabel]="'name'"
             formControlName="category"
@@ -80,8 +80,8 @@
         <p-button
           [size]="'small'"
           type="submit"
-          [disabled]="updateForm.invalid || updateProgramStore.isLoading()"
-          [loading]="updateProgramStore.isLoading()"
+          [disabled]="updateForm.invalid || store.isLoading()"
+          [loading]="store.isLoading()"
           severity="primary">
           Mettre à jour
         </p-button>
@@ -202,8 +202,8 @@
       <p-button
         type="button"
         [size]="'small'"
-        [disabled]="addIndicatorStore.isLoading()"
-        [loading]="addIndicatorStore.isLoading()"
+        [disabled]="indicatorsStore.isLoading()"
+        [loading]="indicatorsStore.isLoading()"
         (onClick)="onSaveIndicators()"
         severity="primary">
         Enregistrer les indicateurs

@@ -20,15 +20,14 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ProgramsStore } from '../../store/programs/programs.store';
+import { ProgramsStore } from '../../store/programs.store';
 import { FilterProgramsDto } from '../../dto/programs/filter-programs.dto';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-import { DeleteProgramStore } from '../../store/programs/delete-program.store';
+// Removed per-action stores in favor of unified ProgramsStore
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { AvatarModule } from 'primeng/avatar';
-import { PublishProgramStore } from '../../store/programs/publish-program.store';
-import { HighlightProgramStore } from '../../store/programs/highlight-program.store';
+// Removed per-action stores in favor of unified ProgramsStore
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Tabs } from '@shared/components/tabs/tabs';
@@ -36,7 +35,7 @@ import { Tabs } from '@shared/components/tabs/tabs';
 @Component({
   selector: 'app-list-programs',
   templateUrl: './list-programs.html',
-  providers: [ProgramsStore, DeleteProgramStore, ConfirmationService, PublishProgramStore, HighlightProgramStore],
+  providers: [ProgramsStore, ConfirmationService],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -59,9 +58,10 @@ export class ListPrograms implements OnInit {
   #confirmationService = inject(ConfirmationService);
   searchForm: FormGroup;
   store = inject(ProgramsStore);
-  deleteProgramStore = inject(DeleteProgramStore);
-  publishProgramStore = inject(PublishProgramStore);
-  highlightStore = inject(HighlightProgramStore);
+  publishStore = null;
+  deleteStore = null;
+  highlightStore = null;
+  // Use unified store for all actions
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
@@ -131,7 +131,7 @@ export class ListPrograms implements OnInit {
   }
 
   onPublish(id: string): void {
-    this.publishProgramStore.publishProgram(id);
+    this.store.publishProgram(id);
   }
 
   onFileUploadLoaded(): void {
@@ -144,7 +144,7 @@ export class ListPrograms implements OnInit {
   }
 
   highlightProgram(id: string): void {
-    this.highlightStore.highlight(id);
+    this.store.highlight(id);
   }
 
   updateRouteAndPrograms(): void {
@@ -166,7 +166,7 @@ export class ListPrograms implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteProgramStore.deleteProgram({ id: roleId });
+        this.store.deleteProgram(roleId);
       }
     });
   }

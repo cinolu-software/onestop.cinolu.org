@@ -11,7 +11,7 @@
         <p-select
           class="w-full!"
           inputId="categories"
-          [options]="categoriesStore.categories()"
+          [options]="categoriesStore.allCategories()"
           optionValue="id"
           optionLabel="name"
           formControlName="category"
@@ -50,8 +50,8 @@
       <p-button
         type="submit"
         size="small"
-        [disabled]="form.invalid || addProgramStore.isLoading()"
-        [loading]="addProgramStore.isLoading()"
+        [disabled]="form.invalid || store.isLoading()"
+        [loading]="store.isLoading()"
         severity="primary">
         Créer le programme
       </p-button>

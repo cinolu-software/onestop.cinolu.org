@@ -5,20 +5,18 @@ import { ChartColumn, SquarePen, Images } from 'lucide-angular';
 import { Tabs, MetricsTableComponent } from '@shared/components';
 import { MetricsMap, totalMetrics, achievementPercentage, metricsMap, metricsMapToDto } from '@shared/helpers';
 import { IEvent } from '@shared/models';
-import { IndicatorsStore } from '@features/admin/programs/store/indicators/indicators.store';
-import { AddMetricStore } from '../../store/events/add-metric.store';
-import { DeleteGalleryStore } from '../../store/galleries/delete-gallery.store';
-import { GalleryStore } from '../../store/galleries/galeries.store';
-import { EventStore } from '../../store/events/event.store';
+import { IndicatorsStore } from '@features/admin/programs/store/indicators.store';
+import { EventsStore } from '../../store/events.store';
 import { EventDetailsComponent } from '../../components/event-details/event-details';
 import { EventGalleryComponent } from '../../components/event-gallery/event-gallery';
 import { EventEditFormComponent } from '../../components/event-edit-form/event-edit-form';
 import { EventDetailsSkeletonComponent } from '../../components/event-details-skeleton/event-details-skeleton';
+import { GalleryStore } from '../../store/event-gallery.store';
 
 @Component({
   selector: 'app-event-edit',
   templateUrl: './edit-event.html',
-  providers: [IndicatorsStore, EventStore, GalleryStore, DeleteGalleryStore, AddMetricStore],
+  providers: [EventsStore, IndicatorsStore, GalleryStore],
   imports: [
     CommonModule,
     Tabs,
@@ -32,11 +30,9 @@ import { EventDetailsSkeletonComponent } from '../../components/event-details-sk
 export class EditEventComponent implements OnInit {
   #route = inject(ActivatedRoute);
   #slug = this.#route.snapshot.params['slug'];
-  eventStore = inject(EventStore);
-  indicatorsStore = inject(IndicatorsStore);
-  deleteGalleryStore = inject(DeleteGalleryStore);
+  eventsStore = inject(EventsStore);
   galleryStore = inject(GalleryStore);
-  addMetricsStore = inject(AddMetricStore);
+  indicatorsStore = inject(IndicatorsStore);
   metricsMap: MetricsMap = {};
   activeTab = signal('details');
   tabs = [
@@ -54,13 +50,13 @@ export class EditEventComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.eventStore.loadEvent(this.#slug);
+    this.eventsStore.loadEvent(this.#slug);
     this.galleryStore.loadGallery(this.#slug);
   }
 
   #watchEventChanges(): void {
     effect(() => {
-      const event = this.eventStore.event();
+      const event = this.eventsStore.event();
       if (!event) return;
       this.#initMetrics(event);
     });
@@ -76,11 +72,11 @@ export class EditEventComponent implements OnInit {
   }
 
   onDeleteImage(imageId: string): void {
-    this.deleteGalleryStore.deleteImage(imageId);
+    this.galleryStore.deleteImage(imageId);
   }
 
   onCoverUploaded(): void {
-    this.eventStore.loadEvent(this.#slug);
+    this.eventsStore.loadEvent(this.#slug);
   }
 
   onGalleryUploaded(): void {
@@ -88,10 +84,10 @@ export class EditEventComponent implements OnInit {
   }
 
   onSaveMetrics(): void {
-    const event = this.eventStore.event();
+    const event = this.eventsStore.event();
     if (!event) return;
     const indicators = this.indicatorsStore.indicators();
     const metrics = metricsMapToDto(this.metricsMap, indicators);
-    this.addMetricsStore.addMetrics({ id: event.id, metrics });
+    this.eventsStore.addMetrics({ id: event.id, metrics });
   }
 }

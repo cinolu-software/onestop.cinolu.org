@@ -186,7 +186,7 @@
                     </label>
                     <p-multiSelect
                       inputId="role"
-                      [options]="rolesStore.roles()"
+                      [options]="rolesStore.allRoles()"
                       [optionValue]="'id'"
                       [optionLabel]="'name'"
                       display="chip"
@@ -202,8 +202,8 @@
             <div class="flex justify-end gap-3 pt-8 mt-8 border-t border-gray-200">
               <p-button
                 [size]="'small'"
-                [loading]="updateStore.isLoading()"
-                [disabled]="updateUserForm.invalid || updateStore.isLoading()"
+                [loading]="store.isLoading()"
+                [disabled]="updateUserForm.invalid || store.isLoading()"
                 severity="primary"
                 type="submit">
                 Enregistrer les modifications

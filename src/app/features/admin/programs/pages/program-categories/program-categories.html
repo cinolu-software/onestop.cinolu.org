@@ -161,8 +161,8 @@
           size="small"
           severity="primary"
           class="font-satoshi"
-          [disabled]="!addCategoryForm.valid || addCategoryStore.isLoading()"
-          [loading]="addCategoryStore.isLoading()"
+          [disabled]="!addCategoryForm.valid || store.isLoading()"
+          [loading]="store.isLoading()"
           (onClick)="onAddCategory()">
           Ajouter la catégorie
         </p-button>
@@ -183,8 +183,8 @@
         <p-button
           size="small"
           severity="primary"
-          [disabled]="!updateCategoryForm.valid || updateCategoryStore.isLoading()"
-          [loading]="updateCategoryStore.isLoading()"
+          [disabled]="!updateCategoryForm.valid || store.isLoading()"
+          [loading]="store.isLoading()"
           (onClick)="onUpdateCategory()">
           Modifier la catégorie
         </p-button>

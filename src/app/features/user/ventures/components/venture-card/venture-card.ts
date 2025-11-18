@@ -7,17 +7,17 @@ import { RouterModule } from '@angular/router';
 import { SquarePen, Eye, LucideAngularModule, Plus, Trash } from 'lucide-angular';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopup } from 'primeng/confirmpopup';
-import { DeleteVentureStore } from '../../store/ventures/delete-venture.store';
+import { VenturesStore } from '../../store/ventures/ventures.store';
 
 @Component({
   selector: 'app-venture-card',
-  providers: [ConfirmationService, DeleteVentureStore],
+  providers: [ConfirmationService, VenturesStore],
   imports: [NgOptimizedImage, ApiImgPipe, ButtonModule, RouterModule, LucideAngularModule, ConfirmPopup],
-  templateUrl: './venture-card.html',
+  templateUrl: './venture-card.html'
 })
 export class VentureCard {
   venture = input.required<IVenture>();
-  deleteVentureStore = inject(DeleteVentureStore);
+  deleteVentureStore = inject(VenturesStore);
   #confirmationService = inject(ConfirmationService);
   icons = { plus: Plus, edit: SquarePen, trash: Trash, eye: Eye };
 
@@ -28,15 +28,15 @@ export class VentureCard {
       rejectButtonProps: {
         label: 'Annuler',
         severity: 'secondary',
-        outlined: true,
+        outlined: true
       },
       acceptButtonProps: {
         label: 'Confirmer',
-        severity: 'danger',
+        severity: 'danger'
       },
       accept: () => {
         this.deleteVentureStore.deleteVenture(id);
-      },
+      }
     });
   }
 }

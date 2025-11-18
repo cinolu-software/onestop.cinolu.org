@@ -1,18 +1,16 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LucideAngularModule, X, SquarePen, Trash, Download, Search, Plus } from 'lucide-angular';
-import { UsersStore } from '../../store/users/users.store';
+import { UsersStore } from '../../store/users.store';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { AvatarModule } from 'primeng/avatar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DownloadUsersStore } from '../../store/users/download-csv.store';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FilterUsersDto } from '../../dto/users/filter-users.dto';
 import { ConfirmationService } from 'primeng/api';
-import { DeleteUserStore } from '../../store/users/delete-user.store';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -21,7 +19,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-users-list',
   templateUrl: './list-users.html',
-  providers: [UsersStore, DownloadUsersStore, DeleteUserStore, ConfirmationService],
+  providers: [UsersStore, ConfirmationService],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -43,8 +41,6 @@ export class ListUsers implements OnInit {
   #confirmationService = inject(ConfirmationService);
   searchForm: FormGroup;
   store = inject(UsersStore);
-  deleteStore = inject(DeleteUserStore);
-  downloadStore = inject(DownloadUsersStore);
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
@@ -98,7 +94,7 @@ export class ListUsers implements OnInit {
   }
 
   onDownloadUsers(): void {
-    this.downloadStore.downloadUsers(this.queryParams());
+    this.store.downloadUsers(this.queryParams());
   }
 
   onDeleteUser(userId: string, event: Event): void {
@@ -115,7 +111,7 @@ export class ListUsers implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteStore.deleteUser(userId);
+        this.store.deleteUser(userId);
       }
     });
   }

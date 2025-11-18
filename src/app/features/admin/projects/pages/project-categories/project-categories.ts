@@ -9,10 +9,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ConfirmationService } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { ConfirmPopup } from 'primeng/confirmpopup';
-import { CategoriesStore } from '../../store/categories/categories.store';
-import { AddCategoryStore } from '../../store/categories/add-category.store';
-import { DeleteCategoryStore } from '../../store/categories/delete-category.store';
-import { UpdateCategoryStore } from '../../store/categories/update-category.store';
+import { CategoriesStore } from '../../store/project-categories.store';
 import { ICategory } from '@shared/models/entities.models';
 import { FilterProjectCategoriesDto } from '../../dto/categories/filter-categories.dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -21,7 +18,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 @Component({
   selector: 'app-project-categories',
   templateUrl: './project-categories.html',
-  providers: [CategoriesStore, AddCategoryStore, UpdateCategoryStore, DeleteCategoryStore, ConfirmationService],
+  providers: [CategoriesStore, ConfirmationService],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -42,9 +39,7 @@ export class ProjectCategories implements OnInit {
   addCategoryForm: FormGroup;
   updateCategoryForm: FormGroup;
   store = inject(CategoriesStore);
-  addCategoryStore = inject(AddCategoryStore);
-  deleteCategoryStore = inject(DeleteCategoryStore);
-  updateCategoryStore = inject(UpdateCategoryStore);
+  // Unified store handles add, update, delete
   showAddModal = signal(false);
   showEditModal = signal(false);
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
@@ -124,7 +119,7 @@ export class ProjectCategories implements OnInit {
 
   onAddCategory(): void {
     if (this.addCategoryForm.invalid) return;
-    this.addCategoryStore.addCategory({
+    this.store.addCategory({
       payload: this.addCategoryForm.value,
       onSuccess: () => this.onToggleAddModal()
     });
@@ -132,7 +127,7 @@ export class ProjectCategories implements OnInit {
 
   onUpdateCategory(): void {
     if (this.updateCategoryForm.invalid) return;
-    this.updateCategoryStore.updateCategory({
+    this.store.updateCategory({
       id: this.updateCategoryForm.value.id,
       payload: this.updateCategoryForm.value,
       onSuccess: () => this.onToggleEditModal(null)
@@ -153,7 +148,7 @@ export class ProjectCategories implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteCategoryStore.deleteCategory({ id: categoryId });
+        this.store.deleteCategory({ id: categoryId });
       }
     });
   }

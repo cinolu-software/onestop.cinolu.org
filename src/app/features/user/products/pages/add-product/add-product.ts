@@ -6,12 +6,12 @@ import { Textarea } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { StepperModule } from 'primeng/stepper';
-import { AddProductStore } from '../../store/products/add-product.store';
+import { ProductsStore } from '../../store/products/products.store';
 import { unpaginatedVenturesStore } from '@features/user/ventures/store/ventures/venture-unpaginated.store';
 
 @Component({
   selector: 'app-product-add',
-  providers: [AddProductStore, unpaginatedVenturesStore],
+  providers: [ProductsStore, unpaginatedVenturesStore],
   imports: [
     ReactiveFormsModule,
     SelectModule,
@@ -20,22 +20,22 @@ import { unpaginatedVenturesStore } from '@features/user/ventures/store/ventures
     Textarea,
     InputTextModule,
     StepperModule,
-    SelectModule,
+    SelectModule
   ],
-  templateUrl: './add-product.html',
+  templateUrl: './add-product.html'
 })
 export class AddProduct {
   #fb = inject(FormBuilder);
   form: FormGroup;
   venturesStore = inject(unpaginatedVenturesStore);
-  store = inject(AddProductStore);
+  store = inject(ProductsStore);
 
   constructor() {
     this.form = this.#fb.group({
       ventureId: ['', Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(0)]],
+      price: ['', [Validators.required, Validators.min(0)]]
     });
   }
 

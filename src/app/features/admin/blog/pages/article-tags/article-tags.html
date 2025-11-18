@@ -165,8 +165,8 @@
           size="small"
           severity="primary"
           class="font-satoshi"
-          [disabled]="!addTagForm.valid || addTagStore.isLoading()"
-          [loading]="addTagStore.isLoading()">
+          [disabled]="!addTagForm.valid || store.isLoading()"
+          [loading]="store.isLoading()">
           Ajouter le tag
         </p-button>
       </div>
@@ -193,8 +193,8 @@
           size="small"
           severity="primary"
           class="font-satoshi"
-          [disabled]="!updateTagForm.valid || updateTagStore.isLoading()"
-          [loading]="updateTagStore.isLoading()">
+          [disabled]="!updateTagForm.valid || store.isLoading()"
+          [loading]="store.isLoading()">
           Modifier le tag
         </p-button>
       </div>

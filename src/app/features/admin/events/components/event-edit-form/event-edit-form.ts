@@ -9,15 +9,15 @@ import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { IEvent } from '@shared/models';
 import { extractCategoryIds, parseDate } from '@shared/helpers/form.helper';
-import { UpdateEventStore } from '../../store/events/update-event.store';
-import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
-import { UnpaginatedSubprogramsStore } from '@features/admin/programs/store/subprograms/unpaginated-subprograms.store';
-import { StaffStore } from '@features/admin/users/store/users/staff.store';
+import { EventsStore } from '../../store/events.store';
+import { SubprogramsStore } from '@features/admin/programs/store/subprograms.store';
+import { UsersStore } from '@features/admin/users/store/users.store';
+import { CategoriesStore } from '../../store/event-categories.store';
 
 @Component({
   selector: 'app-event-edit-form',
   templateUrl: './event-edit-form.html',
-  providers: [UpdateEventStore, StaffStore, UnpaginatedCategoriesStore, UnpaginatedSubprogramsStore],
+  providers: [EventsStore, CategoriesStore, UsersStore, SubprogramsStore],
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -33,12 +33,11 @@ import { StaffStore } from '@features/admin/users/store/users/staff.store';
 export class EventEditFormComponent {
   event = input.required<IEvent>();
   #fb = inject(FormBuilder);
-  categoriesStore = inject(UnpaginatedCategoriesStore);
-  programsStore = inject(UnpaginatedSubprogramsStore);
-  staffStore = inject(StaffStore);
-  updateEventStore = inject(UpdateEventStore);
+  store = inject(EventsStore);
+  categoriesStore = inject(CategoriesStore);
+  programsStore = inject(SubprogramsStore);
+  usersStore = inject(UsersStore);
   form = this.#initForm();
-
   icons = {
     save: Save
   };
@@ -65,6 +64,9 @@ export class EventEditFormComponent {
     effect(() => {
       this.#patchForm(this.event());
     });
+    this.categoriesStore.loadUnpaginatedCategories();
+    this.programsStore.loadUnpaginatedSubprograms();
+    this.usersStore.loadStaff();
   }
 
   #patchForm(event: IEvent): void {
@@ -79,6 +81,6 @@ export class EventEditFormComponent {
   }
 
   onSubmit(): void {
-    if (this.form.valid) this.updateEventStore.updateEvent(this.form.value);
+    if (this.form.valid) this.store.updateEvent(this.form.value);
   }
 }

@@ -7,40 +7,30 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SubprogramsStore } from '../../store/subprograms/subprograms.store';
+import { SubprogramsStore } from '../../store/subprograms.store';
 import { FilterSubprogramsDto } from '../../dto/subprograms/filter-subprograms.dto';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
-import { AddSubprogramsStore } from '../../store/subprograms/add-subprograms.store';
+// unified into SubprogramsStore
 import { Textarea } from 'primeng/textarea';
-import { UpdateSubprogramsStore } from '../../store/subprograms/update-subprograms.store';
-import { DeleteSubprogramsStore } from '../../store/subprograms/delete-subprograms.store';
+// unified into SubprogramsStore
 import { ISubprogram } from '@shared/models/entities.models';
 import { FileUpload } from '@shared/components/file-upload/file-upload';
 import { environment } from '@environments/environment';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { AvatarModule } from 'primeng/avatar';
-import { PublishSubprogramsStore } from '../../store/subprograms/publish-subprograms.store';
-import { UnpaginatedProgramsStore } from '../../store/programs/unpaginated-programs.store';
+// unified into SubprogramsStore
+import { ProgramsStore } from '../../store/programs.store';
 import { SelectModule } from 'primeng/select';
-import { HighlightSubprogramStore } from '../../store/subprograms/highlight-subprogram.store';
+// unified into SubprogramsStore
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-list-subprograms',
   templateUrl: './list-subprograms.html',
-  providers: [
-    UnpaginatedProgramsStore,
-    SubprogramsStore,
-    DeleteSubprogramsStore,
-    UpdateSubprogramsStore,
-    AddSubprogramsStore,
-    ConfirmationService,
-    PublishSubprogramsStore,
-    HighlightSubprogramStore
-  ],
+  providers: [ProgramsStore, SubprogramsStore, ConfirmationService],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -67,12 +57,7 @@ export class ListSubprograms implements OnInit {
   addSubprogramForm: FormGroup;
   updateSubprogramForm: FormGroup;
   store = inject(SubprogramsStore);
-  programsStore = inject(UnpaginatedProgramsStore);
-  addSubprogramStore = inject(AddSubprogramsStore);
-  updateSubrogramStore = inject(UpdateSubprogramsStore);
-  deleteSubrogramStore = inject(DeleteSubprogramsStore);
-  publishSubrogramStore = inject(PublishSubprogramsStore);
-  highlightStore = inject(HighlightSubprogramStore);
+  programsStore = inject(ProgramsStore);
   subprogram = signal<ISubprogram | null>(null);
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   url = environment.apiUrl + 'subprograms/logo/';
@@ -114,6 +99,8 @@ export class ListSubprograms implements OnInit {
 
   ngOnInit(): void {
     this.loadSubprograms();
+    // load flat list of programs for selects
+    this.programsStore.loadUnpaginatedPrograms();
     const searchInput = this.searchForm.get('q');
     searchInput?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
@@ -129,7 +116,7 @@ export class ListSubprograms implements OnInit {
   }
 
   highlightSubprogram(id: string): void {
-    this.highlightStore.highlight(id);
+    this.store.highlightSubprogram(id);
   }
 
   loadSubprograms(): void {
@@ -142,7 +129,7 @@ export class ListSubprograms implements OnInit {
   }
 
   onPublishProgram(id: string): void {
-    this.publishSubrogramStore.publishProgram(id);
+    this.store.publishSubprogram(id);
   }
 
   onFileUploadLoaded(): void {
@@ -175,7 +162,7 @@ export class ListSubprograms implements OnInit {
   }
 
   onAddProgram(): void {
-    this.addSubprogramStore.addProgram({
+    this.store.addSubprogram({
       payload: this.addSubprogramForm.value,
       onSuccess: () => {
         this.onToggleAddModal();
@@ -185,7 +172,7 @@ export class ListSubprograms implements OnInit {
   }
 
   onUpdateProgram(): void {
-    this.updateSubrogramStore.updateProgram({
+    this.store.updateSubprogram({
       payload: this.updateSubprogramForm.value,
       onSuccess: () => {
         this.onToggleEditModal(null);
@@ -208,7 +195,7 @@ export class ListSubprograms implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteSubrogramStore.deleteProgram(roleId);
+        this.store.deleteSubprogram(roleId);
       }
     });
   }

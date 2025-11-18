@@ -11,10 +11,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { FilterRolesDto } from '../../dto/roles/filter-roles.dto';
-import { AddRoleStore } from '../../store/roles/add-role.store';
-import { DeleteRoleStore } from '../../store/roles/delete-role.store';
-import { RolesStore } from '../../store/roles/roles.store';
-import { UpdateRoleStore } from '../../store/roles/update-role.store';
+import { RolesStore } from '../../store/roles.store';
 import { IRole } from '@shared/models/entities.models';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -22,7 +19,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 @Component({
   selector: 'app-user-roles',
   templateUrl: './user-roles.html',
-  providers: [RolesStore, AddRoleStore, UpdateRoleStore, DeleteRoleStore, ConfirmationService],
+  providers: [RolesStore, ConfirmationService],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -44,9 +41,6 @@ export class UserRoles implements OnInit {
   addRoleForm: FormGroup;
   updateRoleForm: FormGroup;
   store = inject(RolesStore);
-  addRoleStore = inject(AddRoleStore);
-  deleteRoleStore = inject(DeleteRoleStore);
-  updateRoleStore = inject(UpdateRoleStore);
   showAddModal = signal(false);
   showEditModal = signal(false);
   #destroyRef = inject(DestroyRef);
@@ -118,7 +112,7 @@ export class UserRoles implements OnInit {
 
   onAddRole(): void {
     if (this.addRoleForm.invalid) return;
-    this.addRoleStore.addRole({
+    this.store.addRole({
       payload: this.addRoleForm.value,
       onSuccess: () => {
         this.onToggleAddModal();
@@ -129,7 +123,7 @@ export class UserRoles implements OnInit {
 
   onUpdateRole(): void {
     if (this.updateRoleForm.invalid) return;
-    this.updateRoleStore.updateRole({
+    this.store.updateRole({
       payload: this.updateRoleForm.value,
       onSuccess: () => this.onToggleEditModal(null)
     });
@@ -149,7 +143,7 @@ export class UserRoles implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteRoleStore.deleteRole(roleId);
+        this.store.deleteRole(roleId);
       }
     });
   }

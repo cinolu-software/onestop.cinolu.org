@@ -7,20 +7,20 @@ import { AvatarModule } from 'primeng/avatar';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UsersStore } from '../../store/users/user.store';
+import { UsersStore } from '../../store/users.store';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { UpdateUserStore } from '../../store/users/update-user.store';
-import { UnpaginatedRolesStore } from '../../store/roles/unpaginated-roles.store';
+import { RolesStore } from '../../store/roles.store';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { SelectModule } from 'primeng/select';
 import { GENDERS } from '@shared/data/genders.data';
 import { TabsModule } from 'primeng/tabs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './edit-user.html',
-  providers: [UsersStore, UpdateUserStore, UnpaginatedRolesStore],
+  providers: [UsersStore, RolesStore],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -44,8 +44,8 @@ export class EditUser {
   genders = GENDERS;
   updateUserForm: FormGroup;
   store = inject(UsersStore);
-  updateStore = inject(UpdateUserStore);
-  rolesStore = inject(UnpaginatedRolesStore);
+  rolesStore = inject(RolesStore);
+  #route = inject(ActivatedRoute);
   icons = {
     locate: Locate,
     alert: TriangleAlert,
@@ -68,6 +68,9 @@ export class EditUser {
       birth_date: ['', Validators.required],
       roles: [[], Validators.required]
     });
+    const email = this.#route.snapshot.params['email'];
+    if (email) this.store.loadUser(email);
+    this.rolesStore.loadAllRoles();
     effect(() => {
       const user = this.store.user();
       if (!user) return;
@@ -80,7 +83,7 @@ export class EditUser {
   }
 
   onUpdateUser(): void {
-    this.updateStore.updateUser(this.updateUserForm.value);
+    this.store.updateUser(this.updateUserForm.value);
   }
 
   onGoBack(): void {

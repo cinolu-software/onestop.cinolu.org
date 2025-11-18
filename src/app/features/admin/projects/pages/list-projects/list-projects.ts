@@ -20,23 +20,22 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ProjectsStore } from '../../store/projects/projects.store';
+import { ProjectsStore } from '../../store/projects.store';
 import { ConfirmationService } from 'primeng/api';
-import { DeleteProjectStore } from '../../store/projects/delete-project.store';
+// Removed legacy per-action stores in favor of unified ProjectsStore
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { AvatarModule } from 'primeng/avatar';
-import { PublishProjectStore } from '../../store/projects/publish-project.store';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
-import { HighlightProjectStore } from '../../store/projects/highlight-project.store';
 import { FilterProjectsDto } from '../../dto/projects/filter-projects.dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Tabs } from '@shared/components/tabs/tabs';
+import { IndicatorsStore } from '@features/admin/programs/store/indicators.store';
 
 @Component({
   selector: 'app-projects-list',
   templateUrl: './list-projects.html',
-  providers: [ProjectsStore, PublishProjectStore, DeleteProjectStore, HighlightProjectStore, ConfirmationService],
+  providers: [ProjectsStore, IndicatorsStore, ConfirmationService],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -58,9 +57,6 @@ export class ListProjects implements OnInit {
   #confirmationService = inject(ConfirmationService);
   searchForm: FormGroup;
   store = inject(ProjectsStore);
-  deleteProjectStore = inject(DeleteProjectStore);
-  publishProjectStore = inject(PublishProjectStore);
-  highlightStore = inject(HighlightProjectStore);
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
@@ -125,7 +121,7 @@ export class ListProjects implements OnInit {
   }
 
   highlightProject(projectId: string): void {
-    this.highlightStore.highlight(projectId);
+    this.store.highlight(projectId);
   }
 
   updateRoute(): void {
@@ -139,7 +135,7 @@ export class ListProjects implements OnInit {
   }
 
   onPublishProject(projectId: string): void {
-    this.publishProjectStore.publishProject(projectId);
+    this.store.publishProject(projectId);
   }
 
   onDeleteProject(projectId: string, event: Event): void {
@@ -156,7 +152,7 @@ export class ListProjects implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteProjectStore.deleteProject(projectId);
+        this.store.deleteProject(projectId);
       }
     });
   }

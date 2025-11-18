@@ -47,7 +47,7 @@
             inputId="event_manager"
             [optionValue]="'id'"
             [optionLabel]="'name'"
-            [options]="staffStore.staff()"
+            [options]="usersStore.staff()"
             [filter]="true"
             formControlName="event_manager"
             placeholder="Sélectionner un responsable"
@@ -62,7 +62,7 @@
             [autocomplete]="'off'"
             [showHeader]="false"
             [optionLabel]="'name'"
-            [options]="categoriesStore.categories()"
+            [options]="categoriesStore.allCategories()"
             [optionValue]="'id'"
             formControlName="categories"
             placeholder="Choisir une ou plusieurs catégories"
@@ -132,16 +132,16 @@
     <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
       <p-button
         [size]="'small'"
-        [loading]="updateEventStore.isLoading()"
-        [disabled]="updateEventStore.isLoading() || form.invalid"
+        [loading]="store.isLoading()"
+        [disabled]="store.isLoading() || form.invalid"
         severity="primary"
         type="submit"
         styleClass="font-semibold">
         <span class="flex items-center gap-2">
-          @if (!updateEventStore.isLoading()) {
+          @if (!store.isLoading()) {
           <i-lucide [name]="icons.save" class="size-4" />
           }
-          <span>{{ updateEventStore.isLoading() ? 'Enregistrement...' : 'Enregistrer les modifications' }}</span>
+          <span>{{ store.isLoading() ? 'Enregistrement...' : 'Enregistrer les modifications' }}</span>
         </span>
       </p-button>
     </div>

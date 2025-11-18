@@ -1,5 +1,5 @@
 <section class="pt-32 dashboard-main-content flex flex-col gap-4">
-  @let article = articleStore.article(); @let isLoading = articleStore.isLoading();
+  @let article = store.article(); @let isLoading = store.isLoading();
   <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
 
   @if (isLoading) {
@@ -49,7 +49,7 @@
   } @if (activeTab() === 'gallery' && article) {
   <app-article-gallery
     [article]="article"
-    [gallery]="galleryStore.gallery()"
+    [gallery]="store.gallery()"
     [isLoading]="isLoading"
     (coverUploaded)="onCoverUploaded()"
     (galleryUploaded)="onGalleryUploaded()"

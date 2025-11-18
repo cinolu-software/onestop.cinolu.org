@@ -1,6 +1,6 @@
 <section class="text-gray-600">
   @let isLoading = store.isLoading(); @let hasQuery = queryParams().q; @let userCount = store.users()[1]; @let userList
-  = store.users()[0]; @let isDownloading = downloadStore.isLoading();
+  = store.users()[0];
   <div class="relative bg-white rounded-xl shadow-sm pb-12">
     <div class="px-6 pt-6 pb-4 border-b border-gray-100">
       <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
@@ -15,15 +15,12 @@
         <div class="flex flex-col sm:flex-row gap-2">
           <p-button
             (onClick)="onDownloadUsers()"
-            [loading]="isDownloading"
-            [disabled]="isDownloading || userCount === 0"
+            [disabled]=" userCount === 0"
             [size]="'small'"
             severity="secondary"
             [outlined]="true">
             <span class="flex items-center gap-2">
-              @if(!isDownloading) {
               <i-lucide [name]="icons.download" class="size-4" />
-              }
               <span>Télécharger CSV</span>
             </span>
           </p-button>

@@ -3,19 +3,19 @@ import { Button } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AddEventStore } from '../../store/events/add-event.store';
+import { EventsStore } from '../../store/events.store';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
-import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { UnpaginatedSubprogramsStore } from '@features/admin/programs/store/subprograms/unpaginated-subprograms.store';
-import { StaffStore } from '@features/admin/users/store/users/staff.store';
+import { SubprogramsStore } from '@features/admin/programs/store/subprograms.store';
+import { UsersStore } from '@features/admin/users/store/users.store';
+import { CategoriesStore } from '../../store/event-categories.store';
 
 @Component({
   selector: 'app-event-add',
   templateUrl: './add-event.html',
-  providers: [AddEventStore, UnpaginatedSubprogramsStore, UnpaginatedCategoriesStore, StaffStore],
+  providers: [EventsStore, SubprogramsStore, UsersStore],
   imports: [
     SelectModule,
     MultiSelectModule,
@@ -30,10 +30,10 @@ import { StaffStore } from '@features/admin/users/store/users/staff.store';
 export class AddEventComponent {
   #fb = inject(FormBuilder);
   form: FormGroup;
-  store = inject(AddEventStore);
-  categoriesStore = inject(UnpaginatedCategoriesStore);
-  programsStore = inject(UnpaginatedSubprogramsStore);
-  staffStore = inject(StaffStore);
+  eventsStore = inject(EventsStore);
+  categoriesStore = inject(CategoriesStore);
+  programsStore = inject(SubprogramsStore);
+  usersStore = inject(UsersStore);
 
   constructor() {
     this.form = this.#fb.group({
@@ -50,10 +50,13 @@ export class AddEventComponent {
       categories: [[], Validators.required],
       event_manager: ['']
     });
+    this.categoriesStore.loadUnpaginatedCategories();
+    this.programsStore.loadUnpaginatedSubprograms();
+    this.usersStore.loadStaff();
   }
 
   onAddEvent(): void {
     if (!this.form.valid) return;
-    this.store.addEvent(this.form.value);
+    this.eventsStore.addEvent(this.form.value);
   }
 }

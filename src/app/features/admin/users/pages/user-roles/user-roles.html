@@ -12,7 +12,7 @@
             }
           </p>
         </div>
-        <p-button (onClick)="onToggleAddModal()" [size]="'small'" severity="primary" styleClass="font-semibold">
+        <p-button (onClick)="onToggleAddModal()" [size]="'small'" severity="primary">
           <span class="flex items-center gap-2">
             <i-lucide [name]="icons.plus" class="size-4" />
             <span>Nouveau rôle</span>
@@ -166,8 +166,8 @@
           size="small"
           severity="primary"
           styleClass="font-satoshi"
-          [disabled]="!addRoleForm.valid || addRoleStore.isLoading()"
-          [loading]="addRoleStore.isLoading()">
+          [disabled]="!addRoleForm.valid || store.isLoading()"
+          [loading]="store.isLoading()">
           <span>Ajouter le rôle</span>
         </p-button>
       </div>
@@ -193,8 +193,8 @@
           size="small"
           severity="primary"
           styleClass="font-satoshi"
-          [disabled]="!updateRoleForm.valid || updateRoleStore.isLoading()"
-          [loading]="updateRoleStore.isLoading()">
+          [disabled]="!updateRoleForm.valid || store.isLoading()"
+          [loading]="store.isLoading()">
           <span>Modifier le rôle</span>
         </p-button>
       </div>

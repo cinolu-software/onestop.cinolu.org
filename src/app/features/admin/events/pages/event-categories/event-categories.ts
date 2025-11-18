@@ -9,19 +9,16 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ConfirmationService } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { ConfirmPopup } from 'primeng/confirmpopup';
-import { CategoriesStore } from '../../store/categories/categories.store';
-import { AddCategoryStore } from '../../store/categories/add-category.store';
-import { DeleteCategoryStore } from '../../store/categories/delete-category.store';
-import { UpdateCategoryStore } from '../../store/categories/update-category.store';
 import { ICategory } from '@shared/models/entities.models';
 import { FilterEventCategoriesDto } from '../../dto/categories/filter-categories.dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CategoriesStore } from '../../store/event-categories.store';
 
 @Component({
   selector: 'app-event-categories',
   templateUrl: './event-categories.html',
-  providers: [CategoriesStore, AddCategoryStore, UpdateCategoryStore, DeleteCategoryStore, ConfirmationService],
+  providers: [CategoriesStore, ConfirmationService],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -41,10 +38,7 @@ export class EventCategories implements OnInit {
   searchForm: FormGroup;
   addCategoryForm: FormGroup;
   updateCategoryForm: FormGroup;
-  store = inject(CategoriesStore);
-  addCategoryStore = inject(AddCategoryStore);
-  deleteCategoryStore = inject(DeleteCategoryStore);
-  updateCategoryStore = inject(UpdateCategoryStore);
+  categoriesStore = inject(CategoriesStore);
   showAddModal = signal(false);
   showEditModal = signal(false);
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
@@ -87,7 +81,7 @@ export class EventCategories implements OnInit {
   }
 
   loadCategories(): void {
-    this.store.loadCategories(this.queryParams());
+    this.categoriesStore.loadCategories(this.queryParams());
   }
 
   onToggleAddModal(): void {
@@ -120,7 +114,7 @@ export class EventCategories implements OnInit {
 
   onAddCategory(): void {
     if (this.addCategoryForm.invalid) return;
-    this.addCategoryStore.addCategory({
+    this.categoriesStore.addCategory({
       payload: this.addCategoryForm.value,
       onSuccess: () => this.onToggleAddModal()
     });
@@ -128,7 +122,7 @@ export class EventCategories implements OnInit {
 
   onUpdateCategory(): void {
     if (this.updateCategoryForm.invalid) return;
-    this.updateCategoryStore.updateCategory({
+    this.categoriesStore.updateCategory({
       id: this.updateCategoryForm.value.id,
       payload: this.updateCategoryForm.value,
       onSuccess: () => this.onToggleEditModal(null)
@@ -149,7 +143,7 @@ export class EventCategories implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteCategoryStore.deleteCategory({ id: categoryId });
+        this.categoriesStore.deleteCategory({ id: categoryId });
       }
     });
   }

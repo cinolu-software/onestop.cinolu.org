@@ -8,10 +8,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { StepperModule } from 'primeng/stepper';
 import { unpaginatedVenturesStore } from '@features/user/ventures/store/ventures/venture-unpaginated.store';
 import { ActivatedRoute } from '@angular/router';
-import { ProductStore } from '../../store/products/product.store';
-import { UpdateProductStore } from '../../store/products/update-product.store';
-import { GalleryStore } from '../../store/galleries/galeries.store';
-import { DeleteGalleryStore } from '../../store/galleries/delete-gallery.store';
+import { ProductsStore } from '../../store/products/products.store';
 import { environment } from '@environments/environment';
 import { FileUpload } from '@shared/components/file-upload/file-upload';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
@@ -21,7 +18,7 @@ import { Tabs } from '@shared/components/tabs/tabs';
 
 @Component({
   selector: 'app-product-add',
-  providers: [UpdateProductStore, ProductStore, GalleryStore, DeleteGalleryStore, unpaginatedVenturesStore],
+  providers: [ProductsStore, unpaginatedVenturesStore],
   imports: [
     ReactiveFormsModule,
     SelectModule,
@@ -35,25 +32,23 @@ import { Tabs } from '@shared/components/tabs/tabs';
     ApiImgPipe,
     LucideAngularModule,
     NgOptimizedImage,
-    Tabs,
+    Tabs
   ],
-  templateUrl: './edit-product.html',
+  templateUrl: './edit-product.html'
 })
 export class EditProductComponent implements OnInit {
   #fb = inject(FormBuilder);
   form: FormGroup;
   venturesStore = inject(unpaginatedVenturesStore);
-  productStore = inject(ProductStore);
-  store = inject(UpdateProductStore);
+  store = inject(ProductsStore);
   #route = inject(ActivatedRoute);
   #slug = this.#route.snapshot.params['slug'];
-  galleryStore = inject(GalleryStore);
-  deleteGalleryStore = inject(DeleteGalleryStore);
+
   galleryUrl = `${environment.apiUrl}products/gallery/`;
   icons = { trash: Trash };
   tabs = [
     { label: 'Modifier le produit', name: 'edit', icon: SquarePen },
-    { label: 'Gérer la galerie', name: 'gallery', icon: Images },
+    { label: 'Gérer la galerie', name: 'gallery', icon: Images }
   ];
   activeTab = signal('edit');
 
@@ -64,24 +59,24 @@ export class EditProductComponent implements OnInit {
       ventureId: ['', Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(0)]],
+      price: ['', [Validators.required, Validators.min(0)]]
     });
     effect(() => {
-      const product = this.productStore.product();
+      const product = this.store.product();
       if (!product) return;
       this.form.patchValue({
         slug: product.slug,
         name: product.name,
         description: product.description,
         price: product.price,
-        ventureId: product.venture.id,
+        ventureId: product.venture.id
       });
     });
   }
 
   ngOnInit(): void {
-    this.productStore.loadProduct(this.#slug);
-    this.galleryStore.loadGallery(this.#slug);
+    this.store.loadProduct(this.#slug);
+    this.store.loadGallery(this.#slug);
   }
 
   onTabChange(tab: string): void {
@@ -94,10 +89,10 @@ export class EditProductComponent implements OnInit {
   }
 
   onDeleteImage(imageId: string): void {
-    this.deleteGalleryStore.deleteImage(imageId);
+    this.store.deleteImage(imageId);
   }
 
   onFileUploadLoaded(): void {
-    this.galleryStore.loadGallery(this.#slug);
+    this.store.loadGallery(this.#slug);
   }
 }

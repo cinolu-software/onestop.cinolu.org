@@ -6,14 +6,14 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { Textarea } from 'primeng/textarea';
-import { UpdateProgramStore } from '../../store/programs/update-program.store';
-import { AddIndicatorStore } from '../../store/indicators/add-indicators.store';
-import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
+import { IndicatorsStore } from '../../store/indicators.store';
+import { ProgramsStore } from '../../store/programs.store';
+import { ProgramCategoriesStore } from '../../store/program-categories.store';
 import { ChartColumn, SquarePen, Check, Trash2, Funnel, Tag, Save } from 'lucide-angular';
 import { LucideAngularModule } from 'lucide-angular';
 import { environment } from '@environments/environment';
 import { DatePicker } from 'primeng/datepicker';
-import { ProgramStore } from '../../store/programs/program.store';
+// Use unified ProgramsStore for single and update operations
 import { Tabs, FileUpload } from '@shared/components';
 import { IProgram } from '@shared/models';
 import { INDICATORS_CATEGORIES } from '../../data/indicators.data';
@@ -21,7 +21,7 @@ import { IndicatorFormData } from '../../types/indicator-form.type';
 
 @Component({
   selector: 'app-update-program-page',
-  providers: [ProgramStore, UpdateProgramStore, UnpaginatedCategoriesStore, AddIndicatorStore],
+  providers: [ProgramsStore, IndicatorsStore, ProgramCategoriesStore],
   imports: [
     CommonModule,
     DatePicker,
@@ -41,12 +41,12 @@ import { IndicatorFormData } from '../../types/indicator-form.type';
 export class UpdateProgram {
   #route = inject(ActivatedRoute);
   #fb = inject(FormBuilder);
-  updateProgramStore = inject(UpdateProgramStore);
-  categoriesStore = inject(UnpaginatedCategoriesStore);
-  programStore = inject(ProgramStore);
+  store = inject(ProgramsStore);
+
+  categoriesStore = inject(ProgramCategoriesStore);
   url = environment.apiUrl + 'programs/logo/';
   activeTab = signal('edit');
-  addIndicatorStore = inject(AddIndicatorStore);
+  indicatorsStore = inject(IndicatorsStore);
   indicatorsTab = signal<Record<string, IndicatorFormData[]>>({});
   indicatorsCategories = signal(INDICATORS_CATEGORIES);
   selectedCategory = signal(this.indicatorsCategories()[0]);
@@ -73,9 +73,11 @@ export class UpdateProgram {
   constructor() {
     const slug = this.#route.snapshot.paramMap.get('slug');
     if (!slug) return;
-    this.programStore.loadProgram(slug);
+    this.store.loadProgram(slug);
+    // Load categories via ProgramCategoriesStore
+    this.categoriesStore.loadUnpaginatedCategories();
     effect(() => {
-      const program = this.programStore.program();
+      const program = this.store.program();
       if (!program) return;
       this.#initIndicatorsTab(program);
       this.#patchForm(program);
@@ -137,7 +139,7 @@ export class UpdateProgram {
   }
 
   onSaveIndicators(): void {
-    const program = this.programStore.program();
+    const program = this.store.program();
     if (!program) return;
     const key = this.selectedCategory();
     const current = this.indicatorsTab()[key] ?? [];
@@ -151,7 +153,7 @@ export class UpdateProgram {
       category: this.selectedCategory(),
       metrics
     };
-    this.addIndicatorStore.addIndicator({ id: program.id, indicators });
+    this.indicatorsStore.addIndicator({ id: program.id, indicators });
   }
 
   onTabChange(tab: string): void {
@@ -159,9 +161,9 @@ export class UpdateProgram {
   }
 
   onSubmit(): void {
-    const program = this.programStore.program();
+    const program = this.store.program();
     if (this.updateForm.invalid || !program) return;
-    this.updateProgramStore.updateProgram({
+    this.store.updateProgram({
       programId: program.id,
       payload: this.updateForm.value
     });

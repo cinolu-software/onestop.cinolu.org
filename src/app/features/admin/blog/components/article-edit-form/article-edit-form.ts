@@ -9,13 +9,12 @@ import { Button } from 'primeng/button';
 import { QuillModule } from 'ngx-quill';
 import { Calendar, Check, FileText, Info, List, PenLine, Tag, LucideAngularModule } from 'lucide-angular';
 import { IArticle } from '@shared/models';
-import { UpdateArticleStore } from '../../store/articles/update-article.store';
-import { UnpaginatedTagStore } from '../../store/tags/unpaginated-tag.store';
+import { ArticlesStore } from '../../store/articles.store';
 
 @Component({
   selector: 'app-article-edit-form',
   templateUrl: './article-edit-form.html',
-  providers: [UpdateArticleStore, UnpaginatedTagStore],
+  providers: [ArticlesStore],
   imports: [
     ReactiveFormsModule,
     SelectModule,
@@ -31,8 +30,7 @@ import { UnpaginatedTagStore } from '../../store/tags/unpaginated-tag.store';
 export class ArticleEditFormComponent {
   article = input.required<IArticle>();
   #fb = inject(FormBuilder);
-  tagsStore = inject(UnpaginatedTagStore);
-  updateStore = inject(UpdateArticleStore);
+  updateStore = inject(ArticlesStore);
   form = this.#initForm();
   icons = {
     penLine: PenLine,
@@ -59,6 +57,7 @@ export class ArticleEditFormComponent {
     effect(() => {
       this.#patchForm(this.article());
     });
+    this.updateStore.loadTags();
   }
 
   #patchForm(article: IArticle): void {

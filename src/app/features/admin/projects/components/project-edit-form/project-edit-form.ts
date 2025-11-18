@@ -8,15 +8,15 @@ import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { IProject } from '@shared/models';
 import { extractCategoryIds, parseDate } from '@shared/helpers/form.helper';
-import { UpdateProjectStore } from '../../store/projects/update-project.store';
-import { UnpaginatedCategoriesStore } from '../../store/categories/unpaginated-categories.store';
-import { UnpaginatedSubprogramsStore } from '@features/admin/programs/store/subprograms/unpaginated-subprograms.store';
-import { StaffStore } from '@features/admin/users/store/users/staff.store';
+import { ProjectsStore } from '../../store/projects.store';
+import { CategoriesStore } from '../../store/project-categories.store';
+import { SubprogramsStore } from '@features/admin/programs/store/subprograms.store';
+import { UsersStore } from '@features/admin/users/store/users.store';
 
 @Component({
   selector: 'app-project-edit-form',
   templateUrl: './project-edit-form.html',
-  providers: [UpdateProjectStore, StaffStore, UnpaginatedCategoriesStore, UnpaginatedSubprogramsStore],
+  providers: [ProjectsStore, UsersStore, CategoriesStore, SubprogramsStore],
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -31,10 +31,10 @@ import { StaffStore } from '@features/admin/users/store/users/staff.store';
 export class ProjectEditFormComponent {
   project = input.required<IProject>();
   #fb = inject(FormBuilder);
-  categoriesStore = inject(UnpaginatedCategoriesStore);
-  programsStore = inject(UnpaginatedSubprogramsStore);
-  staffStore = inject(StaffStore);
-  updateProjectStore = inject(UpdateProjectStore);
+  categoriesStore = inject(CategoriesStore);
+  programsStore = inject(SubprogramsStore);
+  usersStore = inject(UsersStore);
+  updateProjectStore = inject(ProjectsStore);
   form = this.#initForm();
 
   #initForm(): FormGroup {
@@ -58,6 +58,9 @@ export class ProjectEditFormComponent {
     effect(() => {
       this.#patchForm(this.project());
     });
+    this.categoriesStore.loadUnpaginatedCategories();
+    this.programsStore.loadUnpaginatedSubprograms();
+    this.usersStore.loadStaff();
   }
 
   #patchForm(project: IProject): void {

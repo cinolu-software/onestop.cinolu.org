@@ -1,6 +1,6 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
-import { VentureStore } from '../../store/ventures/venture.store';
+import { VenturesStore } from '../../store/ventures/ventures.store';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
@@ -8,11 +8,10 @@ import { TextareaModule } from 'primeng/textarea';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SECTORS } from '../../data/sectors.data';
 import { STAGES } from '../../data/stage.data';
-import { UpdateVenturetore } from '../../store/ventures/update-venture.store';
+
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
-import { GalleryStore } from '../../store/galleries/galeries.store';
-import { DeleteGalleryStore } from '../../store/galleries/delete-gallery.store';
+
 import { Images, LucideAngularModule, SquarePen, Trash } from 'lucide-angular';
 import { ActivatedRoute } from '@angular/router';
 import { FileUpload } from '@shared/components/file-upload/file-upload';
@@ -22,7 +21,7 @@ import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-edit-venture',
-  providers: [VentureStore, UpdateVenturetore, GalleryStore, DeleteGalleryStore],
+  providers: [VenturesStore],
   imports: [
     CommonModule,
     StepperModule,
@@ -36,29 +35,26 @@ import { environment } from '@environments/environment';
     ApiImgPipe,
     NgOptimizedImage,
     LucideAngularModule,
-    Tabs,
+    Tabs
   ],
-  templateUrl: './edit-venture.html',
+  templateUrl: './edit-venture.html'
 })
 export class EditVentureComponent implements OnInit {
   #fb = inject(FormBuilder);
-  store = inject(VentureStore);
-
-  updateVentureStore = inject(UpdateVenturetore);
+  store = inject(VenturesStore);
   form: FormGroup;
   sectors = SECTORS;
   stages = STAGES;
   logoUrl = `${environment.apiUrl}ventures/add-logo/`;
   coverUrl = `${environment.apiUrl}ventures/add-cover/`;
   galleryUrl = `${environment.apiUrl}ventures/gallery/`;
-  galleryStore = inject(GalleryStore);
-  deleteGalleryStore = inject(DeleteGalleryStore);
+
   #route = inject(ActivatedRoute);
   icons = { trash: Trash };
   #slug = this.#route.snapshot.params['slug'];
   tabs = [
     { label: 'Modifier la startup', name: 'edit', icon: SquarePen },
-    { label: 'Gérer la galerie', name: 'gallery', icon: Images },
+    { label: 'Gérer la galerie', name: 'gallery', icon: Images }
   ];
   activeTab = signal('edit');
 
@@ -68,7 +64,7 @@ export class EditVentureComponent implements OnInit {
       if (!venture) return;
       this.form.patchValue({
         ...venture,
-        founded_at: new Date(venture.founded_at),
+        founded_at: new Date(venture.founded_at)
       });
     });
     this.form = this.#fb.group({
@@ -83,13 +79,13 @@ export class EditVentureComponent implements OnInit {
       sector: [''],
       founded_at: [''],
       location: [''],
-      stage: [''],
+      stage: ['']
     });
   }
 
   ngOnInit(): void {
     this.store.loadVenture(this.#slug);
-    this.galleryStore.loadGallery(this.#slug);
+    this.store.loadGallery(this.#slug);
   }
 
   onTabChange(tab: string): void {
@@ -99,17 +95,17 @@ export class EditVentureComponent implements OnInit {
   onUpdateVenture(): void {
     if (!this.form.valid) return;
     const venture = this.store.venture();
-    this.updateVentureStore.updateVenture({
+    this.store.updateVenture({
       slug: venture?.slug || '',
-      payload: this.form.value,
+      payload: this.form.value
     });
   }
 
   onDeleteImage(id: string): void {
-    this.deleteGalleryStore.deleteImage(id);
+    this.store.deleteImage(id);
   }
 
   onFileUploadLoaded(): void {
-    this.galleryStore.loadGallery(this.#slug);
+    this.store.loadGallery(this.#slug);
   }
 }

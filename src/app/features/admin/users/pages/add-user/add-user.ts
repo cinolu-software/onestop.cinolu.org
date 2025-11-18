@@ -7,8 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { AddUserStore } from '../../store/users/add-user.store';
-import { UnpaginatedRolesStore } from '../../store/roles/unpaginated-roles.store';
+import { UsersStore } from '../../store/users.store';
+import { RolesStore } from '../../store/roles.store';
 import { DatePicker } from 'primeng/datepicker';
 import { Select } from 'primeng/select';
 import { GENDERS } from '@shared/data/genders.data';
@@ -16,7 +16,7 @@ import { GENDERS } from '@shared/data/genders.data';
 @Component({
   selector: 'app-user-add',
   templateUrl: './add-user.html',
-  providers: [AddUserStore, UnpaginatedRolesStore],
+  providers: [UsersStore, RolesStore],
   imports: [
     CommonModule,
     ButtonModule,
@@ -33,8 +33,8 @@ import { GENDERS } from '@shared/data/genders.data';
 export class AddUserComponent {
   #fb = inject(FormBuilder);
   addUserForm: FormGroup;
-  store = inject(AddUserStore);
-  rolesStore = inject(UnpaginatedRolesStore);
+  store = inject(UsersStore);
+  rolesStore = inject(RolesStore);
   genders = GENDERS;
 
   constructor() {
@@ -48,6 +48,7 @@ export class AddUserComponent {
       birth_date: ['', Validators.required],
       roles: [[], Validators.required]
     });
+    this.rolesStore.loadAllRoles();
   }
 
   onAddUser(): void {

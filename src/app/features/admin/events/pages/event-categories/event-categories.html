@@ -1,6 +1,6 @@
 <section class="text-gray-600">
-  @let isLoading = store.isLoading(); @let hasQuery = queryParams().q; @let categoryCount = store.categories()[1]; @let
-  categoryList = store.categories()[0];
+  @let isLoading = categoriesStore.isLoading(); @let hasQuery = queryParams().q; @let categoryCount =
+  categoriesStore.categories()[1]; @let categoryList = categoriesStore.categories()[0];
   <div class="relative bg-white rounded-xl shadow-sm pb-12">
     <div class="px-6 pt-6 pb-4 border-b border-gray-100">
       <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
@@ -168,8 +168,8 @@
           size="small"
           severity="primary"
           styleClass="font-satoshi"
-          [disabled]="!addCategoryForm.valid || addCategoryStore.isLoading()"
-          [loading]="addCategoryStore.isLoading()">
+          [disabled]="!addCategoryForm.valid || categoriesStore.isLoading()"
+          [loading]="categoriesStore.isLoading()">
           <span>Ajouter la catégorie</span>
         </p-button>
       </div>
@@ -195,8 +195,8 @@
           size="small"
           severity="primary"
           styleClass="font-satoshi"
-          [disabled]="!updateCategoryForm.valid || updateCategoryStore.isLoading()"
-          [loading]="updateCategoryStore.isLoading()">
+          [disabled]="!updateCategoryForm.valid || categoriesStore.isLoading()"
+          [loading]="categoriesStore.isLoading()">
           <span>Modifier la catégorie</span>
         </p-button>
       </div>

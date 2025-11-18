@@ -54,7 +54,7 @@
               inputId="event_manager"
               [optionValue]="'id'"
               [optionLabel]="'name'"
-              [options]="staffStore.staff()"
+              [options]="usersStore.staff()"
               formControlName="event_manager"
               placeholder="Sélectionner un responsable"
               class="w-full" />
@@ -67,7 +67,7 @@
               [inputId]="'categories'"
               [autocomplete]="'off'"
               [showHeader]="false"
-              [options]="categoriesStore.categories()"
+              [options]="categoriesStore.allCategories()"
               [optionValue]="'id'"
               [optionLabel]="'name'"
               [showClear]="true"
@@ -139,8 +139,8 @@
       <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
         <p-button
           [size]="'small'"
-          [loading]="store.isLoading()"
-          [disabled]="store.isLoading() || form.invalid"
+          [loading]="eventsStore.isLoading()"
+          [disabled]="eventsStore.isLoading() || form.invalid"
           severity="primary"
           type="submit">
           Créer l'événement

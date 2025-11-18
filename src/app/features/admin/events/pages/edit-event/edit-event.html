@@ -1,7 +1,7 @@
 <section class="pt-32 dashboard-main-content flex flex-col gap-4">
-  @let event = eventStore.event();
+  @let event = eventsStore.event();
   <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
-  @if (eventStore.isLoading()) {
+  @if (eventsStore.isLoading()) {
   <app-event-details-skeleton />
   } @if (activeTab() === 'details' && event) {
   <app-event-details [event]="event" />
@@ -9,7 +9,7 @@
   <app-event-gallery
     [event]="event"
     [gallery]="galleryStore.gallery()"
-    [isLoading]="eventStore.isLoading()"
+    [isLoading]="galleryStore.isLoading()"
     (coverUploaded)="onCoverUploaded()"
     (galleryUploaded)="onGalleryUploaded()"
     (deleteImage)="onDeleteImage($event)" />
@@ -20,7 +20,7 @@
     [indicators]="indicatorsStore.indicators()"
     [metricsMap]="metricsMap"
     [existingMetrics]="event?.metrics ?? []"
-    [isLoading]="addMetricsStore.isLoading()"
+    [isLoading]="indicatorsStore.isLoading()"
     (saveAll)="onSaveMetrics()" />
   }
 </section>

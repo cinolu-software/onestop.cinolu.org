@@ -20,23 +20,21 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { EventsStore } from '../../store/events/events.store';
+import { EventsStore } from '../../store/events.store';
 import { ConfirmationService } from 'primeng/api';
-import { DeleteEventStore } from '../../store/events/delete-event.store';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { AvatarModule } from 'primeng/avatar';
-import { PublishEventStore } from '../../store/events/publish-event.store';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
-import { HighlightEventStore } from '../../store/events/highlight-event.store';
 import { FilterEventsDto } from '../../dto/categories/filter-events.dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Tabs } from '@shared/components/tabs/tabs';
+import { IndicatorsStore } from '@features/admin/programs/store/indicators.store';
 
 @Component({
   selector: 'app-events-list',
   templateUrl: './list-events.html',
-  providers: [EventsStore, PublishEventStore, DeleteEventStore, ConfirmationService, HighlightEventStore],
+  providers: [EventsStore, IndicatorsStore, ConfirmationService],
   imports: [
     LucideAngularModule,
     CommonModule,
@@ -57,10 +55,7 @@ export class ListEvents implements OnInit {
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
   searchForm: FormGroup;
-  store = inject(EventsStore);
-  deleteEventStore = inject(DeleteEventStore);
-  publishEventStore = inject(PublishEventStore);
-  highlightStore = inject(HighlightEventStore);
+  eventsStore = inject(EventsStore);
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
@@ -116,7 +111,7 @@ export class ListEvents implements OnInit {
   }
 
   loadEvents(): void {
-    this.store.loadEvents(this.queryParams());
+    this.eventsStore.loadEvents(this.queryParams());
   }
 
   onPageChange(currentPage: number): void {
@@ -130,7 +125,7 @@ export class ListEvents implements OnInit {
   }
 
   highlightEvent(eventId: string): void {
-    this.highlightStore.highlight(eventId);
+    this.eventsStore.highlight(eventId);
   }
 
   updateRouteAndEvents(): void {
@@ -139,7 +134,7 @@ export class ListEvents implements OnInit {
   }
 
   onPublishProject(projectId: string): void {
-    this.publishEventStore.publishEvent(projectId);
+    this.eventsStore.publishEvent(projectId);
   }
 
   onDeleteProject(projectId: string, event: Event): void {
@@ -156,7 +151,7 @@ export class ListEvents implements OnInit {
       acceptLabel: 'Confirmer',
       rejectLabel: 'Annuler',
       accept: () => {
-        this.deleteEventStore.deleteEvent(projectId);
+        this.eventsStore.deleteEvent(projectId);
       }
     });
   }

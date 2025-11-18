@@ -7,21 +7,19 @@ import { ConfirmPopup } from 'primeng/confirmpopup';
 import { InputText } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { TagsStore } from '../../store/tags/tag.store';
-import { AddTagStore } from '../../store/tags/add-tag.store';
+import { TagsStore } from '../../store/tag.store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterArticlesTagsDto } from '../../dto/filter-tags.dto';
 import { CommonModule } from '@angular/common';
 import { ITag } from '@shared/models/entities.models';
-import { UpdateTagStore } from '../../store/tags/update-tag.store';
-import { DeleteTagStore } from '../../store/tags/delete-tag.store';
+
 import { ConfirmationService } from 'primeng/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-article-tags',
-  providers: [ConfirmationService, TagsStore, AddTagStore, UpdateTagStore, DeleteTagStore],
+  providers: [ConfirmationService, TagsStore],
   imports: [
     LucideAngularModule,
     ReactiveFormsModule,
@@ -44,9 +42,6 @@ export class ArticleTags implements OnInit {
   addTagForm: FormGroup;
   updateTagForm: FormGroup;
   store = inject(TagsStore);
-  addTagStore = inject(AddTagStore);
-  deleteTagStore = inject(DeleteTagStore);
-  updateTagStore = inject(UpdateTagStore);
   showAddModal = signal(false);
   showEditModal = signal(false);
   skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
@@ -123,15 +118,12 @@ export class ArticleTags implements OnInit {
 
   onAddTag(): void {
     if (this.addTagForm.invalid) return;
-    this.addTagStore.addTag({
-      payload: this.addTagForm.value,
-      onSuccess: () => this.onToggleAddModal()
-    });
+    this.store.createTag({ payload: this.addTagForm.value, onSuccess: () => this.onToggleAddModal() });
   }
 
   onUpdateTag(): void {
     if (this.updateTagForm.invalid) return;
-    this.updateTagStore.updateTag({
+    this.store.updateTagRemote({
       id: this.updateTagForm.value.id,
       payload: this.updateTagForm.value,
       onSuccess: () => this.onToggleEditModal(null)
@@ -152,7 +144,7 @@ export class ArticleTags implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.deleteTagStore.deleteTag({ id: tagId });
+        this.store.deleteTagRemote({ id: tagId });
       }
     });
   }

@@ -8,13 +8,12 @@ import { InputText } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
-import { AddArticleStore } from '../../store/articles/add-article.store';
-import { UnpaginatedTagStore } from '../../store/tags/unpaginated-tag.store';
+import { ArticlesStore } from '../../store/articles.store';
 import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-article-add',
-  providers: [AddArticleStore, UnpaginatedTagStore],
+  providers: [ArticlesStore],
   imports: [
     LucideAngularModule,
     SelectModule,
@@ -32,8 +31,7 @@ import { QuillModule } from 'ngx-quill';
 export class AddArticle {
   #fb = inject(FormBuilder);
   form: FormGroup;
-  store = inject(AddArticleStore);
-  tagsStore = inject(UnpaginatedTagStore);
+  store = inject(ArticlesStore);
   icons = {
     penLine: PenLine,
     tag: Tag,
@@ -52,6 +50,7 @@ export class AddArticle {
       summary: ['', Validators.required],
       tags: [[], Validators.required]
     });
+    this.store.loadTags();
   }
 
   onAddArticle(): void {
