@@ -3,22 +3,27 @@ import { inject } from '@angular/core';
 import { signalStore, withState, withMethods, patchState, withProps } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap, catchError, of, switchMap, map } from 'rxjs';
-import { FilterVenturesDto } from '../../dto/filter-venture.dto';
+import { FilterVenturesDto } from '../dto/filter-venture.dto';
 import { buildQueryParams } from '@shared/helpers';
-import { IImage, IVenture } from '@shared/models/entities.models';
+import { IVenture } from '@shared/models/entities.models';
 import { Router } from '@angular/router';
 import { ToastrService } from '@core/services/toast/toastr.service';
-import { VentureDto } from '../../dto/venture.dto';
+import { VentureDto } from '../dto/venture.dto';
 
 interface IVenturesStore {
   isLoading: boolean;
   ventures: [IVenture[], number];
   venture: IVenture | null;
-  gallery: IImage[];
+  unpaginatedVentures: IVenture[];
 }
 
 export const VenturesStore = signalStore(
-  withState<IVenturesStore>({ isLoading: false, ventures: [[], 0], venture: null, gallery: [] }),
+  withState<IVenturesStore>({
+    isLoading: false,
+    ventures: [[], 0],
+    venture: null,
+    unpaginatedVentures: []
+  }),
   withProps(() => ({
     _http: inject(HttpClient),
     _router: inject(Router),
@@ -40,7 +45,22 @@ export const VenturesStore = signalStore(
         })
       )
     ),
-    // Single
+    loadUnpaginatedVentures: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, { isLoadingUnpaginated: true } as Partial<IVenturesStore>)),
+        switchMap(() =>
+          _http.get<{ data: IVenture[] }>('ventures/by-user/unpaginated').pipe(
+            map(({ data }) =>
+              patchState(store, { isLoadingUnpaginated: false, unpaginatedVentures: data } as Partial<IVenturesStore>)
+            ),
+            catchError(() => {
+              patchState(store, { isLoadingUnpaginated: false, unpaginatedVentures: [] } as Partial<IVenturesStore>);
+              return of(null);
+            })
+          )
+        )
+      )
+    ),
     loadVenture: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
@@ -55,8 +75,6 @@ export const VenturesStore = signalStore(
         )
       )
     ),
-
-    // Create / Update / Delete
     addVenture: rxMethod<VentureDto>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
@@ -111,42 +129,6 @@ export const VenturesStore = signalStore(
             catchError(() => {
               _toast.showError('Erreur lors de la suppression');
               patchState(store, { isLoading: false });
-              return of(null);
-            })
-          )
-        )
-      )
-    ),
-
-    // Gallery
-    loadGallery: rxMethod<string>(
-      pipe(
-        tap(() => patchState(store, { isLoading: true })),
-        switchMap((slug) =>
-          _http.get<{ data: IImage[] }>(`ventures/gallery/${slug}`).pipe(
-            map(({ data }) => patchState(store, { isLoading: false, gallery: data })),
-            catchError(() => {
-              patchState(store, { isLoading: false, gallery: [] });
-              return of(null);
-            })
-          )
-        )
-      )
-    ),
-    deleteImage: rxMethod<string>(
-      pipe(
-        tap(() => patchState(store, { isLoading: true })),
-        switchMap((id) =>
-          _http.delete<void>(`ventures/gallery/remove/${id}`).pipe(
-            map(() => {
-              const current = store.gallery();
-              const filtered = current.filter((img) => img.id !== id);
-              _toast.showSuccess('Image supprimée avec succès');
-              patchState(store, { isLoading: false, gallery: filtered });
-            }),
-            catchError(() => {
-              patchState(store, { isLoading: false });
-              _toast.showError("Échec de la suppression de l'image");
               return of(null);
             })
           )

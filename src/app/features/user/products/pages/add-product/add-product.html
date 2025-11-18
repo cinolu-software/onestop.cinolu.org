@@ -6,11 +6,11 @@
           <label for="ventureId" class="font-medium">Entreprise</label>
           <p-select
             [inputId]="'ventureId'"
+            formControlName="ventureId"
+            [options]="venturesStore.unpaginatedVentures()"
             optionLabel="name"
             optionValue="id"
-            placeholder="Sélectionner une entreprise"
-            [options]="venturesStore.ventures()"
-            formControlName="ventureId" />
+            placeholder="Select Venture" />
         </div>
         <div class="flex flex-col gap-1.5">
           <label for="name" class="font-medium">Nom du produit<span class="text-red-500">*</span></label>

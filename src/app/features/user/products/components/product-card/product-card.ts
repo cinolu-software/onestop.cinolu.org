@@ -6,7 +6,7 @@ import { SquarePen, Eye, LucideAngularModule, Plus, Trash } from 'lucide-angular
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { CurrencyPipe } from '@angular/common';
-import { ProductsStore } from '../../store/products/products.store';
+import { ProductsStore } from '../../store/products.store';
 
 @Component({
   selector: 'app-product-card',

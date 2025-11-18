@@ -11,12 +11,12 @@ interface IReferralCode {
   isLoading: boolean;
 }
 
-export const GenerateReferralCodeStore = signalStore(
+export const OutreachStore = signalStore(
   withState<IReferralCode>({ isLoading: false }),
   withProps(() => ({
     _http: inject(HttpClient),
     _toast: inject(ToastrService),
-    _authStore: inject(AuthStore),
+    _authStore: inject(AuthStore)
   })),
   withMethods(({ _http, _toast, _authStore, ...store }) => ({
     generateCode: rxMethod<void>(
@@ -33,10 +33,10 @@ export const GenerateReferralCodeStore = signalStore(
               _toast.showError('Erreur lors de la génération du lien');
               patchState(store, { isLoading: false });
               return of(null);
-            }),
+            })
           );
-        }),
-      ),
-    ),
-  })),
+        })
+      )
+    )
+  }))
 );

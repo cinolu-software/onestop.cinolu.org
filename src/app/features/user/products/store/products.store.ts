@@ -3,12 +3,12 @@ import { inject } from '@angular/core';
 import { signalStore, withState, withMethods, patchState, withProps } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap, catchError, of, switchMap, map } from 'rxjs';
-import { FilterProductsDto } from '../../dto/filter-product.dto';
+import { FilterProductsDto } from '../dto/filter-product.dto';
 import { buildQueryParams } from '@shared/helpers';
 import { IImage, IProduct } from '@shared/models/entities.models';
 import { Router } from '@angular/router';
 import { ToastrService } from '@core/services/toast/toastr.service';
-import { ProductDto } from '../../dto/product.dto';
+import { ProductDto } from '../dto/product.dto';
 
 interface IProductsStore {
   isLoading: boolean;
@@ -40,7 +40,6 @@ export const ProductsStore = signalStore(
         })
       )
     ),
-    // Single
     loadProduct: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
@@ -55,8 +54,6 @@ export const ProductsStore = signalStore(
         )
       )
     ),
-
-    // Create / Update / Delete
     addProduct: rxMethod<ProductDto>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),

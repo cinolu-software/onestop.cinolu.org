@@ -8,13 +8,13 @@ import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AuthStore } from '@core/auth/auth.store';
 import { environment } from '@environments/environment';
-import { GenerateReferralCodeStore } from '../store/generate-referralCode.store';
+import { OutreachStore } from '../store/outreach.store';
 import { BadgeCardComponent } from '../components/badge-card.component';
 
 @Component({
   selector: 'app-outreach',
   templateUrl: './outreach.html',
-  providers: [GenerateReferralCodeStore],
+  providers: [OutreachStore],
   imports: [
     ButtonModule,
     InputTextModule,
@@ -24,17 +24,17 @@ import { BadgeCardComponent } from '../components/badge-card.component';
     LucideAngularModule,
     NgxPaginationModule,
     ButtonModule,
-    BadgeCardComponent,
-  ],
+    BadgeCardComponent
+  ]
 })
 export class Outreach {
   authStore = inject(AuthStore);
-  generateReferralCodeStore = inject(GenerateReferralCodeStore);
+  generateReferralCodeStore = inject(OutreachStore);
   referralLink = signal('');
   isLinkCopied = signal(false);
   icons = {
     link: Link,
-    user: UsersRound,
+    user: UsersRound
   };
 
   constructor() {

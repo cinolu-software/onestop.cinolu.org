@@ -8,7 +8,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { StepperModule } from 'primeng/stepper';
 import { SECTORS } from '../../data/sectors.data';
 import { STAGES } from '../../data/stage.data';
-import { VenturesStore } from '../../store/ventures/ventures.store';
+import { VenturesStore } from '../../store/ventures.store';
 
 @Component({
   selector: 'app-venture-add',

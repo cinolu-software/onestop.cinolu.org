@@ -45,7 +45,7 @@
             optionLabel="name"
             optionValue="id"
             placeholder="Sélectionner une entreprise"
-            [options]="venturesStore.ventures()"
+            [options]="venturesStore.unpaginatedVentures()"
             formControlName="ventureId" />
         </div>
         <div class="flex flex-col gap-1.5">

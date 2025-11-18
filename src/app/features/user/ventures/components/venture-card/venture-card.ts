@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { SquarePen, Eye, LucideAngularModule, Plus, Trash } from 'lucide-angular';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopup } from 'primeng/confirmpopup';
-import { VenturesStore } from '../../store/ventures/ventures.store';
+import { VenturesStore } from '../../store/ventures.store';
 
 @Component({
   selector: 'app-venture-card',

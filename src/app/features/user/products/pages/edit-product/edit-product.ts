@@ -6,9 +6,9 @@ import { Textarea } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { StepperModule } from 'primeng/stepper';
-import { unpaginatedVenturesStore } from '@features/user/ventures/store/ventures/venture-unpaginated.store';
+import { VenturesStore } from '@features/user/ventures/store/ventures.store';
 import { ActivatedRoute } from '@angular/router';
-import { ProductsStore } from '../../store/products/products.store';
+import { ProductsStore } from '../../store/products.store';
 import { environment } from '@environments/environment';
 import { FileUpload } from '@shared/components/file-upload/file-upload';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
@@ -18,7 +18,7 @@ import { Tabs } from '@shared/components/tabs/tabs';
 
 @Component({
   selector: 'app-product-add',
-  providers: [ProductsStore, unpaginatedVenturesStore],
+  providers: [ProductsStore, VenturesStore],
   imports: [
     ReactiveFormsModule,
     SelectModule,
@@ -39,7 +39,7 @@ import { Tabs } from '@shared/components/tabs/tabs';
 export class EditProductComponent implements OnInit {
   #fb = inject(FormBuilder);
   form: FormGroup;
-  venturesStore = inject(unpaginatedVenturesStore);
+  venturesStore = inject(VenturesStore);
   store = inject(ProductsStore);
   #route = inject(ActivatedRoute);
   #slug = this.#route.snapshot.params['slug'];
@@ -53,7 +53,7 @@ export class EditProductComponent implements OnInit {
   activeTab = signal('edit');
 
   constructor() {
-    this.venturesStore.loadVentures();
+    this.venturesStore.loadUnpaginatedVentures();
     this.form = this.#fb.group({
       slug: ['', Validators.required],
       ventureId: ['', Validators.required],

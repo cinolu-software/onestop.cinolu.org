@@ -1,6 +1,7 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
-import { VenturesStore } from '../../store/ventures/ventures.store';
+import { VenturesStore } from '../../store/ventures.store';
+import { VentureGalleryStore } from '../../store/venture-gallery.stores';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
@@ -21,7 +22,7 @@ import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-edit-venture',
-  providers: [VenturesStore],
+  providers: [VenturesStore, VentureGalleryStore],
   imports: [
     CommonModule,
     StepperModule,
@@ -42,6 +43,7 @@ import { environment } from '@environments/environment';
 export class EditVentureComponent implements OnInit {
   #fb = inject(FormBuilder);
   store = inject(VenturesStore);
+  galleryStore = inject(VentureGalleryStore);
   form: FormGroup;
   sectors = SECTORS;
   stages = STAGES;
@@ -85,7 +87,7 @@ export class EditVentureComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.loadVenture(this.#slug);
-    this.store.loadGallery(this.#slug);
+    this.galleryStore.loadGallery(this.#slug);
   }
 
   onTabChange(tab: string): void {
@@ -102,10 +104,10 @@ export class EditVentureComponent implements OnInit {
   }
 
   onDeleteImage(id: string): void {
-    this.store.deleteImage(id);
+    this.galleryStore.deleteImage(id);
   }
 
   onFileUploadLoaded(): void {
-    this.store.loadGallery(this.#slug);
+    this.galleryStore.loadGallery(this.#slug);
   }
 }

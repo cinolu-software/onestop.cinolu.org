@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Building2, LucideAngularModule, Plus } from 'lucide-angular';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { VenturesStore } from '../../store/ventures/ventures.store';
+import { VenturesStore } from '../../store/ventures.store';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
