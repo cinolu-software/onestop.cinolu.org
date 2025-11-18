@@ -201,3 +201,61 @@ export type HighlightItem =
   | (IEvent & { sourceKey: 'events' })
   | (IProject & { sourceKey: 'projects' })
   | (IArticle & { sourceKey: 'articles' });
+
+// Phase Management System
+export interface IPhase extends IBase {
+  name: string;
+  description: string;
+  order: number;
+  started_at: Date;
+  ended_at: Date;
+  is_active: boolean;
+  project: IProject;
+  resources?: IResource[];
+  curators?: ICurator[];
+}
+
+export type ResourceType = 'PDF' | 'LINK' | 'IMAGE' | 'OTHER';
+
+export interface IResource extends IBase {
+  title: string;
+  url: string;
+  type: ResourceType;
+  phase: IPhase;
+  project: IProject;
+}
+
+export interface ICurator extends IBase {
+  name: string;
+  email: string;
+  is_active: boolean;
+  invitation_token: string;
+  invitation_accepted_at: Date | null;
+  phases: IPhase[];
+  ratings?: IRating[];
+}
+
+export interface IRating extends IBase {
+  score: number;
+  comment: string;
+  curator: ICurator;
+  project: IProject;
+  phase: IPhase;
+}
+
+export interface IPhaseStatistics {
+  totalProjects: number;
+  ratedProjects: number;
+  passedProjects: number;
+  failedProjects: number;
+  averageScore: number;
+  passRate: number;
+}
+
+export interface IProjectAverage {
+  projectId: string;
+  average: number;
+  count: number;
+  passed: boolean;
+  threshold: number;
+}
