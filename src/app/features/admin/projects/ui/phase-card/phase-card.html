@@ -1,0 +1,80 @@
+<div
+  class="group relative bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl p-5 hover:shadow-lg transition-all duration-300 cursor-pointer"
+  [class.ring-2]="isSelected()"
+  [class.ring-primary-500]="isSelected()"
+  [class.bg-primary-50]="isSelected()"
+  role="button"
+  tabindex="0"
+  (click)="handleSelect()"
+  (keydown.enter)="handleSelect()"
+  (keydown.space)="handleSelect(); $event.preventDefault()">
+  <!-- Action Buttons -->
+  <div class="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+    <p-button (onClick)="handleEdit($event)" [severity]="'secondary'" [outlined]="true" [size]="'small'">
+      <i-lucide [name]="icons.edit" class="size-4" />
+    </p-button>
+    <p-button (onClick)="handleDelete($event)" [severity]="'danger'" [outlined]="true" [size]="'small'">
+      <i-lucide [name]="icons.trash" class="size-4" />
+    </p-button>
+  </div>
+
+  <!-- Phase Content -->
+  <div class="pr-16">
+    <div class="flex items-start gap-3 mb-3">
+      <!-- Order Badge -->
+      <div
+        class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-sm shrink-0">
+        {{ phase().order }}
+      </div>
+
+      <!-- Phase Info -->
+      <div class="flex-1 min-w-0">
+        <h6 class="font-semibold text-gray-900 text-base truncate mb-1">{{ phase().name }}</h6>
+        <div class="flex flex-wrap gap-1.5">
+          <!-- Active Status -->
+          @if (phase().is_active) {
+          <span
+            class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-700 rounded-md">
+            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-1.5"></span>
+            Active
+          </span>
+          } @else {
+          <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-red-100 text-red-700 rounded-md">
+            <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span>
+            Inactive
+          </span>
+          }
+
+          <!-- Resources Count -->
+          @if (phase().resources && phase().resources!.length > 0) {
+          <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-md">
+            <i-lucide [name]="icons.file" class="size-3 mr-1" />
+            {{ phase().resources!.length }} ressource{{ phase().resources!.length > 1 ? 's' : '' }}
+          </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    @if (phase().description) {
+    <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ phase().description }}</p>
+    }
+
+    <!-- Dates -->
+    @if (phase().started_at || phase().ended_at) {
+    <div class="flex items-center gap-3 text-xs text-gray-500">
+      <div class="flex items-center gap-1.5">
+        <i-lucide [name]="icons.calendar" class="size-3.5" />
+        @if (phase().started_at) {
+        <span>{{ phase().started_at | date: 'dd/MM/yy' }}</span>
+        } @if (phase().started_at && phase().ended_at) {
+        <span>→</span>
+        } @if (phase().ended_at) {
+        <span>{{ phase().ended_at | date: 'dd/MM/yy' }}</span>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</div>
