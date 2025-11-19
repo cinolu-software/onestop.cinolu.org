@@ -12,7 +12,7 @@ import {
   File,
   SquarePen
 } from 'lucide-angular';
-import { Button } from 'primeng/button';
+import { Button, ButtonDirective } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
@@ -23,7 +23,16 @@ import { environment } from '@environments/environment';
 @Component({
   selector: 'app-phase-resources',
   templateUrl: './phase-resources.html',
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, Button, InputText, SelectModule, DialogModule]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    LucideAngularModule,
+    Button,
+    InputText,
+    SelectModule,
+    DialogModule,
+    ButtonDirective
+  ]
 })
 export class PhaseResourcesComponent {
   project = input.required<IProject>();
