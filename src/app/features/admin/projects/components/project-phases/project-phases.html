@@ -13,7 +13,7 @@
       </div>
       <p-button
         size="small"
-        (onClick)="showPhaseForm.set(true); editingPhaseId = null; resetPhaseForm()"
+        (onClick)="showPhaseForm.set(true); editingPhaseId.set(null); resetPhaseForm()"
         severity="primary">
         <span class="flex items-center gap-2">
           <i-lucide [name]="icons.plus" class="size-4" />
@@ -27,7 +27,7 @@
     @if (showPhaseForm()) {
     <div class="bg-gradient-to-br from-primary-50/50 to-white border-2 border-primary-200 rounded-xl p-6">
       <h6 class="text-lg font-semibold text-gray-900 mb-4">
-        {{ editingPhaseId ? 'Modifier la phase' : 'Nouvelle phase' }}
+        {{ editingPhaseId() ? 'Modifier la phase' : 'Nouvelle phase' }}
       </h6>
       <form class="flex flex-col gap-4" [formGroup]="phaseForm" (ngSubmit)="onSubmitPhase()">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -84,7 +84,7 @@
             severity="primary"
             [disabled]="phaseForm.invalid || phasesStore.isLoading()"
             [loading]="phasesStore.isLoading()">
-            <span>{{ editingPhaseId ? 'Mettre à jour' : 'Créer la phase' }}</span>
+            <span>{{ editingPhaseId() ? 'Mettre à jour' : 'Créer la phase' }}</span>
           </p-button>
         </div>
       </form>
@@ -106,7 +106,7 @@
         Commencez par créer des phases pour structurer votre projet et y ajouter des ressources.
       </p>
       <p-button
-        (onClick)="showPhaseForm.set(true); editingPhaseId = null; resetPhaseForm()"
+        (onClick)="showPhaseForm.set(true); editingPhaseId.set(null); resetPhaseForm()"
         [size]="'small'"
         severity="primary">
         <span class="flex items-center gap-2">
@@ -140,7 +140,7 @@
       </div>
     </div>
     <div class="p-6 bg-white">
-      <app-project-resources [phase]="phasesStore.selectedPhase()!" [project]="project()" />
+      <app-phase-resources [phase]="phasesStore.selectedPhase()!" [project]="project()" />
     </div>
   </div>
   }

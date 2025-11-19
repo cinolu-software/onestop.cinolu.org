@@ -1,14 +1,13 @@
 <div class="space-y-6">
-  <!-- Action Buttons -->
   <div class="flex gap-3">
-    <p-button (onClick)="showFileUpload = true" severity="primary" [size]="'small'">
+    <p-button (onClick)="showFileUpload.set(true)" severity="primary" [size]="'small'">
       <span class="flex items-center gap-1">
         <i-lucide [name]="icons.upload" class="size-4" />
         <span>Télécharger un fichier</span>
       </span>
     </p-button>
     <p-button
-      (onClick)="showResourceForm = true; editingResourceId = null; resetForms()"
+      (onClick)="showResourceForm.set(true); editingResourceId.set(null); resetForms()"
       severity="primary"
       [outlined]="true"
       [size]="'small'">
@@ -19,49 +18,73 @@
     </p-button>
   </div>
 
-  @if (showFileUpload) {
-  <div class="bg-gradient-to-br from-secondary-50/50 to-white border-2 border-secondary-200 rounded-xl p-6">
+  @if (showFileUpload()) {
+  <div class="bg-white border border-primary-200 shadow-lg rounded-xl p-6">
     <h6 class="text-lg font-semibold text-gray-900 mb-4">Télécharger un fichier</h6>
-    <form class="flex flex-col gap-4" [formGroup]="fileUploadForm" (ngSubmit)="onSubmitFileUpload()">
+    <form class="flex flex-col gap-4" [formGroup]="fileUploadForm">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex flex-col gap-1.5 md:col-span-2">
           <label for="file-title" class="font-medium text-sm">Titre<span class="text-red-500 ml-1">*</span></label>
           <input pInputText id="file-title" formControlName="title" placeholder="Nom du fichier" />
         </div>
         <div class="flex flex-col gap-1.5 md:col-span-2">
-          <label for="file-input" class="font-medium text-sm">Fichier<span class="text-red-500 ml-1">*</span></label>
-          <input
-            id="file-input"
-            type="file"
-            (change)="onFileSelected($event)"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" />
-          @if (selectedFile) {
-          <small class="text-gray-600">Fichier sélectionné: {{ selectedFile.name }}</small>
-          }
+          <label for="file-upload" class="font-medium text-sm">Fichier<span class="text-red-500 ml-1">*</span></label>
+          <div
+            class="relative border-2 border-dashed rounded-lg transition-colors"
+            [ngClass]="{
+              'border-primary-300 bg-primary-50/30': !selectedFile(),
+              'border-primary-500 bg-primary-50': selectedFile()
+            }">
+            <input
+              #fileInput
+              id="file-upload"
+              type="file"
+              (change)="onFileSelect($event)"
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+            <div class="flex flex-col items-center justify-center py-8 px-6 pointer-events-none">
+              <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center mb-2">
+                <i-lucide [name]="icons.upload" class="size-6 text-primary-600" />
+              </div>
+              @if (!selectedFile()) {
+              <div class="flex flex-col items-center gap-2">
+                <p class="text-sm font-medium text-gray-700">Cliquez pour sélectionner un fichier</p>
+                <p class="text-xs text-gray-500">ou glissez-déposez ici</p>
+              </div>
+              } @else {
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center shrink-0">
+                  <i-lucide [name]="icons.file" class="size-5 text-primary-600" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-gray-900 truncate">{{ selectedFile()!.name }}</p>
+                  <p class="text-xs text-gray-500">{{ formatFileSize(selectedFile()!.size) }}</p>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
         </div>
       </div>
       <div class="flex justify-end gap-3 pt-2">
-        <p-button size="small" [outlined]="true" severity="secondary" (onClick)="showFileUpload = false; resetForms()">
+        <p-button size="small" [outlined]="true" severity="primary" (onClick)="showFileUpload.set(false); resetForms()">
           <span>Annuler</span>
         </p-button>
         <p-button
-          type="submit"
+          type="button"
           size="small"
           severity="primary"
           [disabled]="fileUploadForm.invalid || resourcesStore.isLoading()"
-          [loading]="resourcesStore.isLoading()">
+          [loading]="resourcesStore.isLoading()"
+          (onClick)="onUploadFile()">
           <span>Télécharger</span>
         </p-button>
       </div>
     </form>
   </div>
-  }
-
-  <!-- Resource Form -->
-  @if (showResourceForm) {
-  <div class="bg-gradient-to-br from-secondary-50/50 to-white border-2 border-secondary-200 rounded-xl p-6">
+  } @if (showResourceForm()) {
+  <div class="bg-gradient-to-br from-primary-50/50 to-white border-2 border-primary-200 rounded-xl p-6">
     <h6 class="text-lg font-semibold text-gray-900 mb-4">
-      {{ editingResourceId ? 'Modifier la ressource' : 'Nouvelle ressource' }}
+      {{ editingResourceId() ? 'Modifier la ressource' : 'Nouvelle ressource' }}
     </h6>
     <form class="flex flex-col gap-4" [formGroup]="resourceForm" (ngSubmit)="onSubmitResource()">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -90,8 +113,8 @@
         <p-button
           size="small"
           [outlined]="true"
-          severity="secondary"
-          (onClick)="showResourceForm = false; resetForms()">
+          severity="primary"
+          (onClick)="showResourceForm.set(false); resetForms()">
           <span>Annuler</span>
         </p-button>
         <p-button
@@ -100,7 +123,7 @@
           severity="primary"
           [disabled]="resourceForm.invalid || resourcesStore.isLoading()"
           [loading]="resourcesStore.isLoading()">
-          <span>{{ editingResourceId ? 'Mettre à jour' : 'Ajouter la ressource' }}</span>
+          <span>{{ editingResourceId() ? 'Mettre à jour' : 'Ajouter la ressource' }}</span>
         </p-button>
       </div>
     </form>
@@ -114,8 +137,8 @@
   } @else if (resourcesStore.resources().length === 0) {
   <div class="flex flex-col items-center justify-center py-12 px-6">
     <div
-      class="w-16 h-16 bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-2xl flex items-center justify-center mb-4">
-      <i-lucide [name]="icons.fileIcon" class="text-secondary-600 w-8 h-8 stroke-[1.5]" />
+      class="w-16 h-16 bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl flex items-center justify-center mb-4">
+      <i-lucide [name]="icons.fileIcon" class="text-primary-600 w-8 h-8 stroke-[1.5]" />
     </div>
     <h3 class="text-lg font-bold text-gray-900 mb-1">Aucune ressource</h3>
     <p class="text-gray-500 text-center max-w-md text-sm leading-relaxed">
@@ -129,7 +152,7 @@
       class="group relative bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md hover:border-primary-200 transition-all duration-200">
       <div class="flex items-start gap-4">
         <div
-          class="flex items-center justify-center w-11 h-11 rounded-lg bg-gradient-to-br from-secondary-50 to-secondary-100 text-secondary-700 shrink-0">
+          class="flex items-center justify-center w-11 h-11 rounded-lg bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shrink-0">
           <i-lucide [name]="getResourceIcon(resource.type)" class="size-5" />
         </div>
         <div class="flex-1 min-w-0">
@@ -149,7 +172,7 @@
           </div>
         </div>
         <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-          <p-button (onClick)="onEditResource(resource)" [severity]="'secondary'" [outlined]="true" [size]="'small'">
+          <p-button (onClick)="onEditResource(resource)" [severity]="'primary'" [outlined]="true" [size]="'small'">
             <i-lucide [name]="icons.edit" class="size-4" />
           </p-button>
           <p-button (onClick)="onDeleteResource(resource.id)" [severity]="'danger'" [outlined]="true" [size]="'small'">

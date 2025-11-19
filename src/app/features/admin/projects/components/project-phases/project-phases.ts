@@ -13,7 +13,7 @@ import { DividerModule } from 'primeng/divider';
 import { IProject, IPhase } from '@shared/models';
 import { ProjectPhasesStore } from '../../store/project-phases.store';
 import { ProjectResourcesStore } from '../../store/project-resources.store';
-import { ProjectResourcesComponent } from '../project-resources/project-resources';
+import { PhaseResourcesComponent } from '../phase-resources/phase-resources';
 import { PhaseCardComponent } from '../../ui/phase-card/phase-card';
 
 @Component({
@@ -24,7 +24,7 @@ import { PhaseCardComponent } from '../../ui/phase-card/phase-card';
     CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
-    ProjectResourcesComponent,
+    PhaseResourcesComponent,
     PhaseCardComponent,
     ButtonModule,
     InputTextModule,
@@ -50,7 +50,7 @@ export class ProjectPhasesComponent {
     list: ListOrdered
   };
   showPhaseForm = signal<boolean>(false);
-  editingPhaseId: string | null = null;
+  editingPhaseId = signal<string | null>(null);
   phaseForm = this.#fb.group({
     name: ['', Validators.required],
     description: [''],
@@ -81,7 +81,7 @@ export class ProjectPhasesComponent {
       ended_at: '',
       is_active: false
     });
-    this.editingPhaseId = null;
+    this.editingPhaseId.set(null);
   }
 
   onSubmitPhase(): void {
@@ -96,8 +96,9 @@ export class ProjectPhasesComponent {
       is_active: formValue.is_active || false,
       project: this.project().id
     };
-    if (this.editingPhaseId) {
-      this.phasesStore.updatePhase({ id: this.editingPhaseId, data: phaseData });
+    const editingId = this.editingPhaseId();
+    if (editingId) {
+      this.phasesStore.updatePhase({ id: editingId, data: phaseData });
     } else {
       this.phasesStore.createPhase(phaseData);
     }
@@ -105,7 +106,7 @@ export class ProjectPhasesComponent {
   }
 
   onEditPhase(phase: IPhase): void {
-    this.editingPhaseId = phase.id;
+    this.editingPhaseId.set(phase.id);
     this.showPhaseForm.set(true);
     this.phaseForm.patchValue({
       name: phase.name,

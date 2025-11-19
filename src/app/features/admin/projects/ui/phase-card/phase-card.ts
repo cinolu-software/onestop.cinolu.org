@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { LucideAngularModule, Trash2, FileText, CalendarDays, SquarePen } from 'lucide-angular';
+import { LucideAngularModule, Trash2, FileText, CalendarDays, SquarePen, CircleCheck } from 'lucide-angular';
 import { Button } from 'primeng/button';
 import { IPhase } from '@shared/models';
 
@@ -19,7 +19,8 @@ export class PhaseCardComponent {
     edit: SquarePen,
     trash: Trash2,
     file: FileText,
-    calendar: CalendarDays
+    calendar: CalendarDays,
+    checkCircle: CircleCheck
   };
 
   handleSelect(): void {
