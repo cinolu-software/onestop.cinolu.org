@@ -40,7 +40,6 @@ export const AuthStore = signalStore(
             tap(() => {
               _router.navigate(['/unauthorized']);
               _toast.showSuccess('Déconnexion réussie');
-              patchState(store, { user: null });
             }),
             catchError(() => {
               _toast.showError('Erreur lors de la déconnexion');
