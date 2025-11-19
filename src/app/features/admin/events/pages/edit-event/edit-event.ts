@@ -10,7 +10,7 @@ import { EventsStore } from '../../store/events.store';
 import { EventDetailsComponent } from '../../components/event-details/event-details';
 import { EventGalleryComponent } from '../../components/event-gallery/event-gallery';
 import { EventEditFormComponent } from '../../components/event-edit-form/event-edit-form';
-import { EventDetailsSkeletonComponent } from '../../components/event-details-skeleton/event-details-skeleton';
+import { EventDetailsSkeletonComponent } from '../../ui/event-details-skeleton/event-details-skeleton';
 import { GalleryStore } from '../../store/event-gallery.store';
 
 @Component({
