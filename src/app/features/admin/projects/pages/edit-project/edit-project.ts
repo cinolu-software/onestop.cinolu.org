@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SquarePen, Images, ChartColumn } from 'lucide-angular';
+import { SquarePen, Images, ChartColumn, ListTree } from 'lucide-angular';
 import { Tabs, MetricsTableComponent } from '@shared/components';
 import { totalMetrics, achievementPercentage, metricsMap, metricsMapToDto } from '@shared/helpers';
 import { IProject } from '@shared/models';
@@ -12,7 +12,8 @@ import { ProjectMetricsStore } from '../../store/project-metrics.store';
 import { ProjectDetailsComponent } from '../../components/project-details/project-details';
 import { ProjectGalleryComponent } from '../../components/project-gallery/project-gallery';
 import { ProjectEditFormComponent } from '../../components/project-edit-form/project-edit-form';
-import { ProjectDetailsSkeletonComponent } from '../../components/project-details-skeleton/project-details-skeleton';
+import { ProjectDetailsSkeletonComponent } from '../../ui/project-details-skeleton/project-details-skeleton';
+import { ProjectPhasesComponent } from '../../components/project-phases/project-phases';
 
 @Component({
   selector: 'app-project-edit',
@@ -26,7 +27,8 @@ import { ProjectDetailsSkeletonComponent } from '../../components/project-detail
     ProjectDetailsComponent,
     ProjectGalleryComponent,
     ProjectEditFormComponent,
-    ProjectDetailsSkeletonComponent
+    ProjectDetailsSkeletonComponent,
+    ProjectPhasesComponent
   ]
 })
 export class EditProjectComponent implements OnInit {
@@ -41,8 +43,9 @@ export class EditProjectComponent implements OnInit {
   tabs = [
     { label: "Fiche d'activité", name: 'details', icon: ChartColumn },
     { label: 'Mettre à jour', name: 'edit', icon: SquarePen },
-    { label: 'Gérer la galerie', name: 'gallery', icon: Images },
-    { label: 'Les indicateurs', name: 'indicators', icon: ChartColumn }
+    { label: 'Galerie', name: 'gallery', icon: Images },
+    { label: 'Indicateurs', name: 'indicators', icon: ChartColumn },
+    { label: 'Phases & Ressources', name: 'phases', icon: ListTree }
   ];
   totalTargeted = computed(() => totalMetrics(this.metricsMap, 'target'));
   totalAchieved = computed(() => totalMetrics(this.metricsMap, 'achieved'));

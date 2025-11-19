@@ -23,5 +23,7 @@
     [existingMetrics]="project?.metrics ?? []"
     [isLoading]="metricsStore.isLoading()"
     (saveAll)="onSaveMetrics()" />
+  } @if (activeTab() === 'phases' && project) {
+  <app-project-phases [project]="project" />
   }
 </section>
