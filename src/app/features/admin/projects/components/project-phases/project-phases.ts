@@ -1,7 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, inject, effect, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideAngularModule, Plus, Trash2, FileText, CalendarDays, ListOrdered, SquarePen } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  Plus,
+  Trash2,
+  FileText,
+  CalendarDays,
+  ListOrdered,
+  SquarePen,
+  ClipboardList
+} from 'lucide-angular';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -13,19 +22,24 @@ import { DividerModule } from 'primeng/divider';
 import { IProject, IPhase } from '@shared/models';
 import { ProjectPhasesStore } from '../../store/project-phases.store';
 import { ProjectResourcesStore } from '../../store/project-resources.store';
+import { ProjectFormsStore } from '../../store/project-forms.store';
 import { PhaseResourcesComponent } from '../phase-resources/phase-resources';
 import { PhaseCardComponent } from '../../ui/phase-card/phase-card';
+import { PhaseFormsComponent } from '../phase-forms/phase-forms';
+import { Tabs } from '@shared/components/tabs/tabs';
 
 @Component({
   selector: 'app-project-phases',
   templateUrl: './project-phases.html',
-  providers: [ProjectPhasesStore, ProjectResourcesStore],
+  providers: [ProjectPhasesStore, ProjectResourcesStore, ProjectFormsStore],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
     PhaseResourcesComponent,
+    PhaseFormsComponent,
     PhaseCardComponent,
+    Tabs,
     ButtonModule,
     InputTextModule,
     TextareaModule,
@@ -47,10 +61,16 @@ export class ProjectPhasesComponent {
     trash: Trash2,
     file: FileText,
     calendar: CalendarDays,
-    list: ListOrdered
+    list: ListOrdered,
+    forms: ClipboardList
   };
+  phaseTabs = [
+    { label: 'Ressources', name: 'resources', icon: this.icons.file },
+    { label: 'Formulaires', name: 'forms', icon: this.icons.forms }
+  ];
   showPhaseForm = signal<boolean>(false);
   editingPhaseId = signal<string | null>(null);
+  activePhaseSection = signal<'resources' | 'forms'>('resources');
   phaseForm = this.#fb.group({
     name: ['', Validators.required],
     description: [''],
@@ -125,13 +145,21 @@ export class ProjectPhasesComponent {
   }
 
   selectPhase(phase: IPhase): void {
-    // Unselect if the same phase is clicked again
     if (this.phasesStore.selectedPhase()?.id === phase.id) {
       this.phasesStore.selectPhase(null);
+      this.activePhaseSection.set('resources');
       return;
     }
-
     this.phasesStore.selectPhase(phase);
     this.resourcesStore.loadResourcesByPhase(phase.id);
+    this.activePhaseSection.set('resources');
+  }
+
+  onPhaseTabChange(tabName: string): void {
+    if (tabName === 'forms') {
+      this.activePhaseSection.set('forms');
+      return;
+    }
+    this.activePhaseSection.set('resources');
   }
 }
