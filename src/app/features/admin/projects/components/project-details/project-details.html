@@ -23,7 +23,7 @@
           <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
             <i-lucide [name]="icons.user" class="w-5 h-5 text-white" />
           </div>
-          <div class="font-semibold text-white">{{ project().project_manager?.name }}</div>
+          <div class="font-semibold text-white">{{ project().project_manager.name }}</div>
         </div>
       </div>
       }
@@ -78,7 +78,7 @@
       </div>
       <div class="text-xs font-medium text-gray-500 mb-1.5">Chef de projet</div>
       <div class="text-base font-semibold text-gray-900 truncate">
-        {{ project().project_manager?.name || 'Non assigné' }}
+        {{ project().project_manager.name || 'Non assigné' }}
       </div>
     </div>
   </div>
