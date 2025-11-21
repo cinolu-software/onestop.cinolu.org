@@ -18,10 +18,9 @@
       </span>
     </p-button>
   </div>
-
   @if (showFileUpload()) {
   <div class="bg-white rounded-xl border border-gray-200 shadow-md p-6 transition-shadow duration-200 hover:shadow-lg">
-    <h6 class="text-base font-semibold text-gray-900 mb-5">📤 Télécharger un fichier</h6>
+    <h6 class="text-base font-semibold text-gray-900 mb-5">Télécharger un fichier</h6>
     <form class="flex flex-col gap-4" [formGroup]="fileUploadForm">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex flex-col gap-2 md:col-span-2">
@@ -30,7 +29,6 @@
           </label>
           <input pInputText id="file-title" formControlName="title" placeholder="Nom du fichier" />
         </div>
-
         <div class="flex flex-col gap-2 md:col-span-2">
           <label for="file-upload" class="font-medium text-sm text-gray-700">
             Fichier <span class="text-red-500">*</span>
