@@ -4,7 +4,7 @@ import { patchState, signalStore, withMethods, withProps, withState } from '@ngr
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, map, of, pipe, switchMap, tap } from 'rxjs';
 import { ToastrService } from '@core/services/toast/toastr.service';
-import { IForm, IFormField, IPhaseFormSettings } from '@shared/models';
+import { IForm, IFormField } from '@shared/models';
 
 interface ICreatePhaseFormDto {
   title: string;
@@ -13,7 +13,6 @@ interface ICreatePhaseFormDto {
   is_active: boolean;
   phase: string;
   fields: IFormField[];
-  settings?: IPhaseFormSettings;
 }
 
 type IUpdatePhaseFormDto = Partial<ICreatePhaseFormDto>;
