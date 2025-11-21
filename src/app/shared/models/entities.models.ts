@@ -79,7 +79,7 @@ export interface IProject extends IBase {
   objectives: string;
   duration_hours: number;
   selection_criteria: string;
-  project_manager?: IUser;
+  project_manager: IUser;
   program: ISubprogram;
   categories: ICategory[];
   gallery: IImage[];
@@ -221,4 +221,56 @@ export interface IResource extends IBase {
   type: ResourceType;
   phase: IPhase;
   project: IProject;
+}
+
+export type PhaseFormFieldType =
+  | 'SHORT_TEXT'
+  | 'LONG_TEXT'
+  | 'EMAIL'
+  | 'PHONE'
+  | 'NUMBER'
+  | 'DATE'
+  | 'DROPDOWN'
+  | 'MULTI_SELECT'
+  | 'CHECKBOX'
+  | 'RADIO'
+  | 'FILE_UPLOAD'
+  | 'text'
+  | 'textarea'
+  | 'email'
+  | 'phone'
+  | 'number'
+  | 'date'
+  | 'select'
+  | 'dropdown'
+  | 'multiselect'
+  | 'multi_select'
+  | 'radio'
+  | 'checkbox'
+  | 'file'
+  | 'file_upload';
+
+export interface IFormFieldOption {
+  label: string;
+  value: string;
+}
+
+export interface IFormField {
+  id: string;
+  label: string;
+  type: PhaseFormFieldType;
+  required: boolean;
+  placeholder?: string;
+  helperText?: string;
+  description?: string;
+  options?: IFormFieldOption[];
+  validation?: Record<string, unknown>;
+}
+
+export interface IForm extends IBase {
+  title: string;
+  description?: string;
+  is_active: boolean;
+  phase: IPhase | string;
+  fields: IFormField[];
 }
