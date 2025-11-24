@@ -79,7 +79,7 @@ export interface IProject extends IBase {
   objectives: string;
   duration_hours: number;
   selection_criteria: string;
-  project_manager: IUser;
+  project_manager: IUser | null;
   program: ISubprogram;
   categories: ICategory[];
   gallery: IImage[];
