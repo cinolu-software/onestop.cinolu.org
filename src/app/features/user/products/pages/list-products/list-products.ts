@@ -10,8 +10,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { FilterProductsDto } from '../../dto/filter-product.dto';
-import { ProductCard } from '../../components/product-card/product-card';
-import { ProductCardSkeleton } from '../../components/product-card-skeleton/product-card-skeleton';
+import { ProductCard } from '../../ui/product-card/product-card';
+import { ProductCardSkeleton } from '../../ui/product-card-skeleton/product-card-skeleton';
 
 @Component({
   selector: 'app-ventures-list',

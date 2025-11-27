@@ -36,6 +36,7 @@ export class ProjectEditFormComponent {
   usersStore = inject(UsersStore);
   updateProjectStore = inject(ProjectsStore);
   form = this.#initForm();
+  #lastLoadedProgramId: string | null = null;
 
   #initForm(): FormGroup {
     return this.#fb.group({
@@ -56,10 +57,15 @@ export class ProjectEditFormComponent {
 
   constructor() {
     effect(() => {
-      this.#patchForm(this.project());
+      const project = this.project();
+      if (!project) return;
+      this.#patchForm(project);
+      const parentProgramId = project.program?.program?.id;
+      if (!parentProgramId || parentProgramId === this.#lastLoadedProgramId) return;
+      this.#lastLoadedProgramId = parentProgramId;
+      this.programsStore.loadUnpaginatedSubprograms(parentProgramId);
     });
     this.categoriesStore.loadUnpaginatedCategories();
-    this.programsStore.loadUnpaginatedSubprograms();
     this.usersStore.loadStaff();
   }
 

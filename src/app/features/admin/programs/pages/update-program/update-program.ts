@@ -13,11 +13,11 @@ import { ChartColumn, SquarePen, Check, Trash2, Funnel, Tag, Save } from 'lucide
 import { LucideAngularModule } from 'lucide-angular';
 import { environment } from '@environments/environment';
 import { DatePicker } from 'primeng/datepicker';
-// Use unified ProgramsStore for single and update operations
 import { Tabs, FileUpload } from '@shared/components';
 import { IProgram } from '@shared/models';
 import { INDICATORS_CATEGORIES } from '../../data/indicators.data';
 import { IndicatorFormData } from '../../types/indicator-form.type';
+import { ListSubprograms } from '../../components/subprograms/subprograms';
 
 @Component({
   selector: 'app-update-program-page',
@@ -34,7 +34,8 @@ import { IndicatorFormData } from '../../types/indicator-form.type';
     FormsModule,
     Select,
     FileUpload,
-    LucideAngularModule
+    LucideAngularModule,
+    ListSubprograms
   ],
   templateUrl: './update-program.html'
 })
@@ -61,6 +62,7 @@ export class UpdateProgram {
   };
   tabs = [
     { label: 'Modifier', name: 'edit', icon: SquarePen },
+    { label: 'Sous programmes', name: 'subprograms', icon: Tag },
     { label: 'Indicateurs', name: 'indicators', icon: ChartColumn }
   ];
   updateForm: FormGroup = this.#fb.group({

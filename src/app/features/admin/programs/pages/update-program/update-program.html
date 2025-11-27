@@ -88,9 +88,12 @@
       </div>
     </form>
   </div>
+  } @if (activeTab() === 'subprograms') {
+  <div class="px-8 pb-10">
+    <app-list-subprograms [program]="program" />
+  </div>
   } @if (activeTab() === 'indicators') {
   <div class="p-6 space-y-6">
-    <!-- Filters Section -->
     <div class="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-5 border border-gray-200">
       <div class="flex items-center gap-2 mb-4">
         <i-lucide [name]="icons.filter" class="size-5 text-gray-600" />

@@ -40,7 +40,7 @@
               inputId="program"
               [optionValue]="'id'"
               [optionLabel]="'name'"
-              [options]="programsStore.subprograms()"
+              [options]="programsStore.unpaginatedSubprograms()"
               formControlName="program"
               placeholder="Sélectionner un programme"
               class="w-full" />

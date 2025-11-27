@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { Button } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { InputText } from 'primeng/inputtext';
@@ -36,11 +36,21 @@ export class AddProjectComponent {
   categoriesStore = inject(CategoriesStore);
   programsStore = inject(SubprogramsStore);
   usersStore = inject(UsersStore);
+  #lastLoadedProgramId: string | null = null;
   icons = {
     check: Check
   };
 
   constructor() {
+    effect(() => {
+      const project = this.store.project();
+      if (!project) return;
+
+      const parentProgramId = project.program?.program?.id;
+      if (!parentProgramId || parentProgramId === this.#lastLoadedProgramId) return;
+      this.#lastLoadedProgramId = parentProgramId;
+      this.programsStore.loadUnpaginatedSubprograms(parentProgramId);
+    });
     this.form = this.#fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -54,9 +64,7 @@ export class AddProjectComponent {
       categories: [[], Validators.required],
       project_manager: ['']
     });
-    // Load unpaginated category options
     this.categoriesStore.loadUnpaginatedCategories();
-    this.programsStore.loadUnpaginatedSubprograms();
     this.usersStore.loadStaff();
   }
 

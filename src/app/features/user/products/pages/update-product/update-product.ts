@@ -34,9 +34,9 @@ import { Tabs } from '@shared/components/tabs/tabs';
     NgOptimizedImage,
     Tabs
   ],
-  templateUrl: './edit-product.html'
+  templateUrl: './update-product.html'
 })
-export class EditProductComponent implements OnInit {
+export class UpdateProduct implements OnInit {
   #fb = inject(FormBuilder);
   form: FormGroup;
   venturesStore = inject(VenturesStore);

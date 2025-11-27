@@ -2,7 +2,6 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LucideAngularModule, Plus, RefreshCcw, Search, SquarePen, Trash, X } from 'lucide-angular';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Dialog } from 'primeng/dialog';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { InputText } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +11,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FilterArticlesTagsDto } from '../../dto/filter-tags.dto';
 import { CommonModule } from '@angular/common';
 import { ITag } from '@shared/models/entities.models';
-
 import { ConfirmationService } from 'primeng/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -23,7 +21,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   imports: [
     LucideAngularModule,
     ReactiveFormsModule,
-    Dialog,
     ConfirmPopup,
     InputText,
     ProgressSpinnerModule,
@@ -39,11 +36,8 @@ export class ArticleTags implements OnInit {
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
   searchForm: FormGroup;
-  addTagForm: FormGroup;
-  updateTagForm: FormGroup;
+  tagForm: FormGroup;
   store = inject(TagsStore);
-  showAddModal = signal(false);
-  showEditModal = signal(false);
   skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
@@ -58,15 +52,15 @@ export class ArticleTags implements OnInit {
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q')
   });
+  formVisible = signal(false);
+  formMode = signal<'create' | 'edit'>('create');
+  editingTag = signal<ITag | null>(null);
 
   constructor() {
     this.searchForm = this.#fb.group({
       q: [this.queryParams().q || '']
     });
-    this.addTagForm = this.#fb.group({
-      name: ['', Validators.required]
-    });
-    this.updateTagForm = this.#fb.group({
+    this.tagForm = this.#fb.group({
       id: [''],
       name: ['', Validators.required]
     });
@@ -88,19 +82,6 @@ export class ArticleTags implements OnInit {
     this.store.loadTags(this.queryParams());
   }
 
-  onToggleAddModal() {
-    this.showAddModal.set(!this.showAddModal());
-    if (this.showAddModal()) this.addTagForm.reset();
-  }
-
-  onToggleEditModal(tag: ITag | null): void {
-    this.updateTagForm.patchValue({
-      id: tag?.id || '',
-      name: tag?.name || ''
-    });
-    this.showEditModal.update((v) => !v);
-  }
-
   async onPageChange(currentPage: number): Promise<void> {
     this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
     await this.updateRouteAndTags();
@@ -114,20 +95,6 @@ export class ArticleTags implements OnInit {
   async updateRouteAndTags(): Promise<void> {
     await this.updateRoute();
     this.loadTags();
-  }
-
-  onAddTag(): void {
-    if (this.addTagForm.invalid) return;
-    this.store.createTag({ payload: this.addTagForm.value, onSuccess: () => this.onToggleAddModal() });
-  }
-
-  onUpdateTag(): void {
-    if (this.updateTagForm.invalid) return;
-    this.store.updateTagRemote({
-      id: this.updateTagForm.value.id,
-      payload: this.updateTagForm.value,
-      onSuccess: () => this.onToggleEditModal(null)
-    });
   }
 
   onDeleteTag(tagId: string, tag: Event): void {
@@ -144,8 +111,57 @@ export class ArticleTags implements OnInit {
         severity: 'danger'
       },
       accept: () => {
-        this.store.deleteTagRemote({ id: tagId });
+        this.store.delete({ id: tagId });
       }
+    });
+  }
+
+  onToggleForm(tag: ITag | null = null): void {
+    if (tag) {
+      this.formMode.set('edit');
+      this.editingTag.set(tag);
+      this.tagForm.patchValue({
+        id: tag.id,
+        name: tag.name
+      });
+      this.formVisible.set(true);
+      return;
+    }
+
+    this.formMode.set('create');
+    this.editingTag.set(null);
+    this.tagForm.reset({
+      id: '',
+      name: ''
+    });
+    this.formVisible.update((visible) => !visible);
+  }
+
+  onCancelForm(): void {
+    this.formVisible.set(false);
+    this.formMode.set('create');
+    this.editingTag.set(null);
+    this.tagForm.reset({
+      id: '',
+      name: ''
+    });
+  }
+
+  onSubmit(): void {
+    if (this.tagForm.invalid) return;
+    const { id, name } = this.tagForm.value;
+    if (this.formMode() === 'edit' && id) {
+      this.store.update({
+        id,
+        payload: { id, name },
+        onSuccess: () => this.onCancelForm()
+      });
+      return;
+    }
+
+    this.store.create({
+      payload: { name },
+      onSuccess: () => this.onCancelForm()
     });
   }
 }

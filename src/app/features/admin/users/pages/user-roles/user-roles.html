@@ -12,12 +12,17 @@
             }
           </p>
         </div>
-        <p-button (onClick)="onToggleAddModal()" [size]="'small'" severity="primary">
-          <span class="flex items-center gap-2">
-            <i-lucide [name]="icons.plus" class="size-4" />
-            <span>Nouveau rôle</span>
+        <div class="flex items-center gap-3">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+            {{ roleCount }} élément(s)
           </span>
-        </p-button>
+          <p-button (onClick)="onToggleForm()" [size]="'small'" severity="primary">
+            <span class="flex items-center gap-2">
+              <i-lucide [name]="icons.plus" class="size-4" />
+              <span>{{ formVisible() ? 'Fermer le formulaire' : 'Nouveau rôle' }}</span>
+            </span>
+          </p-button>
+        </div>
       </div>
       <form [formGroup]="searchForm" class="search-input-wrapper">
         <div class="search-input-group">
@@ -32,6 +37,49 @@
           }
         </div>
       </form>
+    </div>
+    <div class="px-6">
+      <div
+        class="rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white shadow-sm transition-all duration-500 ease-in-out overflow-hidden"
+        [style.maxHeight]="formVisible() ? '400px' : '0px'"
+        [style.opacity]="formVisible() ? 1 : 0"
+        [style.padding]="formVisible() ? '24px' : '0 24px'"
+        [style.marginTop]="formVisible() ? '24px' : '0px'">
+        <form class="space-y-6" [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+          <div class="flex flex-col gap-1">
+            <p class="text-base font-semibold text-gray-900">
+              {{ formMode() === 'edit' ? 'Modifier le rôle' : 'Ajouter un rôle' }}
+            </p>
+            <p class="text-xs text-gray-500">
+              {{
+                formMode() === 'edit'
+                  ? 'Mettez à jour les permissions existantes.'
+                  : 'Définissez un nouveau rôle utilisateur.'
+              }}
+            </p>
+          </div>
+          <div class="space-y-2">
+            <label for="user-role-name" class="block text-sm font-semibold text-gray-700">
+              Nom du rôle
+              <span class="text-red-500">*</span>
+            </label>
+            <input pInputText id="user-role-name" formControlName="name" placeholder="Nom du rôle" class="w-full" />
+          </div>
+          <div class="flex items-center justify-end gap-3 pt-2 border-t border-gray-100">
+            <p-button type="button" size="small" severity="secondary" [outlined]="true" (onClick)="onCancelForm()">
+              Annuler
+            </p-button>
+            <p-button
+              type="submit"
+              size="small"
+              severity="primary"
+              [disabled]="roleForm.invalid || store.isLoading()"
+              [loading]="store.isLoading()">
+              {{ formMode() === 'edit' ? 'Mettre à jour' : 'Ajouter' }}
+            </p-button>
+          </div>
+        </form>
+      </div>
     </div>
     @if (roleCount === 0 && !isLoading) {
     <div class="mx-6 mt-12 flex flex-col items-center justify-center py-20 px-6 rounded-xl">
@@ -67,7 +115,7 @@
       <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
         Commencez par créer votre premier rôle pour gérer les permissions des utilisateurs.
       </p>
-      <p-button (onClick)="onToggleAddModal()" [size]="'small'" severity="primary" styleClass="font-semibold">
+      <p-button (onClick)="onToggleForm()" [size]="'small'" severity="primary" styleClass="font-semibold">
         <span class="flex items-center gap-2">
           <i-lucide [name]="icons.plus" class="size-4" />
           <span>Créer un rôle</span>
@@ -120,7 +168,7 @@
               <td class="px-6 py-4 font-semibold text-gray-900">{{ role.name | titlecase }}</td>
               <td class="px-6 py-4">
                 <div class="flex items-center gap-1">
-                  <p-button (onClick)="onToggleEditModal(role)" severity="info" size="small" title="Modifier">
+                  <p-button (onClick)="onToggleForm(role)" severity="info" size="small" title="Modifier">
                     <i-lucide [name]="icons.edit" class="size-4" />
                   </p-button>
                   <p-button (onClick)="onDeleteRole(role.id, $event)" severity="danger" size="small" title="Supprimer">
@@ -146,58 +194,4 @@
     </div>
     }
   </div>
-  <p-dialog [(visible)]="showAddModal" [closable]="false" [modal]="true" [style]="{ width: '25rem' }">
-    <form class="flex flex-col gap-4" [formGroup]="addRoleForm" (ngSubmit)="onAddRole()">
-      <div class="flex flex-col gap-1.5">
-        <label for="name" class="font-medium">Nom du rôle<span class="text-red-500">*</span></label>
-        <input pInputText id="name" formControlName="name" />
-      </div>
-      <div class="flex justify-end gap-4 flex-wrap">
-        <p-button
-          size="small"
-          [outlined]="true"
-          severity="secondary"
-          styleClass="font-satoshi"
-          (onClick)="onToggleAddModal()">
-          <span>Annuler</span>
-        </p-button>
-        <p-button
-          type="submit"
-          size="small"
-          severity="primary"
-          styleClass="font-satoshi"
-          [disabled]="!addRoleForm.valid || store.isLoading()"
-          [loading]="store.isLoading()">
-          <span>Ajouter le rôle</span>
-        </p-button>
-      </div>
-    </form>
-  </p-dialog>
-  <p-dialog [(visible)]="showEditModal" [closable]="false" [modal]="true" [style]="{ width: '25rem' }">
-    <form class="flex flex-col gap-4" [formGroup]="updateRoleForm" (ngSubmit)="onUpdateRole()">
-      <div class="flex flex-col gap-1.5">
-        <label for="name" class="font-medium">Nom du rôle<span class="text-red-500">*</span></label>
-        <input pInputText type="text" id="name" formControlName="name" />
-      </div>
-      <div class="flex justify-end gap-4 flex-wrap">
-        <p-button
-          size="small"
-          [outlined]="true"
-          severity="secondary"
-          styleClass="font-satoshi"
-          (onClick)="onToggleEditModal(null)">
-          <span>Annuler</span>
-        </p-button>
-        <p-button
-          type="submit"
-          size="small"
-          severity="primary"
-          styleClass="font-satoshi"
-          [disabled]="!updateRoleForm.valid || store.isLoading()"
-          [loading]="store.isLoading()">
-          <span>Modifier le rôle</span>
-        </p-button>
-      </div>
-    </form>
-  </p-dialog>
 </section>

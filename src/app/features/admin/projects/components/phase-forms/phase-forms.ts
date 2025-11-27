@@ -22,13 +22,10 @@ import { PhaseFormFieldType } from '@shared/models/entities.models';
 import { ProjectFormsStore } from '../../store/project-forms.store';
 
 type FieldFormGroup = FormGroup<{
-  id: FormControl<string>;
   label: FormControl<string>;
   type: FormControl<PhaseFormFieldType>;
   required: FormControl<boolean>;
   placeholder: FormControl<string | null>;
-  helperText: FormControl<string | null>;
-  description: FormControl<string | null>;
   options: FormArray<FormGroup<{ label: FormControl<string>; value: FormControl<string> }>>;
 }>;
 
@@ -63,10 +60,6 @@ export class PhaseFormsComponent {
   };
   showFormEditor = signal(false);
   editingFormId = signal<string | null>(null);
-  previewingForm = signal<IForm | null>(null);
-  previewSubmitted = signal(false);
-  previewFormGroup = this.#fb.group<Record<string, FormControl<unknown>>>({});
-
   fieldTypeOptions: { label: string; value: PhaseFormFieldType }[] = [
     { label: 'Texte court', value: 'SHORT_TEXT' },
     { label: 'Texte long', value: 'LONG_TEXT' },
@@ -80,7 +73,6 @@ export class PhaseFormsComponent {
     { label: 'Choix unique', value: 'RADIO' },
     { label: 'Téléversement de fichier', value: 'FILE_UPLOAD' }
   ];
-
   #optionsTypes = new Set<PhaseFormFieldType>([
     'DROPDOWN',
     'select',
@@ -93,7 +85,6 @@ export class PhaseFormsComponent {
     'RADIO',
     'radio'
   ]);
-
   #multiValueTypes = new Set<PhaseFormFieldType>([
     'MULTI_SELECT',
     'multiselect',
@@ -107,11 +98,6 @@ export class PhaseFormsComponent {
     description: [''],
     welcome_message: [''],
     is_active: [true],
-    settings: this.#fb.group({
-      allowMultipleSubmissions: [false],
-      confirmationMessage: [''],
-      submissionNote: ['']
-    }),
     fields: this.#fb.array<FieldFormGroup>([])
   });
 
@@ -160,7 +146,7 @@ export class PhaseFormsComponent {
 
   onSubmitForm(): void {
     if (this.formForm.invalid || this.fieldsArray.length === 0) return;
-    const payload = this.buildRequestPayload();
+    const payload = this.#buildRequestPayload();
     const editingId = this.editingFormId();
     if (editingId) {
       this.formsStore.updateForm({ id: editingId, data: payload });
@@ -187,36 +173,6 @@ export class PhaseFormsComponent {
     }
   }
 
-  onPreviewForm(form: IForm): void {
-    this.previewingForm.set(form);
-    this.previewSubmitted.set(false);
-    const controls: Record<string, FormControl<unknown>> = {};
-    form.fields.forEach((field) => {
-      controls[field.id] = this.createPreviewControl(field);
-    });
-    this.previewFormGroup = this.#fb.group(controls);
-  }
-
-  onSubmitPreview(): void {
-    if (!this.previewingForm()) return;
-    if (this.previewFormGroup.invalid) {
-      this.previewFormGroup.markAllAsTouched();
-      return;
-    }
-    this.previewSubmitted.set(true);
-  }
-
-  onToggleCheckboxValue(fieldId: string, optionValue: string, checked: boolean): void {
-    const control = this.previewFormGroup.get(fieldId);
-    if (!control) return;
-    const currentValue = (control.value as string[]) || [];
-    if (checked) {
-      control.setValue([...currentValue, optionValue]);
-    } else {
-      control.setValue(currentValue.filter((val) => val !== optionValue));
-    }
-  }
-
   shouldDisplayOptions(type: PhaseFormFieldType): boolean {
     return this.#optionsTypes.has(type);
   }
@@ -236,7 +192,6 @@ export class PhaseFormsComponent {
 
   private createFieldGroup(field?: IFormField): FieldFormGroup {
     return this.#fb.group({
-      id: this.#fb.control(field?.id ?? this.generateFieldId()),
       label: this.#fb.control(field?.label ?? '', { validators: Validators.required, nonNullable: true }),
       type: this.#fb.control<PhaseFormFieldType>(field?.type ?? 'SHORT_TEXT', {
         validators: Validators.required,
@@ -244,8 +199,6 @@ export class PhaseFormsComponent {
       }),
       required: this.#fb.control<boolean>(field?.required ?? false, { nonNullable: true }),
       placeholder: this.#fb.control(field?.placeholder ?? ''),
-      helperText: this.#fb.control(field?.helperText ?? ''),
-      description: this.#fb.control(field?.description ?? ''),
       options: this.#fb.array((field?.options || []).map((option) => this.createOptionGroup(option))) as FormArray<
         FormGroup<{ label: FormControl<string>; value: FormControl<string> }>
       >
@@ -257,17 +210,6 @@ export class PhaseFormsComponent {
       label: this.#fb.control(option?.label ?? '', { nonNullable: true, validators: Validators.required }),
       value: this.#fb.control(option?.value ?? '', { nonNullable: true, validators: Validators.required })
     });
-  }
-
-  private createPreviewControl(field: IFormField): FormControl<unknown> {
-    const validators = field.required ? [Validators.required] : [];
-    if (this.isMultiValueField(field.type)) {
-      return this.#fb.control<string[]>([], validators);
-    }
-    if (field.type === 'FILE_UPLOAD' || field.type === 'file' || field.type === 'file_upload') {
-      return this.#fb.control<File | null>(null, validators);
-    }
-    return this.#fb.control('', validators);
   }
 
   private setFields(fields: IFormField[]): void {
@@ -282,13 +224,7 @@ export class PhaseFormsComponent {
     this.formForm.reset({
       title: '',
       description: '',
-      welcome_message: '',
-      is_active: true,
-      settings: {
-        allowMultipleSubmissions: false,
-        confirmationMessage: '',
-        submissionNote: ''
-      }
+      is_active: true
     });
     this.fieldsArray.clear();
     this.addField();
@@ -298,7 +234,7 @@ export class PhaseFormsComponent {
     }
   }
 
-  private buildRequestPayload(): {
+  #buildRequestPayload(): {
     title: string;
     description?: string;
     welcome_message?: string;
@@ -311,30 +247,19 @@ export class PhaseFormsComponent {
     const fields = this.fieldsArray.controls.map((control) => {
       const optionsArray = control.controls.options.value as IFormFieldOption[];
       return {
-        id: control.controls.id.value,
         label: control.controls.label.value,
         type: control.controls.type.value,
         required: control.controls.required.value,
         placeholder: control.controls.placeholder.value || undefined,
-        helperText: control.controls.helperText.value || undefined,
-        description: control.controls.description.value || undefined,
         options: optionsArray.length ? optionsArray : undefined
       } as IFormField;
     });
     return {
       title: raw.title!,
       description: raw.description || undefined,
-      welcome_message: raw.welcome_message || undefined,
       is_active: raw.is_active ?? true,
       phase: phaseId,
       fields
     };
-  }
-
-  private generateFieldId(): string {
-    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-      return crypto.randomUUID();
-    }
-    return `field-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
   }
 }

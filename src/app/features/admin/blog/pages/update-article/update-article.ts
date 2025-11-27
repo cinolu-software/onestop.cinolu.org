@@ -8,12 +8,12 @@ import { ArticleEditFormComponent } from '../../components/article-edit-form/art
 import { ArticleGalleryComponent } from '../../components/article-gallery/article-gallery';
 
 @Component({
-  selector: 'app-edit-article',
+  selector: 'app-update-article',
   providers: [ArticlesStore],
   imports: [CommonModule, Tabs, ArticleEditFormComponent, ArticleGalleryComponent],
-  templateUrl: './edit-article.html'
+  templateUrl: './update-article.html'
 })
-export class EditArticle implements OnInit {
+export class UpdateArticle implements OnInit {
   #route = inject(ActivatedRoute);
   #slug = this.#route.snapshot.params['slug'];
   store = inject(ArticlesStore);

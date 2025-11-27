@@ -18,8 +18,8 @@ import { TabsModule } from 'primeng/tabs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-user-edit',
-  templateUrl: './edit-user.html',
+  selector: 'app-user-update',
+  templateUrl: './update-user.html',
   providers: [UsersStore, RolesStore],
   imports: [
     LucideAngularModule,
@@ -38,7 +38,7 @@ import { ActivatedRoute } from '@angular/router';
     TabsModule
   ]
 })
-export class EditUser {
+export class UpdateUser {
   #fb = inject(FormBuilder);
   #location = inject(Location);
   genders = GENDERS;

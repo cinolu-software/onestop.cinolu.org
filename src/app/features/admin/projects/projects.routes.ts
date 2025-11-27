@@ -18,7 +18,7 @@ export const projectsRoutes: Routes = [
       {
         path: 'edit/:slug',
         title: 'Modifier un projet',
-        loadComponent: () => import('./pages/edit-project/edit-project').then((c) => c.EditProjectComponent)
+        loadComponent: () => import('./pages/update-project/update-project').then((c) => c.UpdateProject)
       }
     ]
   },

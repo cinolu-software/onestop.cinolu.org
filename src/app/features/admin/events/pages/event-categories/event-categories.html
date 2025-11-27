@@ -8,16 +8,21 @@
           <h5 class="text-2xl font-bold text-gray-900 mb-1">Catégories d'événements</h5>
           <p class="text-sm text-gray-500">
             Gérez et organisez vos catégories @if (!isLoading) {
-            <span class="text-gray-400">• {{ categoryCount | json }} au total</span>
+            <span class="text-gray-400">• {{ categoryCount }} au total</span>
             }
           </p>
         </div>
-        <p-button size="small" (onClick)="onToggleAddModal()" severity="primary">
-          <span class="flex items-center gap-2">
-            <i-lucide [name]="icons.plus" class="size-4" />
-            <span>Nouvelle catégorie</span>
+        <div class="flex items-center gap-3">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+            {{ categoryCount }} élément(s)
           </span>
-        </p-button>
+          <p-button size="small" severity="primary" (onClick)="onToggleForm()">
+            <span class="flex items-center gap-2">
+              <i-lucide [name]="icons.plus" class="size-4" />
+              <span>{{ formVisible() ? 'Fermer le formulaire' : 'Nouvelle catégorie' }}</span>
+            </span>
+          </p-button>
+        </div>
       </div>
       <form [formGroup]="searchForm" class="search-input-wrapper">
         <div class="search-input-group">
@@ -32,6 +37,52 @@
           }
         </div>
       </form>
+    </div>
+    <div class="px-6">
+      <div
+        class="rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white shadow-sm transition-all duration-500 ease-in-out overflow-hidden"
+        [style.maxHeight]="formVisible() ? '400px' : '0px'"
+        [style.opacity]="formVisible() ? 1 : 0"
+        [style.padding]="formVisible() ? '24px' : '0 24px'"
+        [style.marginTop]="formVisible() ? '24px' : '0px'">
+        <form class="space-y-6" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+          <div class="flex flex-col gap-1">
+            <p class="text-base font-semibold text-gray-900">
+              {{ formMode() === 'edit' ? 'Modifier la catégorie' : 'Ajouter une catégorie' }}
+            </p>
+            <p class="text-xs text-gray-500">
+              {{ formMode() === 'edit' ? 'Mettez à jour les détails existants.' : 'Décrivez une nouvelle catégorie.' }}
+            </p>
+          </div>
+          <div class="grid grid-cols-1 gap-6">
+            <div class="space-y-2">
+              <label for="event-category-name" class="block text-sm font-semibold text-gray-700">
+                Nom de la catégorie
+                <span class="text-red-500">*</span>
+              </label>
+              <input
+                pInputText
+                id="event-category-name"
+                formControlName="name"
+                placeholder="Nom de la catégorie"
+                class="w-full" />
+            </div>
+          </div>
+          <div class="flex items-center justify-end gap-3 pt-2 border-t border-gray-100">
+            <p-button type="button" size="small" severity="secondary" [outlined]="true" (onClick)="onCancelForm()">
+              Annuler
+            </p-button>
+            <p-button
+              type="submit"
+              size="small"
+              severity="primary"
+              [disabled]="categoryForm.invalid || categoriesStore.isLoading()"
+              [loading]="categoriesStore.isLoading()">
+              {{ formMode() === 'edit' ? 'Mettre à jour' : 'Ajouter' }}
+            </p-button>
+          </div>
+        </form>
+      </div>
     </div>
     @if (categoryCount === 0 && !isLoading) {
     <div class="mx-6 mt-12 flex flex-col items-center justify-center py-20 px-6 rounded-xl">
@@ -67,7 +118,7 @@
       <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
         Commencez par ajouter votre première catégorie pour organiser vos événements.
       </p>
-      <p-button (onClick)="onToggleAddModal()" [size]="'small'" severity="primary" styleClass="font-semibold">
+      <p-button (onClick)="onToggleForm()" [size]="'small'" severity="primary" styleClass="font-semibold">
         <span class="flex items-center gap-2">
           <i-lucide [name]="icons.plus" class="size-4" />
           <span>Créer une catégorie</span>
@@ -120,7 +171,7 @@
               <td class="px-6 py-4 font-semibold text-gray-900">{{ category.name | titlecase }}</td>
               <td class="px-6 py-4">
                 <div class="flex items-center gap-1">
-                  <p-button (onClick)="onToggleEditModal(category)" severity="info" size="small">
+                  <p-button (onClick)="onToggleForm(category)" severity="info" size="small">
                     <i-lucide [name]="icons.edit" class="size-4" />
                   </p-button>
                   <p-button (onClick)="onDeleteCategory(category.id, $event)" severity="danger" size="small">
@@ -147,59 +198,4 @@
     </div>
     }
   </div>
-
-  <p-dialog [(visible)]="showAddModal" [closable]="false" [modal]="true" [style]="{ width: '25rem' }">
-    <form class="flex flex-col gap-4" [formGroup]="addCategoryForm" (ngSubmit)="onAddCategory()">
-      <div class="flex flex-col gap-1.5">
-        <label for="name" class="font-medium"> Nom de la catégorie<span class="text-red-500">*</span> </label>
-        <input pInputText type="text" id="name" name="name" formControlName="name" />
-      </div>
-      <div class="flex justify-end gap-4 flex-wrap">
-        <p-button
-          size="small"
-          [outlined]="true"
-          severity="secondary"
-          styleClass="font-satoshi"
-          (onClick)="onToggleAddModal()">
-          <span>Annuler</span>
-        </p-button>
-        <p-button
-          type="submit"
-          size="small"
-          severity="primary"
-          styleClass="font-satoshi"
-          [disabled]="!addCategoryForm.valid || categoriesStore.isLoading()"
-          [loading]="categoriesStore.isLoading()">
-          <span>Ajouter la catégorie</span>
-        </p-button>
-      </div>
-    </form>
-  </p-dialog>
-  <p-dialog [(visible)]="showEditModal" [closable]="false" [modal]="true" [style]="{ width: '25rem' }">
-    <form class="flex flex-col gap-4" [formGroup]="updateCategoryForm" (ngSubmit)="onUpdateCategory()">
-      <div class="flex flex-col gap-1.5">
-        <label for="name" class="font-medium"> Nom du catégorie<span class="text-red-500">*</span> </label>
-        <input pInputText type="text" id="name" name="name" formControlName="name" />
-      </div>
-      <div class="flex justify-end gap-4 flex-wrap">
-        <p-button
-          size="small"
-          [outlined]="true"
-          severity="secondary"
-          styleClass="font-satoshi"
-          (onClick)="onToggleEditModal(null)">
-          <span>Annuler</span>
-        </p-button>
-        <p-button
-          type="submit"
-          size="small"
-          severity="primary"
-          styleClass="font-satoshi"
-          [disabled]="!updateCategoryForm.valid || categoriesStore.isLoading()"
-          [loading]="categoriesStore.isLoading()">
-          <span>Modifier la catégorie</span>
-        </p-button>
-      </div>
-    </form>
-  </p-dialog>
 </section>

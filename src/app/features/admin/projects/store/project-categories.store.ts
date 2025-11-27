@@ -79,7 +79,7 @@ export const CategoriesStore = signalStore(
         )
       )
     ),
-    updateCategory: rxMethod<{ id: string; payload: ICategory; onSuccess: () => void }>(
+    updateCategory: rxMethod<{ id: string; payload: { id: string; name: string }; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ id, payload, onSuccess }) =>

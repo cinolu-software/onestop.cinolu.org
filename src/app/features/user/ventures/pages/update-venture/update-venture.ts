@@ -38,9 +38,9 @@ import { environment } from '@environments/environment';
     LucideAngularModule,
     Tabs
   ],
-  templateUrl: './edit-venture.html'
+  templateUrl: './update-venture.html'
 })
-export class EditVentureComponent implements OnInit {
+export class UpdateVenture implements OnInit {
   #fb = inject(FormBuilder);
   store = inject(VenturesStore);
   galleryStore = inject(VentureGalleryStore);

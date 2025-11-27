@@ -23,11 +23,6 @@ export const programsRoutes: Routes = [
     ]
   },
   {
-    path: 'subprograms',
-    title: 'Les sous-programmes',
-    loadComponent: () => import('./pages/list-subprograms/list-subprograms').then((c) => c.ListSubprograms)
-  },
-  {
     path: 'program-categories',
     title: 'Les categories',
     loadComponent: () => import('./pages/program-categories/program-categories').then((c) => c.ProgramCategories)

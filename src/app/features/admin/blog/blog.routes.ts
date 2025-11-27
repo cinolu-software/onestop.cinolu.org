@@ -7,23 +7,23 @@ export const blogRoutes: Routes = [
       {
         path: '',
         title: 'Liste des articles',
-        loadComponent: () => import('./pages/list-articles/list-articles').then((c) => c.ListArticles),
+        loadComponent: () => import('./pages/list-articles/list-articles').then((c) => c.ListArticles)
       },
       {
         path: 'add',
         title: 'Inserer un article',
-        loadComponent: () => import('./pages/add-article/add-article').then((c) => c.AddArticle),
+        loadComponent: () => import('./pages/add-article/add-article').then((c) => c.AddArticle)
       },
       {
         path: 'edit/:slug',
         title: 'Modifier un article',
-        loadComponent: () => import('./pages/edit-article/edit-article').then((c) => c.EditArticle),
-      },
-    ],
+        loadComponent: () => import('./pages/update-article/update-article').then((c) => c.UpdateArticle)
+      }
+    ]
   },
   {
     path: 'tags',
     title: 'Tags des articles',
-    loadComponent: () => import('./pages/article-tags/article-tags').then((c) => c.ArticleTags),
-  },
+    loadComponent: () => import('./pages/article-tags/article-tags').then((c) => c.ArticleTags)
+  }
 ];

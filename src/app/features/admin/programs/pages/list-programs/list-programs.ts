@@ -24,10 +24,8 @@ import { ProgramsStore } from '../../store/programs.store';
 import { FilterProgramsDto } from '../../dto/programs/filter-programs.dto';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-// Removed per-action stores in favor of unified ProgramsStore
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { AvatarModule } from 'primeng/avatar';
-// Removed per-action stores in favor of unified ProgramsStore
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Tabs } from '@shared/components/tabs/tabs';
@@ -61,7 +59,6 @@ export class ListPrograms implements OnInit {
   publishStore = null;
   deleteStore = null;
   highlightStore = null;
-  // Use unified store for all actions
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {

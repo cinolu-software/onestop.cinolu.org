@@ -29,10 +29,11 @@
             Programme associé<span class="text-red-500 ml-1">*</span>
           </label>
           <p-select
+            [filter]="true"
             inputId="program"
             [optionValue]="'id'"
             [optionLabel]="'name'"
-            [options]="programsStore.subprograms()"
+            [options]="programsStore.unpaginatedSubprograms()"
             formControlName="program"
             placeholder="Sélectionner un programme"
             class="w-full" />
@@ -132,7 +133,7 @@
         [disabled]="updateProjectStore.isLoading() || form.invalid"
         type="submit"
         severity="primary">
-        Modifier
+        Modifier le projet
       </p-button>
     </div>
   </div>

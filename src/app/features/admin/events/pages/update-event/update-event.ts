@@ -14,8 +14,8 @@ import { EventDetailsSkeletonComponent } from '../../ui/event-details-skeleton/e
 import { GalleryStore } from '../../store/event-gallery.store';
 
 @Component({
-  selector: 'app-event-edit',
-  templateUrl: './edit-event.html',
+  selector: 'app-event-update',
+  templateUrl: './update-event.html',
   providers: [EventsStore, IndicatorsStore, GalleryStore],
   imports: [
     CommonModule,
@@ -27,7 +27,7 @@ import { GalleryStore } from '../../store/event-gallery.store';
     EventDetailsSkeletonComponent
   ]
 })
-export class EditEventComponent implements OnInit {
+export class UpdateEvent implements OnInit {
   #route = inject(ActivatedRoute);
   #slug = this.#route.snapshot.params['slug'];
   eventsStore = inject(EventsStore);

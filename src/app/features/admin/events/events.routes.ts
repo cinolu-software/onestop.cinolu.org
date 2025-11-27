@@ -17,7 +17,7 @@ export const eventsRoutes: Routes = [
       {
         path: 'edit/:slug',
         title: 'Modifier un événement',
-        loadComponent: () => import('./pages/edit-event/edit-event').then((c) => c.EditEventComponent)
+        loadComponent: () => import('./pages/update-event/update-event').then((c) => c.UpdateEvent)
       }
     ]
   },

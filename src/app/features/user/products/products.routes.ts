@@ -17,7 +17,7 @@ export const productsRoutes: Routes = [
       {
         path: 'update/:slug',
         title: 'Modifier un produit',
-        loadComponent: () => import('./pages/edit-product/edit-product').then((c) => c.EditProductComponent)
+        loadComponent: () => import('./pages/update-product/update-product').then((c) => c.UpdateProduct)
       }
     ]
   }

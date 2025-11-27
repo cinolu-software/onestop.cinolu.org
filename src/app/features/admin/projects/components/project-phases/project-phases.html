@@ -22,7 +22,6 @@
       </p-button>
     </div>
   </div>
-
   <div class="p-6 space-y-6">
     @if (showPhaseForm()) {
     <div class="bg-gradient-to-br from-primary-50/50 to-white border-2 border-primary-200 rounded-xl p-6">
@@ -95,7 +94,7 @@
       <div class="h-32 bg-gray-200 animate-pulse rounded-xl"></div>
       }
     </div>
-    } @else if (phasesStore.phases().length === 0) {
+    } @else if (phasesStore.phases().length === 0 && !showPhaseForm()) {
     <div class="flex flex-col items-center justify-center py-16 px-6">
       <div
         class="w-20 h-20 bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl flex items-center justify-center mb-5">

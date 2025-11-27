@@ -47,10 +47,6 @@ export const ADMIN_LINKS: ILink[] = [
       {
         name: 'Les catégories',
         path: '/program-categories'
-      },
-      {
-        name: 'Sous programmes',
-        path: '/subprograms'
       }
     ]
   },

@@ -213,7 +213,7 @@ export interface IPhase extends IBase {
   resources?: IResource[];
 }
 
-export type ResourceType = 'PDF' | 'LINK' | 'IMAGE' | 'OTHER';
+export type ResourceType = 'PDF' | 'LINK' | 'IMAGE' | 'VIDEO' | 'OTHER';
 
 export interface IResource extends IBase {
   title: string;
@@ -256,15 +256,11 @@ export interface IFormFieldOption {
 }
 
 export interface IFormField {
-  id: string;
   label: string;
   type: PhaseFormFieldType;
   required: boolean;
   placeholder?: string;
-  helperText?: string;
-  description?: string;
   options?: IFormFieldOption[];
-  validation?: Record<string, unknown>;
 }
 
 export interface IForm extends IBase {

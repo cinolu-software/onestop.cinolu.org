@@ -1,6 +1,5 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideAngularModule, Save } from 'lucide-angular';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TextareaModule } from 'primeng/textarea';
@@ -26,8 +25,7 @@ import { CategoriesStore } from '../../store/event-categories.store';
     TextareaModule,
     DatePickerModule,
     InputText,
-    Button,
-    LucideAngularModule
+    Button
   ]
 })
 export class EventEditFormComponent {
@@ -38,9 +36,7 @@ export class EventEditFormComponent {
   programsStore = inject(SubprogramsStore);
   usersStore = inject(UsersStore);
   form = this.#initForm();
-  icons = {
-    save: Save
-  };
+  #lastLoadedProgramId: string | null = null;
 
   #initForm(): FormGroup {
     return this.#fb.group({
@@ -62,10 +58,15 @@ export class EventEditFormComponent {
 
   constructor() {
     effect(() => {
-      this.#patchForm(this.event());
+      const event = this.event();
+      if (!event) return;
+      this.#patchForm(event);
+      const parentProgramId = event.program?.program?.id;
+      if (!parentProgramId || parentProgramId === this.#lastLoadedProgramId) return;
+      this.#lastLoadedProgramId = parentProgramId;
+      this.programsStore.loadUnpaginatedSubprograms(parentProgramId);
     });
     this.categoriesStore.loadUnpaginatedCategories();
-    this.programsStore.loadUnpaginatedSubprograms();
     this.usersStore.loadStaff();
   }
 

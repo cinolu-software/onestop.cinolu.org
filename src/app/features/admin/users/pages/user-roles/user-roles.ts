@@ -8,7 +8,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
-import { Dialog } from 'primeng/dialog';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { FilterRolesDto } from '../../dto/roles/filter-roles.dto';
 import { RolesStore } from '../../store/roles.store';
@@ -28,7 +27,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     ProgressSpinnerModule,
     NgxPaginationModule,
     ReactiveFormsModule,
-    Dialog,
     ConfirmPopup
   ]
 })
@@ -38,11 +36,8 @@ export class UserRoles implements OnInit {
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
   searchForm: FormGroup;
-  addRoleForm: FormGroup;
-  updateRoleForm: FormGroup;
+  roleForm: FormGroup;
   store = inject(RolesStore);
-  showAddModal = signal(false);
-  showEditModal = signal(false);
   #destroyRef = inject(DestroyRef);
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   icons = {
@@ -53,18 +48,18 @@ export class UserRoles implements OnInit {
     search: Search
   };
   queryParams = signal<FilterRolesDto>({
-    page: this.#route.snapshot.params['page'],
-    q: this.#route.snapshot.params['q']
+    page: this.#route.snapshot.queryParamMap.get('page'),
+    q: this.#route.snapshot.queryParamMap.get('q')
   });
+  formVisible = signal(false);
+  formMode = signal<'create' | 'edit'>('create');
+  editingRole = signal<IRole | null>(null);
 
   constructor() {
     this.searchForm = this.#fb.group({
       q: [this.queryParams().q || '']
     });
-    this.addRoleForm = this.#fb.group({
-      name: ['', Validators.required]
-    });
-    this.updateRoleForm = this.#fb.group({
+    this.roleForm = this.#fb.group({
       id: [''],
       name: ['', Validators.required]
     });
@@ -86,15 +81,6 @@ export class UserRoles implements OnInit {
     this.store.loadRoles(this.queryParams());
   }
 
-  onToggleAddModal(): void {
-    this.showAddModal.set(!this.showAddModal());
-  }
-
-  onToggleEditModal(role: IRole | null): void {
-    this.updateRoleForm.patchValue({ ...role });
-    this.showEditModal.update((v) => !v);
-  }
-
   onPageChange(currentPage: number): void {
     this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
     this.updateRouteAndRoles();
@@ -108,25 +94,6 @@ export class UserRoles implements OnInit {
   updateRouteAndRoles(): void {
     this.updateRoute();
     this.loadRoles();
-  }
-
-  onAddRole(): void {
-    if (this.addRoleForm.invalid) return;
-    this.store.addRole({
-      payload: this.addRoleForm.value,
-      onSuccess: () => {
-        this.onToggleAddModal();
-        this.addRoleForm.reset();
-      }
-    });
-  }
-
-  onUpdateRole(): void {
-    if (this.updateRoleForm.invalid) return;
-    this.store.updateRole({
-      payload: this.updateRoleForm.value,
-      onSuccess: () => this.onToggleEditModal(null)
-    });
   }
 
   onDeleteRole(roleId: string, event: Event): void {
@@ -145,6 +112,54 @@ export class UserRoles implements OnInit {
       accept: () => {
         this.store.deleteRole(roleId);
       }
+    });
+  }
+
+  onToggleForm(role: IRole | null = null): void {
+    if (role) {
+      this.formMode.set('edit');
+      this.editingRole.set(role);
+      this.roleForm.patchValue({
+        id: role.id,
+        name: role.name
+      });
+      this.formVisible.set(true);
+      return;
+    }
+
+    this.formMode.set('create');
+    this.editingRole.set(null);
+    this.roleForm.reset({
+      id: '',
+      name: ''
+    });
+    this.formVisible.update((visible) => !visible);
+  }
+
+  onCancelForm(): void {
+    this.formVisible.set(false);
+    this.formMode.set('create');
+    this.editingRole.set(null);
+    this.roleForm.reset({
+      id: '',
+      name: ''
+    });
+  }
+
+  onSubmit(): void {
+    if (this.roleForm.invalid) return;
+    const { id, name } = this.roleForm.value;
+    if (this.formMode() === 'edit' && id) {
+      this.store.updateRole({
+        payload: { id, name },
+        onSuccess: () => this.onCancelForm()
+      });
+      return;
+    }
+
+    this.store.addRole({
+      payload: { name },
+      onSuccess: () => this.onCancelForm()
     });
   }
 }

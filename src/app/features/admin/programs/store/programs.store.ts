@@ -50,7 +50,6 @@ export const ProgramsStore = signalStore(
         })
       )
     ),
-    // Unpaginated loader for selects and light lists
     loadUnpaginatedPrograms: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isLoadingUnpaginated: true })),
@@ -67,7 +66,6 @@ export const ProgramsStore = signalStore(
         )
       )
     ),
-    // Single
     loadProgram: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),

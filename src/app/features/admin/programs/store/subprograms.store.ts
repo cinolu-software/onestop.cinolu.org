@@ -22,24 +22,20 @@ export const SubprogramsStore = signalStore(
     _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _toast, ...store }) => ({
-    loadPrograms: rxMethod<FilterSubprogramsDto>(
+    loadPrograms: rxMethod<{ id: string; payload: FilterSubprogramsDto }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
-        switchMap((queryParams) => {
-          const params = buildQueryParams(queryParams);
-          return _http
-            .get<{
-              data: [ISubprogram[], number];
-            }>('subprograms/paginated', { params })
-            .pipe(
-              map(({ data }) => {
-                patchState(store, { isLoading: false, subprograms: data });
-              }),
-              catchError(() => {
-                patchState(store, { isLoading: false, subprograms: [[], 0] });
-                return of(null);
-              })
-            );
+        switchMap((params) => {
+          const p = buildQueryParams(params.payload);
+          return _http.get<{ data: [ISubprogram[], number] }>(`subprograms/paginated/${params.id}`, { params: p }).pipe(
+            map(({ data }) => {
+              patchState(store, { isLoading: false, subprograms: data });
+            }),
+            catchError(() => {
+              patchState(store, { isLoading: false, subprograms: [[], 0] });
+              return of(null);
+            })
+          );
         })
       )
     ),
@@ -50,7 +46,11 @@ export const SubprogramsStore = signalStore(
           _http.post<{ data: ISubprogram }>('subprograms', payload).pipe(
             map(({ data }) => {
               const [list, count] = store.subprograms();
-              patchState(store, { subprograms: [[data, ...list], count + 1] });
+              const unpaginated = store.unpaginatedSubprograms();
+              patchState(store, {
+                subprograms: [[data, ...list], count + 1],
+                unpaginatedSubprograms: [data, ...unpaginated]
+              });
               _toast.showSuccess('Sous programme ajouté');
               patchState(store, { isLoading: false });
               onSuccess();
@@ -71,8 +71,10 @@ export const SubprogramsStore = signalStore(
           _http.patch<{ data: ISubprogram }>(`subprograms/${payload.id}`, payload).pipe(
             map(({ data }) => {
               const [list, count] = store.subprograms();
+              const unpaginated = store.unpaginatedSubprograms();
               const updated = list.map((sp) => (sp.id === data.id ? data : sp));
-              patchState(store, { subprograms: [updated, count] });
+              const updatedUnpaginated = unpaginated.map((sp) => (sp.id === data.id ? data : sp));
+              patchState(store, { subprograms: [updated, count], unpaginatedSubprograms: updatedUnpaginated });
               _toast.showSuccess('Sous programme mis à jour');
               patchState(store, { isLoading: false });
               onSuccess();
@@ -95,7 +97,8 @@ export const SubprogramsStore = signalStore(
               patchState(store, { isLoading: false });
               const [list, count] = store.subprograms();
               const filtered = list.filter((subprogram) => subprogram.id !== id);
-              patchState(store, { subprograms: [filtered, count - 1] });
+              const filteredUnpaginated = store.unpaginatedSubprograms().filter((subprogram) => subprogram.id !== id);
+              patchState(store, { subprograms: [filtered, count - 1], unpaginatedSubprograms: filteredUnpaginated });
               _toast.showSuccess('Programme supprimé');
             }),
             catchError(() => {
@@ -115,7 +118,8 @@ export const SubprogramsStore = signalStore(
             map(({ data }) => {
               const [list, count] = store.subprograms();
               const updated = list.map((sp) => (sp.id === data.id ? data : sp));
-              patchState(store, { subprograms: [updated, count] });
+              const updatedUnpaginated = store.unpaginatedSubprograms().map((sp) => (sp.id === data.id ? data : sp));
+              patchState(store, { subprograms: [updated, count], unpaginatedSubprograms: updatedUnpaginated });
               patchState(store, { isLoading: false });
             }),
             catchError(() => {
@@ -134,7 +138,8 @@ export const SubprogramsStore = signalStore(
             map(({ data }) => {
               const [list, count] = store.subprograms();
               const updated = list.map((sp) => (sp.id === data.id ? data : sp));
-              patchState(store, { subprograms: [updated, count] });
+              const updatedUnpaginated = store.unpaginatedSubprograms().map((sp) => (sp.id === data.id ? data : sp));
+              patchState(store, { subprograms: [updated, count], unpaginatedSubprograms: updatedUnpaginated });
               _toast.showSuccess(
                 data.is_highlighted ? 'Programme mis en avant' : 'Programme retiré de la mise en avant'
               );
@@ -149,11 +154,11 @@ export const SubprogramsStore = signalStore(
         )
       )
     ),
-    loadUnpaginatedSubprograms: rxMethod<void>(
+    loadUnpaginatedSubprograms: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
-        switchMap(() =>
-          _http.get<{ data: ISubprogram[] }>('subprograms').pipe(
+        switchMap((id) =>
+          _http.get<{ data: ISubprogram[] }>(`subprograms/unpaginated/${id}`).pipe(
             map(({ data }) => {
               patchState(store, { isLoading: false, unpaginatedSubprograms: data });
             }),
@@ -164,22 +169,6 @@ export const SubprogramsStore = signalStore(
           )
         )
       )
-    ),
-    addProgram: (subprogram: ISubprogram): void => {
-      const [subprograms, count] = store.subprograms();
-      patchState(store, {
-        subprograms: [[subprogram, ...subprograms], count + 1]
-      });
-    },
-    updateProgram: (subprogram: ISubprogram): void => {
-      const [subprograms, count] = store.subprograms();
-      const updated = subprograms.map((sp) => (sp.id === subprogram.id ? subprogram : sp));
-      patchState(store, { subprograms: [updated, count] });
-    },
-    deleteProgram: (id: string): void => {
-      const [subprograms, count] = store.subprograms();
-      const filtered = subprograms.filter((subprogram) => subprogram.id !== id);
-      patchState(store, { subprograms: [filtered, count - 1] });
-    }
+    )
   }))
 );

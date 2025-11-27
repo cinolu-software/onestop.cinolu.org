@@ -8,8 +8,8 @@ import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AuthStore } from '@core/auth/auth.store';
 import { environment } from '@environments/environment';
-import { OutreachStore } from '../store/outreach.store';
-import { BadgeCardComponent } from '../components/badge-card.component';
+import { OutreachStore } from '../../store/outreach.store';
+import { BadgeCard } from '../../ui/badge-card/badge-card.component';
 
 @Component({
   selector: 'app-outreach',
@@ -24,7 +24,7 @@ import { BadgeCardComponent } from '../components/badge-card.component';
     LucideAngularModule,
     NgxPaginationModule,
     ButtonModule,
-    BadgeCardComponent
+    BadgeCard
   ]
 })
 export class Outreach {

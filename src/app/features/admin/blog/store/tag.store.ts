@@ -40,7 +40,7 @@ export const TagsStore = signalStore(
         })
       )
     ),
-    createTag: rxMethod<{ payload: ArticleTagDto; onSuccess: () => void }>(
+    create: rxMethod<{ payload: ArticleTagDto; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ payload, onSuccess }) =>
@@ -61,7 +61,7 @@ export const TagsStore = signalStore(
         )
       )
     ),
-    updateTagRemote: rxMethod<{ id: string; payload: ITag; onSuccess: () => void }>(
+    update: rxMethod<{ id: string; payload: { id: string; name: string }; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ id, payload, onSuccess }) =>
@@ -83,7 +83,7 @@ export const TagsStore = signalStore(
         )
       )
     ),
-    deleteTagRemote: rxMethod<{ id: string }>(
+    delete: rxMethod<{ id: string }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ id }) =>

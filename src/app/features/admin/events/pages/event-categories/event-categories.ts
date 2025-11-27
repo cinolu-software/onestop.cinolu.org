@@ -7,7 +7,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
-import { Dialog } from 'primeng/dialog';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { ICategory } from '@shared/models/entities.models';
 import { FilterEventCategoriesDto } from '../../dto/categories/filter-categories.dto';
@@ -26,7 +25,6 @@ import { CategoriesStore } from '../../store/event-categories.store';
     InputTextModule,
     NgxPaginationModule,
     ReactiveFormsModule,
-    Dialog,
     ConfirmPopup
   ]
 })
@@ -36,11 +34,8 @@ export class EventCategories implements OnInit {
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
   searchForm: FormGroup;
-  addCategoryForm: FormGroup;
-  updateCategoryForm: FormGroup;
+  categoryForm: FormGroup;
   categoriesStore = inject(CategoriesStore);
-  showAddModal = signal(false);
-  showEditModal = signal(false);
   skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
   icons = {
@@ -54,15 +49,15 @@ export class EventCategories implements OnInit {
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q')
   });
+  formVisible = signal(false);
+  formMode = signal<'create' | 'edit'>('create');
+  editingCategory = signal<ICategory | null>(null);
 
   constructor() {
     this.searchForm = this.#fb.group({
       q: [this.queryParams().q || '']
     });
-    this.addCategoryForm = this.#fb.group({
-      name: ['', Validators.required]
-    });
-    this.updateCategoryForm = this.#fb.group({
+    this.categoryForm = this.#fb.group({
       id: [''],
       name: ['', Validators.required]
     });
@@ -84,19 +79,6 @@ export class EventCategories implements OnInit {
     this.categoriesStore.loadCategories(this.queryParams());
   }
 
-  onToggleAddModal(): void {
-    this.showAddModal.set(!this.showAddModal());
-    if (this.showAddModal()) this.addCategoryForm.reset();
-  }
-
-  onToggleEditModal(category: ICategory | null): void {
-    this.updateCategoryForm.patchValue({
-      id: category?.id || '',
-      name: category?.name || ''
-    });
-    this.showEditModal.update((v) => !v);
-  }
-
   onPageChange(currentPage: number): void {
     this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
     this.updateRouteAndCategories();
@@ -110,23 +92,6 @@ export class EventCategories implements OnInit {
   updateRouteAndCategories(): void {
     this.updateRoute();
     this.loadCategories();
-  }
-
-  onAddCategory(): void {
-    if (this.addCategoryForm.invalid) return;
-    this.categoriesStore.addCategory({
-      payload: this.addCategoryForm.value,
-      onSuccess: () => this.onToggleAddModal()
-    });
-  }
-
-  onUpdateCategory(): void {
-    if (this.updateCategoryForm.invalid) return;
-    this.categoriesStore.updateCategory({
-      id: this.updateCategoryForm.value.id,
-      payload: this.updateCategoryForm.value,
-      onSuccess: () => this.onToggleEditModal(null)
-    });
   }
 
   onDeleteCategory(categoryId: string, event: Event): void {
@@ -145,6 +110,55 @@ export class EventCategories implements OnInit {
       accept: () => {
         this.categoriesStore.deleteCategory({ id: categoryId });
       }
+    });
+  }
+
+  onToggleForm(category: ICategory | null = null): void {
+    if (category) {
+      this.formMode.set('edit');
+      this.editingCategory.set(category);
+      this.categoryForm.patchValue({
+        id: category.id,
+        name: category.name
+      });
+      this.formVisible.set(true);
+      return;
+    }
+
+    this.formMode.set('create');
+    this.editingCategory.set(null);
+    this.categoryForm.reset({
+      id: '',
+      name: ''
+    });
+    this.formVisible.update((visible) => !visible);
+  }
+
+  onCancelForm(): void {
+    this.formVisible.set(false);
+    this.formMode.set('create');
+    this.editingCategory.set(null);
+    this.categoryForm.reset({
+      id: '',
+      name: ''
+    });
+  }
+
+  onSubmit(): void {
+    if (this.categoryForm.invalid) return;
+    const { id, name } = this.categoryForm.value;
+    if (this.formMode() === 'edit' && id) {
+      this.categoriesStore.updateCategory({
+        id,
+        payload: { id, name },
+        onSuccess: () => this.onCancelForm()
+      });
+      return;
+    }
+
+    this.categoriesStore.addCategory({
+      payload: { name },
+      onSuccess: () => this.onCancelForm()
     });
   }
 }

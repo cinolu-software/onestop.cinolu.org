@@ -53,18 +53,16 @@ export class PhaseResourcesComponent {
   showFileUpload = signal(false);
   editingResourceId = signal<string | null>(null);
   selectedFile = signal<File | null>(null);
-
   resourceForm = this.#fb.group({
     title: ['', Validators.required],
     type: ['LINK' as ResourceType, Validators.required],
     url: ['', Validators.required]
   });
-
   fileUploadForm = this.#fb.group({
     title: ['', Validators.required],
     file: [null as File | null, Validators.required]
   });
-  resourceTypes: ResourceType[] = ['PDF', 'LINK', 'IMAGE', 'OTHER'];
+  resourceTypes: ResourceType[] = ['PDF', 'LINK', 'IMAGE', 'VIDEO', 'OTHER'];
 
   constructor() {
     effect(() => {
@@ -188,6 +186,8 @@ export class PhaseResourcesComponent {
         return 'Lien';
       case 'IMAGE':
         return 'Image';
+      case 'VIDEO':
+        return 'Vidéo';
       case 'OTHER':
         return 'Autre';
       default:

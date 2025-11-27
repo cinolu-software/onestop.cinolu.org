@@ -16,8 +16,8 @@ import { ProjectDetailsSkeletonComponent } from '../../ui/project-details-skelet
 import { ProjectPhasesComponent } from '../../components/project-phases/project-phases';
 
 @Component({
-  selector: 'app-project-edit',
-  templateUrl: './edit-project.html',
+  selector: 'app-project-update',
+  templateUrl: './update-project.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [IndicatorsStore, GalleryStore, ProjectsStore, ProjectMetricsStore],
   imports: [
@@ -31,7 +31,7 @@ import { ProjectPhasesComponent } from '../../components/project-phases/project-
     ProjectPhasesComponent
   ]
 })
-export class EditProjectComponent implements OnInit {
+export class UpdateProject implements OnInit {
   #route = inject(ActivatedRoute);
   #slug = this.#route.snapshot.params['slug'];
   projectStore = inject(ProjectsStore);

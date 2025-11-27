@@ -17,7 +17,7 @@ export const venturesRoutes: Routes = [
       {
         path: 'update/:slug',
         title: 'Modifier',
-        loadComponent: () => import('./pages/edit-venture/edit-venture').then((c) => c.EditVentureComponent)
+        loadComponent: () => import('./pages/update-venture/update-venture').then((c) => c.UpdateVenture)
       },
       {
         path: 'view/:slug',

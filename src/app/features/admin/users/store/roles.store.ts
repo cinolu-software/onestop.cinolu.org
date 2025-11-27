@@ -55,7 +55,7 @@ export const RolesStore = signalStore(
         )
       )
     ),
-    addRole: rxMethod<{ payload: RoleDto; onSuccess: () => void }>(
+    addRole: rxMethod<{ payload: { name: string }; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ payload, onSuccess }) =>

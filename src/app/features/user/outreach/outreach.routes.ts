@@ -7,8 +7,8 @@ export const outreachRoutes: Routes = [
       {
         path: '',
         title: 'Vulgarisation - Outreach',
-        loadComponent: () => import('./pages/outreach').then((c) => c.Outreach),
-      },
-    ],
-  },
+        loadComponent: () => import('./pages/outreach/outreach').then((c) => c.Outreach)
+      }
+    ]
+  }
 ];

@@ -12,19 +12,24 @@
             }
           </p>
         </div>
-        <button
-          (click)="onToggleAddModal()"
-          class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm">
-          <i-lucide [name]="icons.plus" class="size-4" />
-          Nouveau tag
-        </button>
+        <div class="flex items-center gap-3">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+            {{ tagsCount }} élément(s)
+          </span>
+          <p-button (onClick)="onToggleForm()" size="small" severity="primary">
+            <span class="flex items-center gap-2">
+              <i-lucide [name]="icons.plus" class="size-4" />
+              <span>{{ formVisible() ? 'Fermer le formulaire' : 'Nouveau tag' }}</span>
+            </span>
+          </p-button>
+        </div>
       </div>
       <form [formGroup]="searchForm" class="search-input-wrapper">
         <div class="search-input-group">
           <div class="search-input-icon">
             <i-lucide [name]="icons.search" class="search-input-icon-svg" />
           </div>
-          <input type="text" formControlName="q" placeholder="Rechercher un rôle..." class="search-input" />
+          <input type="text" formControlName="q" placeholder="Rechercher un tag..." class="search-input" />
           @if (searchForm.get('q')?.value) {
           <button type="button" (click)="searchForm.patchValue({ q: '' })" class="search-input-clear">
             <i-lucide [name]="icons.x" class="search-input-clear-icon" />
@@ -32,6 +37,45 @@
           }
         </div>
       </form>
+    </div>
+    <div class="px-6">
+      <div
+        class="rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white shadow-sm transition-all duration-500 ease-in-out overflow-hidden"
+        [style.maxHeight]="formVisible() ? '400px' : '0px'"
+        [style.opacity]="formVisible() ? 1 : 0"
+        [style.padding]="formVisible() ? '24px' : '0 24px'"
+        [style.marginTop]="formVisible() ? '24px' : '0px'">
+        <form class="space-y-6" [formGroup]="tagForm" (ngSubmit)="onSubmit()">
+          <div class="flex flex-col gap-1">
+            <p class="text-base font-semibold text-gray-900">
+              {{ formMode() === 'edit' ? 'Modifier le tag' : 'Ajouter un tag' }}
+            </p>
+            <p class="text-xs text-gray-500">
+              {{ formMode() === 'edit' ? 'Mettez à jour ce tag.' : 'Définissez un nouveau tag pour vos articles.' }}
+            </p>
+          </div>
+          <div class="space-y-2">
+            <label for="article-tag-name" class="block text-sm font-semibold text-gray-700">
+              Nom du tag
+              <span class="text-red-500">*</span>
+            </label>
+            <input pInputText id="article-tag-name" formControlName="name" placeholder="Nom du tag" class="w-full" />
+          </div>
+          <div class="flex items-center justify-end gap-3 pt-2 border-t border-gray-100">
+            <p-button type="button" size="small" severity="secondary" [outlined]="true" (onClick)="onCancelForm()">
+              Annuler
+            </p-button>
+            <p-button
+              type="submit"
+              size="small"
+              severity="primary"
+              [disabled]="tagForm.invalid || store.isLoading()"
+              [loading]="store.isLoading()">
+              {{ formMode() === 'edit' ? 'Mettre à jour' : 'Ajouter' }}
+            </p-button>
+          </div>
+        </form>
+      </div>
     </div>
     @if (tagsCount === 0 && !isLoading) {
     <div class="mx-6 mt-12 flex flex-col items-center justify-center py-20 px-6 rounded-xl">
@@ -47,12 +91,17 @@
           >{{ hasQuery }}</span
         >". Essayez avec d'autres mots-clés ou réinitialisez les filtres.
       </p>
-      <button
-        (click)="searchForm.patchValue({ q: '' })"
-        class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-lg transition-colors duration-200">
-        <i-lucide [name]="icons.refresh" class="size-4" />
-        Réinitialiser les filtres
-      </button>
+      <p-button
+        (onClick)="searchForm.patchValue({ q: '' })"
+        size="small"
+        severity="secondary"
+        [outlined]="true"
+        styleClass="font-semibold">
+        <span class="flex items-center gap-2">
+          <i-lucide [name]="icons.refresh" class="size-4" />
+          <span>Réinitialiser les filtres</span>
+        </span>
+      </p-button>
       } @else {
       <div
         class="w-20 h-20 bg-gradient-to-br from-primary-50 to-primary-100 rounded-3xl flex items-center justify-center mb-5">
@@ -62,12 +111,12 @@
       <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
         Commencez par ajouter votre premier tag pour organiser vos articles.
       </p>
-      <button
-        (click)="onToggleAddModal()"
-        class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-        <i-lucide [name]="icons.plus" class="size-4" />
-        Créer un tag
-      </button>
+      <p-button (onClick)="onToggleForm()" size="small" severity="primary" styleClass="font-semibold">
+        <span class="flex items-center gap-2">
+          <i-lucide [name]="icons.plus" class="size-4" />
+          <span>Créer un tag</span>
+        </span>
+      </p-button>
       }
     </div>
     } @if (isLoading) {
@@ -115,19 +164,15 @@
               <td class="px-6 py-4 font-semibold text-gray-900">{{ tag.name | titlecase }}</td>
               <td class="px-6 py-4">
                 <div class="flex items-center gap-1">
-                  <button
-                    (click)="onToggleEditModal(tag)"
-                    class="group relative p-1.5 rounded-md bg-blue-400 text-white shadow-sm hover:bg-blue-500 transition-all duration-200 hover:scale-110 active:scale-95">
+                  <p-button (onClick)="onToggleForm(tag)" severity="info" size="small">
                     <i-lucide [name]="icons.edit" class="size-4" />
-                  </button>
-                  <button
-                    (click)="onDeleteTag(tag.id, $event)"
-                    class="group relative p-1.5 rounded-md bg-red-400 text-white shadow-sm hover:bg-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
+                  </p-button>
+                  <p-button (onClick)="onDeleteTag(tag.id, $event)" severity="danger" size="small">
                     <div class="relative">
                       <p-confirmpopup />
                       <i-lucide [name]="icons.trash" class="size-4" />
                     </div>
-                  </button>
+                  </p-button>
                 </div>
               </td>
             </tr>
@@ -150,54 +195,4 @@
     }
   </div>
 
-  <p-dialog [(visible)]="showAddModal" [closable]="false" [modal]="true" [style]="{ width: '25rem' }">
-    <form class="flex flex-col gap-4" [formGroup]="addTagForm" (ngSubmit)="onAddTag()">
-      <div class="flex flex-col gap-1.5">
-        <label for="name" class="font-medium">Nom du tag<span class="text-red-500">*</span></label>
-        <input pInputText type="text" id="name" name="name" formControlName="name" />
-      </div>
-      <div class="flex justify-end gap-4 flex-wrap">
-        <p-button size="small" variant="outlined" severity="danger" class="font-satoshi" (onClick)="onToggleAddModal()">
-          Annuler
-        </p-button>
-        <p-button
-          type="submit"
-          size="small"
-          severity="primary"
-          class="font-satoshi"
-          [disabled]="!addTagForm.valid || store.isLoading()"
-          [loading]="store.isLoading()">
-          Ajouter le tag
-        </p-button>
-      </div>
-    </form>
-  </p-dialog>
-
-  <p-dialog [(visible)]="showEditModal" [closable]="false" [modal]="true" [style]="{ width: '25rem' }">
-    <form class="flex flex-col gap-4" [formGroup]="updateTagForm" (ngSubmit)="onUpdateTag()">
-      <div class="flex flex-col gap-1.5">
-        <label for="name" class="font-medium">Nom du tag<span class="text-red-500">*</span></label>
-        <input pInputText type="text" id="name" name="name" formControlName="name" />
-      </div>
-      <div class="flex justify-end gap-4 flex-wrap">
-        <p-button
-          size="small"
-          variant="outlined"
-          severity="danger"
-          class="font-satoshi"
-          (onClick)="onToggleEditModal(null)">
-          Annuler
-        </p-button>
-        <p-button
-          type="submit"
-          size="small"
-          severity="primary"
-          class="font-satoshi"
-          [disabled]="!updateTagForm.valid || store.isLoading()"
-          [loading]="store.isLoading()">
-          Modifier le tag
-        </p-button>
-      </div>
-    </form>
-  </p-dialog>
 </div>

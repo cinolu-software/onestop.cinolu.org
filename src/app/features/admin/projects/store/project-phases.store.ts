@@ -23,11 +23,7 @@ interface IPhasesStore {
 }
 
 export const ProjectPhasesStore = signalStore(
-  withState<IPhasesStore>({
-    isLoading: false,
-    phases: [],
-    selectedPhase: null
-  }),
+  withState<IPhasesStore>({ isLoading: false, phases: [], selectedPhase: null }),
   withProps(() => ({
     _http: inject(HttpClient),
     _toast: inject(ToastrService)
@@ -39,7 +35,7 @@ export const ProjectPhasesStore = signalStore(
         switchMap((projectId) => {
           return _http.get<{ data: IPhase[] }>(`phases/project/${projectId}`).pipe(
             map(({ data }) => {
-              patchState(store, { isLoading: false, phases: data });
+              patchState(store, { isLoading: false, phases: data, selectedPhase: data[0] || null });
             }),
             catchError(() => {
               patchState(store, { isLoading: false, phases: [] });

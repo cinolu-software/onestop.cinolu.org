@@ -33,10 +33,11 @@
             Programme associé<span class="text-red-500 ml-1">*</span>
           </label>
           <p-select
+            [filter]="true"
             inputId="program"
             [optionValue]="'id'"
             [optionLabel]="'name'"
-            [options]="programsStore.subprograms()"
+            [options]="programsStore.unpaginatedSubprograms()"
             formControlName="program"
             placeholder="Sélectionner un programme"
             class="w-full" />
@@ -135,14 +136,8 @@
         [loading]="store.isLoading()"
         [disabled]="store.isLoading() || form.invalid"
         severity="primary"
-        type="submit"
-        styleClass="font-semibold">
-        <span class="flex items-center gap-2">
-          @if (!store.isLoading()) {
-          <i-lucide [name]="icons.save" class="size-4" />
-          }
-          <span>{{ store.isLoading() ? 'Enregistrement...' : 'Enregistrer les modifications' }}</span>
-        </span>
+        type="submit">
+        {{ store.isLoading() ? 'Enregistrement...' : 'Modifier le projet' }}
       </p-button>
     </div>
   </div>
