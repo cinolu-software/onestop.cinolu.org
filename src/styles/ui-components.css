@@ -1,0 +1,564 @@
+@layer utilities {
+  /* Buttons - Modern & Polished */
+  .ui-button {
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-lg border cursor-pointer leading-6 relative overflow-hidden transition-all duration-300 ease-in-out shadow-sm;
+  }
+
+  .ui-button::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transform-gpu bg-gray-300/30 -translate-x-full transition-transform duration-500 ease-in-out;
+  }
+
+  .ui-button:hover:not(.ui-button-disabled)::before {
+    @apply opacity-100 transform-gpu translate-x-full;
+  }
+
+  /* Sizes */
+  .ui-button-small {
+    @apply px-3.5 py-2 text-sm;
+  }
+  .ui-button-medium {
+    @apply px-5 py-2.5 text-[15px];
+  }
+  .ui-button-large {
+    @apply px-6 py-3 text-base;
+  }
+
+  /* Variants - Solid */
+  .ui-button-primary {
+    @apply text-white bg-primary-600 border-primary-600;
+  }
+
+  .ui-button-primary:hover:not(.ui-button-disabled) {
+    @apply bg-primary-700 border-primary-700;
+  }
+
+  .ui-button-primary:focus {
+    @apply ring-offset-2 ring-primary-500;
+  }
+
+  .ui-button-secondary {
+    @apply text-white bg-slate-600 border-slate-600;
+  }
+  .ui-button-secondary:hover:not(.ui-button-disabled) {
+    @apply bg-slate-700 border-slate-700;
+  }
+
+  .ui-button-secondary:focus {
+    @apply ring-offset-2 ring-slate-500;
+  }
+
+  .ui-button-danger {
+    @apply text-white bg-red-600 border-red-600;
+  }
+
+  .ui-button-danger:hover:not(.ui-button-disabled) {
+    @apply bg-red-700 border-red-700;
+  }
+
+  .ui-button-danger:focus {
+    @apply ring-offset-2 ring-red-500;
+  }
+
+  .ui-button-info {
+    @apply text-white bg-blue-600 border-blue-600;
+  }
+
+  .ui-button-info:hover:not(.ui-button-disabled) {
+    @apply bg-blue-700 border-blue-700;
+  }
+
+  .ui-button-info:focus {
+    @apply ring-offset-2 ring-blue-500;
+  }
+
+  .ui-button-contrast {
+    @apply text-white bg-slate-900 border-slate-900;
+  }
+
+  .ui-button-contrast:hover:not(.ui-button-disabled) {
+    @apply bg-slate-950 border-slate-950;
+  }
+
+  .ui-button-contrast:focus {
+    @apply ring-offset-2 ring-slate-700;
+  }
+
+  /* Outlined - Light & Modern */
+  .ui-button-outlined {
+    @apply bg-white shadow-sm border;
+  }
+  .ui-button-outlined:hover:not(.ui-button-disabled) {
+    @apply shadow-md;
+  }
+
+  .ui-button-outlined.ui-button-primary {
+    @apply text-primary-700 border-primary-400;
+  }
+  .ui-button-outlined.ui-button-primary:hover:not(.ui-button-disabled) {
+    @apply bg-primary-50 border-primary-700;
+  }
+  .ui-button-outlined.ui-button-primary:focus {
+    @apply ring-offset-2 ring-primary-500;
+  }
+
+  .ui-button-outlined.ui-button-secondary {
+    @apply text-slate-700 border-slate-400;
+  }
+  .ui-button-outlined.ui-button-secondary:hover:not(.ui-button-disabled) {
+    @apply bg-slate-50 border-slate-600;
+  }
+  .ui-button-outlined.ui-button-secondary:focus {
+    @apply ring-offset-2 ring-slate-500;
+  }
+
+  .ui-button-outlined.ui-button-danger {
+    @apply text-red-700 border-red-600;
+  }
+  .ui-button-outlined.ui-button-danger:hover:not(.ui-button-disabled) {
+    @apply bg-red-50 border-red-700;
+  }
+  .ui-button-outlined.ui-button-danger:focus {
+    @apply ring-offset-2 ring-red-500;
+  }
+
+  .ui-button-outlined.ui-button-info {
+    @apply text-blue-700 border-blue-600;
+  }
+  .ui-button-outlined.ui-button-info:hover:not(.ui-button-disabled) {
+    @apply bg-blue-50 border-blue-700;
+  }
+  .ui-button-outlined.ui-button-info:focus {
+    @apply ring-offset-2 ring-blue-500;
+  }
+
+  .ui-button-outlined.ui-button-contrast {
+    @apply text-slate-900 border-slate-300;
+  }
+  .ui-button-outlined.ui-button-contrast:hover:not(.ui-button-disabled) {
+    @apply bg-slate-50 border-slate-500;
+  }
+  .ui-button-outlined.ui-button-contrast:focus {
+    @apply ring-offset-2 ring-slate-700;
+  }
+
+  /* Text buttons - Minimal & Clean */
+  .ui-button-text {
+    @apply bg-transparent border-transparent shadow-none;
+  }
+  .ui-button-text:hover:not(.ui-button-disabled) {
+    @apply shadow-none;
+  }
+
+  .ui-button-text.ui-button-primary {
+    @apply text-primary-700;
+  }
+  .ui-button-text.ui-button-primary:hover:not(.ui-button-disabled) {
+    @apply bg-primary-50;
+  }
+  .ui-button-text.ui-button-primary:focus {
+    @apply ring-offset-2 ring-primary-500;
+  }
+
+  .ui-button-text.ui-button-secondary {
+    @apply text-slate-700;
+  }
+  .ui-button-text.ui-button-secondary:hover:not(.ui-button-disabled) {
+    @apply bg-slate-100;
+  }
+  .ui-button-text.ui-button-secondary:focus {
+    @apply ring-offset-2 ring-slate-500;
+  }
+
+  .ui-button-text.ui-button-danger {
+    @apply text-red-700;
+  }
+  .ui-button-text.ui-button-danger:hover:not(.ui-button-disabled) {
+    @apply bg-red-50;
+  }
+  .ui-button-text.ui-button-danger:focus {
+    @apply ring-offset-2 ring-red-500;
+  }
+
+  .ui-button-text.ui-button-info {
+    @apply text-blue-700;
+  }
+  .ui-button-text.ui-button-info:hover:not(.ui-button-disabled) {
+    @apply bg-blue-50;
+  }
+  .ui-button-text.ui-button-info:focus {
+    @apply ring-offset-2 ring-blue-500;
+  }
+
+  .ui-button-text.ui-button-contrast {
+    @apply text-slate-900;
+  }
+  .ui-button-text.ui-button-contrast:hover:not(.ui-button-disabled) {
+    @apply bg-slate-100;
+  }
+  .ui-button-text.ui-button-contrast:focus {
+    @apply ring-offset-2 ring-slate-700;
+  }
+
+  /* Disabled */
+  .ui-button-disabled {
+    @apply opacity-50 cursor-not-allowed shadow-none;
+  }
+
+  /* Inputs - Modern & Polished */
+  .ui-input,
+  .ui-textarea,
+  .ui-select,
+  .ui-datepicker {
+    @apply w-full px-3.5 py-2.5 text-[15px] leading-6 text-slate-900 bg-white border border-slate-300 rounded-lg font-[inherit] transition-all duration-300 ease-in-out shadow-sm hover:border-slate-400 hover:shadow-md;
+  }
+
+  .ui-input:focus,
+  .ui-textarea:focus,
+  .ui-select:focus,
+  .ui-datepicker:focus {
+    @apply outline-none border-primary-500 ring-2 ring-offset-1 ring-primary-200 shadow-md;
+  }
+
+  .ui-input::placeholder,
+  .ui-textarea::placeholder {
+    @apply text-slate-400;
+  }
+
+  .ui-input-invalid,
+  .ui-textarea-invalid,
+  .ui-select-invalid,
+  .ui-datepicker-invalid {
+    @apply border-red-500 bg-red-50;
+  }
+
+  .ui-input-invalid:focus,
+  .ui-textarea-invalid:focus,
+  .ui-select-invalid:focus,
+  .ui-datepicker-invalid:focus {
+    @apply border-red-600 ring-2 ring-offset-1 ring-red-200 shadow-md;
+  }
+
+  .ui-input-disabled,
+  .ui-textarea-disabled,
+  .ui-select-disabled,
+  .ui-datepicker-disabled {
+    @apply bg-slate-50 border-slate-200 cursor-not-allowed opacity-60 shadow-none;
+  }
+
+  /* Textarea specific */
+  .ui-textarea {
+    @apply resize-y min-h-28;
+  }
+
+  /* Select specific */
+  .ui-select {
+    @apply appearance-none pr-10 cursor-pointer;
+  }
+
+  /* Browser-specific webkit rule */
+  .ui-datepicker {
+    @apply cursor-pointer pr-10 opacity-60 hover:opacity-100 transition-opacity duration-200 ease-in-out;
+  }
+
+  .ui-datepicker-panel button:enabled:hover {
+    @apply transition-colors duration-150;
+  }
+
+  /* Password input specific */
+  .ui-password {
+    @apply pr-10;
+  }
+
+  .ui-text-editor {
+    @apply border border-gray-300 rounded-lg overflow-hidden bg-white;
+  }
+
+  .ui-text-editor-toolbar {
+    @apply flex items-center gap-1 px-3 py-2 bg-gray-50 border-b border-gray-200;
+    flex-wrap: wrap;
+  }
+
+  .ui-text-editor-toolbar-group {
+    @apply flex items-center gap-1;
+  }
+
+  .ui-text-editor-toolbar-divider {
+    @apply w-px h-6 bg-gray-300 mx-1;
+  }
+
+  .ui-text-editor-button {
+    @apply w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 transition-colors text-gray-700;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .ui-text-editor-button:hover:not(:disabled) {
+    @apply bg-gray-200;
+  }
+
+  .ui-text-editor-button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .ui-text-editor-button-active {
+    @apply bg-primary-100 text-primary-700;
+  }
+
+  .ui-text-editor-button-active:hover {
+    @apply bg-primary-200;
+  }
+
+  .ui-text-editor-content {
+    @apply px-4 py-3 outline-none;
+    min-height: 300px;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  .ui-text-editor-content:empty:before {
+    content: attr(data-placeholder);
+    @apply text-gray-400;
+    pointer-events: none;
+  }
+
+  .ui-text-editor-content:focus {
+    @apply outline-none;
+  }
+
+  .ui-text-editor-focused {
+    @apply ring-2 ring-primary-500/50;
+  }
+
+  .ui-text-editor-invalid {
+    @apply border-red-500;
+  }
+
+  .ui-text-editor-disabled {
+    @apply bg-gray-100 cursor-not-allowed opacity-60;
+  }
+
+  /* Content Styling */
+  .ui-text-editor-content p {
+    @apply mb-3;
+  }
+
+  .ui-text-editor-content h1 {
+    @apply text-3xl font-bold mb-3;
+  }
+
+  .ui-text-editor-content h2 {
+    @apply text-2xl font-bold mb-3;
+  }
+
+  .ui-text-editor-content h3 {
+    @apply text-xl font-bold mb-2;
+  }
+
+  .ui-text-editor-content ul,
+  .ui-text-editor-content ol {
+    @apply mb-3 pl-6;
+  }
+
+  .ui-text-editor-content ul {
+    @apply list-disc;
+  }
+
+  .ui-text-editor-content ol {
+    @apply list-decimal;
+  }
+
+  .ui-text-editor-content li {
+    @apply mb-1;
+  }
+
+  .ui-text-editor-content a {
+    @apply text-primary-600 underline;
+  }
+
+  .ui-text-editor-content img {
+    @apply max-w-full h-auto rounded-lg my-3;
+  }
+
+  .ui-text-editor-content pre {
+    @apply bg-gray-900 text-gray-100 rounded-lg p-4 my-3 overflow-x-auto;
+    font-family: 'Courier New', monospace;
+  }
+
+  .ui-text-editor-content code {
+    @apply bg-gray-100 text-gray-800 px-1 rounded;
+    font-family: 'Courier New', monospace;
+  }
+
+  .ui-text-editor-content blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic my-3 text-gray-600;
+  }
+
+  .ui-text-editor-content strong,
+  .ui-text-editor-content b {
+    @apply font-bold;
+  }
+
+  .ui-text-editor-content em,
+  .ui-text-editor-content i {
+    @apply italic;
+  }
+
+  .ui-text-editor-content u {
+    @apply underline;
+  }
+
+  /* Pagination - Navigation & Controls */
+  .pagination {
+    @apply flex items-center justify-center gap-6 py-4;
+  }
+
+  .pagination-button {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 text-sm font-medium transition-all duration-150 hover:bg-gray-50 hover:border-gray-300 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-200;
+  }
+
+  .pagination-info {
+    @apply flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200;
+  }
+
+  .pagination-page-count {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  .pagination-item-count {
+    @apply text-xs text-gray-500 border-l border-gray-300 pl-3;
+  }
+
+  /* Confirm Dialog - Modal Popup */
+  .ui-confirm-overlay {
+    @apply fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-9999 p-4;
+    animation: ui-fade-in 200ms ease-out;
+  }
+
+  .ui-confirm-dialog {
+    @apply bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden cursor-default;
+    animation: ui-slide-in 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ui-confirm-header {
+    @apply px-6 pt-6 pb-4 border-b border-gray-200 flex items-center justify-between;
+  }
+
+  .ui-confirm-title {
+    @apply m-0 text-xl font-semibold text-gray-900;
+  }
+
+  .ui-confirm-close {
+    @apply bg-transparent border-none p-2 cursor-pointer text-gray-500 rounded-md flex items-center justify-center transition-all duration-200 -mr-2;
+  }
+
+  .ui-confirm-close:hover {
+    @apply bg-gray-100 text-gray-900;
+  }
+
+  .ui-confirm-close:active {
+    @apply scale-95;
+  }
+
+  .ui-confirm-close:focus-visible {
+    @apply outline-2 outline-blue-500 outline-offset-2;
+  }
+
+  .ui-confirm-content {
+    @apply px-6 py-6 flex flex-col gap-4 items-center text-center;
+  }
+
+  .ui-confirm-icon-wrapper {
+    @apply flex justify-center items-center;
+  }
+
+  .ui-confirm-icon {
+    @apply w-14 h-14 rounded-full bg-linear-to-br from-red-100 to-red-200 flex items-center justify-center text-red-600;
+    animation: ui-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .ui-confirm-icon svg {
+    @apply w-7 h-7 stroke-[2.5];
+  }
+
+  .ui-confirm-message {
+    @apply m-0 text-[15px] leading-relaxed text-gray-600 max-w-sm;
+  }
+
+  .ui-confirm-footer {
+    @apply px-6 pb-6 pt-4 flex gap-3 justify-end bg-gray-50 border-t border-gray-200;
+  }
+
+  .ui-confirm-button-cancel,
+  .ui-confirm-button-confirm {
+    @apply flex-1 max-w-40;
+  }
+
+  /* Animations */
+  @keyframes ui-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes ui-slide-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes ui-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  /* Responsive - Mobile */
+  @media (max-width: 640px) {
+    .ui-confirm-overlay {
+      @apply p-2;
+    }
+
+    .ui-confirm-dialog {
+      @apply max-w-full m-2;
+    }
+
+    .ui-confirm-header {
+      @apply px-5 pt-5 pb-3;
+    }
+
+    .ui-confirm-content {
+      @apply px-5 py-5;
+    }
+
+    .ui-confirm-footer {
+      @apply px-5 pb-5 pt-3 flex-col-reverse;
+    }
+
+    .ui-confirm-button-cancel,
+    .ui-confirm-button-confirm {
+      @apply max-w-full;
+    }
+
+    .ui-confirm-title {
+      @apply text-lg;
+    }
+
+    .ui-confirm-message {
+      @apply text-sm;
+    }
+  }
+}
