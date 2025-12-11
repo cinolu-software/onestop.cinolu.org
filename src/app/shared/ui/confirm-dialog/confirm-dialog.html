@@ -1,0 +1,30 @@
+@if (confirmation(); as config) {
+<div class="ui-confirm-overlay" (click)="onReject()">
+  <div class="ui-confirm-dialog" (click)="$event.stopPropagation()">
+    @if (config.header) {
+    <div class="ui-confirm-header">
+      <h2 id="confirm-dialog-title" class="ui-confirm-title">{{ config.header }}</h2>
+      <button class="ui-confirm-close" (click)="onReject()" type="button" aria-label="Fermer">
+        <i-lucide [img]="icons.X" [size]="20" />
+      </button>
+    </div>
+    }
+    <div class="ui-confirm-content">
+      <div class="ui-confirm-icon-wrapper">
+        <div class="ui-confirm-icon">
+          <i-lucide [img]="icons.CircleAlert" [size]="24" />
+        </div>
+      </div>
+      <p class="ui-confirm-message">{{ config.message }}</p>
+    </div>
+    <div class="ui-confirm-footer">
+      <ui-button [variant]="'secondary'" [outlined]="true" (clicked)="onReject()" [size]="'small'">
+        {{ config.rejectLabel || 'Annuler' }}
+      </ui-button>
+      <ui-button [variant]="'danger'" (clicked)="onAccept()" [size]="'small'">
+        {{ config.acceptLabel || 'Confirmer' }}
+      </ui-button>
+    </div>
+  </div>
+</div>
+}

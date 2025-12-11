@@ -1,0 +1,56 @@
+<div class="relative">
+  <div [class]="selectClasses()" (click)="toggleDropdown()" [id]="id()">
+    @if (value.length === 0) {
+    <span class="text-gray-400">{{ placeholder() }}</span>
+    } @else { @if (display() === 'comma') {
+    <span class="text-sm">{{ selectedLabels().join(', ') }}</span>
+    } @else {
+    <div class="flex flex-wrap gap-1">
+      @for (label of selectedLabels(); track label) {
+      <span
+        class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded transition-colors">
+        {{ label }}
+        <button
+          type="button"
+          (click)="removeItem(normalizedOptions()[selectedLabels().indexOf(label)].value, $event)"
+          class="hover:text-primary-900 transition-colors">
+          ×
+        </button>
+      </span>
+      }
+    </div>
+    } }
+
+    <svg
+      class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 transition-colors"
+      [class.rotate-180]="isOpen()"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+
+  @if (isOpen()) {
+  <div
+    class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
+    @for (option of normalizedOptions(); track option.value) {
+    <div
+      class="px-3 py-2 cursor-pointer hover:bg-gray-100 flex items-center gap-2 transition-colors"
+      [class.bg-primary-50]="isSelected(option.value)"
+      [class.opacity-50]="option.disabled"
+      (click)="!option.disabled && toggleOption(option.value)">
+      <input
+        type="checkbox"
+        [checked]="isSelected(option.value)"
+        [disabled]="option.disabled"
+        class="w-4 h-4 accent-primary-600"
+        (click)="$event.stopPropagation()" />
+      <span class="text-sm">{{ option.label }}</span>
+    </div>
+    } @if (options().length === 0) {
+    <div class="px-3 py-2 text-sm text-gray-500 text-center">No options available</div>
+    }
+  </div>
+  }
+</div>

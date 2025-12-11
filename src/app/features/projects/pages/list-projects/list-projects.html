@@ -1,0 +1,314 @@
+<section class="text-gray-600">
+  @let isLoading = store.isLoading(); @let hasQuery = queryParams().q; @let projectCount =
+  store.projects()[1]; @let projectList = store.projects()[0];
+  <div class="relative bg-white rounded-xl shadow-sm pb-12">
+    <div class="px-6 pt-6 pb-4 border-b border-gray-100">
+      <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
+        <div>
+          <h5 class="text-2xl font-bold text-gray-900 mb-1">Projets</h5>
+          <p class="text-sm text-gray-500">
+            Gérez et organisez vos projets @if (!isLoading) {
+            <span class="text-gray-400">• {{ projectCount }} au total</span>
+            }
+          </p>
+        </div>
+        <ui-button size="small" [routerLink]="'/projects/add'">
+          <i-lucide [name]="icons.plus" class="size-4" />
+          Nouveau projet
+        </ui-button>
+      </div>
+      <form [formGroup]="searchForm" class="search-input-wrapper">
+        <div class="search-input-group">
+          <div class="search-input-icon">
+            <i-lucide [name]="icons.search" class="search-input-icon-svg" />
+          </div>
+          <input
+            type="text"
+            formControlName="q"
+            placeholder="Rechercher un projet par nom..."
+            class="search-input" />
+          @if (searchForm.get('q')?.value) {
+          <button
+            type="button"
+            (click)="
+              searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndProjects()
+            "
+            class="search-input-clear">
+            <i-lucide name="x" class="search-input-clear-icon" />
+          </button>
+          }
+        </div>
+      </form>
+    </div>
+    <div class="px-6 my-4">
+      <ui-tabs
+        [tabs]="tabsConfig()"
+        [activeTab]="activeTab()"
+        [isLoading]="isLoading"
+        (tabChange)="onTabChange($event)" />
+    </div>
+
+    @if (projectCount === 0 && !isLoading) {
+    <div class="mx-6 mt-12 flex flex-col items-center justify-center py-20 px-6 rounded-xl">
+      @if (hasQuery) {
+      <div
+        class="w-20 h-20 bg-linear-to-br from-blue-50 to-blue-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
+        <i-lucide [name]="icons.search" class="text-blue-500 w-9 h-9 stroke-[1.5]" />
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun projet trouvé</h3>
+      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+        Nous n'avons trouvé aucun projet correspondant à vos critères de recherche "<span
+          class="font-semibold text-gray-700"
+          >{{ hasQuery }}</span
+        >". Essayez avec d'autres mots-clés ou réinitialisez les filtres.
+      </p>
+      <ui-button
+        (clicked)="
+          searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndProjects()
+        "
+        variant="secondary"
+        [outlined]="true"
+        styleClass="text-sm">
+        <span class="flex items-center gap-2">
+          <i-lucide [name]="icons.filter" class="size-4" />
+          <span>Réinitialiser les filtres</span>
+        </span>
+      </ui-button>
+      } @else if (activeTab() === 'published') {
+      <div
+        class="w-20 h-20 bg-linear-to-br from-emerald-50 to-emerald-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
+        <i-lucide [name]="icons.eye" class="text-emerald-500 w-9 h-9 stroke-[1.5]" />
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun projet publié</h3>
+      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+        Vous n'avez pas encore de projets publiés. Publiez vos brouillons pour les rendre visibles
+        au public.
+      </p>
+      } @else if (activeTab() === 'drafts') {
+      <div
+        class="w-20 h-20 bg-linear-to-br from-gray-50 to-gray-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
+        <i-lucide [name]="icons.fileX" class="text-gray-400 w-9 h-9 stroke-[1.5]" />
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun brouillon</h3>
+      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+        Tous vos projets sont publiés. Les brouillons apparaîtront ici lorsque vous dépubliez un
+        projet.
+      </p>
+      } @else if (activeTab() === 'highlighted') {
+      <div
+        class="w-20 h-20 bg-linear-to-br from-amber-50 to-amber-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
+        <i-lucide [name]="icons.sparkles" class="text-amber-500 w-9 h-9 stroke-[1.5]" />
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun projet en vedette</h3>
+      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+        Mettez vos meilleurs projets en vedette pour les mettre en avant. Cliquez sur l'étoile pour
+        les ajouter.
+      </p>
+      } @else {
+      <div
+        class="w-20 h-20 bg-linear-to-br from-primary-50 to-primary-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
+        <i-lucide [name]="icons.plus" class="text-primary-600 w-10 h-10 stroke-[1.5]" />
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun projet</h3>
+      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
+        Commencez par créer votre premier projet pour gérer vos initiatives et organiser vos
+        activités.
+      </p>
+      <ui-button [routerLink]="'/projects/add'" variant="primary" styleClass="text-sm">
+        <span class="flex items-center gap-2">
+          <i-lucide [name]="icons.plus" class="size-4" />
+          <span>Créer un projet</span>
+        </span>
+      </ui-button>
+      }
+    </div>
+    } @if (isLoading) {
+    <div class="px-6 mt-6">
+      <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+        <table class="w-full text-left">
+          <thead class="text-left">
+            <tr class="border-b border-gray-200">
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Image
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Nom
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Début
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Fin
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Statut
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-100">
+            @for (i of skeletonArray; track $index) {
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-5">
+                <div class="w-10 h-10 rounded-full bg-gray-200 animate-pulse"></div>
+              </td>
+              <td class="px-6 py-5">
+                <div class="h-4 w-48 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-5">
+                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-5">
+                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-5">
+                <div class="h-6 w-20 bg-gray-200 rounded-full animate-pulse"></div>
+              </td>
+              <td class="px-6 py-5">
+                <div class="flex items-center gap-2">
+                  <div class="h-9 w-9 bg-gray-200 rounded-lg animate-pulse"></div>
+                  <div class="h-9 w-9 bg-gray-200 rounded-lg animate-pulse"></div>
+                  <div class="h-9 w-9 bg-gray-200 rounded-lg animate-pulse"></div>
+                  <div class="h-9 w-9 bg-gray-200 rounded-lg animate-pulse"></div>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    } @if (projectCount > 0 && !isLoading) {
+    <div class="px-6 mt-6">
+      <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+        <table class="w-full text-left">
+          <thead class="text-left">
+            <tr class="border-b border-gray-200">
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Image
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Nom
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Début
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Fin
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Statut
+              </th>
+              <th
+                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-100">
+            @for ( project of projectList | paginate : { itemsPerPage: 40, currentPage:
+            queryParams().page || 1, totalItems: projectCount, }; track project.id ) {
+            <tr
+              class="group border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-6 py-5">
+                @if (project) {
+                <ui-avatar [image]="project | apiIMG : 'project'" [size]="50" />
+                }
+              </td>
+              <td class="px-6 py-5">
+                <p class="font-semibold text-gray-900 w-full md:w-48">
+                  {{ project.name | titlecase }}
+                </p>
+              </td>
+              <td class="px-6 py-5 text-sm text-gray-600">
+                {{ project.started_at | date : 'dd MMM yyyy' }}
+              </td>
+              <td class="px-6 py-5 text-sm text-gray-600">
+                {{ project.ended_at | date : 'dd MMM yyyy' }}
+              </td>
+              <td class="px-6 py-5">
+                @if (project.is_published) {
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  Publié
+                </span>
+                } @else {
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  Brouillon
+                </span>
+                }
+              </td>
+              <td class="px-6 py-5">
+                <div class="flex items-center gap-2">
+                  <ui-button
+                    (clicked)="highlightProject(project.id)"
+                    [variant]="project.is_highlighted ? 'contrast' : 'secondary'"
+                    [size]="'small'"
+                    [title]="
+                      project.is_highlighted ? 'Retirer de la vedette' : 'Mettre en vedette'
+                    ">
+                    <i-lucide
+                      [name]="project.is_highlighted ? icons.star : icons.starOff"
+                      class="size-4" />
+                  </ui-button>
+                  <ui-button
+                    (clicked)="onPublishProject(project.id)"
+                    [variant]="project.is_published ? 'primary' : 'secondary'"
+                    [size]="'small'"
+                    [title]="project.is_published ? 'Dépublier' : 'Publier'">
+                    <i-lucide
+                      [name]="project.is_published ? icons.eye : icons.eyeOff"
+                      class="size-4" />
+                  </ui-button>
+                  <ui-button
+                    [routerLink]="['/projects/edit', project.slug]"
+                    variant="info"
+                    [size]="'small'"
+                    title="Modifier le projet">
+                    <i-lucide [name]="icons.edit" class="size-4" />
+                  </ui-button>
+                  <ui-button
+                    (clicked)="onDeleteProject(project.id, $event)"
+                    variant="danger"
+                    [size]="'small'"
+                    title="Supprimer">
+                    <i-lucide [name]="icons.trash" class="size-4" />
+                  </ui-button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    } @if (projectCount > 40) {
+    <div class="flex justify-center items-center gap-3 py-8 px-6">
+      <pagination-controls
+        nextLabel=""
+        previousLabel=""
+        [autoHide]="true"
+        [maxSize]="5"
+        (pageChange)="onPageChange($event)"
+        class="pg" />
+    </div>
+    }
+  </div>
+  <ui-confirm-dialog />
+</section>

@@ -1,0 +1,13 @@
+<table class="w-full bg-white">
+  <tbody>
+    @for (i of rowsArray(); track $index) {
+    <tr>
+      @for (col of columnsArray(); track $index) {
+      <td class="px-6 py-4">
+        <div class="h-4 w-full max-w-xs bg-gray-200 rounded animate-pulse"></div>
+      </td>
+      }
+    </tr>
+    }
+  </tbody>
+</table>

@@ -1,0 +1,58 @@
+<section class="pt-32 dashboard-main-content flex flex-col gap-4">
+  @let article = store.article(); @let isLoading = store.isLoading();
+  <ui-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+
+  @if (isLoading) {
+  <div class="bg-white rounded-xl shadow-sm p-6">
+    @if (activeTab() === 'edit') {
+    <div class="space-y-6">
+      <div class="space-y-2">
+        <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+        <div class="h-10 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+      </div>
+      <div class="space-y-2">
+        <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+        <div class="h-10 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+      </div>
+      <div class="space-y-2">
+        <div class="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+        <div class="h-32 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+      </div>
+      <div class="space-y-2">
+        <div class="h-4 w-28 bg-gray-200 rounded animate-pulse"></div>
+        <div class="h-64 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+      </div>
+      <div class="flex gap-3 justify-end">
+        <div class="h-10 w-24 bg-gray-200 rounded-lg animate-pulse"></div>
+        <div class="h-10 w-32 bg-gray-200 rounded-lg animate-pulse"></div>
+      </div>
+    </div>
+    } @else if (activeTab() === 'gallery') {
+    <div class="space-y-6">
+      <div class="space-y-3">
+        <div class="h-5 w-40 bg-gray-200 rounded animate-pulse"></div>
+        <div class="h-48 w-full bg-gray-200 rounded-xl animate-pulse"></div>
+      </div>
+      <div class="space-y-3">
+        <div class="h-5 w-32 bg-gray-200 rounded animate-pulse"></div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          @for (i of [1,2,3,4]; track $index) {
+          <div class="h-40 bg-gray-200 rounded-lg animate-pulse"></div>
+          }
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  } @else { @if (activeTab() === 'edit' && article) {
+  <app-article-edit-form [article]="article" />
+  } @if (activeTab() === 'gallery' && article) {
+  <app-article-gallery
+    [article]="article"
+    [gallery]="store.gallery()"
+    [isLoading]="isLoading"
+    (coverUploaded)="onCoverUploaded()"
+    (galleryUploaded)="onGalleryUploaded()"
+    (deleteImage)="onDeleteImage($event)" />
+  } }
+</section>

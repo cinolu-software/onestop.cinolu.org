@@ -1,0 +1,174 @@
+import { Component, input, forwardRef, signal, effect, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  LucideAngularModule,
+  Bold,
+  Italic,
+  Underline,
+  List,
+  ListOrdered,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Link,
+  Image,
+  Code
+} from 'lucide-angular';
+
+@Component({
+  selector: 'ui-text-editor',
+  imports: [CommonModule, LucideAngularModule],
+  templateUrl: './text-editor.html',
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiTextEditor), multi: true }
+  ]
+})
+export class UiTextEditor implements ControlValueAccessor {
+  @ViewChild('editor', { static: false }) editorElement!: ElementRef<HTMLDivElement>;
+
+  placeholder = input<string>('Start typing...');
+  disabled = input<boolean>(false);
+  id = input<string>('');
+  invalid = input<boolean>(false);
+  minHeight = input<string>('300px');
+
+  value = '';
+  isFocused = signal(false);
+
+  icons = {
+    bold: Bold,
+    italic: Italic,
+    underline: Underline,
+    bulletList: List,
+    orderedList: ListOrdered,
+    alignLeft: AlignLeft,
+    alignCenter: AlignCenter,
+    alignRight: AlignRight,
+    link: Link,
+    image: Image,
+    code: Code
+  };
+
+  onChange!: (value: string) => void;
+  onTouched!: () => void;
+
+  constructor() {
+    effect(() => {
+      if (this.disabled() && this.editorElement) {
+        this.editorElement.nativeElement.contentEditable = 'false';
+      }
+    });
+  }
+
+  writeValue(value: string): void {
+    this.value = value || '';
+    if (this.editorElement) {
+      this.editorElement.nativeElement.innerHTML = this.value;
+    }
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    if (this.editorElement) {
+      this.editorElement.nativeElement.contentEditable = (!isDisabled).toString();
+    }
+  }
+
+  onInput(): void {
+    if (this.editorElement) {
+      this.value = this.editorElement.nativeElement.innerHTML;
+      this.onChange(this.value);
+    }
+  }
+
+  onFocus(): void {
+    this.isFocused.set(true);
+  }
+
+  onBlur(): void {
+    this.isFocused.set(false);
+    this.onTouched();
+  }
+
+  execCommand(command: string, value: string | undefined = undefined): void {
+    document.execCommand(command, false, value);
+    this.editorElement?.nativeElement.focus();
+    this.onInput();
+  }
+
+  formatBold(): void {
+    this.execCommand('bold');
+  }
+
+  formatItalic(): void {
+    this.execCommand('italic');
+  }
+
+  formatUnderline(): void {
+    this.execCommand('underline');
+  }
+
+  insertBulletList(): void {
+    this.execCommand('insertUnorderedList');
+  }
+
+  insertOrderedList(): void {
+    this.execCommand('insertOrderedList');
+  }
+
+  alignLeft(): void {
+    this.execCommand('justifyLeft');
+  }
+
+  alignCenter(): void {
+    this.execCommand('justifyCenter');
+  }
+
+  alignRight(): void {
+    this.execCommand('justifyRight');
+  }
+
+  insertLink(): void {
+    const url = prompt('Enter URL:');
+    if (url) {
+      this.execCommand('createLink', url);
+    }
+  }
+
+  insertImage(): void {
+    const url = prompt('Enter image URL:');
+    if (url) {
+      this.execCommand('insertImage', url);
+    }
+  }
+
+  formatCode(): void {
+    this.execCommand('formatBlock', 'pre');
+  }
+
+  editorClasses(): string {
+    const baseClasses = 'ui-text-editor-content';
+    const focusedClass = this.isFocused() ? 'ui-text-editor-focused' : '';
+    const invalidClass = this.invalid() ? 'ui-text-editor-invalid' : '';
+    const disabledClass = this.disabled() ? 'ui-text-editor-disabled' : '';
+    return [baseClasses, focusedClass, invalidClass, disabledClass].filter(Boolean).join(' ');
+  }
+
+  toolbarClasses(): string {
+    return 'ui-text-editor-toolbar';
+  }
+
+  buttonClasses(isActive = false): string {
+    const baseClasses = 'ui-text-editor-button';
+    const activeClass = isActive ? 'ui-text-editor-button-active' : '';
+    return [baseClasses, activeClass].filter(Boolean).join(' ');
+  }
+}

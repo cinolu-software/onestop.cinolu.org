@@ -1,0 +1,12 @@
+@if (true) {
+<aside class="hidden md:block w-[22vw] z-30 overflow-y-auto">
+  <app-sidebar />
+</aside>
+<main class="md:ml-[18vw] min-h-screen pt-12 px-8 pb-12 lg:px-8 bg-gray-100">
+  <app-topbar />
+  <div class="mt-20 px-10">
+    <router-outlet />
+  </div>
+</main>
+<ui-back-button />
+}

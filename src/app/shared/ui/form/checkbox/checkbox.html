@@ -1,0 +1,19 @@
+<div class="flex items-center gap-2">
+  <input
+    type="checkbox"
+    [id]="id()"
+    [name]="name()"
+    [checked]="value"
+    [disabled]="disabled()"
+    [class]="checkboxClasses()"
+    (change)="onCheckboxChange($event)"
+    class="accent-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2" />
+  @if (label()) {
+  <label
+    [for]="id()"
+    class="text-sm font-medium text-gray-700 cursor-pointer select-none transition-colors"
+    [class.opacity-50]="disabled()">
+    {{ label() }}
+  </label>
+  }
+</div>

@@ -1,0 +1,26 @@
+<div class="relative" [style.width.px]="size()" [style.height.px]="size()">
+  <svg class="transform -rotate-90" [attr.width]="size()" [attr.height]="size()">
+    <circle
+      [attr.cx]="center()"
+      [attr.cy]="center()"
+      [attr.r]="radius()"
+      stroke="currentColor"
+      [attr.stroke-width]="strokeWidth()"
+      fill="transparent"
+      class="text-gray-200" />
+    <circle
+      [attr.cx]="center()"
+      [attr.cy]="center()"
+      [attr.r]="radius()"
+      stroke="currentColor"
+      [attr.stroke-width]="strokeWidth()"
+      fill="transparent"
+      [attr.stroke-dasharray]="circumference()"
+      [attr.stroke-dashoffset]="offset()"
+      [class]="'transition-all duration-500 ' + strokeColor()"
+      stroke-linecap="round" />
+  </svg>
+  <div class="absolute inset-0 flex items-center justify-center">
+    <span class="text-sm font-bold" [class]="textColor()"> {{ percentage() }}% </span>
+  </div>
+</div>

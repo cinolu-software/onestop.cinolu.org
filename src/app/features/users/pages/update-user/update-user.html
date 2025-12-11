@@ -1,0 +1,242 @@
+<section class="pt-32 dashboard-main-content flex flex-col gap-6">
+  @if (store.isLoading()) {
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+    <div class="flex items-start gap-8 mb-8">
+      <div class="shrink-0">
+        <div class="animate-pulse bg-gray-200 h-48 w-48 rounded-2xl"></div>
+      </div>
+      <div class="flex-1 space-y-6">
+        <div>
+          <div class="animate-pulse rounded-lg bg-gray-200 h-8 w-64 mb-3"></div>
+          <div class="animate-pulse rounded-lg bg-gray-200 h-5 w-48"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="animate-pulse rounded-lg bg-gray-200 h-5 w-full"></div>
+          <div class="animate-pulse rounded-lg bg-gray-200 h-5 w-full"></div>
+          <div class="animate-pulse rounded-lg bg-gray-200 h-5 w-full"></div>
+          <div class="animate-pulse rounded-lg bg-gray-200 h-5 w-full"></div>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-gray-200 pt-8">
+      <div class="animate-pulse rounded-lg h-10 w-full mb-6 bg-gray-200"></div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+        <div class="space-y-2">
+          <div class="animate-pulse rounded bg-gray-200 h-4 w-24"></div>
+          <div class="animate-pulse rounded-lg bg-gray-200 h-10 w-full"></div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  } @if (store.user(); as user) {
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-linear-to-r from-primary-50 to-primary-100/50 p-8 border-b border-gray-200">
+      <div class="flex flex-col lg:flex-row items-start gap-8">
+        <div class="shrink-0">
+          <div
+            class="relative h-48 w-48 rounded-2xl ring-4 ring-white shadow-xl bg-gray-100 overflow-hidden">
+            <img
+              [alt]="user.name"
+              [ngSrc]="user | apiIMG : 'user'"
+              class="object-cover"
+              fill
+              priority />
+          </div>
+        </div>
+        <div class="flex-1 space-y-6">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ user.name | titlecase }}</h1>
+            <div class="flex items-center gap-2 text-gray-600">
+              <i-lucide [name]="icons.calendar" class="size-4" />
+              <span class="text-sm"
+                >Membre depuis le {{ user.created_at | date : 'longDate' }}</span
+              >
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            @if (user.email) {
+            <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm rounded-lg p-3">
+              <div
+                class="shrink-0 w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <i-lucide [name]="icons.email" class="size-5 text-primary-600" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Email</p>
+                <p class="text-sm font-semibold text-gray-900 truncate">{{ user.email }}</p>
+              </div>
+            </div>
+            } @if (user.phone_number) {
+            <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm rounded-lg p-3">
+              <div
+                class="shrink-0 w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <i-lucide [name]="icons.phone" class="size-5 text-primary-600" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Téléphone</p>
+                <p class="text-sm font-semibold text-gray-900 truncate">{{ user.phone_number }}</p>
+              </div>
+            </div>
+            } @if (user.city || user.country) {
+            <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm rounded-lg p-3">
+              <div
+                class="shrink-0 w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <i-lucide [name]="icons.mapPin" class="size-5 text-primary-600" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Localisation
+                </p>
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                  {{ user.country }}, {{ user.city }}
+                </p>
+              </div>
+            </div>
+            } @if (user.gender) {
+            <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm rounded-lg p-3">
+              <div
+                class="shrink-0 w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <i-lucide [name]="icons.user" class="size-5 text-primary-600" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Genre</p>
+                <p class="text-sm font-semibold text-gray-900">{{ user.gender }}</p>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="p-8">
+        <form [formGroup]="updateUserForm" (ngSubmit)="onUpdateUser()">
+          <div class="space-y-8">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                Coordonnées
+              </h3>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-2">
+                  <label for="email" class="text-sm font-semibold text-gray-700">
+                    Email<span class="text-red-500 ml-1">*</span>
+                  </label>
+                  <ui-input id="email" formControlName="email" placeholder="exemple@email.com" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label for="phone_number" class="text-sm font-semibold text-gray-700">
+                    Numéro de téléphone<span class="text-red-500 ml-1">*</span>
+                  </label>
+                  <ui-input
+                    id="phone_number"
+                    formControlName="phone_number"
+                    placeholder="+243 XXX XXX XXX" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                Identité
+              </h3>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-2">
+                  <label for="name" class="text-sm font-semibold text-gray-700">
+                    Nom complet<span class="text-red-500 ml-1">*</span>
+                  </label>
+                  <ui-input id="name" formControlName="name" placeholder="Nom de l'utilisateur" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label for="gender" class="text-sm font-semibold text-gray-700">
+                    Genre<span class="text-red-500 ml-1">*</span>
+                  </label>
+                  <ui-select
+                    inputId="gender"
+                    [options]="genders"
+                    formControlName="gender"
+                    placeholder="Sélectionner un genre" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label for="birth_date" class="text-sm font-semibold text-gray-700">
+                    Date de naissance<span class="text-red-500 ml-1">*</span>
+                  </label>
+                  <ui-datepicker
+                    id="birth_date"
+                    formControlName="birth_date"
+                    showIcon
+                    iconDisplay="input"
+                    placeholder="JJ/MM/AAAA" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                Localisation
+              </h3>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-2">
+                  <label for="country" class="text-sm font-semibold text-gray-700">
+                    Pays<span class="text-red-500 ml-1">*</span>
+                  </label>
+                  <input
+                    ui-input
+                    id="country"
+                    formControlName="country"
+                    placeholder="Ex: République Démocratique du Congo" />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <label for="city" class="text-sm font-semibold text-gray-700">
+                    Ville<span class="text-red-500 ml-1">*</span>
+                  </label>
+                  <ui-input id="city" formControlName="city" placeholder="Ex: Kinshasa" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                Permissions et rôles
+              </h3>
+              <div class="grid grid-cols-1 gap-6">
+                <div class="flex flex-col gap-2">
+                  <label for="role" class="text-sm font-semibold text-gray-700">
+                    Rôles<span class="text-red-500 ml-1">*</span>
+                  </label>
+                  <ui-multi-select
+                    [options]="roleOptions()"
+                    formControlName="roles"
+                    placeholder="Sélectionner un ou plusieurs rôles" />
+                  <p class="text-xs text-gray-500 mt-1">
+                    Les rôles déterminent les permissions et l'accès aux différentes sections de
+                    l'application
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end gap-3 pt-8 mt-8 border-t border-gray-200">
+            <ui-button
+              [size]="'small'"
+              [loading]="store.isLoading()"
+              [disabled]="updateUserForm.invalid || store.isLoading()"
+              variant="primary"
+              type="submit">
+              Enregistrer les modifications
+            </ui-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  } @if (!store.isLoading() && !store.user()) {
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+    <div class="flex flex-col items-center gap-3">
+      <i-lucide [name]="icons.alert" class="size-12 text-red-500" />
+      <h3 class="text-lg font-semibold text-gray-900">Utilisateur introuvable</h3>
+      <p class="text-gray-600">
+        Aucune information utilisateur n'a été trouvée pour cet identifiant.
+      </p>
+    </div>
+  </div>
+  }
+</section>

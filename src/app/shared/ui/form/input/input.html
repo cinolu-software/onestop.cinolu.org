@@ -1,0 +1,19 @@
+<div class="space-y-2">
+  @if (label()) {
+  <label [for]="id()" class="block text-sm font-semibold text-gray-700">
+    {{ label() }}
+  </label>
+  }
+  <input
+    [type]="type()"
+    [name]="name()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [id]="id()"
+    [autocomplete]="'off'"
+    [class]="inputClasses()"
+    [value]="value"
+    (input)="onInput($event)"
+    (blur)="onTouched(); blurred.emit($event)"
+    (focus)="focused.emit($event)" />
+</div>

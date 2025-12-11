@@ -1,0 +1,29 @@
+<div
+  class="flex items-center flex-wrap justify-between gap-4 mb-8 bg-white rounded-xl px-6 py-4 shadow-sm border border-gray-200">
+  <div class="flex items-center gap-3">
+    <i-lucide [img]="icons.Calendar" class="text-primary-600 w-5 h-5 stroke-2" />
+    <label for="indicator-year" class="font-semibold text-gray-800">
+      Performance Globale : {{ year().getFullYear() }}
+    </label>
+  </div>
+  <ui-datepicker
+    inputId="indicator-year"
+    name="indicator-year"
+    [view]="'year'"
+    [(ngModel)]="year" />
+</div>
+@if (reportStore.isLoading()) {
+<app-performance-skeleton />
+} @else if (reportStore.report().length === 0) {
+<ui-empty-state [year]="year().getFullYear()" />
+} @else {
+<app-performance-overview
+  [year]="year().getFullYear()"
+  [programCount]="reportStore.report().length"
+  [averagePerformance]="averagePerformance()" />
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  @for (program of sortedPrograms(); track $index) {
+  <app-program-card [program]="program" />
+  }
+</div>
+}

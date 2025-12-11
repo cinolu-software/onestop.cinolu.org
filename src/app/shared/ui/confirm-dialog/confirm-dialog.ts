@@ -1,0 +1,31 @@
+import { Component, inject } from '@angular/core';
+import { X, CircleAlert, LucideAngularModule } from 'lucide-angular';
+import { UiButton } from '../form/button/button';
+import { ConfirmationService } from '@shared/services/confirmation';
+
+@Component({
+  selector: 'ui-confirm-dialog',
+  imports: [UiButton, LucideAngularModule],
+  templateUrl: './confirm-dialog.html'
+})
+export class UiConfirmDialog {
+  #confirmationService = inject(ConfirmationService);
+  icons = { X, CircleAlert };
+  confirmation = this.#confirmationService.getConfirmation;
+
+  onAccept(): void {
+    const config = this.confirmation();
+    if (config?.accept) {
+      config.accept();
+    }
+    this.#confirmationService.close();
+  }
+
+  onReject(): void {
+    const config = this.confirmation();
+    if (config?.reject) {
+      config.reject();
+    }
+    this.#confirmationService.close();
+  }
+}
