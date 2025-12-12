@@ -1,16 +1,16 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { LucideAngularModule, Plus, RefreshCcw, Search, SquarePen, Trash, X } from 'lucide-angular';
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { LucideAngularModule, Plus, Search, Trash, Funnel, Pencil } from 'lucide-angular';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { TagsStore } from '../../store/tag.store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterArticlesTagsDto } from '../../dto/filter-tags.dto';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { UiButton, UiConfirmDialog, UiLoader } from '@shared/ui';
+import { UiButton, UiConfirmDialog, UiInput, UiPagination } from '@shared/ui';
 import { ITag } from '@shared/models';
 import { ConfirmationService } from '@shared/services/confirmation';
+import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
 
 @Component({
   selector: 'app-article-tags',
@@ -19,35 +19,30 @@ import { ConfirmationService } from '@shared/services/confirmation';
     LucideAngularModule,
     ReactiveFormsModule,
     UiButton,
+    UiInput,
     UiConfirmDialog,
-
-    NgxPaginationModule,
+    UiPagination,
+    UiTableSkeleton,
     CommonModule
   ],
   templateUrl: './article-tags.html'
 })
-export class ArticleTags implements OnInit {
+export class ArticleTags {
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
+  #destroyRef = inject(DestroyRef);
   searchForm: FormGroup;
   tagForm: FormGroup;
   store = inject(TagsStore);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
-  #destroyRef = inject(DestroyRef);
-  icons = {
-    refresh: RefreshCcw,
-    edit: SquarePen,
-    trash: Trash,
-    plus: Plus,
-    search: Search,
-    x: X
-  };
+  itemsPerPage = 10;
+  icons = { Pencil, Trash, Plus, Search, Funnel };
   queryParams = signal<FilterArticlesTagsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q')
   });
+  currentPage = computed(() => Number(this.queryParams().page) || 1);
   formVisible = signal(false);
   formMode = signal<'create' | 'edit'>('create');
   editingTag = signal<ITag | null>(null);
@@ -60,44 +55,51 @@ export class ArticleTags implements OnInit {
       id: [''],
       name: ['', Validators.required]
     });
-  }
 
-  ngOnInit(): void {
-    this.store.loadTags(this.queryParams());
-    const searchInput = this.searchForm.get('q');
-    searchInput?.valueChanges
+    effect(() => {
+      this.store.loadTags(this.queryParams());
+    });
+    const searchValue = this.searchForm.get('q');
+    searchValue?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
       .subscribe((searchValue: string) => {
-        this.queryParams().q = searchValue ? searchValue.trim() : null;
-        this.queryParams().page = null;
-        this.updateRouteAndTags();
+        this.queryParams.update((qp) => ({
+          ...qp,
+          q: searchValue ? searchValue.trim() : null,
+          page: null
+        }));
+        this.updateRoute();
       });
   }
 
-  loadTags() {
-    this.store.loadTags(this.queryParams());
+  onPageChange(currentPage: number): void {
+    this.queryParams.update((qp) => ({
+      ...qp,
+      page: currentPage === 1 ? null : currentPage.toString()
+    }));
+    this.updateRoute();
   }
 
-  async onPageChange(currentPage: number): Promise<void> {
-    this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
-    await this.updateRouteAndTags();
-  }
-
-  async updateRoute(): Promise<void> {
+  updateRoute(): void {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/blog/tags'], { queryParams });
+    this.#router.navigate(['/blog/tags'], { queryParams });
   }
 
-  async updateRouteAndTags(): Promise<void> {
-    await this.updateRoute();
-    this.loadTags();
+  resetFilters(): void {
+    this.searchForm.patchValue({ q: '' });
+    this.queryParams.update((qp) => ({
+      ...qp,
+      q: null,
+      page: null
+    }));
+    this.updateRoute();
   }
 
-  onDeleteTag(tagId: string, tag: Event): void {
+  onDelete(tagId: string): void {
     this.#confirmationService.confirm({
-      message: 'Êtes-vous sûr de vouloir supprimer ce tag?',
-      header: 'Confirmer la suppression',
-      acceptLabel: 'Confirmer',
+      header: 'Confirmation',
+      message: 'Êtes-vous sûr de vouloir supprimer ce tag ?',
+      acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
       accept: () => {
         this.store.delete({ id: tagId });

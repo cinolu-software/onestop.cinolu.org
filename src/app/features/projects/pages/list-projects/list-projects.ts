@@ -1,127 +1,123 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import {
-  LucideAngularModule,
-  SquarePen,
-  Trash,
-  Search,
-  Plus,
-  Eye,
-  EyeOff,
-  Star,
-  StarOff,
-  Filter,
-  FileX,
-  Sparkles,
-  X
-} from 'lucide-angular';
-
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { LucideAngularModule, Trash, Search, Eye, Star, Funnel, Pencil } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-
-import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProjectsStore } from '../../store/projects.store';
-
-// Removed legacy per-action stores in favor of unified ProjectsStore
-
-import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { FilterProjectsDto } from '../../dto/projects/filter-projects.dto';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { IndicatorsStore } from '@features/programs/store/indicators.store';
-import { UiAvatar, UiButton, UiConfirmDialog, UiTabs } from '@shared/ui';
+import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
+import { UiAvatar, UiButton, UiConfirmDialog, UiTabs, UiPagination, UiBadge } from '@shared/ui';
+import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
 import { ConfirmationService } from '@shared/services/confirmation';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { IndicatorsStore } from '@features/programs/store/indicators.store';
 
 @Component({
-  selector: 'app-projects-list',
+  selector: 'app-list-projects',
   templateUrl: './list-projects.html',
   providers: [ProjectsStore, IndicatorsStore],
   imports: [
     LucideAngularModule,
     CommonModule,
     UiButton,
-    NgxPaginationModule,
     ReactiveFormsModule,
-    RouterLink,
     UiConfirmDialog,
-    UiAvatar,
     ApiImgPipe,
-    UiTabs
+    UiAvatar,
+    RouterLink,
+    UiTabs,
+    UiPagination,
+    UiTableSkeleton,
+    UiBadge
   ]
 })
-export class ListProjects implements OnInit {
+export class ListProjects {
   #route = inject(ActivatedRoute);
   #router = inject(Router);
-  #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
-  searchForm: FormGroup;
-  store = inject(ProjectsStore);
-  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
-  icons = {
-    edit: SquarePen,
-    trash: Trash,
-    search: Search,
-    plus: Plus,
-    eye: Eye,
-    eyeOff: EyeOff,
-    star: Star,
-    starOff: StarOff,
-    filter: Filter,
-    fileX: FileX,
-    sparkles: Sparkles,
-    x: X
-  };
+  #fb = inject(FormBuilder);
+  store = inject(ProjectsStore);
   queryParams = signal<FilterProjectsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q'),
-    filter:
-      (this.#route.snapshot.queryParamMap.get('filter') as FilterProjectsDto['filter']) || 'all'
+    filter: this.#route.snapshot.queryParamMap.get('filter') as FilterProjectsDto['filter']
   });
-  activeTab = signal<string>(this.#route.snapshot.queryParamMap.get('filter') || 'all');
+  searchForm: FormGroup = this.#fb.group({
+    q: [this.queryParams().q || '']
+  });
+  icons = { Trash, Search, Eye, Star, Funnel, Pencil };
+  itemsPerPage = 10;
+  activeTab = computed(() => this.queryParams().filter || 'all');
   tabsConfig = signal([
-    { label: 'Tous les projets', name: 'all' },
+    { label: 'Tous', name: 'all' },
     { label: 'Publiés', name: 'published' },
     { label: 'Brouillons', name: 'drafts' },
     { label: 'En vedette', name: 'highlighted' }
   ]);
 
-  constructor() {
-    this.searchForm = this.#fb.group({
-      q: [this.queryParams().q || '']
-    });
-  }
+  currentPage = (): number => {
+    const page = this.queryParams().page;
+    return page ? parseInt(page, 10) : 1;
+  };
 
-  ngOnInit(): void {
-    this.loadProjects();
+  constructor() {
+    effect(() => {
+      this.updateRouteAndProjects();
+    });
     const searchInput = this.searchForm.get('q');
     searchInput?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
       .subscribe((searchValue: string) => {
-        this.queryParams().q = searchValue ? searchValue.trim() : null;
-        this.queryParams().page = null;
-        this.updateRouteAndProjects();
+        const nextQ = searchValue ? searchValue.trim() : null;
+        this.queryParams.update((qp) => {
+          if (qp.q === nextQ && qp.page === null) return qp;
+          return { ...qp, page: null, q: nextQ };
+        });
       });
   }
 
   onTabChange(tabName: string): void {
-    this.activeTab.set(tabName);
-    this.queryParams().filter = tabName as FilterProjectsDto['filter'];
-    this.queryParams().page = null;
-    this.updateRouteAndProjects();
-  }
-
-  loadProjects(): void {
-    this.store.loadProjects(this.queryParams());
+    this.searchForm.patchValue({ q: '' });
+    this.queryParams.update((qp) => ({
+      ...qp,
+      page: null,
+      filter: tabName === 'all' ? null : tabName
+    }));
   }
 
   onPageChange(currentPage: number): void {
-    this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
-    this.updateRouteAndProjects();
+    this.searchForm.patchValue({ q: '' });
+    this.queryParams.update((qp) => ({
+      ...qp,
+      page: currentPage === 1 ? null : currentPage.toString()
+    }));
   }
 
-  highlightProject(projectId: string): void {
-    this.store.highlight(projectId);
+  onPublish(id: string): void {
+    this.store.publishProject(id);
+  }
+
+  highlightProject(id: string): void {
+    this.store.highlight(id);
+  }
+
+  resetFilters(): void {
+    this.searchForm.patchValue({ q: '' });
+    this.queryParams.set({ page: null, q: null, filter: null });
+  }
+
+  onDelete(projectId: string): void {
+    this.#confirmationService.confirm({
+      header: 'Confirmer la suppression',
+      message: 'Etes-vous sûr de vouloir supprimer ce projet ?',
+      acceptLabel: 'Supprimer',
+      rejectLabel: 'Annuler',
+      accept: () => {
+        this.store.deleteProject(projectId);
+      }
+    });
   }
 
   updateRoute(): void {
@@ -131,29 +127,6 @@ export class ListProjects implements OnInit {
 
   updateRouteAndProjects(): void {
     this.updateRoute();
-    this.loadProjects();
-  }
-
-  onPublishProject(projectId: string): void {
-    this.store.publishProject(projectId);
-  }
-
-  onDeleteProject(projectId: string, event: Event): void {
-    this.#confirmationService.confirm({
-      target: event.currentTarget as EventTarget,
-      message: 'Etes-vous sûr ?',
-      acceptLabel: 'Confirmer',
-      rejectLabel: 'Annuler',
-      rejectButtonProps: {
-        severity: 'secondary',
-        outlined: true
-      },
-      acceptButtonProps: {
-        severity: 'danger'
-      },
-      accept: () => {
-        this.store.deleteProject(projectId);
-      }
-    });
+    this.store.loadProjects(this.queryParams());
   }
 }

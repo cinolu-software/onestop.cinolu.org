@@ -1,34 +1,17 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import {
-  LucideAngularModule,
-  X,
-  SquarePen,
-  Trash,
-  Search,
-  Plus,
-  Eye,
-  EyeOff,
-  Star,
-  StarOff,
-  FileX,
-  Sparkles,
-  Funnel
-} from 'lucide-angular';
-
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { LucideAngularModule, Trash, Search, Plus, Eye, Star, Funnel, Pencil } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-
-import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EventsStore } from '../../store/events.store';
-
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { FilterEventsDto } from '../../dto/categories/filter-events.dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { IndicatorsStore } from '@features/programs/store/indicators.store';
-import { UiAvatar, UiButton, UiConfirmDialog, UiTabs } from '@shared/ui';
+import { UiAvatar, UiButton, UiConfirmDialog, UiPagination, UiTabs } from '@shared/ui';
 import { ConfirmationService } from '@shared/services/confirmation';
+import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
+import { IndicatorsStore } from '@features/programs/store/indicators.store';
 
 @Component({
   selector: 'app-events-list',
@@ -38,44 +21,33 @@ import { ConfirmationService } from '@shared/services/confirmation';
     LucideAngularModule,
     CommonModule,
     UiButton,
-    NgxPaginationModule,
     ReactiveFormsModule,
     RouterLink,
     UiConfirmDialog,
     UiAvatar,
     ApiImgPipe,
-    UiTabs
+    UiTabs,
+    UiPagination,
+    UiTableSkeleton
   ]
 })
-export class ListEvents implements OnInit {
+export class ListEvents {
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
-  searchForm: FormGroup;
-  eventsStore = inject(EventsStore);
-  skeletonArray = Array.from({ length: 8 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
-  icons = {
-    x: X,
-    edit: SquarePen,
-    trash: Trash,
-    search: Search,
-    plus: Plus,
-    eye: Eye,
-    eyeOff: EyeOff,
-    star: Star,
-    starOff: StarOff,
-    filter: Funnel,
-    fileX: FileX,
-    sparkles: Sparkles
-  };
+  searchForm: FormGroup;
+  store = inject(EventsStore);
+  itemsPerPage = 10;
+  icons = { Pencil, Trash, Search, Plus, Eye, Star, Funnel };
   queryParams = signal<FilterEventsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q'),
-    filter: (this.#route.snapshot.queryParamMap.get('filter') as FilterEventsDto['filter']) || 'all'
+    filter: this.#route.snapshot.queryParamMap.get('filter')
   });
-  activeTab = signal<string>(this.#route.snapshot.queryParamMap.get('filter') || 'all');
+  activeTab = computed(() => this.queryParams().filter || 'all');
+  currentPage = computed(() => Number(this.queryParams().page) || 1);
   tabsConfig = signal([
     { label: 'Tous', name: 'all' },
     { label: 'Publiés', name: 'published' },
@@ -87,34 +59,33 @@ export class ListEvents implements OnInit {
     this.searchForm = this.#fb.group({
       q: [this.queryParams().q || '']
     });
-  }
-
-  ngOnInit(): void {
-    this.loadEvents();
-    const searchInput = this.searchForm.get('q');
-    searchInput?.valueChanges
+    effect(() => {
+      this.store.loadEvents(this.queryParams());
+    });
+    const searchValue = this.searchForm.get('q');
+    searchValue?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
       .subscribe((searchValue: string) => {
-        this.queryParams().q = searchValue ? searchValue.trim() : null;
-        this.queryParams().page = null;
-        this.updateRouteAndEvents();
+        this.queryParams.update((qp) => ({
+          ...qp,
+          q: searchValue ? searchValue.trim() : null,
+          page: null
+        }));
+        this.updateRoute();
       });
   }
 
   onTabChange(tabName: string): void {
-    this.activeTab.set(tabName);
-    this.queryParams().filter = tabName as FilterEventsDto['filter'];
-    this.queryParams().page = null;
-    this.updateRouteAndEvents();
-  }
-
-  loadEvents(): void {
-    this.eventsStore.loadEvents(this.queryParams());
+    this.queryParams.update((qp) => ({ ...qp, filter: tabName, page: null }));
+    this.updateRoute();
   }
 
   onPageChange(currentPage: number): void {
-    this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
-    this.updateRouteAndEvents();
+    this.queryParams.update((qp) => ({
+      ...qp,
+      page: currentPage === 1 ? null : currentPage.toString()
+    }));
+    this.updateRoute();
   }
 
   updateRoute(): void {
@@ -122,34 +93,33 @@ export class ListEvents implements OnInit {
     this.#router.navigate(['/events'], { queryParams });
   }
 
-  highlightEvent(eventId: string): void {
-    this.eventsStore.highlight(eventId);
+  showcaseEvent(eventId: string): void {
+    this.store.highlight(eventId);
   }
 
-  updateRouteAndEvents(): void {
+  onPublish(eventId: string): void {
+    this.store.publishEvent(eventId);
+  }
+
+  resetFilters(): void {
+    this.searchForm.patchValue({ q: '' });
+    this.queryParams.update((qp) => ({
+      ...qp,
+      q: null,
+      page: null,
+      filter: 'all'
+    }));
     this.updateRoute();
-    this.loadEvents();
   }
 
-  onPublishProject(projectId: string): void {
-    this.eventsStore.publishEvent(projectId);
-  }
-
-  onDeleteProject(projectId: string, event: Event): void {
+  onDelete(eventId: string): void {
     this.#confirmationService.confirm({
-      target: event.currentTarget as EventTarget,
-      message: 'Etes-vous sûr ?',
-      rejectButtonProps: {
-        severity: 'secondary',
-        outlined: true
-      },
-      acceptButtonProps: {
-        severity: 'danger'
-      },
-      acceptLabel: 'Confirmer',
+      header: 'Confirmation',
+      message: 'Êtes-vous sûr de vouloir supprimer cet événement ?',
+      acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
       accept: () => {
-        this.eventsStore.deleteEvent(projectId);
+        this.store.deleteEvent(eventId);
       }
     });
   }

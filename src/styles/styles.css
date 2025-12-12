@@ -185,7 +185,7 @@
   }
 
   .action-button-highlight-default {
-    @apply flex items-center gap-1.5 hover:shadow-md px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200  bg-white border border-gray-200 text-gray-600 hover:border-amber-300 hover:text-amber-600 hover:bg-amber-50;
+    @apply flex items-center gap-1.5 hover:shadow-md px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200  border border-gray-200  hover:border-amber-300 text-amber-600 bg-amber-50/90;
   }
 
   .action-button-danger {

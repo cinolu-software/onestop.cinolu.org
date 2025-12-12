@@ -1,147 +1,144 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { LucideAngularModule, RefreshCcw, SquarePen, Plus, Trash, Search, X } from 'lucide-angular';
-
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { LucideAngularModule, Plus, Trash, Search, Funnel, Pencil } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProgramCategoriesStore } from '../../store/program-categories.store';
 import { ICategory } from '@shared/models';
 import { FilterProgramCategoriesDto } from '../../dto/categories/filter-categories.dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { UiButton, UiConfirmDialog, UiDialog, UiInput } from '@shared/ui';
+import { UiButton, UiConfirmDialog, UiPagination } from '@shared/ui';
+import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
 import { ConfirmationService } from '@shared/services/confirmation';
+import { UiInput } from '@shared/ui/form/input/input';
 
 @Component({
-  selector: 'app-project-categories',
+  selector: 'app-program-categories',
   templateUrl: './program-categories.html',
   providers: [ProgramCategoriesStore],
   imports: [
     LucideAngularModule,
     CommonModule,
     UiButton,
-    NgxPaginationModule,
     ReactiveFormsModule,
-    UiDialog,
     UiConfirmDialog,
+    UiPagination,
+    UiTableSkeleton,
     UiInput
   ]
 })
-export class ProgramCategories implements OnInit {
+export class ProgramCategories {
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
-  searchForm: FormGroup;
-  addCategoryForm: FormGroup;
-  updateCategoryForm: FormGroup;
-  store = inject(ProgramCategoriesStore);
-  showAddModal = signal(false);
-  showEditModal = signal(false);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
   #destroyRef = inject(DestroyRef);
-  icons = {
-    refresh: RefreshCcw,
-    edit: SquarePen,
-    trash: Trash,
-    plus: Plus,
-    search: Search,
-    x: X
-  };
+  store = inject(ProgramCategoriesStore);
   queryParams = signal<FilterProgramCategoriesDto>({
-    page: this.#route.snapshot.params['page'],
-    q: this.#route.snapshot.params['q']
+    page: this.#route.snapshot.queryParamMap.get('page'),
+    q: this.#route.snapshot.queryParamMap.get('q')
+  });
+  searchForm: FormGroup = this.#fb.group({
+    q: [this.queryParams().q || '']
+  });
+  categoryForm: FormGroup = this.#fb.group({
+    id: [''],
+    name: ['', Validators.required]
+  });
+  icons = { Pencil, Trash, Plus, Search, Funnel };
+  itemsPerPage = 10;
+  formVisible = signal(false);
+  formMode = signal<'create' | 'edit'>('create');
+  editingCategory = signal<ICategory | null>(null);
+
+  currentPage = computed(() => {
+    const page = this.queryParams().page;
+    return page ? parseInt(page, 10) : 1;
   });
 
   constructor() {
-    this.searchForm = this.#fb.group({
-      q: [this.queryParams().q || '']
+    effect(() => {
+      this.updateRouteAndCategories();
     });
-    this.addCategoryForm = this.#fb.group({
-      name: ['', Validators.required]
-    });
-    this.updateCategoryForm = this.#fb.group({
-      id: [''],
-      name: ['', Validators.required]
-    });
-  }
-
-  ngOnInit(): void {
-    this.loadCategories();
     const searchInput = this.searchForm.get('q');
     searchInput?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
       .subscribe((searchValue: string) => {
-        this.queryParams().q = searchValue ? searchValue.trim() : null;
-        this.queryParams().page = null;
-        this.updateRouteAndCategories();
+        const nextQ = searchValue ? searchValue.trim() : null;
+        this.queryParams.update((qp) => {
+          if (qp.q === nextQ && qp.page === null) return qp;
+          return { ...qp, page: null, q: nextQ };
+        });
       });
   }
 
-  loadCategories(): void {
-    this.store.loadCategories(this.queryParams());
-  }
-
-  onToggleAddModal(): void {
-    this.showAddModal.set(!this.showAddModal());
-    if (this.showAddModal()) this.addCategoryForm.reset();
-  }
-
-  onToggleEditModal(category: ICategory | null): void {
-    this.updateCategoryForm.patchValue({
-      id: category?.id || '',
-      name: category?.name || ''
-    });
-    this.showEditModal.update((v) => !v);
-  }
-
   onPageChange(currentPage: number): void {
-    this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
-    this.updateRouteAndCategories();
+    this.queryParams.update((qp) => ({
+      ...qp,
+      page: currentPage === 1 ? null : currentPage.toString()
+    }));
+  }
+
+  resetFilters(): void {
+    this.searchForm.patchValue({ q: '' });
+    this.queryParams.set({ page: null, q: null });
   }
 
   updateRoute(): void {
     const queryParams = this.queryParams();
-    this.#router.navigate(['/program-categories'], { queryParams }).then();
+    this.#router.navigate(['/program-categories'], { queryParams });
   }
 
   updateRouteAndCategories(): void {
     this.updateRoute();
-    this.loadCategories();
+    this.store.loadCategories(this.queryParams());
   }
 
-  onAddCategory(): void {
-    if (this.addCategoryForm.invalid) return;
+  onToggleForm(category: ICategory | null = null): void {
+    if (category) {
+      this.formMode.set('edit');
+      this.editingCategory.set(category);
+      this.categoryForm.patchValue({ id: category.id, name: category.name });
+      this.formVisible.set(true);
+      return;
+    }
+    this.formMode.set('create');
+    this.editingCategory.set(null);
+    this.categoryForm.reset({ id: '', name: '' });
+    this.formVisible.update((v) => !v);
+  }
+
+  onCancelForm(): void {
+    this.formVisible.set(false);
+    this.formMode.set('create');
+    this.editingCategory.set(null);
+    this.categoryForm.reset({ id: '', name: '' });
+  }
+
+  onSubmit(): void {
+    if (this.categoryForm.invalid) return;
+    const { id, name } = this.categoryForm.value;
+    if (this.formMode() === 'edit' && id) {
+      this.store.updateCategory({
+        id,
+        payload: { id, name },
+        onSuccess: () => this.onCancelForm()
+      });
+      return;
+    }
     this.store.addCategory({
-      payload: this.addCategoryForm.value,
-      onSuccess: () => this.onToggleAddModal()
+      payload: { name },
+      onSuccess: () => this.onCancelForm()
     });
   }
 
-  onUpdateCategory(): void {
-    if (this.updateCategoryForm.invalid) return;
-    this.store.updateCategory({
-      id: this.updateCategoryForm.value.id,
-      payload: this.updateCategoryForm.value,
-      onSuccess: () => this.onToggleEditModal(null)
-    });
-  }
-
-  onDeleteCategory(categoryId: string, event: Event): void {
+  onDelete(categoryId: string): void {
     this.#confirmationService.confirm({
-      target: event.currentTarget as EventTarget,
-      message: 'Etes-vous sûr ?',
-      rejectButtonProps: {
-        label: 'Annuler',
-        severity: 'secondary',
-        outlined: true
-      },
-      acceptButtonProps: {
-        label: 'Confirmer',
-        severity: 'danger'
-      },
+      header: 'Confirmer la suppression',
+      message: 'Êtes-vous sûr de vouloir supprimer cette catégorie ?',
+      acceptLabel: 'Supprimer',
+      rejectLabel: 'Annuler',
       accept: () => {
         this.store.deleteCategory(categoryId);
       }

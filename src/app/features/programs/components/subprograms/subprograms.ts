@@ -7,19 +7,20 @@ import {
   Eye,
   EyeOff,
   Star,
-  StarOff
+  StarOff,
+  Search,
+  Funnel
 } from 'lucide-angular';
-
 import { CommonModule } from '@angular/common';
-
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubprogramsStore } from '../../store/subprograms.store';
 import { ISubprogram } from '@shared/models';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '@env/environment';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { IProgram } from '@shared/models';
-import { FileUpload, UiAvatar, UiButton, UiConfirmDialog, UiInput } from '@shared/ui';
 import { ConfirmationService } from '@shared/services/confirmation';
+import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
+import { UiButton, UiInput, UiConfirmDialog, FileUpload, UiAvatar } from '@ui';
 
 @Component({
   selector: 'app-list-subprograms',
@@ -34,7 +35,8 @@ import { ConfirmationService } from '@shared/services/confirmation';
     UiConfirmDialog,
     FileUpload,
     ApiImgPipe,
-    UiAvatar
+    UiAvatar,
+    UiTableSkeleton
   ]
 })
 export class ListSubprograms {
@@ -59,16 +61,17 @@ export class ListSubprograms {
     name: ['', Validators.required],
     description: ['', Validators.required]
   });
-  skeletonArray = Array.from({ length: 4 }, (_, i) => i + 1);
   url = environment.apiUrl + 'subprograms/logo/';
   icons = {
-    edit: SquarePen,
-    trash: Trash,
-    plus: Plus,
-    eye: Eye,
-    eyeOff: EyeOff,
-    star: Star,
-    starOff: StarOff
+    Pencil: SquarePen,
+    Trash: Trash,
+    Plus: Plus,
+    Eye: Eye,
+    EyeOff: EyeOff,
+    Star: Star,
+    StarOff: StarOff,
+    Search: Search,
+    Funnel: Funnel
   };
   formVisible = signal(false);
   formMode = signal<'create' | 'edit'>('create');
@@ -153,21 +156,14 @@ export class ListSubprograms {
     });
   }
 
-  onDeleteRole(roleId: string, event: Event): void {
+  onDelete(subprogramId: string): void {
     this.#confirmationService.confirm({
-      target: event.currentTarget as EventTarget,
-      message: 'Etes-vous sûr ?',
-      acceptLabel: 'Confirmer',
+      header: 'Confirmation',
+      message: 'Êtes-vous sûr de vouloir supprimer ce sous-programme ?',
+      acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
-      rejectButtonProps: {
-        severity: 'secondary',
-        outlined: true
-      },
-      acceptButtonProps: {
-        severity: 'danger'
-      },
       accept: () => {
-        this.store.deleteSubprogram(roleId);
+        this.store.deleteSubprogram(subprogramId);
         this.loadSubprograms();
       }
     });

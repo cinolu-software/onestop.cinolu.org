@@ -7,6 +7,7 @@ import { buildQueryParams } from '@shared/helpers';
 import { ToastrService } from '@shared/services/toast/toastr.service';
 import { ICategory } from '@shared/models';
 import { FilterProgramCategoriesDto } from '../dto/categories/filter-categories.dto';
+import { ProgramCategoryDto } from '../dto/categories/program-category.dto';
 
 interface ICategoriesStore {
   isLoading: boolean;
@@ -80,7 +81,7 @@ export const ProgramCategoriesStore = signalStore(
         )
       )
     ),
-    updateCategory: rxMethod<{ id: string; payload: ICategory; onSuccess: () => void }>(
+    updateCategory: rxMethod<{ id: string; payload: ProgramCategoryDto; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ id, payload, onSuccess }) =>

@@ -10,7 +10,7 @@
     "ssr": "node dist/onestop/server/server.mjs"
   },
   "prettier": {
-    "printWidth": 100,
+    "printWidth": 120,
     "singleQuote": true,
     "bracketSameLine": true,
     "trailingComma": "none",

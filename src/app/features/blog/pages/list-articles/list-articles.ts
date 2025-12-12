@@ -1,31 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FilterArticleDto } from '../../dto/filter-article.dto';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {
-  Eye,
-  EyeOff,
-  FileX,
-  Funnel,
-  LucideAngularModule,
-  Plus,
-  RefreshCcw,
-  Search,
-  Sparkles,
-  SquarePen,
-  Star,
-  StarOff,
-  Trash
-} from 'lucide-angular';
-import { NgxPaginationModule } from 'ngx-pagination';
+import { Eye, Funnel, LucideAngularModule, Pencil, Plus, Search, Star, Trash } from 'lucide-angular';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
 import { ArticlesStore } from '../../store/articles.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { UiAvatar, UiButton, UiConfirmDialog, UiLoader, UiTabs } from '@shared/ui';
+import { UiAvatar, UiButton, UiConfirmDialog, UiPagination, UiTabs, UiBadge } from '@shared/ui';
 import { IArticle } from '@shared/models';
 import { ConfirmationService } from '@shared/services/confirmation';
+import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
 
 @Component({
   selector: 'app-article-list',
@@ -34,52 +20,35 @@ import { ConfirmationService } from '@shared/services/confirmation';
     LucideAngularModule,
     CommonModule,
     UiButton,
-    NgxPaginationModule,
     ReactiveFormsModule,
     RouterLink,
     UiAvatar,
     ApiImgPipe,
     UiConfirmDialog,
-    UiTabs
+    UiTabs,
+    UiPagination,
+    UiTableSkeleton,
+    UiBadge
   ],
   templateUrl: './list-articles.html'
 })
-export class ListArticles implements OnInit {
+export class ListArticles {
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
+  #destroyRef = inject(DestroyRef);
   searchForm: FormGroup;
   store = inject(ArticlesStore);
-  #destroyRef = inject(DestroyRef);
-  skeletonArray = Array.from({ length: 100 }, (_, i) => i + 1);
-  icons = {
-    refresh: RefreshCcw,
-    edit: SquarePen,
-    trash: Trash,
-    search: Search,
-    plus: Plus,
-    eye: Eye,
-    eyeOff: EyeOff,
-    star: Star,
-    starOff: StarOff,
-    fileX: FileX,
-    filter: Funnel,
-    sparkles: Sparkles
-  };
+  itemsPerPage = 10;
+  icons = { Pencil, Trash, Search, Plus, Eye, Star, Funnel };
   queryParams = signal<FilterArticleDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q'),
-    filter:
-      (this.#route.snapshot.queryParamMap.get('filter') as FilterArticleDto['filter']) || 'all'
+    filter: (this.#route.snapshot.queryParamMap.get('filter') as FilterArticleDto['filter']) || 'all'
   });
-  activeTab = signal<string>(
-    (this.#route.snapshot.queryParamMap.get('filter') as
-      | 'all'
-      | 'published'
-      | 'drafts'
-      | 'highlighted') || 'all'
-  );
+  activeTab = computed(() => this.queryParams().filter || 'all');
+  currentPage = computed(() => Number(this.queryParams().page) || 1);
   tabsConfig = signal([
     { name: 'all', label: 'Tous' },
     { name: 'published', label: 'Publiés' },
@@ -91,56 +60,67 @@ export class ListArticles implements OnInit {
     this.searchForm = this.#fb.group({
       q: [this.queryParams().q || '']
     });
-  }
 
-  ngOnInit(): void {
-    this.loadArticles();
-    const searchInput = this.searchForm.get('q');
-    searchInput?.valueChanges
-      .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
+    effect(() => {
+      this.store.loadArticles(this.queryParams());
+    });
+
+    this.searchForm
+      .get('q')
+      ?.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
       .subscribe((searchValue: string) => {
-        this.queryParams().q = searchValue ? searchValue.trim() : null;
-        this.queryParams().page = null;
-        this.updateRouteAndArticles();
+        this.queryParams.update((qp) => ({
+          ...qp,
+          q: searchValue ? searchValue.trim() : null,
+          page: null
+        }));
+        this.updateRoute();
       });
   }
 
-  loadArticles(): void {
-    this.store.loadArticles(this.queryParams());
-  }
-
   onTabChange(tabName: string): void {
-    this.activeTab.set(tabName);
-    this.queryParams().filter = tabName as FilterArticleDto['filter'];
-    this.queryParams().page = null;
-    this.updateRouteAndArticles();
+    this.queryParams.update((qp) => ({
+      ...qp,
+      filter: tabName as FilterArticleDto['filter'],
+      page: null
+    }));
+    this.updateRoute();
   }
 
   onPageChange(currentPage: number): void {
-    this.queryParams().page = currentPage === 1 ? null : currentPage.toString();
-    this.updateRouteAndArticles().then();
+    this.queryParams.update((qp) => ({
+      ...qp,
+      page: currentPage === 1 ? null : currentPage.toString()
+    }));
+    this.updateRoute();
   }
 
-  async updateRoute(): Promise<void> {
+  updateRoute(): void {
     const queryParams = this.queryParams();
-    await this.#router.navigate(['/blog/articles'], { queryParams });
+    this.#router.navigate(['/blog/articles'], { queryParams });
   }
 
-  highlightArticle(articleId: string): void {
+  showcaseArticle(articleId: string): void {
     this.store.highlight(articleId);
   }
 
-  async updateRouteAndArticles(): Promise<void> {
-    await this.updateRoute();
-    this.loadArticles();
+  resetFilters(): void {
+    this.searchForm.patchValue({ q: '' });
+    this.queryParams.update((qp) => ({
+      ...qp,
+      q: null,
+      page: null,
+      filter: 'all'
+    }));
+    this.updateRoute();
   }
 
-  onDeleteArticle(articleId: string, article: Event): void {
+  onDelete(articleId: string): void {
     this.#confirmationService.confirm({
-      message: 'Etes-vous sûr ?',
-      header: 'Confirmer la suppression',
+      header: 'Confirmation',
+      message: 'Êtes-vous sûr de vouloir supprimer cet article ?',
+      acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
-      acceptLabel: 'Confirmer',
       accept: () => {
         this.store.deleteArticle(articleId);
       }

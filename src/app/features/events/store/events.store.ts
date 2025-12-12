@@ -175,9 +175,7 @@ export const EventsStore = signalStore(
               const [list, count] = store.events();
               const updated = list.map((e) => (e.id === data.id ? data : e));
               _toast.showSuccess(
-                data.is_highlighted
-                  ? 'Evénement mis en avant'
-                  : 'Evénement retiré des mises en avant'
+                data.is_highlighted ? 'Evénement mis en avant' : 'Evénement retiré des mises en avant'
               );
               patchState(store, { isLoading: false, events: [updated, count], event: data });
             }),

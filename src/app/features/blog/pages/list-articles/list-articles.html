@@ -1,288 +1,122 @@
-<section class="text-gray-600">
-  @let isLoading = store.isLoading(); @let hasQuery = queryParams().q; @let articleCount =
-  store.articles()[1]; @let articleList = store.articles()[0];
-  <div class="relative bg-white rounded-xl shadow-sm pb-12">
-    <div class="px-6 pt-6 pb-4 border-b border-gray-100">
-      <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
-        <div>
-          <h5 class="text-2xl font-bold text-gray-900 mb-1">Articles</h5>
-          <p class="text-sm text-gray-500">
-            Gérez et organisez vos articles @if (!isLoading) {
-            <span class="text-gray-400">• {{ articleCount }} au total</span>
-            }
-          </p>
-        </div>
-        <ui-button size="small" [routerLink]="'/blog/articles/add'">
-          <i-lucide [name]="icons.plus" class="size-4" />
-          Nouvel article
-        </ui-button>
-      </div>
-
-      <!-- Search Bar -->
-      <form [formGroup]="searchForm" class="search-input-wrapper">
-        <div class="search-input-group">
-          <div class="search-input-icon">
-            <i-lucide [name]="icons.search" class="search-input-icon-svg" />
-          </div>
-          <input
-            type="text"
-            formControlName="q"
-            placeholder="Rechercher un article par titre..."
-            class="search-input" />
-          @if (searchForm.get('q')?.value) {
-          <button
-            type="button"
-            (click)="
-              searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndArticles()
-            "
-            class="search-input-clear">
-            <i-lucide name="x" class="search-input-clear-icon" />
-          </button>
+@let isLoading = store.isLoading(); @let articleCount = store.articles()[1]; @let articles = store.articles()[0];
+<div class="relative bg-white rounded-xl shadow-sm pb-12">
+  <div class="px-6 pt-6 pb-4 border-b border-gray-100">
+    <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
+      <div>
+        <h5 class="text-2xl font-bold text-gray-900 mb-1">
+          Articles @if (!isLoading) {
+          <span class="text-gray-400 text-sm">• {{ articleCount }} au total</span>
           }
+        </h5>
+      </div>
+      <a [routerLink]="'/blog/articles/add'" class="ui-button ui-button-small ui-button-primary">
+        <i-lucide [name]="icons.Plus" class="size-4" />
+        Nouvel article
+      </a>
+    </div>
+    <form [formGroup]="searchForm" class="search-input-wrapper">
+      <div class="search-input-group">
+        <div class="search-input-icon">
+          <i-lucide [name]="icons.Search" class="search-input-icon-svg" />
         </div>
-      </form>
-    </div>
+        <input type="text" formControlName="q" placeholder="Rechercher un article..." class="search-input" />
+      </div>
+    </form>
+  </div>
 
-    <div class="px-6 my-4">
-      <ui-tabs [tabs]="tabsConfig()" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
-    </div>
-    @if (articleCount === 0 && !isLoading) {
-    <div class="mx-6 mt-12 flex flex-col items-center justify-center py-20 px-6 rounded-xl">
-      @if (hasQuery) {
-      <!-- Search/Filter No Results State -->
-      <div
-        class="w-20 h-20 bg-linear-to-br from-blue-50 to-blue-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
-        <i-lucide [name]="icons.search" class="text-blue-500 w-9 h-9 stroke-[1.5]" />
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun article trouvé</h3>
-      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
-        Nous n'avons trouvé aucun article correspondant à vos critères de recherche "<span
-          class="font-semibold text-gray-700"
-          >{{ hasQuery }}</span
-        >". Essayez avec d'autres mots-clés ou réinitialisez les filtres.
-      </p>
-      <ui-button
-        (clicked)="
-          searchForm.patchValue({ q: '' }); queryParams().q = null; updateRouteAndArticles()
-        "
-        variant="secondary"
-        [outlined]="true"
-        styleClass="text-sm">
-        <span class="flex items-center gap-2">
-          <i-lucide [name]="icons.filter" class="size-4" />
-          <span>Réinitialiser les filtres</span>
-        </span>
-      </ui-button>
-      } @else if (activeTab() === 'published') {
-      <div
-        class="w-20 h-20 bg-linear-to-br from-emerald-50 to-emerald-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
-        <i-lucide [name]="icons.eye" class="text-emerald-500 w-9 h-9 stroke-[1.5]" />
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun article publié</h3>
-      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
-        Vous n'avez pas encore d'articles publiés. Publiez vos brouillons pour les rendre visibles
-        au public.
-      </p>
-      } @else if (activeTab() === 'drafts') {
-      <div
-        class="w-20 h-20 bg-linear-to-br from-gray-50 to-gray-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
-        <i-lucide [name]="icons.fileX" class="text-gray-400 w-9 h-9 stroke-[1.5]" />
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun brouillon</h3>
-      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
-        Tous vos articles sont publiés. Les brouillons apparaîtront ici lorsque vous dépubliez un
-        article.
-      </p>
-      } @else if (activeTab() === 'highlighted') {
-      <div
-        class="w-20 h-20 bg-linear-to-br from-amber-50 to-amber-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
-        <i-lucide [name]="icons.sparkles" class="text-amber-500 w-9 h-9 stroke-[1.5]" />
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun article en vedette</h3>
-      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
-        Mettez vos meilleurs articles en vedette pour les mettre en avant. Cliquez sur l'étoile pour
-        les ajouter.
-      </p>
-      } @else {
-      <div
-        class="w-20 h-20 bg-linear-to-br from-primary-50 to-primary-100 rounded-3xl flex items-center justify-center mb-5 shadow-sm">
-        <i-lucide [name]="icons.plus" class="text-primary-600 w-10 h-10 stroke-[1.5]" />
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun article</h3>
-      <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
-        Commencez par créer votre premier article pour partager votre contenu avec votre audience.
-      </p>
-      <ui-button [routerLink]="'/blog/articles/add'" variant="primary" styleClass="text-sm">
-        <span class="flex items-center gap-2">
-          <i-lucide [name]="icons.plus" class="size-4" />
-          <span>Créer un article</span>
-        </span>
-      </ui-button>
-      }
-    </div>
-    } @if (isLoading) {
-    <div class="px-6 mt-6">
-      <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-        <table class="w-full text-left">
-          <thead class="text-left">
-            <tr class="border-b border-gray-200">
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Image
-              </th>
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Titre
-              </th>
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Date
-              </th>
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Statut
-              </th>
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-100">
-            @for (i of skeletonArray; track $index) {
-            <tr class="hover:bg-gray-50">
-              <td class="px-6 py-5">
-                <div class="w-10 h-10 rounded-full bg-gray-200 animate-pulse"></div>
-              </td>
-              <td class="px-6 py-5">
-                <div class="h-4 w-48 bg-gray-200 rounded animate-pulse"></div>
-              </td>
-              <td class="px-6 py-5">
-                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
-              </td>
-              <td class="px-6 py-5">
-                <div class="h-6 w-20 bg-gray-200 rounded-full animate-pulse"></div>
-              </td>
-              <td class="px-6 py-5">
-                <div class="flex items-center gap-2">
-                  <div class="h-9 w-9 bg-gray-200 rounded-lg animate-pulse"></div>
-                  <div class="h-9 w-9 bg-gray-200 rounded-lg animate-pulse"></div>
-                  <div class="h-9 w-9 bg-gray-200 rounded-lg animate-pulse"></div>
-                </div>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-    } @if (articleCount > 0 && !isLoading) {
-    <div class="px-6 mt-6">
-      <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-        <table class="w-full text-left">
-          <thead class="text-left">
-            <tr class="border-b border-gray-200">
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Image
-              </th>
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Titre
-              </th>
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Date
-              </th>
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Statut
-              </th>
-              <th
-                class="px-6 py-4 text-xs uppercase tracking-wide font-bold text-gray-900 bg-gray-50/50">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-100">
-            @for ( article of articleList | paginate : { itemsPerPage: 40, currentPage:
-            queryParams().page || 1, totalItems: articleCount, }; track article.id ) {
-            <tr
-              class="group border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors duration-150">
-              <td class="px-6 py-5">
-                @if (article) {
-                <ui-avatar [image]="article | apiIMG : 'article'" [size]="48" />
-                }
-              </td>
-              <td class="px-6 py-5">
-                <p class="font-semibold text-gray-900 w-full md:w-48 line-clamp-2">
-                  {{ article.title | titlecase }}
-                </p>
-              </td>
-              <td class="px-6 py-5 text-sm text-gray-600">
-                {{ article.created_at | date : 'dd MMM yyyy' }}
-              </td>
-              <td class="px-6 py-5">
-                @if (isPublished(article)) {
-                <span
-                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-                  Publié
-                </span>
-                } @else {
-                <span
-                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
-                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
-                  Brouillon
-                </span>
-                }
-              </td>
-              <td class="px-6 py-5">
-                <div class="flex items-center gap-2">
-                  <ui-button
-                    (clicked)="highlightArticle(article.id)"
-                    [variant]="article.is_highlighted ? 'contrast' : 'secondary'"
-                    [size]="'small'"
-                    [title]="
-                      article.is_highlighted ? 'Retirer de la vedette' : 'Mettre en vedette'
-                    ">
-                    <i-lucide
-                      [name]="article.is_highlighted ? icons.star : icons.starOff"
-                      class="size-4" />
-                  </ui-button>
-                  <ui-button
-                    [routerLink]="['/blog/articles/edit', article.slug]"
-                    variant="info"
-                    [size]="'small'"
-                    title="Modifier l'article">
-                    <i-lucide [name]="icons.edit" class="size-4" />
-                  </ui-button>
-                  <ui-button
-                    (clicked)="onDeleteArticle(article.id, $event)"
-                    variant="danger"
-                    [size]="'small'"
-                    title="Supprimer">
-                    <i-lucide [name]="icons.trash" class="size-4" />
-                  </ui-button>
-                </div>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-    } @if (articleCount > 40) {
-    <div class="flex justify-center items-center gap-3 py-8 px-6">
-      <pagination-controls
-        nextLabel=""
-        previousLabel=""
-        [autoHide]="true"
-        [maxSize]="5"
-        (pageChange)="onPageChange($event)"
-        class="pg" />
+  <div class="px-6 my-4">
+    <ui-tabs [tabs]="tabsConfig()" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+  </div>
+
+  <div class="px-4 sm:px-6 mt-6">
+    @if (isLoading && articleCount === 0) {
+    <ui-table-skeleton [rows]="10" [columns]="5" />
+    } @if (articleCount > 0) {
+    <div class="ui-table-wrapper">
+      <table class="ui-table">
+        <thead class="ui-table-head">
+          <tr class="ui-table-head-row">
+            <th class="ui-table-header">Image</th>
+            <th class="ui-table-header">Titre</th>
+            <th class="ui-table-header">Date</th>
+            <th class="ui-table-header">Statut</th>
+            <th class="ui-table-header">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="ui-table-body">
+          @for (article of articles; track article.id) {
+          <tr class="ui-table-row">
+            <td class="ui-table-cell">
+              <ui-avatar [image]="article | apiIMG : 'article'" [size]="48" />
+            </td>
+            <td class="ui-table-cell">
+              <p class="font-semibold text-gray-900 w-full md:w-48 line-clamp-2">
+                {{ article.title | titlecase }}
+              </p>
+            </td>
+            <td class="ui-table-cell text-sm text-gray-600">
+              {{ article.created_at | date : 'dd MMM yyyy' }}
+            </td>
+            <td class="ui-table-cell">
+              @if (isPublished(article)) {
+              <ui-badge [showDot]="true" [variant]="'success'" label="Publié" />
+              } @else {
+              <ui-badge [showDot]="true" label="Brouillon" />
+              }
+            </td>
+            <td class="ui-table-cell">
+              <div class="flex items-center gap-1">
+                <button
+                  (click)="showcaseArticle(article.id)"
+                  [class]="article.is_highlighted ? 'action-button-highlight' : 'action-button-highlight-default'">
+                  <i-lucide [img]="icons.Star" class="size-4" />
+                  En avant
+                </button>
+                <a [routerLink]="['/blog/articles/edit', article.slug]" class="action-button-default">
+                  <i-lucide [name]="icons.Pencil" class="size-4" />
+                  Modifier
+                </a>
+                <button (click)="onDelete(article.id)" class="action-button-danger">
+                  <i-lucide [name]="icons.Trash" class="size-4" />
+                  Supprimer
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
     </div>
     }
+    <div class="flex flex-col justify-end items-end">
+      <ui-pagination
+        [currentPage]="currentPage()"
+        [totalItems]="articleCount"
+        [itemsPerPage]="itemsPerPage"
+        (pageChange)="onPageChange($event)" />
+    </div>
   </div>
+  @if (articleCount === 0 && !isLoading) {
+  <div class="mx-6 mt-16 flex flex-col items-center justify-center py-20 px-8">
+    <div
+      class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 shadow-inner border border-primary-100">
+      <i-lucide [name]="icons.Search" class="w-10 h-10 stroke-[1.5] text-primary-500" />
+    </div>
+    <h3 class="text-2xl font-bold text-gray-900 mb-2 text-center">Aucun article trouvé</h3>
+    <p class="text-gray-500 text-center max-w-lg mb-8 text-base leading-relaxed">
+      Nous n'avons trouvé aucun article correspondant à vos critères.<br />
+    </p>
+    <ui-button
+      (clicked)="resetFilters()"
+      variant="secondary"
+      [outlined]="true"
+      styleClass="text-base font-medium px-6 py-2.5 rounded-md shadow">
+      <span class="flex items-center gap-2">
+        <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
+        <span>Réinitialiser les filtres</span>
+      </span>
+    </ui-button>
+  </div>
+  }
   <ui-confirm-dialog />
-</section>
+</div>

@@ -8,8 +8,7 @@ export const programsRoutes: Routes = [
       {
         path: '',
         title: 'Les programmes',
-        loadComponent: () =>
-          import('./pages/list-programs/list-programs').then((c) => c.ListPrograms)
+        loadComponent: () => import('./pages/list-programs/list-programs').then((c) => c.ListPrograms)
       },
       {
         path: 'add',
@@ -19,15 +18,13 @@ export const programsRoutes: Routes = [
       {
         path: 'edit/:slug',
         title: 'Modifier un programme',
-        loadComponent: () =>
-          import('./pages/update-program/update-program').then((c) => c.UpdateProgram)
+        loadComponent: () => import('./pages/update-program/update-program').then((c) => c.UpdateProgram)
       }
     ]
   },
   {
     path: 'program-categories',
     title: 'Les categories',
-    loadComponent: () =>
-      import('./pages/program-categories/program-categories').then((c) => c.ProgramCategories)
+    loadComponent: () => import('./pages/program-categories/program-categories').then((c) => c.ProgramCategories)
   }
 ];
