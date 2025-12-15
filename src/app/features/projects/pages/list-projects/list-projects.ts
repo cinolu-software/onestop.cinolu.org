@@ -96,11 +96,11 @@ export class ListProjects {
   }
 
   onPublish(id: string): void {
-    this.store.publishProject(id);
+    this.store.publish(id);
   }
 
   highlightProject(id: string): void {
-    this.store.highlight(id);
+    this.store.showcase(id);
   }
 
   resetFilters(): void {
@@ -115,7 +115,7 @@ export class ListProjects {
       acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
       accept: () => {
-        this.store.deleteProject(projectId);
+        this.store.delete(projectId);
       }
     });
   }
@@ -127,6 +127,6 @@ export class ListProjects {
 
   updateRouteAndProjects(): void {
     this.updateRoute();
-    this.store.loadProjects(this.queryParams());
+    this.store.loadAll(this.queryParams());
   }
 }

@@ -44,10 +44,10 @@ export class AddProjectComponent {
 
   constructor() {
     effect(() => {
-      this.programsStore.loadAllSubprograms();
+      this.programsStore.loadUnpaginated();
     });
     this.form = this.#initForm();
-    this.categoriesStore.loadUnpaginatedCategories();
+    this.categoriesStore.loadUnpaginated();
     this.usersStore.loadStaff();
   }
 
@@ -69,6 +69,6 @@ export class AddProjectComponent {
 
   onAddProject(): void {
     if (!this.form.valid) return;
-    this.store.addProject(this.form.value);
+    this.store.create(this.form.value);
   }
 }

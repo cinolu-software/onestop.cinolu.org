@@ -1,10 +1,7 @@
 import { Component, computed, effect, inject } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EventsStore } from '../../store/events.store';
-
 import { SubprogramsStore } from '@features/programs/store/subprograms.store';
 import { UsersStore } from '@features/users/store/users.store';
 import { CategoriesStore } from '../../store/event-categories.store';
@@ -48,7 +45,7 @@ export class AddEventComponent {
 
   constructor() {
     effect(() => {
-      this.programsStore.loadAllSubprograms();
+      this.programsStore.loadUnpaginated();
     });
     this.form = this.#initForm();
     this.categoriesStore.loadUnpaginatedCategories();

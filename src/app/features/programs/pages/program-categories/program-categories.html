@@ -14,7 +14,15 @@
         <div class="search-input-icon">
           <i-lucide [name]="icons.Search" class="search-input-icon-svg" />
         </div>
-        <input type="text" formControlName="q" placeholder="Rechercher une catégorie..." class="search-input" />
+        <label for="category-search-input" class="sr-only">Rechercher une catégorie</label>
+        <input
+          id="category-search-input"
+          type="text"
+          name="q"
+          formControlName="q"
+          placeholder="Rechercher une catégorie..."
+          class="search-input"
+          autocomplete="off" />
       </div>
     </form>
   </div>
@@ -34,6 +42,8 @@
         </div>
         <div class="space-y-2">
           <app-ui-input
+            [id]="'name'"
+            name="name"
             label="Nom de la catégorie"
             formControlName="name"
             placeholder="Ex: Formation, Incubation, Accélération..." />

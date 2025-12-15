@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule, CircleAlert } from 'lucide-angular';
@@ -18,13 +18,6 @@ export class AddProgramPage {
   store = inject(ProgramsStore);
   categoriesStore = inject(CategoriesStore);
   icons = { alert: CircleAlert };
-
-  categoryOptions = computed(() =>
-    this.categoriesStore.allCategories().map((cat) => ({
-      label: cat.name,
-      value: cat.id
-    }))
-  );
   form = this.#fb.group({
     name: ['', Validators.required],
     description: ['', Validators.required],
@@ -33,10 +26,10 @@ export class AddProgramPage {
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    this.store.addProgram(this.form.value as ProgramDto);
+    this.store.create(this.form.value as ProgramDto);
   }
 
   constructor() {
-    this.categoriesStore.loadUnpaginatedCategories();
+    this.categoriesStore.loadUnpaginated();
   }
 }

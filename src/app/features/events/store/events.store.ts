@@ -53,7 +53,7 @@ export const EventsStore = signalStore(
         switchMap((slug) =>
           _http.get<{ data: IEvent }>(`events/slug/${slug}`).pipe(
             map(({ data }) => {
-              _indicatorsStore.loadIndicators({
+              _indicatorsStore.loadAll({
                 programId: data.program.program.id,
                 year: new Date(data.started_at).getFullYear()
               });

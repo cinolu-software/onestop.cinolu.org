@@ -30,8 +30,7 @@ export const ProjectsStore = signalStore(
     _indicatorsStore: inject(IndicatorsStore)
   })),
   withMethods(({ _http, _router, _toast, _indicatorsStore, ...store }) => ({
-    // Collection: load
-    loadProjects: rxMethod<FilterProjectCategoriesDto>(
+    loadAll: rxMethod<FilterProjectCategoriesDto>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((queryParams) => {
@@ -48,15 +47,13 @@ export const ProjectsStore = signalStore(
         })
       )
     ),
-
-    // Single: load by slug + side-effects
-    loadProject: rxMethod<string>(
+    loadOne: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((slug) => {
           return _http.get<{ data: IProject }>(`projects/slug/${slug}`).pipe(
             tap(({ data }) => {
-              _indicatorsStore.loadIndicators({
+              _indicatorsStore.loadAll({
                 programId: data.program.program.id,
                 year: new Date(data.started_at).getFullYear()
               });
@@ -70,9 +67,7 @@ export const ProjectsStore = signalStore(
         })
       )
     ),
-
-    // Create
-    addProject: rxMethod<ProjectDto>(
+    create: rxMethod<ProjectDto>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((project) => {
@@ -91,9 +86,7 @@ export const ProjectsStore = signalStore(
         })
       )
     ),
-
-    // Update (API)
-    updateProject: rxMethod<ProjectDto>(
+    update: rxMethod<ProjectDto>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((project) => {
@@ -115,9 +108,7 @@ export const ProjectsStore = signalStore(
         })
       )
     ),
-
-    // Publish
-    publishProject: rxMethod<string>(
+    publish: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((id) => {
@@ -135,9 +126,7 @@ export const ProjectsStore = signalStore(
         })
       )
     ),
-
-    // Highlight
-    highlight: rxMethod<string>(
+    showcase: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((id) => {
@@ -157,9 +146,7 @@ export const ProjectsStore = signalStore(
         })
       )
     ),
-
-    // Delete (API)
-    deleteProject: rxMethod<string>(
+    delete: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((id) => {

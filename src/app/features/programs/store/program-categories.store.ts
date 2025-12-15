@@ -26,26 +26,24 @@ export const ProgramCategoriesStore = signalStore(
     _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _toast, ...store }) => ({
-    loadCategories: rxMethod<FilterProgramCategoriesDto>(
+    loadAll: rxMethod<FilterProgramCategoriesDto>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((queryParams) => {
           const params = buildQueryParams(queryParams);
-          return _http
-            .get<{ data: [ICategory[], number] }>('program-categories/paginated', { params })
-            .pipe(
-              map(({ data }) => {
-                patchState(store, { isLoading: false, categories: data });
-              }),
-              catchError(() => {
-                patchState(store, { isLoading: false, categories: [[], 0] });
-                return of(null);
-              })
-            );
+          return _http.get<{ data: [ICategory[], number] }>('program-categories/paginated', { params }).pipe(
+            map(({ data }) => {
+              patchState(store, { isLoading: false, categories: data });
+            }),
+            catchError(() => {
+              patchState(store, { isLoading: false, categories: [[], 0] });
+              return of(null);
+            })
+          );
         })
       )
     ),
-    loadUnpaginatedCategories: rxMethod<void>(
+    loadUnpaginated: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(() =>
@@ -61,7 +59,7 @@ export const ProgramCategoriesStore = signalStore(
         )
       )
     ),
-    addCategory: rxMethod<{ payload: { name: string; color?: string }; onSuccess: () => void }>(
+    create: rxMethod<{ payload: { name: string; color?: string }; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ payload, onSuccess }) =>
@@ -81,7 +79,7 @@ export const ProgramCategoriesStore = signalStore(
         )
       )
     ),
-    updateCategory: rxMethod<{ id: string; payload: ProgramCategoryDto; onSuccess: () => void }>(
+    update: rxMethod<{ id: string; payload: ProgramCategoryDto; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ id, payload, onSuccess }) =>
@@ -102,7 +100,7 @@ export const ProgramCategoriesStore = signalStore(
         )
       )
     ),
-    deleteCategory: rxMethod<string>(
+    delete: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((id) =>

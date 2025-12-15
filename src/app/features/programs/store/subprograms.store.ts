@@ -4,9 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, exhaustMap, map, of, pipe, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from '@shared/services/toast/toastr.service';
-import { FilterSubprogramsDto } from '../dto/subprograms/filter-subprograms.dto';
 import { SubprogramDto } from '../dto/subprograms/subprograms.dto';
-import { buildQueryParams } from '@shared/helpers';
 import { ISubprogram } from '@shared/models';
 
 interface IProgramsStore {
@@ -22,28 +20,23 @@ export const SubprogramsStore = signalStore(
     _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _toast, ...store }) => ({
-    loadPrograms: rxMethod<{ id: string; payload: FilterSubprogramsDto }>(
+    loadAll: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
-        switchMap((params) => {
-          const p = buildQueryParams(params.payload);
-          return _http
-            .get<{ data: [ISubprogram[], number] }>(`subprograms/paginated/${params.id}`, {
-              params: p
+        switchMap((id) =>
+          _http.get<{ data: ISubprogram[] }>(`subprograms/unpaginated/${id}`).pipe(
+            map(({ data }) => {
+              patchState(store, { isLoading: false, allSubprograms: data });
+            }),
+            catchError(() => {
+              patchState(store, { isLoading: false, allSubprograms: [] });
+              return of(null);
             })
-            .pipe(
-              map(({ data }) => {
-                patchState(store, { isLoading: false, subprograms: data });
-              }),
-              catchError(() => {
-                patchState(store, { isLoading: false, subprograms: [[], 0] });
-                return of(null);
-              })
-            );
-        })
+          )
+        )
       )
     ),
-    addSubprogram: rxMethod<{ payload: SubprogramDto; onSuccess: () => void }>(
+    create: rxMethod<{ payload: SubprogramDto; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ payload, onSuccess }) => {
@@ -64,7 +57,7 @@ export const SubprogramsStore = signalStore(
         })
       )
     ),
-    updateSubprogram: rxMethod<{ payload: SubprogramDto; onSuccess: () => void }>(
+    update: rxMethod<{ payload: SubprogramDto; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ payload, onSuccess }) =>
@@ -86,7 +79,7 @@ export const SubprogramsStore = signalStore(
         )
       )
     ),
-    deleteSubprogram: rxMethod<string>(
+    delete: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((id) =>
@@ -95,11 +88,7 @@ export const SubprogramsStore = signalStore(
               patchState(store, { isLoading: false });
               const [list, count] = store.subprograms();
               const filtered = list.filter((subprogram) => subprogram.id !== id);
-              const filteredUnpaginated = store.allSubprograms().filter((subprogram) => subprogram.id !== id);
-              patchState(store, {
-                subprograms: [filtered, count - 1],
-                allSubprograms: filteredUnpaginated
-              });
+              patchState(store, { subprograms: [filtered, count - 1] });
               _toast.showSuccess('Programme supprimé');
             }),
             catchError(() => {
@@ -111,7 +100,7 @@ export const SubprogramsStore = signalStore(
         )
       )
     ),
-    publishSubprogram: rxMethod<string>(
+    publish: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((id) =>
@@ -119,11 +108,7 @@ export const SubprogramsStore = signalStore(
             map(({ data }) => {
               const [list, count] = store.subprograms();
               const updated = list.map((sp) => (sp.id === data.id ? data : sp));
-              const updatedUnpaginated = store.allSubprograms().map((sp) => (sp.id === data.id ? data : sp));
-              patchState(store, {
-                subprograms: [updated, count],
-                allSubprograms: updatedUnpaginated
-              });
+              patchState(store, { subprograms: [updated, count] });
               patchState(store, { isLoading: false });
             }),
             catchError(() => {
@@ -134,7 +119,7 @@ export const SubprogramsStore = signalStore(
         )
       )
     ),
-    highlightSubprogram: rxMethod<string>(
+    showcase: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((id) =>
@@ -142,11 +127,7 @@ export const SubprogramsStore = signalStore(
             map(({ data }) => {
               const [list, count] = store.subprograms();
               const updated = list.map((sp) => (sp.id === data.id ? data : sp));
-              const updatedUnpaginated = store.allSubprograms().map((sp) => (sp.id === data.id ? data : sp));
-              patchState(store, {
-                subprograms: [updated, count],
-                allSubprograms: updatedUnpaginated
-              });
+              patchState(store, { subprograms: [updated, count] });
               _toast.showSuccess(
                 data.is_highlighted ? 'Programme mis en avant' : 'Programme retiré de la mise en avant'
               );
@@ -161,27 +142,11 @@ export const SubprogramsStore = signalStore(
         )
       )
     ),
-    loadAllSubprograms: rxMethod<void>(
+    loadUnpaginated: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         exhaustMap(() =>
           _http.get<{ data: ISubprogram[] }>(`subprograms`).pipe(
-            map(({ data }) => {
-              patchState(store, { isLoading: false, allSubprograms: data });
-            }),
-            catchError(() => {
-              patchState(store, { isLoading: false, allSubprograms: [] });
-              return of(null);
-            })
-          )
-        )
-      )
-    ),
-    loadallSubprograms: rxMethod<string>(
-      pipe(
-        tap(() => patchState(store, { isLoading: true })),
-        switchMap((id) =>
-          _http.get<{ data: ISubprogram[] }>(`subprograms/unpaginated/${id}`).pipe(
             map(({ data }) => {
               patchState(store, { isLoading: false, allSubprograms: data });
             }),

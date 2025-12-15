@@ -28,7 +28,7 @@ export class EventEditFormComponent {
       const event = this.event();
       if (!event) return;
       this.#patchForm(event);
-      this.programsStore.loadAllSubprograms();
+      this.programsStore.loadUnpaginated();
     });
     this.categoriesStore.loadUnpaginatedCategories();
     this.usersStore.loadStaff();

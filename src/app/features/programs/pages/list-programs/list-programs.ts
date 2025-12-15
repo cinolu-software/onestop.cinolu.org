@@ -100,7 +100,7 @@ export class ListPrograms {
   }
 
   onFileUploadLoaded(): void {
-    this.store.loadPrograms(this.queryParams());
+    this.store.loadAll(this.queryParams());
   }
 
   showcaseProgram(id: string): void {
@@ -119,7 +119,7 @@ export class ListPrograms {
       acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
       accept: () => {
-        this.store.deleteProgram(roleId);
+        this.store.delete(roleId);
       }
     });
   }
@@ -131,6 +131,6 @@ export class ListPrograms {
 
   updateRouteAndPrograms(): void {
     this.updateRoute();
-    this.store.loadPrograms(this.queryParams());
+    this.store.loadAll(this.queryParams());
   }
 }

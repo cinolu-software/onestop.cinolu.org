@@ -1,16 +1,5 @@
 import { Component, Input, inject, signal } from '@angular/core';
-import {
-  LucideAngularModule,
-  SquarePen,
-  Trash,
-  Plus,
-  Eye,
-  EyeOff,
-  Star,
-  StarOff,
-  Search,
-  Funnel
-} from 'lucide-angular';
+import { LucideAngularModule, Pencil, Trash, Eye, Star, Search, Funnel, Plus } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubprogramsStore } from '../../store/subprograms.store';
@@ -65,33 +54,23 @@ export class ListSubprograms {
     description: ['', Validators.required]
   });
   url = environment.apiUrl + 'subprograms/logo/';
-  icons = {
-    Pencil: SquarePen,
-    Trash: Trash,
-    Plus: Plus,
-    Eye: Eye,
-    EyeOff: EyeOff,
-    Star: Star,
-    StarOff: StarOff,
-    Search: Search,
-    Funnel: Funnel
-  };
+  icons = { Pencil, Plus, Trash, Eye, Star, Search, Funnel };
   formVisible = signal(false);
   formMode = signal<'create' | 'edit'>('create');
   editingSubprogram = signal<ISubprogram | null>(null);
 
   highlightSubprogram(id: string): void {
-    this.store.highlightSubprogram(id);
+    this.store.showcase(id);
   }
 
   loadSubprograms(programId?: string): void {
     const id = programId ?? this.programSignal()?.id;
     if (!id) return;
-    this.store.loadallSubprograms(id);
+    this.store.loadAll(id);
   }
 
   onPublishProgram(id: string): void {
-    this.store.publishSubprogram(id);
+    this.store.publish(id);
   }
 
   onFileUploadLoaded(): void {
@@ -141,7 +120,7 @@ export class ListSubprograms {
       payload.programId = this.programSignal()?.id || '';
     }
     if (this.formMode() === 'edit') {
-      this.store.updateSubprogram({
+      this.store.update({
         payload,
         onSuccess: () => {
           this.onCancelForm();
@@ -150,7 +129,7 @@ export class ListSubprograms {
       });
       return;
     }
-    this.store.addSubprogram({
+    this.store.create({
       payload,
       onSuccess: () => {
         this.onCancelForm();
@@ -166,7 +145,7 @@ export class ListSubprograms {
       acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
       accept: () => {
-        this.store.deleteSubprogram(subprogramId);
+        this.store.delete(subprogramId);
         this.loadSubprograms();
       }
     });

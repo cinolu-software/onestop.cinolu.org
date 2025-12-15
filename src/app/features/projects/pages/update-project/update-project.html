@@ -14,7 +14,7 @@
     (galleryUploaded)="onGalleryUploaded()"
     (deleteImage)="onDeleteImage($event)" />
   } @if (activeTab() === 'edit' && project) {
-  <app-project-edit-form [project]="project" />
+  <app-project-update-form [project]="project" />
   } @if (activeTab() === 'indicators' && project) {
   <app-ui-metrics-table
     [indicators]="indicatorsStore.indicators()"
@@ -22,7 +22,5 @@
     [existingMetrics]="project?.metrics ?? []"
     [isLoading]="metricsStore.isLoading()"
     (saveAll)="onSaveMetrics()" />
-  } @if (activeTab() === 'phases' && project) {
-  <app-project-phases [project]="project" />
   }
 </section>

@@ -92,7 +92,7 @@ export class ProjectCategories {
 
   updateRouteAndCategories(): void {
     this.updateRoute();
-    this.store.loadCategories(this.queryParams());
+    this.store.loadAll(this.queryParams());
   }
 
   onToggleForm(category: ICategory | null = null): void {
@@ -120,14 +120,14 @@ export class ProjectCategories {
     if (this.categoryForm.invalid) return;
     const { id, name } = this.categoryForm.value;
     if (this.formMode() === 'edit' && id) {
-      this.store.updateCategory({
+      this.store.update({
         id,
         payload: { id, name },
         onSuccess: () => this.onCancelForm()
       });
       return;
     }
-    this.store.addCategory({
+    this.store.create({
       payload: { name },
       onSuccess: () => this.onCancelForm()
     });
@@ -140,7 +140,7 @@ export class ProjectCategories {
       acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
       accept: () => {
-        this.store.deleteCategory({ id: categoryId });
+        this.store.delete({ id: categoryId });
       }
     });
   }

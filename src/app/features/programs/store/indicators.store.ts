@@ -24,7 +24,7 @@ export const IndicatorsStore = signalStore(
     _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _toast, ...store }) => ({
-    loadIndicators: rxMethod<{ programId: string; year: number }>(
+    loadAll: rxMethod<{ programId: string; year: number }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ programId, year }) => {
@@ -40,7 +40,7 @@ export const IndicatorsStore = signalStore(
         })
       )
     ),
-    addIndicator: rxMethod<{ id: string; indicators: IndicatorDto }>(
+    create: rxMethod<{ id: string; indicators: IndicatorDto }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ id, indicators }) =>

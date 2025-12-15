@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SquarePen, Images, ChartColumn, ListTree } from 'lucide-angular';
+import { SquarePen, Images, ChartColumn } from 'lucide-angular';
 import { UiTabs, MetricsTableComponent } from '@shared/ui';
 import { totalMetrics, achievementRate, metricsMap, metricsMapToDto } from '@shared/helpers';
 import { IProject } from '@shared/models';
@@ -11,9 +11,8 @@ import { ProjectsStore } from '../../store/projects.store';
 import { ProjectMetricsStore } from '../../store/project-metrics.store';
 import { ProjectDetailsComponent } from '../../components/project-details/project-details';
 import { ProjectGalleryComponent } from '../../components/project-gallery/project-gallery';
-import { ProjectEditFormComponent } from '../../components/project-edit-form/project-edit-form';
+import { ProjectUpdateForm } from '../../components/project-update-form/project-update-form';
 import { ProjectDetailsSkeletonComponent } from '../../ui/project-details-skeleton/project-details-skeleton';
-import { ProjectPhasesComponent } from '../../components/project-phases/project-phases';
 
 @Component({
   selector: 'app-project-update',
@@ -26,9 +25,8 @@ import { ProjectPhasesComponent } from '../../components/project-phases/project-
     MetricsTableComponent,
     ProjectDetailsComponent,
     ProjectGalleryComponent,
-    ProjectEditFormComponent,
-    ProjectDetailsSkeletonComponent,
-    ProjectPhasesComponent
+    ProjectUpdateForm,
+    ProjectDetailsSkeletonComponent
   ]
 })
 export class UpdateProject implements OnInit {
@@ -44,8 +42,7 @@ export class UpdateProject implements OnInit {
     { label: "Fiche d'activité", name: 'details', icon: ChartColumn },
     { label: 'Mettre à jour', name: 'edit', icon: SquarePen },
     { label: 'Galerie', name: 'gallery', icon: Images },
-    { label: 'Indicateurs', name: 'indicators', icon: ChartColumn },
-    { label: 'Phases & Ressources', name: 'phases', icon: ListTree }
+    { label: 'Indicateurs', name: 'indicators', icon: ChartColumn }
   ];
   totalTargeted = computed(() => totalMetrics(this.metricsMap, 'target'));
   totalAchieved = computed(() => totalMetrics(this.metricsMap, 'achieved'));
@@ -56,8 +53,8 @@ export class UpdateProject implements OnInit {
   }
 
   ngOnInit(): void {
-    this.projectStore.loadProject(this.#slug);
-    this.galleryStore.loadGallery(this.#slug);
+    this.projectStore.loadOne(this.#slug);
+    this.galleryStore.loadAll(this.#slug);
   }
 
   #watchProjectChanges(): void {
@@ -82,15 +79,15 @@ export class UpdateProject implements OnInit {
   }
 
   onCoverUploaded(): void {
-    this.projectStore.loadProject(this.#slug);
+    this.projectStore.loadOne(this.#slug);
   }
 
   onGalleryUploaded(): void {
-    this.galleryStore.loadGallery(this.#slug);
+    this.galleryStore.loadAll(this.#slug);
   }
 
   onDeleteImage(id: string): void {
-    this.galleryStore.deleteImage(id);
+    this.galleryStore.delete(id);
   }
 
   onTabChange(tab: string): void {

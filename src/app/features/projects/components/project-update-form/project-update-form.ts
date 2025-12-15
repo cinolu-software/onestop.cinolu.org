@@ -9,12 +9,12 @@ import { SubprogramsStore } from '@features/programs/store/subprograms.store';
 import { UsersStore } from '@features/users/store/users.store';
 
 @Component({
-  selector: 'app-project-edit-form',
-  templateUrl: './project-edit-form.html',
+  selector: 'app-project-update-form',
+  templateUrl: './project-update-form.html',
   providers: [ProjectsStore, UsersStore, CategoriesStore, SubprogramsStore],
   imports: [FormsModule, ReactiveFormsModule, UiInput, UiTextarea, UiSelect, UiMultiSelect, UiDatepicker, UiButton]
 })
-export class ProjectEditFormComponent {
+export class ProjectUpdateForm {
   project = input.required<IProject>();
   #fb = inject(FormBuilder);
   categoriesStore = inject(CategoriesStore);
@@ -34,9 +34,9 @@ export class ProjectEditFormComponent {
       const project = this.project();
       if (!project) return;
       this.#patchForm(project);
-      this.programsStore.loadAllSubprograms();
+      this.programsStore.loadUnpaginated();
     });
-    this.categoriesStore.loadUnpaginatedCategories();
+    this.categoriesStore.loadUnpaginated();
     this.usersStore.loadStaff();
   }
 
@@ -69,6 +69,6 @@ export class ProjectEditFormComponent {
   }
 
   onSubmit(): void {
-    if (this.form.valid) this.updateProjectStore.updateProject(this.form.value);
+    if (this.form.valid) this.updateProjectStore.update(this.form.value);
   }
 }

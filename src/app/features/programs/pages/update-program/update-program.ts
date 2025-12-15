@@ -48,13 +48,6 @@ export class UpdateProgram {
   selectedCategory = signal(this.indicatorsCategories()[0]);
   year = signal<Date>(new Date());
 
-  categoryOptions = computed<SelectOption[]>(() =>
-    this.categoriesStore.allCategories().map((cat) => ({
-      label: cat.name,
-      value: cat.id
-    }))
-  );
-
   indicatorCategoryOptions = computed<SelectOption[]>(() =>
     this.indicatorsCategories().map((cat) => ({
       label: cat,
@@ -78,8 +71,8 @@ export class UpdateProgram {
   constructor() {
     const slug = this.#route.snapshot.paramMap.get('slug');
     if (!slug) return;
-    this.store.loadProgram(slug);
-    this.categoriesStore.loadUnpaginatedCategories();
+    this.store.loadOne(slug);
+    this.categoriesStore.loadUnpaginated();
     effect(() => {
       const program = this.store.program();
       if (!program) return;
@@ -157,7 +150,7 @@ export class UpdateProgram {
       category: this.selectedCategory(),
       metrics
     };
-    this.indicatorsStore.addIndicator({ id: program.id, indicators });
+    this.indicatorsStore.create({ id: program.id, indicators });
   }
 
   onTabChange(tab: string): void {
@@ -167,7 +160,7 @@ export class UpdateProgram {
   onSubmit(): void {
     const program = this.store.program();
     if (this.updateForm.invalid || !program) return;
-    this.store.updateProgram({
+    this.store.update({
       programId: program.id,
       payload: this.updateForm.value
     });

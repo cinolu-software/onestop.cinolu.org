@@ -12,7 +12,15 @@
         <div class="search-input-icon">
           <i-lucide [name]="icons.Search" class="search-input-icon-svg" />
         </div>
-        <input type="text" formControlName="q" placeholder="Rechercher" class="search-input" />
+        <label for="program-search-input" class="sr-only">Rechercher des programmes</label>
+        <input
+          id="program-search-input"
+          type="text"
+          name="q"
+          formControlName="q"
+          placeholder="Rechercher"
+          class="search-input"
+          autocomplete="off" />
       </div>
     </form>
   </div>

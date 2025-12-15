@@ -32,7 +32,7 @@ export const ProgramsStore = signalStore(
     _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _router, _toast, ...store }) => ({
-    loadPrograms: rxMethod<FilterProgramsDto>(
+    loadAll: rxMethod<FilterProgramsDto>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((queryParams) => {
@@ -49,7 +49,7 @@ export const ProgramsStore = signalStore(
         })
       )
     ),
-    loadallPrograms: rxMethod<void>(
+    loadUnpaginated: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isLoadingUnpaginated: true })),
         exhaustMap(() =>
@@ -65,7 +65,7 @@ export const ProgramsStore = signalStore(
         )
       )
     ),
-    loadProgram: rxMethod<string>(
+    loadOne: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((slug) =>
@@ -79,9 +79,7 @@ export const ProgramsStore = signalStore(
         )
       )
     ),
-
-    // Create / Update / Delete
-    addProgram: rxMethod<ProgramDto>(
+    create: rxMethod<ProgramDto>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((payload) =>
@@ -100,7 +98,7 @@ export const ProgramsStore = signalStore(
         )
       )
     ),
-    updateProgram: rxMethod<{ programId: string; payload: ProgramDto }>(
+    update: rxMethod<{ programId: string; payload: ProgramDto }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ programId, payload }) =>
@@ -121,7 +119,7 @@ export const ProgramsStore = signalStore(
         )
       )
     ),
-    deleteProgram: rxMethod<string>(
+    delete: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((id) =>

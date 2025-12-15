@@ -22,19 +22,11 @@
               placeholder="Ex: Atelier de formation entrepreneuriale" />
           </div>
           <div class="flex flex-col gap-2">
-            <label for="place" class="text-sm font-semibold text-gray-700"
-              >Lieu de l'événement</label
-            >
-            <app-ui-input
-              id="place"
-              formControlName="place"
-              class="w-full"
-              placeholder="Ex: Kinshasa, RDC" />
+            <label for="place" class="text-sm font-semibold text-gray-700">Lieu de l'événement</label>
+            <app-ui-input id="place" formControlName="place" class="w-full" placeholder="Ex: Kinshasa, RDC" />
           </div>
           <div class="flex flex-col gap-2">
-            <label for="duration_hours" class="text-sm font-semibold text-gray-700"
-              >Durée estimée (en heures)</label
-            >
+            <label for="duration_hours" class="text-sm font-semibold text-gray-700">Durée estimée (en heures)</label>
             <input
               ui-input
               id="duration_hours"
@@ -56,9 +48,7 @@
               class="w-full" />
           </div>
           <div class="flex flex-col gap-2">
-            <label for="event_manager" class="text-sm font-semibold text-gray-700"
-              >Responsable de l'événement</label
-            >
+            <label for="event_manager" class="text-sm font-semibold text-gray-700">Responsable de l'événement</label>
             <app-ui-select
               inputId="event_manager"
               [options]="staffOptions()"
@@ -71,9 +61,7 @@
               Catégories<span class="text-red-500 ml-1">*</span>
             </label>
             <app-ui-multi-select
-              [inputId]="'categories'"
-              [autocomplete]="'off'"
-              [showHeader]="false"
+              [id]="'categories'"
               [options]="categoriesStore.allCategories()"
               [optionValue]="'id'"
               [optionLabel]="'name'"
@@ -82,10 +70,9 @@
               class="w-full" />
           </div>
           <div class="flex flex-col gap-2">
-            <label for="started_at" class="text-sm font-semibold text-gray-700">
-              Date de début<span class="text-red-500 ml-1">*</span>
-            </label>
             <app-ui-datepicker
+              label="Date de début"
+              [id]="'started_at'"
               showIcon
               iconDisplay="input"
               formControlName="started_at"
@@ -100,9 +87,7 @@
         </div>
       </div>
       <div>
-        <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">
-          Présentation détaillée
-        </h6>
+        <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">Présentation détaillée</h6>
         <div class="grid grid-cols-1 gap-6">
           <div class="flex flex-col gap-2">
             <label for="description" class="text-sm font-semibold text-gray-700">
@@ -116,9 +101,7 @@
               placeholder="Présentez l'événement de manière claire et concise..."></textarea>
           </div>
           <div class="flex flex-col gap-2">
-            <label for="context" class="text-sm font-semibold text-gray-700"
-              >Contexte et justification</label
-            >
+            <label for="context" class="text-sm font-semibold text-gray-700">Contexte et justification</label>
             <textarea
               ui-textarea
               id="context"
@@ -127,9 +110,7 @@
               placeholder="Décrivez le contexte dans lequel s'inscrit cet événement..."></textarea>
           </div>
           <div class="flex flex-col gap-2">
-            <label for="objectives" class="text-sm font-semibold text-gray-700"
-              >Objectifs visés</label
-            >
+            <label for="objectives" class="text-sm font-semibold text-gray-700">Objectifs visés</label>
             <textarea
               ui-textarea
               id="objectives"
@@ -138,9 +119,7 @@
               placeholder="Listez les objectifs principaux et les résultats attendus..."></textarea>
           </div>
           <div class="flex flex-col gap-2">
-            <label for="selection_criteria" class="text-sm font-semibold text-gray-700"
-              >Critères d'éligibilité</label
-            >
+            <label for="selection_criteria" class="text-sm font-semibold text-gray-700">Critères d'éligibilité</label>
             <textarea
               ui-textarea
               id="selection_criteria"
