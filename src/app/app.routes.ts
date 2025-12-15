@@ -8,8 +8,7 @@ export const routes: Routes = [
     component: Layout,
     data: { layout: 'dashboard-layout' },
     canActivate: [authGuard],
-    loadChildren: () =>
-      import('@features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes)
+    loadChildren: () => import('@features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes)
   },
   {
     component: Layout,
@@ -50,6 +49,14 @@ export const routes: Routes = [
     path: '',
     title: 'Utilisateurs',
     loadChildren: () => import('@features/users/users.routes').then((m) => m.usersRoutes)
+  },
+  {
+    component: Layout,
+    path: 'account',
+    title: 'Mon compte',
+    data: { layout: 'dashboard-layout' },
+    canActivate: [authGuard],
+    loadChildren: () => import('@features/account/account.routes').then((m) => m.accountRoutes)
   },
   {
     path: 'sign-in',
