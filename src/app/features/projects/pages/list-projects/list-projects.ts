@@ -48,7 +48,7 @@ export class ListProjects {
     q: [this.queryParams().q || '']
   });
   icons = { Trash, Search, Eye, Star, Funnel, Pencil };
-  itemsPerPage = 10;
+  itemsPerPage = 20;
   activeTab = computed(() => this.queryParams().filter || 'all');
   tabsConfig = signal([
     { label: 'Tous', name: 'all' },

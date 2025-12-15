@@ -25,12 +25,12 @@ export class UiSelect implements ControlValueAccessor {
   optionLabel = input<string>('');
   optionValue = input<string>('');
   icons = { ChevronDown };
+  value: unknown = '';
 
   normalizedOptions = computed(() => {
     const opts = this.options();
     const labelKey = this.optionLabel();
     const valueKey = this.optionValue();
-
     if (labelKey && valueKey) {
       return (opts as Record<string, unknown>[]).map((opt) => ({
         label: String(opt[labelKey] ?? ''),
@@ -41,8 +41,6 @@ export class UiSelect implements ControlValueAccessor {
 
     return opts as SelectOption[];
   });
-
-  value: unknown = '';
 
   #onChangeCallback!: (value: unknown) => void;
   onTouched!: () => void;

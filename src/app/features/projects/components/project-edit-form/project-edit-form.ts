@@ -1,11 +1,5 @@
 import { Component, computed, effect, inject, input } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UiButton, UiDatepicker, UiInput, UiMultiSelect, UiSelect, UiTextarea } from '@shared/ui';
 import { IProject } from '@shared/models';
 import { extractCategoryIds, parseDate } from '@shared/helpers/form.helper';
@@ -18,16 +12,7 @@ import { UsersStore } from '@features/users/store/users.store';
   selector: 'app-project-edit-form',
   templateUrl: './project-edit-form.html',
   providers: [ProjectsStore, UsersStore, CategoriesStore, SubprogramsStore],
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    UiInput,
-    UiTextarea,
-    UiSelect,
-    UiMultiSelect,
-    UiDatepicker,
-    UiButton
-  ]
+  imports: [FormsModule, ReactiveFormsModule, UiInput, UiTextarea, UiSelect, UiMultiSelect, UiDatepicker, UiButton]
 })
 export class ProjectEditFormComponent {
   project = input.required<IProject>();
@@ -38,17 +23,11 @@ export class ProjectEditFormComponent {
   updateProjectStore = inject(ProjectsStore);
   form = this.#initForm();
 
-  programOptions = computed(() =>
-    this.programsStore.unpaginatedSubprograms().map((p) => ({ label: p.name, value: p.id }))
-  );
+  programOptions = computed(() => this.programsStore.allSubprograms().map((p) => ({ label: p.name, value: p.id })));
 
-  staffOptions = computed(() =>
-    this.usersStore.staff().map((u) => ({ label: u.name, value: u.id }))
-  );
+  staffOptions = computed(() => this.usersStore.staff().map((u) => ({ label: u.name, value: u.id })));
 
-  categoryOptions = computed(() =>
-    this.categoriesStore.allCategories().map((c) => ({ label: c.name, value: c.id }))
-  );
+  categoryOptions = computed(() => this.categoriesStore.allCategories().map((c) => ({ label: c.name, value: c.id })));
 
   constructor() {
     effect(() => {

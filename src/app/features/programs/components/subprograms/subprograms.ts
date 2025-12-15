@@ -87,7 +87,7 @@ export class ListSubprograms {
   loadSubprograms(programId?: string): void {
     const id = programId ?? this.programSignal()?.id;
     if (!id) return;
-    this.store.loadUnpaginatedSubprograms(id);
+    this.store.loadallSubprograms(id);
   }
 
   onPublishProgram(id: string): void {

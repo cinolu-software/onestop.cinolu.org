@@ -4,7 +4,18 @@
     {{ label() }}
   </label>
   }
-  <div [class]="selectClasses()" class="ui-multi-select-trigger" [class.ui-multi-select-trigger-disabled]="disabled()" (click)="toggleDropdown()" (keyup.enter)="toggleDropdown()" (keyup.space)="toggleDropdown()" [id]="id()" [tabindex]="disabled() ? -1 : 0" role="button" [attr.aria-expanded]="isOpen()" [attr.aria-haspopup]="'listbox'">
+  <div
+    [class]="selectClasses()"
+    class="ui-multi-select-trigger"
+    [class.ui-multi-select-trigger-disabled]="disabled()"
+    (click)="toggleDropdown()"
+    (keyup.enter)="toggleDropdown()"
+    (keyup.space)="toggleDropdown()"
+    [id]="id()"
+    [tabindex]="disabled() ? -1 : 0"
+    role="button"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-haspopup]="'listbox'">
     <div class="ui-multi-select-content">
       @if (value.length === 0) {
       <span class="ui-multi-select-placeholder">{{ placeholder() }}</span>

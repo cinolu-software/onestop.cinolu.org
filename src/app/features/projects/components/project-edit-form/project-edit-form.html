@@ -1,142 +1,81 @@
 <form class="w-full" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-    <div class="mb-8">
-      <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">
-        Informations essentielles
-      </h6>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="flex flex-col gap-2">
-          <label for="name" class="text-sm font-semibold text-gray-700">
-            Nom du projet<span class="text-red-500 ml-1">*</span>
-          </label>
-          <app-ui-input
-            id="name"
-            formControlName="name"
-            class="w-full"
-            placeholder="Ex: Programme de mentorat entrepreneurial" />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="duration_hours" class="text-sm font-semibold text-gray-700"
-            >Durée estimée (en heures)</label
-          >
-          <app-ui-input
-            id="duration_hours"
-            type="number"
-            formControlName="duration_hours"
-            class="w-full"
-            placeholder="Ex: 100" />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="program" class="text-sm font-semibold text-gray-700">
-            Programme associé<span class="text-red-500 ml-1">*</span>
-          </label>
-          <app-ui-select
-            [filter]="true"
-            inputId="program"
-            [options]="programOptions()"
-            formControlName="program"
-            placeholder="Sélectionner un programme"
-            class="w-full" />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="project_manager" class="text-sm font-semibold text-gray-700"
-            >Chef de projet</label
-          >
-          <app-ui-select
-            inputId="project_manager"
-            [options]="staffOptions()"
-            [filter]="true"
-            formControlName="project_manager"
-            placeholder="Sélectionner un chef de projet"
-            class="w-full" />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="categories" class="text-sm font-semibold text-gray-700">
-            Catégories<span class="text-red-500 ml-1">*</span>
-          </label>
-          <app-ui-multi-select
-            [inputId]="'categories'"
-            [autocomplete]="'off'"
-            [showHeader]="false"
-            [options]="categoryOptions()"
-            formControlName="categories"
-            placeholder="Choisir une ou plusieurs catégories"
-            class="w-full" />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="started_at" class="text-sm font-semibold text-gray-700">
-            Date de début<span class="text-red-500 ml-1">*</span>
-          </label>
-          <app-ui-datepicker formControlName="started_at" class="w-full" />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="ended_at" class="text-sm font-semibold text-gray-700">
-            Date de fin<span class="text-red-500 ml-1">*</span>
-          </label>
-          <app-ui-datepicker formControlName="ended_at" class="w-full" />
-        </div>
-      </div>
-    </div>
-    <div>
-      <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">
-        Présentation détaillée
-      </h6>
-      <div class="grid grid-cols-1 gap-6">
-        <div class="flex flex-col gap-2">
-          <label for="description" class="text-sm font-semibold text-gray-700">
-            Présentation générale<span class="text-red-500 ml-1">*</span>
-          </label>
-          <app-ui-textarea
-            id="description"
-            formControlName="description"
-            [rows]="6"
-            class="w-full"
-            placeholder="Présentez le projet de manière claire et concise..."></app-ui-textarea>
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="context" class="text-sm font-semibold text-gray-700"
-            >Contexte et justification</label
-          >
-          <app-ui-textarea
-            id="context"
-            formControlName="context"
-            [rows]="6"
-            class="w-full"
-            placeholder="Expliquez le contexte et la raison d'être du projet..."></app-ui-textarea>
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="objectives" class="text-sm font-semibold text-gray-700"
-            >Objectifs visés</label
-          >
-          <app-ui-textarea
-            id="objectives"
-            formControlName="objectives"
-            [rows]="6"
-            class="w-full"
-            placeholder="Décrivez les objectifs que le projet vise à atteindre..."></app-ui-textarea>
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="selection_criteria" class="text-sm font-semibold text-gray-700"
-            >Critères d'éligibilité</label
-          >
-          <app-ui-textarea
-            id="selection_criteria"
-            formControlName="selection_criteria"
-            [rows]="6"
-            class="w-full"
-            placeholder="Spécifiez les critères de sélection ou d'éligibilité..."></app-ui-textarea>
-        </div>
-      </div>
-    </div>
-    <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
-      <app-ui-button
-        [size]="'small'"
-        [loading]="updateProjectStore.isLoading()"
-        [disabled]="updateProjectStore.isLoading() || form.invalid"
-        type="submit"
-        variant="primary">
-        Modifier le projet
-      </app-ui-button>
-    </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <app-ui-input
+      label="Nom du projet"
+      [id]="'name'"
+      formControlName="name"
+      class="w-full"
+      placeholder="Ex: Programme de mentorat entrepreneurial" />
+    <app-ui-input
+      label="Durée estimée (en heures)"
+      [id]="'duration_hours'"
+      type="number"
+      formControlName="duration_hours"
+      class="w-full"
+      placeholder="Ex: 100" />
+    <app-ui-select
+      [id]="'program_id'"
+      label="Programme associé"
+      [filter]="true"
+      [options]="programOptions()"
+      formControlName="program"
+      placeholder="Sélectionner un programme"
+      class="w-full" />
+    <app-ui-select
+      [id]="'project_manager_id'"
+      label="Chef de projet"
+      [options]="staffOptions()"
+      [filter]="true"
+      formControlName="project_manager"
+      placeholder="Sélectionner un chef de projet"
+      class="w-full" />
+    <app-ui-multi-select
+      [id]="'categories_ids'"
+      label="Catégories"
+      [options]="categoryOptions()"
+      formControlName="categories"
+      placeholder="Choisir une ou plusieurs catégories" />
+    <app-ui-datepicker [id]="'started_at'" label="Date de début" formControlName="started_at" class="w-full" />
+    <app-ui-datepicker [id]="'ended_at'" label="Date de fin" formControlName="ended_at" class="w-full" />
+  </div>
+  <div class="grid grid-cols-1 gap-6">
+    <app-ui-textarea
+      [id]="'description'"
+      label="Présentation générale"
+      formControlName="description"
+      [rows]="6"
+      class="w-full"
+      placeholder="Présentez le projet de manière claire et concise..."></app-ui-textarea>
+    <app-ui-textarea
+      [id]="'context'"
+      label="Contexte et justification"
+      formControlName="context"
+      [rows]="6"
+      class="w-full"
+      placeholder="Expliquez le contexte et la raison d'être du projet..."></app-ui-textarea>
+    <app-ui-textarea
+      [id]="'objectives'"
+      label="Objectifs visés"
+      formControlName="objectives"
+      [rows]="6"
+      class="w-full"
+      placeholder="Décrivez les objectifs que le projet vise à atteindre..."></app-ui-textarea>
+    <app-ui-textarea
+      [id]="'selection_criteria'"
+      label="Critères d'éligibilité"
+      formControlName="selection_criteria"
+      [rows]="6"
+      class="w-full"
+      placeholder="Spécifiez les critères de sélection ou d'éligibilité..."></app-ui-textarea>
+  </div>
+  <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
+    <app-ui-button
+      [size]="'small'"
+      [loading]="updateProjectStore.isLoading()"
+      [disabled]="updateProjectStore.isLoading() || form.invalid"
+      type="submit"
+      variant="primary">
+      Modifier le projet
+    </app-ui-button>
   </div>
 </form>

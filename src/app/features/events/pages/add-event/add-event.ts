@@ -26,7 +26,7 @@ export class AddEventComponent {
   usersStore = inject(UsersStore);
 
   programOptions = computed<SelectOption[]>(() =>
-    this.programsStore.unpaginatedSubprograms().map((prog) => ({
+    this.programsStore.allSubprograms().map((prog) => ({
       label: prog.name,
       value: prog.id
     }))

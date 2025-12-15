@@ -47,7 +47,7 @@ export class ListPrograms {
     q: [this.queryParams().q || '']
   });
   icons = { Trash, Search, Eye, Star, Funnel, Pencil };
-  itemsPerPage = 2;
+  itemsPerPage = 10;
   activeTab = computed(() => this.queryParams().filter || 'all');
   tabsConfig = signal([
     { label: 'Tous', name: 'all' },

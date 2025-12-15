@@ -9,13 +9,12 @@
       [id]="id()"
       [disabled]="disabled()"
       [class]="selectClasses()"
-      [value]="value"
       (change)="onChange($event)"
       (blur)="onTouched()">
-      @if (placeholder()) {
-      <option value="" disabled selected>{{ placeholder() }}</option>
-      } @for (option of normalizedOptions(); track option.value) {
-      <option [value]="option.value" [disabled]="option.disabled">{{ option.label }}</option>
+      @for (option of normalizedOptions(); track option.value) {
+      <option [value]="option.value" [selected]="option.value === value" [disabled]="option.disabled">
+        {{ option.label }}
+      </option>
       }
     </select>
     <div class="ui-select-icon">

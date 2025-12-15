@@ -14,9 +14,8 @@ interface IProgramsStore {
   isLoading: boolean;
   programs: [IProgram[], number];
   program: IProgram | null;
-  // Unpaginated list (for selects / simple lists)
   isLoadingUnpaginated: boolean;
-  unpaginatedPrograms: IProgram[];
+  allPrograms: IProgram[];
 }
 
 export const ProgramsStore = signalStore(
@@ -25,7 +24,7 @@ export const ProgramsStore = signalStore(
     programs: [[], 0],
     program: null,
     isLoadingUnpaginated: false,
-    unpaginatedPrograms: []
+    allPrograms: []
   }),
   withProps(() => ({
     _http: inject(HttpClient),
@@ -50,16 +49,16 @@ export const ProgramsStore = signalStore(
         })
       )
     ),
-    loadUnpaginatedPrograms: rxMethod<void>(
+    loadallPrograms: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isLoadingUnpaginated: true })),
         exhaustMap(() =>
           _http.get<{ data: IProgram[] }>('programs').pipe(
             map(({ data }) => {
-              patchState(store, { isLoadingUnpaginated: false, unpaginatedPrograms: data });
+              patchState(store, { isLoadingUnpaginated: false, allPrograms: data });
             }),
             catchError(() => {
-              patchState(store, { isLoadingUnpaginated: false, unpaginatedPrograms: [] });
+              patchState(store, { isLoadingUnpaginated: false, allPrograms: [] });
               return of(null);
             })
           )
@@ -171,9 +170,7 @@ export const ProgramsStore = signalStore(
               const [list, count] = store.programs();
               const updated = list.map((p) => (p.id === data.id ? data : p));
               _toast.showSuccess(
-                data.is_highlighted
-                  ? 'Programme mis en avant'
-                  : 'Programme retiré de la mise en avant'
+                data.is_highlighted ? 'Programme mis en avant' : 'Programme retiré de la mise en avant'
               );
               patchState(store, { isLoading: false, program: data, programs: [updated, count] });
             }),

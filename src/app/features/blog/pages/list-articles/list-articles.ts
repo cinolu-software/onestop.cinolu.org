@@ -40,7 +40,7 @@ export class ListArticles {
   #destroyRef = inject(DestroyRef);
   searchForm: FormGroup;
   store = inject(ArticlesStore);
-  itemsPerPage = 10;
+  itemsPerPage = 20;
   icons = { Pencil, Trash, Search, Plus, Eye, Star, Funnel };
   queryParams = signal<FilterArticleDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),

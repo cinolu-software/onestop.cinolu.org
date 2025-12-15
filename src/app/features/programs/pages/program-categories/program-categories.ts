@@ -1,5 +1,5 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
-import { LucideAngularModule, Plus, Trash, Search, Funnel, Pencil } from 'lucide-angular';
+import { LucideAngularModule, Trash, Search, Funnel, Pencil } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -46,7 +46,7 @@ export class ProgramCategories {
     id: [''],
     name: ['', Validators.required]
   });
-  icons = { Pencil, Trash, Plus, Search, Funnel };
+  icons = { Pencil, Trash, Search, Funnel };
   itemsPerPage = 10;
   formVisible = signal(false);
   formMode = signal<'create' | 'edit'>('create');

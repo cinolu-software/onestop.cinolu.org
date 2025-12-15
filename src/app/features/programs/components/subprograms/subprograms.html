@@ -1,7 +1,6 @@
-@let program = programSignal(); @let isLoading = store.isLoading(); @let subprograms = store.unpaginatedSubprograms();
+@let program = programSignal(); @let isLoading = store.isLoading(); @let subprograms = store.allSubprograms();
 <div class="pt-6 pb-4 border-b border-gray-100">
-  <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
-    <h5 class="text-2xl font-bold text-gray-900 mb-1">Sous-programmes</h5>
+  <div class="flex justify-end px-6">
     <app-ui-button [disabled]="!program" (clicked)="onToggleForm()" variant="primary" size="small">
       {{ formVisible() ? 'Fermer le formulaire' : 'Ajouter un sous-programme' }}
     </app-ui-button>
@@ -19,10 +18,15 @@
       </div>
       <div class="grid grid-cols-1 gap-6">
         <div class="space-y-2">
-          <app-ui-input label="Nom du sous-programme" formControlName="name" placeholder="Nom du sous-programme" />
+          <app-ui-input
+            [id]="'name'"
+            label="Nom du sous-programme"
+            formControlName="name"
+            placeholder="Nom du sous-programme" />
         </div>
         <div class="space-y-2">
           <app-ui-textarea
+            [id]="'description'"
             label="Description"
             formControlName="description"
             placeholder="Décrivez brièvement le sous-programme..." />
@@ -100,15 +104,13 @@
             <div class="flex items-center gap-1">
               <button
                 (click)="highlightSubprogram(subprogram.id)"
-                [class]="subprogram.is_highlighted ? 'action-button-contrast' : 'action-button-default'"
-                [title]="subprogram.is_highlighted ? 'Retirer de la vedette' : 'Mettre en vedette'">
-                <i-lucide [name]="subprogram.is_highlighted ? icons.Star : icons.StarOff" class="size-4" />
+                [class]="subprogram.is_highlighted ? 'action-button-highlight' : 'action-button-highlight-default'">
+                <i-lucide [name]="icons.Star" class="size-4" />
+                En avant
               </button>
-              <button
-                (click)="onPublishProgram(subprogram.id)"
-                [class]="subprogram.is_published ? 'action-button-success' : 'action-button-default'"
-                [title]="subprogram.is_published ? 'Dépublier' : 'Publier'">
-                <i-lucide [name]="subprogram.is_published ? icons.Eye : icons.EyeOff" class="size-4" />
+              <button (click)="onPublishProgram(subprogram.id)" class="action-button-active">
+                <i-lucide [name]="icons.Eye" class="size-4" />
+                Publié
               </button>
               <button (click)="onToggleForm(subprogram)" class="action-button-default">
                 <i-lucide [name]="icons.Pencil" class="size-4" />

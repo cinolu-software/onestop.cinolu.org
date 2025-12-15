@@ -22,7 +22,7 @@ export class AddProjectComponent {
   usersStore = inject(UsersStore);
 
   programOptions = computed(() =>
-    this.programsStore.unpaginatedSubprograms().map((program) => ({
+    this.programsStore.allSubprograms().map((program) => ({
       label: program.name,
       value: program.id
     }))

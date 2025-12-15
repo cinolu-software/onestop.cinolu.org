@@ -79,7 +79,6 @@ export class UpdateProgram {
     const slug = this.#route.snapshot.paramMap.get('slug');
     if (!slug) return;
     this.store.loadProgram(slug);
-    // Load categories via ProgramCategoriesStore
     this.categoriesStore.loadUnpaginatedCategories();
     effect(() => {
       const program = this.store.program();
