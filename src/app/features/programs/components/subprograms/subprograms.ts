@@ -42,7 +42,7 @@ export class ListSubprograms {
     const programId = value?.id || '';
     this.subprogramForm.patchValue({ programId });
     if (programId) {
-      this.loadSubprograms(programId);
+      this.loadAll(programId);
     }
   }
 
@@ -59,11 +59,11 @@ export class ListSubprograms {
   formMode = signal<'create' | 'edit'>('create');
   editingSubprogram = signal<ISubprogram | null>(null);
 
-  highlightSubprogram(id: string): void {
+  onShowcase(id: string): void {
     this.store.showcase(id);
   }
 
-  loadSubprograms(programId?: string): void {
+  loadAll(programId?: string): void {
     const id = programId ?? this.programSignal()?.id;
     if (!id) return;
     this.store.loadAll(id);
@@ -74,7 +74,7 @@ export class ListSubprograms {
   }
 
   onFileUploadLoaded(): void {
-    this.loadSubprograms();
+    this.loadAll();
   }
 
   onToggleForm(subprogram: ISubprogram | null = null): void {
@@ -124,7 +124,7 @@ export class ListSubprograms {
         payload,
         onSuccess: () => {
           this.onCancelForm();
-          this.loadSubprograms();
+          this.loadAll();
         }
       });
       return;
@@ -133,7 +133,7 @@ export class ListSubprograms {
       payload,
       onSuccess: () => {
         this.onCancelForm();
-        this.loadSubprograms();
+        this.loadAll();
       }
     });
   }
@@ -146,7 +146,7 @@ export class ListSubprograms {
       rejectLabel: 'Annuler',
       accept: () => {
         this.store.delete(subprogramId);
-        this.loadSubprograms();
+        this.loadAll();
       }
     });
   }
