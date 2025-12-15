@@ -28,7 +28,7 @@ export const ProjectMetricsStore = signalStore(
     _toast: inject(ToastrService)
   })),
   withMethods(({ _http, _toast, ...store }) => ({
-    addMetrics: rxMethod<AddMetricsParams>(
+    create: rxMethod<AddMetricsParams>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap((params) =>

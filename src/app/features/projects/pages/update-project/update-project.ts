@@ -75,7 +75,7 @@ export class UpdateProject implements OnInit {
     if (!project) return;
     const indicators = this.indicatorsStore.indicators();
     const metrics = metricsMapToDto(this.metricsMap, indicators);
-    this.metricsStore.addMetrics({ id: project.id, metrics });
+    this.metricsStore.create({ id: project.id, metrics });
   }
 
   onCoverUploaded(): void {

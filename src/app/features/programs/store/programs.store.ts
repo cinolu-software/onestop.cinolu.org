@@ -14,18 +14,11 @@ interface IProgramsStore {
   isLoading: boolean;
   programs: [IProgram[], number];
   program: IProgram | null;
-  isLoadingUnpaginated: boolean;
   allPrograms: IProgram[];
 }
 
 export const ProgramsStore = signalStore(
-  withState<IProgramsStore>({
-    isLoading: false,
-    programs: [[], 0],
-    program: null,
-    isLoadingUnpaginated: false,
-    allPrograms: []
-  }),
+  withState<IProgramsStore>({ isLoading: false, programs: [[], 0], program: null, allPrograms: [] }),
   withProps(() => ({
     _http: inject(HttpClient),
     _router: inject(Router),
@@ -51,14 +44,14 @@ export const ProgramsStore = signalStore(
     ),
     loadUnpaginated: rxMethod<void>(
       pipe(
-        tap(() => patchState(store, { isLoadingUnpaginated: true })),
+        tap(() => patchState(store, { isLoading: true })),
         exhaustMap(() =>
           _http.get<{ data: IProgram[] }>('programs').pipe(
             map(({ data }) => {
-              patchState(store, { isLoadingUnpaginated: false, allPrograms: data });
+              patchState(store, { isLoading: false, allPrograms: data });
             }),
             catchError(() => {
-              patchState(store, { isLoadingUnpaginated: false, allPrograms: [] });
+              patchState(store, { isLoading: false, allPrograms: [] });
               return of(null);
             })
           )
