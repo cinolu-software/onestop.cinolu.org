@@ -1,43 +1,24 @@
-import { Component, effect, inject, input, computed } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UiButton, UiInput, UiTextarea, UiMultiSelect, UiDatepicker, UiTextEditor } from '@shared/ui';
-import { Calendar, Check, FileText, Info, List, PenLine, Tag, LucideAngularModule } from 'lucide-angular';
+import { UiButton, UiInput, UiMultiSelect, UiTextEditor } from '@shared/ui';
+import { Info, LucideAngularModule } from 'lucide-angular';
 import { IArticle } from '@shared/models';
 import { ArticlesStore } from '../../store/articles.store';
 import { TagsStore } from '../../store/tag.store';
 
 @Component({
-  selector: 'app-article-edit-form',
-  templateUrl: './article-edit-form.html',
+  selector: 'app-article-update-form',
+  templateUrl: './article-update-form.html',
   providers: [ArticlesStore, TagsStore],
-  imports: [
-    ReactiveFormsModule,
-    LucideAngularModule,
-    UiButton,
-    UiInput,
-    UiTextarea,
-    UiMultiSelect,
-    UiDatepicker,
-    UiTextEditor
-  ]
+  imports: [ReactiveFormsModule, LucideAngularModule, UiButton, UiInput, UiMultiSelect, UiTextEditor]
 })
-export class ArticleEditFormComponent {
+export class ArticleUpdate {
   article = input.required<IArticle>();
   #fb = inject(FormBuilder);
   updateStore = inject(ArticlesStore);
   tagsStore = inject(TagsStore);
   form = this.#initForm();
-  icons = {
-    penLine: PenLine,
-    tag: Tag,
-    calendar: Calendar,
-    list: List,
-    fileText: FileText,
-    info: Info,
-    check: Check
-  };
-
-  tagOptions = computed(() => this.tagsStore.allTags().map((tag) => ({ label: tag.name, value: tag.id })));
+  icons = { Info };
 
   #initForm(): FormGroup {
     return this.#fb.group({

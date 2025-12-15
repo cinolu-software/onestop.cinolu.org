@@ -1,5 +1,4 @@
 <div class="ui-text-editor">
-  <!-- Toolbar -->
   <div [class]="toolbarClasses()">
     <div class="ui-text-editor-toolbar-group">
       <button
@@ -8,7 +7,7 @@
         (click)="formatBold()"
         title="Bold (Ctrl+B)"
         [disabled]="disabled()">
-        <i-lucide [img]="icons.bold" [size]="16" />
+        <i-lucide [img]="icons.Bold" [size]="16" />
       </button>
       <button
         type="button"
@@ -16,7 +15,7 @@
         (click)="formatItalic()"
         title="Italic (Ctrl+I)"
         [disabled]="disabled()">
-        <i-lucide [img]="icons.italic" [size]="16" />
+        <i-lucide [img]="icons.Italic" [size]="16" />
       </button>
       <button
         type="button"
@@ -24,7 +23,7 @@
         (click)="formatUnderline()"
         title="Underline (Ctrl+U)"
         [disabled]="disabled()">
-        <i-lucide [img]="icons.underline" [size]="16" />
+        <i-lucide [img]="icons.Underline" [size]="16" />
       </button>
     </div>
 
@@ -37,7 +36,7 @@
         (click)="insertBulletList()"
         title="Bullet List"
         [disabled]="disabled()">
-        <i-lucide [img]="icons.bulletList" [size]="16" />
+        <i-lucide [img]="icons.List" [size]="16" />
       </button>
       <button
         type="button"
@@ -45,20 +44,15 @@
         (click)="insertOrderedList()"
         title="Numbered List"
         [disabled]="disabled()">
-        <i-lucide [img]="icons.orderedList" [size]="16" />
+        <i-lucide [img]="icons.List" [size]="16" />
       </button>
     </div>
 
     <div class="ui-text-editor-toolbar-divider"></div>
 
     <div class="ui-text-editor-toolbar-group">
-      <button
-        type="button"
-        [class]="buttonClasses()"
-        (click)="alignLeft()"
-        title="Align Left"
-        [disabled]="disabled()">
-        <i-lucide [img]="icons.alignLeft" [size]="16" />
+      <button type="button" [class]="buttonClasses()" (click)="alignLeft()" title="Align Left" [disabled]="disabled()">
+        <i-lucide [img]="icons.TextAlignStart" [size]="16" />
       </button>
       <button
         type="button"
@@ -66,7 +60,7 @@
         (click)="alignCenter()"
         title="Align Center"
         [disabled]="disabled()">
-        <i-lucide [img]="icons.alignCenter" [size]="16" />
+        <i-lucide [img]="icons.TextAlignCenter" [size]="16" />
       </button>
       <button
         type="button"
@@ -74,41 +68,11 @@
         (click)="alignRight()"
         title="Align Right"
         [disabled]="disabled()">
-        <i-lucide [img]="icons.alignRight" [size]="16" />
-      </button>
-    </div>
-
-    <div class="ui-text-editor-toolbar-divider"></div>
-
-    <div class="ui-text-editor-toolbar-group">
-      <button
-        type="button"
-        [class]="buttonClasses()"
-        (click)="insertLink()"
-        title="Insert Link"
-        [disabled]="disabled()">
-        <i-lucide [img]="icons.link" [size]="16" />
-      </button>
-      <button
-        type="button"
-        [class]="buttonClasses()"
-        (click)="insertImage()"
-        title="Insert Image"
-        [disabled]="disabled()">
-        <i-lucide [img]="icons.image" [size]="16" />
-      </button>
-      <button
-        type="button"
-        [class]="buttonClasses()"
-        (click)="formatCode()"
-        title="Code Block"
-        [disabled]="disabled()">
-        <i-lucide [img]="icons.code" [size]="16" />
+        <i-lucide [img]="icons.TextAlignEnd" [size]="16" />
       </button>
     </div>
   </div>
 
-  <!-- Editor Area -->
   <div
     #editor
     [class]="editorClasses()"

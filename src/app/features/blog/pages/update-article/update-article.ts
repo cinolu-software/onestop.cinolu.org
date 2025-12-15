@@ -4,13 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Images, SquarePen } from 'lucide-angular';
 import { UiTabs } from '@shared/ui';
 import { ArticlesStore } from '../../store/articles.store';
-import { ArticleEditFormComponent } from '../../components/article-edit-form/article-edit-form';
+import { ArticleUpdate } from '../../components/article-update-form/article-update-form';
 import { ArticleGalleryComponent } from '../../components/article-gallery/article-gallery';
 
 @Component({
   selector: 'app-update-article',
   providers: [ArticlesStore],
-  imports: [CommonModule, UiTabs, ArticleEditFormComponent, ArticleGalleryComponent],
+  imports: [CommonModule, UiTabs, ArticleUpdate, ArticleGalleryComponent],
   templateUrl: './update-article.html'
 })
 export class UpdateArticle implements OnInit {

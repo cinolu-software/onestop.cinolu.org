@@ -45,7 +45,7 @@
     }
   </div>
   } @else { @if (activeTab() === 'edit' && article) {
-  <app-article-edit-form [article]="article" />
+  <app-article-update-form [article]="article" />
   } @if (activeTab() === 'gallery' && article) {
   <app-article-gallery
     [article]="article"

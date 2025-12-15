@@ -7,22 +7,16 @@ import {
   Italic,
   Underline,
   List,
-  ListOrdered,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  Link,
-  Image,
-  Code
+  TextAlignStart,
+  TextAlignCenter,
+  TextAlignEnd
 } from 'lucide-angular';
 
 @Component({
   selector: 'app-ui-text-editor',
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './text-editor.html',
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiTextEditor), multi: true }
-  ]
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiTextEditor), multi: true }]
 })
 export class UiTextEditor implements ControlValueAccessor {
   @ViewChild('editor', { static: false }) editorElement!: ElementRef<HTMLDivElement>;
@@ -32,23 +26,9 @@ export class UiTextEditor implements ControlValueAccessor {
   id = input<string>('');
   invalid = input<boolean>(false);
   minHeight = input<string>('300px');
-
   value = '';
   isFocused = signal(false);
-
-  icons = {
-    bold: Bold,
-    italic: Italic,
-    underline: Underline,
-    bulletList: List,
-    orderedList: ListOrdered,
-    alignLeft: AlignLeft,
-    alignCenter: AlignCenter,
-    alignRight: AlignRight,
-    link: Link,
-    image: Image,
-    code: Code
-  };
+  icons = { Bold, Italic, Underline, List, TextAlignCenter, TextAlignStart, TextAlignEnd };
 
   onChange!: (value: string) => void;
   onTouched!: () => void;
