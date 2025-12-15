@@ -5,6 +5,9 @@ import { AuthStore } from '../auth/auth.store';
 export const unauthGuard: CanActivateFn = () => {
   const authStore = inject(AuthStore);
   const router = inject(Router);
-  if (authStore.user() && !authStore.isLoading()) return router.parseUrl('/');
+  const user = authStore.user();
+  const roles = user?.roles as unknown as string[];
+  const hasRights = roles?.includes('admin') || roles?.includes('staff');
+  if (hasRights && !authStore.isLoading()) return router.parseUrl('/');
   return true;
 };
