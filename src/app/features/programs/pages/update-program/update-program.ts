@@ -47,7 +47,7 @@ export class UpdateProgram {
   indicatorsCategories = signal(INDICATORS_CATEGORIES);
   selectedCategory = signal(this.indicatorsCategories()[0]);
   year = signal<Date>(new Date());
-
+  icons = { Trash2, Funnel, Tag, ChartColumn };
   indicatorCategoryOptions = computed<SelectOption[]>(() =>
     this.indicatorsCategories().map((cat) => ({
       label: cat,
@@ -55,7 +55,6 @@ export class UpdateProgram {
     }))
   );
 
-  icons = { Trash2, Funnel, Tag, ChartColumn };
   tabs = [
     { label: 'Modifier le programme', name: 'edit', icon: SquarePen },
     { label: 'Sous programmes', name: 'subprograms', icon: Tag },
