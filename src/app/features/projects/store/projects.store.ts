@@ -155,11 +155,7 @@ export const ProjectsStore = signalStore(
               const [list, count] = store.projects();
               const filtered = list.filter((p) => p.id !== id);
               _toast.showSuccess('Le projet a été supprimé avec succès');
-              patchState(store, {
-                isLoading: false,
-                projects: [filtered, Math.max(0, count - 1)],
-                project: null
-              });
+              patchState(store, { isLoading: false, projects: [filtered, Math.max(0, count - 1)], project: null });
             }),
             catchError(() => {
               _toast.showError("Une erreur s'est produite lors de la suppression");
