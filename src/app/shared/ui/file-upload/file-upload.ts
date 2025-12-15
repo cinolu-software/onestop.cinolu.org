@@ -11,7 +11,7 @@ import imagePreview from 'filepond-plugin-image-preview';
 registerPlugin(imagePreview);
 
 @Component({
-  selector: 'ui-file-upload',
+  selector: 'app-ui-file-upload',
   imports: [FilePondModule],
   templateUrl: './file-upload.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

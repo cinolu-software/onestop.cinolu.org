@@ -1,26 +1,16 @@
-@let isLoading = store.isLoading(); @let userCount = store.users()[1]; @let users =
-store.users()[0];
+@let isLoading = store.isLoading(); @let userCount = store.users()[1]; @let users = store.users()[0];
 <div class="relative bg-white rounded-xl shadow-sm pb-12">
   <div class="px-6 pt-6 pb-4 border-b border-gray-100">
     <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
       <div>
-        <h5 class="text-2xl font-bold text-gray-900 mb-1">
-          Utilisateurs @if (!isLoading) {
-          <span class="text-gray-400 text-sm">• {{ userCount }} au total</span>
-          }
-        </h5>
+        <h5 class="text-2xl font-bold text-gray-900 mb-1">Utilisateurs</h5>
       </div>
       <div class="flex items-center gap-2">
-        <button
-          class="ui-button ui-button-small ui-button-secondary"
-          [disabled]="userCount === 0"
-          (click)="onDownloadUsers()">
+        <app-ui-button variant="secondary" size="small" [disabled]="userCount === 0" (click)="onDownloadUsers()">
           <i-lucide [name]="icons.Download" class="size-4" />
           Télécharger CSV
-        </button>
-        <a class="ui-button ui-button-small ui-button-primary" [routerLink]="'/users/add'">
-          Nouvel utilisateur
-        </a>
+        </app-ui-button>
+        <a class="ui-button ui-button-small ui-button-primary" [routerLink]="'/users/add'"> Nouvel utilisateur </a>
       </div>
     </div>
     <form [formGroup]="searchForm" class="search-input-wrapper">
@@ -35,9 +25,9 @@ store.users()[0];
 
   <div class="px-4 sm:px-6 mt-6">
     @if (isLoading && userCount === 0) {
-    <ui-table-skeleton [rows]="10" [columns]="4" />
+    <app-ui-table-skeleton [rows]="10" [columns]="4" />
     } @if (userCount > 0) {
-    <div class="ui-table-wrapper">
+    <div class="ui-table-wrapper scrollbar-hide">
       <table class="ui-table">
         <thead class="ui-table-head">
           <tr class="ui-table-head-row">
@@ -52,11 +42,8 @@ store.users()[0];
           <tr class="ui-table-row">
             <td class="ui-table-cell">
               <div class="flex items-center gap-3">
-                <ui-avatar [image]="user | apiIMG : 'user'" [label]="user.name" />
-                <div class="min-w-0">
-                  <p class="font-semibold text-gray-900 truncate">{{ user.name | titlecase }}</p>
-                  <p class="text-xs text-gray-500 mt-0.5">Compte actif</p>
-                </div>
+                <app-ui-avatar [image]="user | apiIMG : 'user'" [label]="user.name" />
+                <p class="font-semibold text-gray-900 w-full md:w-48 line-clamp-2">{{ user.name | titlecase }}</p>
               </div>
             </td>
             <td class="ui-table-cell">
@@ -64,12 +51,9 @@ store.users()[0];
             </td>
             <td class="ui-table-cell">
               <div class="flex flex-col">
-                <span class="text-sm text-gray-700 font-medium">
+                <p class="text-sm text-gray-700 font-medium whitespace-nowrap">
                   {{ user.created_at | date : 'dd MMM yyyy' }}
-                </span>
-                <span class="text-xs text-gray-500 mt-0.5">
-                  {{ user.created_at | date : 'HH:mm' }}
-                </span>
+                </p>
               </div>
             </td>
             <td class="ui-table-cell">
@@ -91,7 +75,7 @@ store.users()[0];
     </div>
     }
     <div class="flex flex-col justify-end items-end">
-      <ui-pagination
+      <app-ui-pagination
         [currentPage]="currentPage()"
         [totalItems]="userCount"
         [itemsPerPage]="itemsPerPage"
@@ -108,7 +92,7 @@ store.users()[0];
     <p class="text-gray-500 text-center max-w-lg mb-8 text-base leading-relaxed">
       Nous n'avons trouvé aucun utilisateur correspondant à vos critères.<br />
     </p>
-    <ui-button
+    <app-ui-button
       (clicked)="resetFilters()"
       variant="secondary"
       [outlined]="true"
@@ -117,8 +101,8 @@ store.users()[0];
         <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
         <span>Réinitialiser les filtres</span>
       </span>
-    </ui-button>
+    </app-ui-button>
   </div>
   }
-  <ui-confirm-dialog />
+  <app-ui-confirm-dialog />
 </div>

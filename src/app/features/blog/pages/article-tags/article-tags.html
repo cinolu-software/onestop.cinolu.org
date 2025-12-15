@@ -3,11 +3,7 @@
   <div class="px-6 pt-6 pb-4 border-b border-gray-100">
     <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
       <div>
-        <h5 class="text-2xl font-bold text-gray-900 mb-1">
-          Tags d'articles @if (!isLoading) {
-          <span class="text-gray-400 text-sm">• {{ tagCount }} au total</span>
-          }
-        </h5>
+        <h5 class="text-2xl font-bold text-gray-900 mb-1">Tags d'articles</h5>
       </div>
       <button class="ui-button ui-button-small ui-button-primary" (click)="onToggleForm()">
         <i-lucide [name]="icons.Plus" class="size-4" />
@@ -24,7 +20,6 @@
     </form>
   </div>
 
-  <!-- Collapsible Form -->
   <div class="px-6">
     <div
       class="rounded-2xl border border-gray-200 bg-linear-to-br from-gray-50 to-white shadow-sm transition-all duration-500 ease-in-out overflow-hidden"
@@ -39,20 +34,20 @@
           </h6>
         </div>
         <div class="space-y-2">
-          <ui-input label="Nom du tag" formControlName="name" placeholder="Ex: Innovation, Technologie, Santé..." />
+          <app-ui-input label="Nom du tag" formControlName="name" placeholder="Ex: Innovation, Technologie, Santé..." />
         </div>
         <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-          <ui-button type="button" size="small" variant="secondary" [outlined]="true" (clicked)="onCancelForm()">
+          <app-ui-button type="button" size="small" variant="secondary" [outlined]="true" (clicked)="onCancelForm()">
             Annuler
-          </ui-button>
-          <ui-button
+          </app-ui-button>
+          <app-ui-button
             type="submit"
             size="small"
             variant="primary"
             [disabled]="tagForm.invalid || store.isLoading()"
             [loading]="store.isLoading()">
             {{ formMode() === 'edit' ? 'Mettre à jour' : 'Ajouter' }}
-          </ui-button>
+          </app-ui-button>
         </div>
       </form>
     </div>
@@ -60,9 +55,9 @@
 
   <div class="px-4 sm:px-6 mt-6">
     @if (isLoading && tagCount === 0) {
-    <ui-table-skeleton [rows]="10" [columns]="3" />
+    <app-ui-table-skeleton [rows]="10" [columns]="3" />
     } @if (tagCount > 0) {
-    <div class="ui-table-wrapper">
+    <div class="ui-table-wrapper scrollbar-hide">
       <table class="ui-table">
         <thead class="ui-table-head">
           <tr class="ui-table-head-row">
@@ -75,7 +70,7 @@
           @for (tag of tags; track tag.id) {
           <tr class="ui-table-row">
             <td class="ui-table-cell">
-              <p class="font-semibold text-gray-900">{{ tag.id }}</p>
+              <p class="font-semibold text-sm">{{ tag.id }}</p>
             </td>
             <td class="ui-table-cell">
               <p class="font-semibold text-gray-900">{{ tag.name | titlecase }}</p>
@@ -99,7 +94,7 @@
     </div>
     }
     <div class="flex flex-col justify-end items-end">
-      <ui-pagination
+      <app-ui-pagination
         [currentPage]="currentPage()"
         [totalItems]="tagCount"
         [itemsPerPage]="itemsPerPage"
@@ -116,7 +111,7 @@
     <p class="text-gray-500 text-center max-w-lg mb-8 text-base leading-relaxed">
       Nous n'avons trouvé aucun tag correspondant à vos critères.<br />
     </p>
-    <ui-button
+    <app-ui-button
       (clicked)="resetFilters()"
       variant="secondary"
       [outlined]="true"
@@ -125,8 +120,8 @@
         <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
         <span>Réinitialiser les filtres</span>
       </span>
-    </ui-button>
+    </app-ui-button>
   </div>
   }
-  <ui-confirm-dialog />
+  <app-ui-confirm-dialog />
 </div>

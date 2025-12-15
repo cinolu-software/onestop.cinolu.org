@@ -3,7 +3,7 @@ import { Component, input, output, ChangeDetectionStrategy } from '@angular/core
 import { LucideAngularModule, LucideIconData } from 'lucide-angular';
 
 @Component({
-  selector: 'ui-tabs',
+  selector: 'app-ui-tabs',
   imports: [LucideAngularModule, CommonModule],
   templateUrl: './tabs.html',
   changeDetection: ChangeDetectionStrategy.OnPush

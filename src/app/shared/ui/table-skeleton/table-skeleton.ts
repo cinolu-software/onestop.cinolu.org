@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 
 @Component({
-  selector: 'ui-table-skeleton',
+  selector: 'app-ui-table-skeleton',
   imports: [],
   templateUrl: './table-skeleton.html'
 })

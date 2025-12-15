@@ -1,6 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsersStore } from '../../store/users.store';
 import { RolesStore } from '../../store/roles.store';
@@ -11,16 +10,7 @@ import { UiButton, UiDatepicker, UiInput, UiMultiSelect, UiSelect } from '@share
   selector: 'app-user-add',
   templateUrl: './add-user.html',
   providers: [UsersStore, RolesStore],
-  imports: [
-    CommonModule,
-    UiButton,
-    UiInput,
-    NgxPaginationModule,
-    ReactiveFormsModule,
-    UiDatepicker,
-    UiMultiSelect,
-    UiSelect
-  ]
+  imports: [CommonModule, UiButton, UiInput, ReactiveFormsModule, UiDatepicker, UiMultiSelect, UiSelect]
 })
 export class AddUserComponent {
   #fb = inject(FormBuilder);

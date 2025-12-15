@@ -1,10 +1,10 @@
-import { Component, input, output, forwardRef, signal, computed } from '@angular/core';
+import { Component, input, output, forwardRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
-  selector: 'ui-password',
+  selector: 'app-ui-password',
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './password.html',
   providers: [

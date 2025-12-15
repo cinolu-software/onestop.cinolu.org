@@ -2,7 +2,7 @@ import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'ui-progress-bar',
+  selector: 'app-ui-progress-bar',
   imports: [CommonModule],
   template: `
     <div class="w-full bg-gray-200 rounded-full overflow-hidden" [style.height.px]="height()">

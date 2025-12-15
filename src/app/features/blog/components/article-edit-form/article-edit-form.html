@@ -7,7 +7,7 @@
           Titre de l'article
           <span class="text-red-500">*</span>
         </label>
-        <ui-input
+        <app-ui-input
           [id]="'title'"
           formControlName="title"
           [placeholder]="'Ex: Les tendances du développement web en 2025'"
@@ -22,7 +22,7 @@
             Tags de l'article
             <span class="text-red-500">*</span>
           </label>
-          <ui-multi-select
+          <app-ui-multi-select
             [id]="'tags'"
             [options]="tagOptions()"
             [placeholder]="'Sélectionnez des tags'"
@@ -38,7 +38,7 @@
             <i-lucide [img]="icons.calendar" [size]="16" class="text-primary-600" />
             Date de publication
           </label>
-          <ui-datepicker
+          <app-ui-datepicker
             [id]="'published_at'"
             formControlName="published_at"
             [placeholder]="'Sélectionnez une date'"
@@ -53,11 +53,11 @@
           Résumé
           <span class="text-red-500">*</span>
         </label>
-        <ui-textarea
+        <app-ui-textarea
           [id]="'summary'"
           formControlName="summary"
           [rows]="6"
-          [placeholder]="'Rédigez un résumé captivant de votre article...'"></ui-textarea>
+          [placeholder]="'Rédigez un résumé captivant de votre article...'"></app-ui-textarea>
         <p class="text-xs text-gray-500 mt-1">
           Un aperçu concis de votre article (150-200 caractères)
         </p>
@@ -69,7 +69,7 @@
           Contenu de l'article
           <span class="text-red-500">*</span>
         </label>
-        <ui-text-editor
+        <app-ui-text-editor
           formControlName="content"
           [minHeight]="'400px'"
           [placeholder]="'Commencez à écrire votre article...'"
@@ -84,7 +84,7 @@
         <span>Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires</span>
       </div>
       <div class="flex items-center gap-3">
-        <ui-button
+        <app-ui-button
           [type]="'submit'"
           [variant]="'primary'"
           [size]="'small'"
@@ -94,7 +94,7 @@
             <i-lucide [img]="icons.check" [size]="16" />
             <span>Mettre à jour</span>
           </span>
-        </ui-button>
+        </app-ui-button>
       </div>
     </div>
   </div>

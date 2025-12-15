@@ -2,7 +2,7 @@ import { Component, input, output, effect, model } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'ui-dialog',
+  selector: 'app-ui-dialog',
   imports: [CommonModule],
   templateUrl: './dialog.html'
 })

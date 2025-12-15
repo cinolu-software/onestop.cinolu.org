@@ -25,7 +25,7 @@
             <label for="place" class="text-sm font-semibold text-gray-700"
               >Lieu de l'événement</label
             >
-            <ui-input
+            <app-ui-input
               id="place"
               formControlName="place"
               class="w-full"
@@ -47,7 +47,7 @@
             <label for="program" class="text-sm font-semibold text-gray-700">
               Programme associé<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-select
+            <app-ui-select
               [filter]="true"
               inputId="program"
               [options]="programOptions()"
@@ -59,7 +59,7 @@
             <label for="event_manager" class="text-sm font-semibold text-gray-700"
               >Responsable de l'événement</label
             >
-            <ui-select
+            <app-ui-select
               inputId="event_manager"
               [options]="staffOptions()"
               formControlName="event_manager"
@@ -70,7 +70,7 @@
             <label for="categories" class="text-sm font-semibold text-gray-700">
               Catégories<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-multi-select
+            <app-ui-multi-select
               [inputId]="'categories'"
               [autocomplete]="'off'"
               [showHeader]="false"
@@ -85,7 +85,7 @@
             <label for="started_at" class="text-sm font-semibold text-gray-700">
               Date de début<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-datepicker
+            <app-ui-datepicker
               showIcon
               iconDisplay="input"
               formControlName="started_at"
@@ -95,7 +95,7 @@
             <label for="ended_at" class="text-sm font-semibold text-gray-700">
               Date de fin<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-datepicker showIcon iconDisplay="input" formControlName="ended_at" class="w-full" />
+            <app-ui-datepicker showIcon iconDisplay="input" formControlName="ended_at" class="w-full" />
           </div>
         </div>
       </div>
@@ -151,14 +151,14 @@
         </div>
       </div>
       <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
-        <ui-button
+        <app-ui-button
           [size]="'small'"
           [loading]="eventsStore.isLoading()"
           [disabled]="eventsStore.isLoading() || form.invalid"
           variant="primary"
           type="submit">
           Créer l'événement
-        </ui-button>
+        </app-ui-button>
       </div>
     </div>
   </form>

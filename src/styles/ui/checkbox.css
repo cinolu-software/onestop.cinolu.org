@@ -1,0 +1,62 @@
+@layer utilities {
+  .ui-checkbox-wrapper {
+    @apply flex items-center gap-3;
+  }
+
+  .ui-checkbox-container {
+    @apply relative inline-flex items-center justify-center;
+  }
+
+  .ui-checkbox-input {
+    @apply w-5 h-5 rounded-md border-2 border-slate-300 bg-white cursor-pointer transition-all duration-200 ease-in-out;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+  }
+
+  .ui-checkbox-input:hover:not(:disabled) {
+    @apply border-primary-400 bg-primary-50/30;
+  }
+
+  .ui-checkbox-input:focus {
+    @apply outline-none ring-2 ring-offset-1 ring-primary-200 border-primary-500;
+  }
+
+  .ui-checkbox-input:checked {
+    @apply bg-primary-600 border-primary-600;
+  }
+
+  .ui-checkbox-input:checked:hover:not(:disabled) {
+    @apply bg-primary-700 border-primary-700;
+  }
+
+  .ui-checkbox-input.ui-checkbox-disabled {
+    @apply bg-slate-100 border-slate-200 cursor-not-allowed opacity-50;
+  }
+
+  .ui-checkbox-input.ui-checkbox-invalid {
+    @apply border-red-400;
+  }
+
+  .ui-checkbox-input.ui-checkbox-invalid:focus {
+    @apply border-red-500 ring-red-200;
+  }
+
+  .ui-checkbox-checkmark {
+    @apply absolute inset-0 flex items-center justify-center pointer-events-none text-white;
+  }
+
+  .ui-checkbox-label {
+    @apply text-sm font-medium text-slate-700 cursor-pointer select-none transition-colors duration-200;
+    line-height: 1.5;
+  }
+
+  .ui-checkbox-label:hover:not(.ui-checkbox-label-disabled) {
+    @apply text-slate-900;
+  }
+
+  .ui-checkbox-label-disabled {
+    @apply text-slate-400 cursor-not-allowed opacity-60;
+  }
+}

@@ -1,0 +1,97 @@
+@layer utilities {
+  .ui-confirm-overlay {
+    @apply fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-9999 p-4;
+  }
+
+  .ui-confirm-dialog {
+    @apply bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden cursor-default;
+  }
+
+  .ui-confirm-header {
+    @apply px-6 pt-6 pb-4 border-b border-gray-200 flex items-center justify-between;
+  }
+
+  .ui-confirm-title {
+    @apply m-0 text-xl font-semibold text-gray-900;
+  }
+
+  .ui-confirm-close {
+    @apply bg-transparent border-none p-2 cursor-pointer text-gray-500 rounded-md flex items-center justify-center transition-all duration-200 -mr-2;
+  }
+
+  .ui-confirm-close:hover {
+    @apply bg-gray-100 text-gray-900;
+  }
+
+  .ui-confirm-close:active {
+    @apply scale-95;
+  }
+
+  .ui-confirm-close:focus-visible {
+    @apply outline-2 outline-blue-500 outline-offset-2;
+  }
+
+  .ui-confirm-content {
+    @apply px-6 py-6 flex flex-col gap-4 items-center text-center;
+  }
+
+  .ui-confirm-icon-wrapper {
+    @apply flex justify-center items-center;
+  }
+
+  .ui-confirm-icon {
+    @apply w-14 h-14 rounded-full bg-linear-to-br from-red-100 to-red-200 flex items-center justify-center text-red-600;
+  }
+
+  .ui-confirm-icon svg {
+    @apply w-7 h-7 stroke-[2.5];
+  }
+
+  .ui-confirm-message {
+    @apply m-0 text-[15px] leading-relaxed text-gray-600 max-w-sm;
+  }
+
+  .ui-confirm-footer {
+    @apply px-6 pb-6 pt-4 flex gap-3 justify-end bg-gray-50 border-t border-gray-200;
+  }
+
+  .ui-confirm-button-cancel,
+  .ui-confirm-button-confirm {
+    @apply flex-1 max-w-40;
+  }
+
+  @media (max-width: 640px) {
+    .ui-confirm-overlay {
+      @apply p-2;
+    }
+
+    .ui-confirm-dialog {
+      @apply max-w-full m-2;
+    }
+
+    .ui-confirm-header {
+      @apply px-5 pt-5 pb-3;
+    }
+
+    .ui-confirm-content {
+      @apply px-5 py-5;
+    }
+
+    .ui-confirm-footer {
+      @apply px-5 pb-5 pt-3 flex-col-reverse;
+    }
+
+    .ui-confirm-button-cancel,
+    .ui-confirm-button-confirm {
+      @apply max-w-full;
+    }
+
+    .ui-confirm-title {
+      @apply text-lg;
+    }
+
+    .ui-confirm-message {
+      @apply text-sm;
+    }
+  }
+}

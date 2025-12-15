@@ -1,0 +1,201 @@
+@layer utilities {
+  .ui-button {
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-lg border cursor-pointer leading-6 relative overflow-hidden transition-all duration-300 ease-in-out shadow-sm;
+  }
+
+  .ui-button::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transform-gpu bg-gray-300/30 -translate-x-full transition-transform duration-500 ease-in-out;
+  }
+
+  .ui-button:hover:not(.ui-button-disabled)::before {
+    @apply opacity-100 transform-gpu translate-x-full;
+  }
+
+  .ui-button-small {
+    @apply px-3.5 py-2 text-sm;
+  }
+  .ui-button-medium {
+    @apply px-5 py-2.5 text-[15px];
+  }
+  .ui-button-large {
+    @apply px-6 py-3 text-base;
+  }
+
+  .ui-button-primary {
+    @apply text-white bg-primary-600 border-primary-600;
+  }
+
+  .ui-button-primary:hover:not(.ui-button-disabled) {
+    @apply bg-primary-700 border-primary-700;
+  }
+
+  .ui-button-primary:focus {
+    @apply ring-offset-2 ring-primary-500;
+  }
+
+  .ui-button-secondary {
+    @apply text-white bg-slate-600 border-slate-600;
+  }
+  .ui-button-secondary:hover:not(.ui-button-disabled) {
+    @apply bg-slate-700 border-slate-700;
+  }
+
+  .ui-button-secondary:focus {
+    @apply ring-offset-2 ring-slate-500;
+  }
+
+  .ui-button-danger {
+    @apply text-white bg-red-600 border-red-600;
+  }
+
+  .ui-button-danger:hover:not(.ui-button-disabled) {
+    @apply bg-red-700 border-red-700;
+  }
+
+  .ui-button-danger:focus {
+    @apply ring-offset-2 ring-red-500;
+  }
+
+  .ui-button-info {
+    @apply text-white bg-blue-600 border-blue-600;
+  }
+
+  .ui-button-info:hover:not(.ui-button-disabled) {
+    @apply bg-blue-700 border-blue-700;
+  }
+
+  .ui-button-info:focus {
+    @apply ring-offset-2 ring-blue-500;
+  }
+
+  .ui-button-contrast {
+    @apply text-white bg-slate-900 border-slate-900;
+  }
+
+  .ui-button-contrast:hover:not(.ui-button-disabled) {
+    @apply bg-slate-950 border-slate-950;
+  }
+
+  .ui-button-contrast:focus {
+    @apply ring-offset-2 ring-slate-700;
+  }
+
+  .ui-button-outlined {
+    @apply bg-white shadow-sm border border-gray-200;
+  }
+  .ui-button-outlined:hover:not(.ui-button-disabled) {
+    @apply shadow-md;
+  }
+
+  .ui-button-outlined.ui-button-primary {
+    @apply text-primary-700 border-primary-400;
+  }
+  .ui-button-outlined.ui-button-primary:hover:not(.ui-button-disabled) {
+    @apply bg-primary-50 border-primary-700;
+  }
+  .ui-button-outlined.ui-button-primary:focus {
+    @apply ring-offset-2 ring-primary-500;
+  }
+
+  .ui-button-outlined.ui-button-secondary {
+    @apply text-slate-700 border-gray-400;
+  }
+  .ui-button-outlined.ui-button-secondary:hover:not(.ui-button-disabled) {
+    @apply bg-slate-50 border-gray-600;
+  }
+  .ui-button-outlined.ui-button-secondary:focus {
+    @apply ring-offset-2 ring-gray-500;
+  }
+
+  .ui-button-outlined.ui-button-danger {
+    @apply text-red-700 border-red-600;
+  }
+  .ui-button-outlined.ui-button-danger:hover:not(.ui-button-disabled) {
+    @apply bg-red-50 border-red-700;
+  }
+  .ui-button-outlined.ui-button-danger:focus {
+    @apply ring-offset-2 ring-red-500;
+  }
+
+  .ui-button-outlined.ui-button-info {
+    @apply text-blue-700 border-blue-600;
+  }
+  .ui-button-outlined.ui-button-info:hover:not(.ui-button-disabled) {
+    @apply bg-blue-50 border-blue-700;
+  }
+  .ui-button-outlined.ui-button-info:focus {
+    @apply ring-offset-2 ring-blue-500;
+  }
+
+  .ui-button-outlined.ui-button-contrast {
+    @apply text-slate-900 border-slate-300;
+  }
+  .ui-button-outlined.ui-button-contrast:hover:not(.ui-button-disabled) {
+    @apply bg-slate-50 border-slate-500;
+  }
+  .ui-button-outlined.ui-button-contrast:focus {
+    @apply ring-offset-2 ring-slate-700;
+  }
+
+  .ui-button-text {
+    @apply bg-transparent border-transparent shadow-none;
+  }
+  .ui-button-text:hover:not(.ui-button-disabled) {
+    @apply shadow-none;
+  }
+
+  .ui-button-text.ui-button-primary {
+    @apply text-primary-700;
+  }
+  .ui-button-text.ui-button-primary:hover:not(.ui-button-disabled) {
+    @apply bg-primary-50;
+  }
+  .ui-button-text.ui-button-primary:focus {
+    @apply ring-offset-2 ring-primary-500;
+  }
+
+  .ui-button-text.ui-button-secondary {
+    @apply text-slate-700;
+  }
+  .ui-button-text.ui-button-secondary:hover:not(.ui-button-disabled) {
+    @apply bg-slate-100;
+  }
+  .ui-button-text.ui-button-secondary:focus {
+    @apply ring-offset-2 ring-slate-500;
+  }
+
+  .ui-button-text.ui-button-danger {
+    @apply text-red-700;
+  }
+  .ui-button-text.ui-button-danger:hover:not(.ui-button-disabled) {
+    @apply bg-red-50;
+  }
+  .ui-button-text.ui-button-danger:focus {
+    @apply ring-offset-2 ring-red-500;
+  }
+
+  .ui-button-text.ui-button-info {
+    @apply text-blue-700;
+  }
+  .ui-button-text.ui-button-info:hover:not(.ui-button-disabled) {
+    @apply bg-blue-50;
+  }
+  .ui-button-text.ui-button-info:focus {
+    @apply ring-offset-2 ring-blue-500;
+  }
+
+  .ui-button-text.ui-button-contrast {
+    @apply text-slate-900;
+  }
+  .ui-button-text.ui-button-contrast:hover:not(.ui-button-disabled) {
+    @apply bg-slate-100;
+  }
+  .ui-button-text.ui-button-contrast:focus {
+    @apply ring-offset-2 ring-slate-700;
+  }
+
+  .ui-button-disabled {
+    @apply opacity-50 cursor-not-allowed shadow-none;
+  }
+}

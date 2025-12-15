@@ -12,7 +12,7 @@ type ButtonVariant =
 type ButtonSize = 'small' | 'medium' | 'large';
 
 @Component({
-  selector: 'ui-button',
+  selector: 'app-ui-button',
   imports: [CommonModule],
   templateUrl: './button.html'
 })

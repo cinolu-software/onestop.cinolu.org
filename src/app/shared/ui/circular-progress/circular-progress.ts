@@ -2,7 +2,7 @@ import { Component, input, computed, ChangeDetectionStrategy } from '@angular/co
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'ui-circular-progress',
+  selector: 'app-ui-circular-progress',
   imports: [CommonModule],
   templateUrl: './circular-progress.html',
   changeDetection: ChangeDetectionStrategy.OnPush

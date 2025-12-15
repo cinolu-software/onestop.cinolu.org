@@ -13,7 +13,7 @@
           }
         </p>
       </div>
-      <ui-button
+      <app-ui-button
         size="small"
         (clicked)="showPhaseForm.set(true); editingPhaseId.set(null); resetPhaseForm()"
         variant="primary">
@@ -21,7 +21,7 @@
           <i-lucide [name]="icons.plus" class="size-4" />
           <span>Nouvelle phase</span>
         </span>
-      </ui-button>
+      </app-ui-button>
     </div>
   </div>
   <div class="p-6 space-y-6">
@@ -37,7 +37,7 @@
             <label for="phase-name" class="font-medium text-sm">
               Nom de la phase<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-input
+            <app-ui-input
               id="phase-name"
               formControlName="name"
               placeholder="Ex: Phase de conception" />
@@ -53,11 +53,11 @@
           </div>
           <div class="flex flex-col gap-1.5">
             <label for="phase-started" class="font-medium text-sm">Date de début</label>
-            <ui-datepicker inputId="phase-started" formControlName="started_at" class="w-full" />
+            <app-ui-datepicker inputId="phase-started" formControlName="started_at" class="w-full" />
           </div>
           <div class="flex flex-col gap-1.5">
             <label for="phase-ended" class="font-medium text-sm">Date de fin</label>
-            <ui-datepicker inputId="phase-ended" formControlName="ended_at" class="w-full" />
+            <app-ui-datepicker inputId="phase-ended" formControlName="ended_at" class="w-full" />
           </div>
           <div class="flex flex-col gap-1.5">
             <label for="phase-order" class="font-medium text-sm">Ordre</label>
@@ -70,7 +70,7 @@
           </div>
           <div class="flex items-end pb-1.5">
             <div class="flex items-center gap-2">
-              <ui-checkbox formControlName="is_active" id="phase-active" />
+              <app-ui-checkbox formControlName="is_active" id="phase-active" />
               <label for="phase-active" class="font-medium text-sm cursor-pointer"
                 >Phase active</label
               >
@@ -78,21 +78,21 @@
           </div>
         </div>
         <div class="flex justify-end gap-3 pt-2">
-          <ui-button
+          <app-ui-button
             size="small"
             [outlined]="true"
             variant="secondary"
             (clicked)="showPhaseForm.set(false); resetPhaseForm()">
             <span>Annuler</span>
-          </ui-button>
-          <ui-button
+          </app-ui-button>
+          <app-ui-button
             type="submit"
             size="small"
             variant="primary"
             [disabled]="phaseForm.invalid || phasesStore.isLoading()"
             [loading]="phasesStore.isLoading()">
             <span>{{ editingPhaseId() ? 'Mettre à jour' : 'Créer la phase' }}</span>
-          </ui-button>
+          </app-ui-button>
         </div>
       </form>
     </div>
@@ -112,7 +112,7 @@
       <p class="text-gray-500 text-center max-w-md mb-6 text-sm leading-relaxed">
         Commencez par créer des phases pour structurer votre projet et y ajouter des ressources.
       </p>
-      <ui-button
+      <app-ui-button
         (clicked)="showPhaseForm.set(true); editingPhaseId.set(null); resetPhaseForm()"
         [size]="'small'"
         variant="primary">
@@ -120,7 +120,7 @@
           <i-lucide [name]="icons.plus" class="size-4" />
           <span>Créer une phase</span>
         </span>
-      </ui-button>
+      </app-ui-button>
     </div>
     } @else {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -139,7 +139,7 @@
   @if (phasesStore.selectedPhase()) {
   <div class="border-t border-gray-100">
     <div class="px-6 pt-6 bg-gray-50/50 space-y-4">
-      <ui-tabs
+      <app-ui-tabs
         [tabs]="phaseTabs"
         [activeTab]="activePhaseSection()"
         (tabChange)="onPhaseTabChange($event)" />

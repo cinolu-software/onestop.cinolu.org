@@ -12,7 +12,7 @@
       </p>
     </div>
     <div class="flex flex-wrap gap-2">
-      <ui-button
+      <app-ui-button
         size="small"
         variant="primary"
         (clicked)="resetFormEditorState(false); showFormEditor.set(true)">
@@ -20,7 +20,7 @@
           <i-lucide [name]="icons.plus" class="size-4" />
           <span>{{ editingFormId() ? 'Modifier le formulaire' : 'Nouveau formulaire' }}</span>
         </span>
-      </ui-button>
+      </app-ui-button>
     </div>
   </div>
   @if (showFormEditor()) {
@@ -32,13 +32,13 @@
           {{ editingFormId() ? 'Modifier le formulaire' : 'Nouveau formulaire' }}
         </h6>
       </div>
-      <ui-button
+      <app-ui-button
         variant="secondary"
         [outlined]="true"
         size="small"
         (clicked)="toggleFormEditor(false)">
         Fermer
-      </ui-button>
+      </app-ui-button>
     </div>
     <form class="space-y-6" [formGroup]="formForm" (ngSubmit)="onSubmitForm()">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -46,7 +46,7 @@
           <label for="form-title" class="text-sm font-medium text-gray-700">
             Titre du formulaire <span class="text-red-500">*</span>
           </label>
-          <ui-input
+          <app-ui-input
             id="form-title"
             formControlName="title"
             placeholder="Ex: Formulaire de candidature"
@@ -55,7 +55,7 @@
         <div class="flex flex-col gap-1.5">
           <span class="text-sm font-medium text-gray-700">Statut</span>
           <div class="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg">
-            <ui-checkbox formControlName="is_active" id="form-is-active" />
+            <app-ui-checkbox formControlName="is_active" id="form-is-active" />
             <label for="form-is-active" class="text-sm font-medium text-gray-700 cursor-pointer">
               Formulaire actif
             </label>
@@ -65,11 +65,11 @@
           <label for="form-description" class="text-sm font-medium text-gray-700"
             >Description</label
           >
-          <ui-textarea
+          <app-ui-textarea
             id="form-description"
             formControlName="description"
             [rows]="5"
-            placeholder="Expliquez l'objectif du formulaire"></ui-textarea>
+            placeholder="Expliquez l'objectif du formulaire"></app-ui-textarea>
         </div>
       </div>
       <div class="space-y-4" formArrayName="fields">
@@ -80,12 +80,12 @@
               Ajoutez les questions ou champs requis pour cette phase.
             </p>
           </div>
-          <ui-button size="small" (clicked)="addField()">
+          <app-ui-button size="small" (clicked)="addField()">
             <span class="flex items-center gap-2">
               <i-lucide [name]="icons.plus" class="size-4" />
               <span>Ajouter un champ</span>
             </span>
-          </ui-button>
+          </app-ui-button>
         </div>
         @for (fieldGroup of fieldsArray.controls; track $index; let idx = $index) {
         <div class="border border-gray-200 rounded-xl p-4 space-y-3" [formGroupName]="idx">
@@ -98,27 +98,27 @@
                 {{ fieldGroup.controls.required.value ? 'Obligatoire' : 'Facultatif' }}
               </p>
             </div>
-            <ui-button
+            <app-ui-button
               variant="danger"
               [outlined]="true"
               size="small"
               (clicked)="removeField(idx)"
               [disabled]="fieldsArray.length === 1">
               Supprimer
-            </ui-button>
+            </app-ui-button>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-medium text-gray-500" [attr.for]="'field-label-' + idx"
                 >Libellé</label
               >
-              <ui-input formControlName="label" placeholder="Question ou intitulé" />
+              <app-ui-input formControlName="label" placeholder="Question ou intitulé" />
             </div>
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-medium text-gray-500" [attr.for]="'field-type-' + idx">
                 Type de champ
               </label>
-              <ui-select formControlName="type" [options]="fieldTypeOptions"></ui-select>
+              <app-ui-select formControlName="type" [options]="fieldTypeOptions"></app-ui-select>
             </div>
             <div class="flex flex-col gap-1.5">
               <label
@@ -126,10 +126,10 @@
                 [attr.for]="'field-placeholder-' + idx">
                 Placeholder
               </label>
-              <ui-input formControlName="placeholder" placeholder="Texte indicatif" />
+              <app-ui-input formControlName="placeholder" placeholder="Texte indicatif" />
             </div>
             <div class="flex items-center gap-2">
-              <ui-checkbox formControlName="required" [id]="'field-' + idx + '-required'" />
+              <app-ui-checkbox formControlName="required" [id]="'field-' + idx + '-required'" />
               <label
                 [for]="'field-' + idx + '-required'"
                 class="text-sm text-gray-700 cursor-pointer">
@@ -143,12 +143,12 @@
             formArrayName="options">
             <div class="flex items-center justify-between">
               <p class="text-sm font-semibold text-gray-800">Options</p>
-              <ui-button size="small" [outlined]="true" (clicked)="addOption(idx)">
+              <app-ui-button size="small" [outlined]="true" (clicked)="addOption(idx)">
                 <span class="flex items-center gap-2">
                   <i-lucide [name]="icons.plus" class="size-3.5" />
                   <span>Ajouter une option</span>
                 </span>
-              </ui-button>
+              </app-ui-button>
             </div>
             @if (fieldOptionsArray(idx).length === 0) {
             <p class="text-xs text-gray-500">Ajoutez au moins une option pour ce type de champ.</p>
@@ -163,7 +163,7 @@
                     [for]="'field-' + idx + '-option-label-' + optIndex">
                     Label
                   </label>
-                  <ui-input
+                  <app-ui-input
                     formControlName="label"
                     [id]="'field-' + idx + '-option-label-' + optIndex"
                     placeholder="Ex: Choix A" />
@@ -175,17 +175,17 @@
                     Valeur
                   </label>
                   <div class="flex items-center gap-2">
-                    <ui-input
+                    <app-ui-input
                       formControlName="value"
                       [id]="'field-' + idx + '-option-value-' + optIndex"
                       placeholder="Valeur unique" />
-                    <ui-button
+                    <app-ui-button
                       type="button"
                       variant="danger"
                       [text]="true"
                       (clicked)="removeOption(idx, optIndex)">
                       <i-lucide [name]="icons.trash" class="size-4" />
-                    </ui-button>
+                    </app-ui-button>
                   </div>
                 </div>
               </div>
@@ -197,22 +197,22 @@
         }
       </div>
       <div class="flex justify-end gap-3 pt-2">
-        <ui-button
+        <app-ui-button
           type="button"
           variant="secondary"
           [outlined]="true"
           size="small"
           (clicked)="toggleFormEditor(false)">
           Annuler
-        </ui-button>
-        <ui-button
+        </app-ui-button>
+        <app-ui-button
           type="submit"
           variant="primary"
           size="small"
           [disabled]="formForm.invalid || fieldsArray.length === 0 || formsStore.isLoading()"
           [loading]="formsStore.isLoading()">
           {{ editingFormId() ? 'Mettre à jour' : 'Enregistrer' }}
-        </ui-button>
+        </app-ui-button>
       </div>
     </form>
   </div>
@@ -264,18 +264,18 @@
           </div>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
-          <ui-button [outlined]="true" variant="primary" size="small" (clicked)="onEditForm(form)">
+          <app-ui-button [outlined]="true" variant="primary" size="small" (clicked)="onEditForm(form)">
             <span class="flex items-center gap-1.5 text-sm">
               <i-lucide [name]="icons.edit" class="size-4" />
               Modifier
             </span>
-          </ui-button>
-          <ui-button variant="danger" size="small" (clicked)="onDeleteForm(form.id)">
+          </app-ui-button>
+          <app-ui-button variant="danger" size="small" (clicked)="onDeleteForm(form.id)">
             <span class="flex items-center gap-1.5 text-sm">
               <i-lucide [name]="icons.trash" class="size-4" />
               Supprimer
             </span>
-          </ui-button>
+          </app-ui-button>
         </div>
       </div>
     </div>

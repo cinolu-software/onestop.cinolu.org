@@ -5,7 +5,7 @@ type BadgeVariant = 'success' | 'warning' | 'danger' | 'info' | 'default';
 type BadgeSize = 'small' | 'medium' | 'large';
 
 @Component({
-  selector: 'ui-badge',
+  selector: 'app-ui-badge',
   templateUrl: './badge.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule]

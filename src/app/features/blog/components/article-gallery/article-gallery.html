@@ -33,7 +33,7 @@
         <div class="h-20 bg-gray-200 animate-pulse rounded-lg w-full"></div>
         } @else {
         <div class="md:w-3/5">
-          <ui-file-upload
+          <app-ui-file-upload
             [name]="'article'"
             [url]="url + article().id"
             (loaded)="onCoverUploaded()" />
@@ -56,7 +56,7 @@
       <div class="h-20 bg-gray-200 animate-pulse rounded-lg w-full"></div>
       } @else {
       <div class="md:w-2/5">
-        <ui-file-upload
+        <app-ui-file-upload
           [multiple]="true"
           [name]="'image'"
           [url]="galleryUrl + article().id"

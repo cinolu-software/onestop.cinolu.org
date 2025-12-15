@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, input, output, computed, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, ChartColumn, ChevronDown, Lock, AlertTriangle } from 'lucide-angular';
 import { MetricsMap, groupIndicatorsByCategory, calculateGroupMetrics } from '../../helpers';
@@ -8,7 +7,7 @@ import { CircularProgressComponent } from '../circular-progress/circular-progres
 import { UiButton } from '../form/button/button';
 
 @Component({
-  selector: 'ui-metrics-table',
+  selector: 'app-ui-metrics-table',
   imports: [FormsModule, LucideAngularModule, CircularProgressComponent, UiButton],
   templateUrl: './metrics-table.html',
   changeDetection: ChangeDetectionStrategy.OnPush

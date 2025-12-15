@@ -1,4 +1,4 @@
-import { UserCheck, Calendar1, BookOpen, Layers, Folders, LayoutDashboard, Settings, UserCog } from 'lucide-angular';
+import { UserCheck, Calendar1, BookOpen, Layers, Folders, LayoutDashboard, UserCog } from 'lucide-angular';
 import { ILink } from '../types/link.type';
 
 export const LINKS: ILink[] = [

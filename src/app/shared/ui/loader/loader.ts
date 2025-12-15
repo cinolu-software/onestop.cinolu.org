@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'ui-loader',
+  selector: 'app-ui-loader',
   imports: [CommonModule],
   templateUrl: './loader.html',
 })

@@ -1,6 +1,6 @@
 <section class="pt-32 dashboard-main-content flex flex-col gap-4">
   @let event = eventsStore.event();
-  <ui-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+  <app-ui-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
   @if (eventsStore.isLoading()) {
   <app-event-details-skeleton />
   } @if (activeTab() === 'details' && event) {
@@ -16,7 +16,7 @@
   } @if (activeTab() === 'edit' && event) {
   <app-event-edit-form [event]="event" />
   } @if (activeTab() === 'indicators') {
-  <ui-metrics-table
+  <app-ui-metrics-table
     [indicators]="indicatorsStore.indicators()"
     [metricsMap]="metricsMap"
     [existingMetrics]="event?.metrics ?? []"

@@ -4,7 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectOption } from '../select/select';
 
 @Component({
-  selector: 'ui-multi-select',
+  selector: 'app-ui-multi-select',
   imports: [CommonModule],
   templateUrl: './multi-select.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiMultiSelect), multi: true }]

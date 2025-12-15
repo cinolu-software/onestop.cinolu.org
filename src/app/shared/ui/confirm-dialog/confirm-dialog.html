@@ -1,6 +1,6 @@
 @if (confirmation(); as config) {
-<div class="ui-confirm-overlay" (click)="onReject()">
-  <div class="ui-confirm-dialog" (click)="$event.stopPropagation()">
+<div class="ui-confirm-overlay" (click)="onReject()" (keyup.enter)="onReject()" (keyup.escape)="onReject()" tabindex="0" role="button" [attr.aria-label]="'Close dialog'">
+  <div class="ui-confirm-dialog" (click)="$event.stopPropagation()" (keyup.enter)="$event.stopPropagation()" tabindex="0">
     @if (config.header) {
     <div class="ui-confirm-header">
       <h2 id="confirm-dialog-title" class="ui-confirm-title">{{ config.header }}</h2>
@@ -18,12 +18,12 @@
       <p class="ui-confirm-message">{{ config.message }}</p>
     </div>
     <div class="ui-confirm-footer">
-      <ui-button [variant]="'secondary'" [outlined]="true" (clicked)="onReject()" [size]="'small'">
+      <app-ui-button [variant]="'secondary'" [outlined]="true" (clicked)="onReject()" [size]="'small'">
         {{ config.rejectLabel || 'Annuler' }}
-      </ui-button>
-      <ui-button [variant]="'danger'" (clicked)="onAccept()" [size]="'small'">
+      </app-ui-button>
+      <app-ui-button [variant]="'danger'" (clicked)="onAccept()" [size]="'small'">
         {{ config.acceptLabel || 'Confirmer' }}
-      </ui-button>
+      </app-ui-button>
     </div>
   </div>
 </div>

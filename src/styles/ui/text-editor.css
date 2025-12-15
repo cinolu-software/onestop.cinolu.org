@@ -1,0 +1,137 @@
+@layer utilities {
+  .ui-text-editor {
+    @apply border border-gray-300 rounded-lg overflow-hidden bg-white;
+  }
+
+  .ui-text-editor-toolbar {
+    @apply flex items-center gap-1 px-3 py-2 bg-gray-50 border-b border-gray-200;
+    flex-wrap: wrap;
+  }
+
+  .ui-text-editor-toolbar-group {
+    @apply flex items-center gap-1;
+  }
+
+  .ui-text-editor-toolbar-divider {
+    @apply w-px h-6 bg-gray-300 mx-1;
+  }
+
+  .ui-text-editor-button {
+    @apply w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 transition-colors text-gray-700;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .ui-text-editor-button:hover:not(:disabled) {
+    @apply bg-gray-200;
+  }
+
+  .ui-text-editor-button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .ui-text-editor-button-active {
+    @apply bg-primary-100 text-primary-700;
+  }
+
+  .ui-text-editor-button-active:hover {
+    @apply bg-primary-200;
+  }
+
+  .ui-text-editor-content {
+    @apply px-4 py-3 outline-none;
+    min-height: 300px;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  .ui-text-editor-content:empty:before {
+    content: attr(data-placeholder);
+    @apply text-gray-400;
+    pointer-events: none;
+  }
+
+  .ui-text-editor-content:focus {
+    @apply outline-none;
+  }
+
+  .ui-text-editor-focused {
+    @apply ring-2 ring-primary-500/50;
+  }
+
+  .ui-text-editor-invalid {
+    @apply border-red-500;
+  }
+
+  .ui-text-editor-disabled {
+    @apply bg-gray-100 cursor-not-allowed opacity-60;
+  }
+
+  .ui-text-editor-content p {
+    @apply mb-3;
+  }
+
+  .ui-text-editor-content h1 {
+    @apply text-3xl font-bold mb-3;
+  }
+
+  .ui-text-editor-content h2 {
+    @apply text-2xl font-bold mb-3;
+  }
+
+  .ui-text-editor-content h3 {
+    @apply text-xl font-bold mb-2;
+  }
+
+  .ui-text-editor-content ul,
+  .ui-text-editor-content ol {
+    @apply mb-3 pl-6;
+  }
+
+  .ui-text-editor-content ul {
+    @apply list-disc;
+  }
+
+  .ui-text-editor-content ol {
+    @apply list-decimal;
+  }
+
+  .ui-text-editor-content li {
+    @apply mb-1;
+  }
+
+  .ui-text-editor-content a {
+    @apply text-primary-600 underline;
+  }
+
+  .ui-text-editor-content img {
+    @apply max-w-full h-auto rounded-lg my-3;
+  }
+
+  .ui-text-editor-content pre {
+    @apply bg-gray-900 text-gray-100 rounded-lg p-4 my-3 overflow-x-auto;
+  }
+
+  .ui-text-editor-content code {
+    @apply bg-gray-100 text-gray-800 px-1 rounded;
+  }
+
+  .ui-text-editor-content blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic my-3 text-gray-600;
+  }
+
+  .ui-text-editor-content strong,
+  .ui-text-editor-content b {
+    @apply font-bold;
+  }
+
+  .ui-text-editor-content em,
+  .ui-text-editor-content i {
+    @apply italic;
+  }
+
+  .ui-text-editor-content u {
+    @apply underline;
+  }
+}

@@ -9,7 +9,7 @@ export interface SelectOption {
 }
 
 @Component({
-  selector: 'ui-select',
+  selector: 'app-ui-select',
   imports: [LucideAngularModule],
   templateUrl: './select.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiSelect), multi: true }]

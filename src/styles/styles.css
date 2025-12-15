@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import './ui-components.css';
+@import './ui/main.css';
 
 @theme {
   --font-mona: 'Mona Sans', sans-serif;
@@ -79,10 +79,6 @@
 }
 
 @layer utilities {
-  .ui-avatar {
-    @apply inline-flex items-center justify-center overflow-hidden rounded-full shrink-0;
-  }
-
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -98,10 +94,8 @@
 }
 
 @layer components {
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+  .ui-avatar {
+    @apply inline-flex items-center justify-center overflow-hidden rounded-full shrink-0;
   }
 
   .search-input-wrapper {
@@ -125,7 +119,7 @@
   }
 
   .search-input {
-    @apply w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400;
+    @apply w-full pl-11 pr-12 py-3 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400;
     @apply focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none;
     @apply transition-all duration-200;
   }
@@ -138,9 +132,8 @@
     @apply size-5;
   }
 
-  /* Table Components */
   .ui-table-wrapper {
-    @apply overflow-x-auto rounded-xl border border-gray-200 shadow-sm;
+    @apply overflow-x-scroll  rounded-xl border border-gray-200 shadow-sm;
   }
 
   .ui-table {
@@ -173,22 +166,22 @@
 
   /* Action Button Components */
   .action-button-default {
-    @apply flex items-center gap-1.5 hover:shadow-md px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 bg-white border border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50;
+    @apply inline-flex items-center gap-1.5 hover:shadow-md px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 bg-white border border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50 whitespace-nowrap;
   }
 
   .action-button-active {
-    @apply px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 shadow-md  bg-green-700/80 text-white shadow-green-200;
+    @apply inline-flex items-center gap-1.5 shadow-md px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 bg-green-700/80 text-white shadow-green-200 whitespace-nowrap;
   }
 
   .action-button-highlight {
-    @apply px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 shadow-md bg-linear-to-r from-amber-500 to-orange-500 text-white shadow-amber-200;
+    @apply inline-flex items-center gap-1.5 shadow-md px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 bg-linear-to-r from-amber-500 to-orange-500 text-white shadow-amber-200 whitespace-nowrap;
   }
 
   .action-button-highlight-default {
-    @apply flex items-center gap-1.5 hover:shadow-md px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200  border border-gray-200  hover:border-amber-300 text-amber-600 bg-amber-50/90;
+    @apply inline-flex items-center gap-1.5 hover:shadow-md px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border border-gray-200 hover:border-amber-300 text-amber-600 bg-amber-50/90 whitespace-nowrap;
   }
 
   .action-button-danger {
-    @apply flex items-center gap-1.5 hover:shadow-md px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200  border border-gray-200 text-red-600 bg-red-50 hover:border-red-300;
+    @apply inline-flex items-center gap-1.5 hover:shadow-md px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border border-gray-200 text-red-600 bg-red-50 hover:border-red-300 whitespace-nowrap;
   }
 }

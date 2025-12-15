@@ -1,7 +1,7 @@
 <div class="bg-white rounded-xl shadow-sm border border-gray-100">
   @let program = store.program();
   <div class="px-6 mb-4">
-    <ui-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+    <app-ui-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
   </div>
   @if (activeTab() === 'edit') {
   <div class="p-6 flex flex-col gap-6">
@@ -13,7 +13,7 @@
         } @else {
         <div
           class="p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-primary-400 transition-colors duration-200">
-          <ui-file-upload [name]="'logo'" [url]="url + program?.id" />
+          <app-ui-file-upload [name]="'logo'" [url]="url + program?.id" />
         </div>
         }
       </div>
@@ -22,13 +22,13 @@
     <div class="border-t border-gray-100"></div>
     <form class="space-y-6" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-8">
-        <ui-select
+        <app-ui-select
           label="Catégorie"
           [options]="categoryOptions()"
           formControlName="category"
           placeholder="Sélectionner une catégorie" />
-        <ui-input label="Nom du programme" formControlName="name" placeholder="Nom du programme" />
-        <ui-textarea
+        <app-ui-input label="Nom du programme" formControlName="name" placeholder="Nom du programme" />
+        <app-ui-textarea
           label="Description"
           formControlName="description"
           placeholder="Description détaillée du programme..." />
@@ -38,14 +38,14 @@
           <span class="w-2 h-2 bg-red-500 rounded-full"></span>
           <span>Champs obligatoires</span>
         </div>
-        <ui-button
+        <app-ui-button
           [size]="'small'"
           type="submit"
           [disabled]="updateForm.invalid || store.isLoading()"
           [loading]="store.isLoading()"
           variant="primary">
           Mettre à jour
-        </ui-button>
+        </app-ui-button>
       </div>
     </form>
   </div>
@@ -57,8 +57,8 @@
   <div class="p-6 space-y-6">
     <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ui-datepicker label="Année" view="year" [(ngModel)]="year" placeholder="Sélectionner l'année" />
-        <ui-select
+        <app-ui-datepicker label="Année" view="year" [(ngModel)]="year" placeholder="Sélectionner l'année" />
+        <app-ui-select
           label="Catégorie d'indicateurs"
           [options]="indicatorCategoryOptions()"
           [(ngModel)]="selectedCategory"
@@ -89,7 +89,7 @@
                 <i-lucide [name]="icons.Tag" class="size-3.5 text-gray-500" />
                 Nom de l'indicateur
               </div>
-              <ui-input
+              <app-ui-input
                 placeholder="Ex: Nombre de participants"
                 [(ngModel)]="ind.name"
                 autocomplete="off"
@@ -100,16 +100,16 @@
                 <i-lucide [name]="icons.ChartColumn" class="size-3.5 text-gray-500" />
                 Objectif (KPI)
               </div>
-              <ui-input type="number" placeholder="Ex: 100" [(ngModel)]="ind.target" />
+              <app-ui-input type="number" placeholder="Ex: 100" [(ngModel)]="ind.target" />
             </div>
           </div>
-          <ui-button
+          <app-ui-button
             [disabled]="(indicatorsTab()[selectedCategory()].length || 0) <= 1"
             (clicked)="removeIndicator($index)"
             variant="danger"
             size="small">
             <i-lucide [name]="icons.Trash2" class="size-5" />
-          </ui-button>
+          </app-ui-button>
         </div>
       </div>
       } @if (!indicatorsTab()[selectedCategory()].length) {
@@ -120,17 +120,17 @@
         </div>
         <h5 class="text-base font-bold text-gray-900 mb-2">Aucun indicateur</h5>
         <p class="text-sm text-gray-500 mb-4">Commencez par ajouter votre premier indicateur de performance</p>
-        <ui-button type="button" (clicked)="addIndicator()" variant="primary" [outlined]="true" styleClass="text-sm">
+        <app-ui-button type="button" (clicked)="addIndicator()" variant="primary" [outlined]="true" styleClass="text-sm">
           Ajouter un indicateur
-        </ui-button>
+        </app-ui-button>
       </div>
       }
     </div>
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t-2 border-gray-200">
-      <ui-button type="button" [size]="'small'" (clicked)="addIndicator()" variant="secondary" [outlined]="true">
+      <app-ui-button type="button" [size]="'small'" (clicked)="addIndicator()" variant="secondary" [outlined]="true">
         Ajouter un indicateur
-      </ui-button>
-      <ui-button
+      </app-ui-button>
+      <app-ui-button
         type="button"
         [size]="'small'"
         [disabled]="indicatorsStore.isLoading()"
@@ -138,7 +138,7 @@
         (clicked)="onSaveIndicators()"
         variant="primary">
         Enregistrer les indicateurs
-      </ui-button>
+      </app-ui-button>
     </div>
   </div>
   }

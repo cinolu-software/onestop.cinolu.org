@@ -1,5 +1,4 @@
-@let isLoading = store.isLoading(); @let projectCount = store.projects()[1]; @let projects =
-store.projects()[0];
+@let isLoading = store.isLoading(); @let projectCount = store.projects()[1]; @let projects = store.projects()[0];
 <div class="relative bg-white rounded-xl shadow-sm pb-12">
   <div class="px-6 pt-6 pb-4 border-b border-gray-100">
     <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
@@ -10,9 +9,7 @@ store.projects()[0];
           }
         </h5>
       </div>
-      <a class="ui-button ui-button-small ui-button-primary" [routerLink]="'/projects/add'">
-        Nouveau projet
-      </a>
+      <a class="ui-button ui-button-small ui-button-primary" [routerLink]="'/projects/add'"> Nouveau projet </a>
     </div>
     <form [formGroup]="searchForm" class="search-input-wrapper">
       <div class="search-input-group">
@@ -24,7 +21,7 @@ store.projects()[0];
     </form>
   </div>
   <div class="px-6 my-4">
-    <ui-tabs
+    <app-ui-tabs
       [tabs]="tabsConfig()"
       [activeTab]="activeTab()"
       [isLoading]="isLoading"
@@ -32,9 +29,9 @@ store.projects()[0];
   </div>
   <div class="px-4 sm:px-6 mt-6">
     @if (isLoading && projectCount === 0) {
-    <ui-table-skeleton [rows]="10" [columns]="5" />
+    <app-ui-table-skeleton [rows]="10" [columns]="5" />
     } @if (projectCount > 0) {
-    <div class="ui-table-wrapper">
+    <div class="ui-table-wrapper scrollbar-hide">
       <table class="ui-table">
         <thead class="ui-table-head">
           <tr class="ui-table-head-row">
@@ -51,27 +48,22 @@ store.projects()[0];
             <td class="ui-table-cell">
               <div class="flex items-center gap-3">
                 <div class="relative">
-                  <ui-avatar [image]="project | apiIMG : 'project'" [label]="project.name" />
+                  <app-ui-avatar [image]="project | apiIMG : 'project'" [label]="project.name" />
                 </div>
-                <div class="min-w-0">
-                  <p class="font-semibold text-gray-900 truncate">{{ project.name | titlecase }}</p>
-                  <p class="text-xs text-gray-500 mt-0.5">
-                    Créé {{ project.created_at | date : 'dd MMM yyyy' }}
-                  </p>
-                </div>
+                <p class="font-semibold text-gray-900 w-full md:w-48 line-clamp-2">{{ project.name | titlecase }}</p>
               </div>
             </td>
-            <td class="ui-table-cell text-sm text-gray-600">
+            <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
               {{ project.started_at | date : 'dd MMM yyyy' }}
             </td>
-            <td class="ui-table-cell text-sm text-gray-600">
+            <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
               {{ project.ended_at | date : 'dd MMM yyyy' }}
             </td>
             <td class="ui-table-cell">
               @if (project.is_published) {
-              <ui-badge [variant]="'success'" [showDot]="true" [label]="'Publié'" />
+              <app-ui-badge [variant]="'success'" [showDot]="true" [label]="'Publié'" />
               } @else {
-              <ui-badge [showDot]="true" [label]="'Brouillon'" />
+              <app-ui-badge [showDot]="true" [label]="'Brouillon'" />
               }
             </td>
             <td class="ui-table-cell">
@@ -79,15 +71,8 @@ store.projects()[0];
                 <div class="flex items-center gap-1.5">
                   <button
                     (click)="highlightProject(project.id)"
-                    [class]="
-                      project.is_highlighted
-                        ? 'action-button-highlight'
-                        : 'action-button-highlight-default'
-                    ">
-                    <i-lucide
-                      [name]="icons.Star"
-                      class="size-4"
-                      [class.fill-current]="project.is_highlighted" />
+                    [class]="project.is_highlighted ? 'action-button-highlight' : 'action-button-highlight-default'">
+                    <i-lucide [name]="icons.Star" class="size-4" [class.fill-current]="project.is_highlighted" />
                     En avant
                   </button>
                   <button (click)="onPublish(project.id)" class="action-button-active">
@@ -97,9 +82,7 @@ store.projects()[0];
                 </div>
                 <div class="h-6 w-px bg-gray-200"></div>
                 <div class="flex items-center gap-1">
-                  <button
-                    [routerLink]="['/projects/edit', project.slug]"
-                    class="action-button-default">
+                  <button [routerLink]="['/projects/edit', project.slug]" class="action-button-default">
                     <i-lucide [name]="icons.Pencil" class="size-4" />
                     Modifier
                   </button>
@@ -117,7 +100,7 @@ store.projects()[0];
     </div>
     }
     <div class="flex flex-col justify-end items-end">
-      <ui-pagination
+      <app-ui-pagination
         [currentPage]="currentPage()"
         [totalItems]="projectCount"
         [itemsPerPage]="itemsPerPage"
@@ -125,7 +108,7 @@ store.projects()[0];
     </div>
   </div>
   @if (projectCount === 0 && !isLoading) {
-  <div class="mx-6 mt-16 flex flex-col items-center justify-center py-20 px-8">
+  <div class="mx-6 flex flex-col items-center">
     <div
       class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 shadow-inner border border-primary-100">
       <i-lucide [name]="icons.Search" class="w-10 h-10 stroke-[1.5] text-primary-500" />
@@ -134,7 +117,7 @@ store.projects()[0];
     <p class="text-gray-500 text-center max-w-lg mb-8 text-base leading-relaxed">
       Nous n'avons trouvé aucun projet correspondant à vos critères.<br />
     </p>
-    <ui-button
+    <app-ui-button
       (clicked)="resetFilters()"
       variant="secondary"
       [outlined]="true"
@@ -143,8 +126,8 @@ store.projects()[0];
         <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
         <span>Réinitialiser les filtres</span>
       </span>
-    </ui-button>
+    </app-ui-button>
   </div>
   }
-  <ui-confirm-dialog />
+  <app-ui-confirm-dialog />
 </div>

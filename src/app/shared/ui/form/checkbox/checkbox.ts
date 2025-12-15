@@ -1,9 +1,9 @@
-import { Component, input, forwardRef, computed } from '@angular/core';
+import { Component, input, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'ui-checkbox',
+  selector: 'app-ui-checkbox',
   imports: [CommonModule],
   templateUrl: './checkbox.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiCheckbox), multi: true }]

@@ -8,12 +8,12 @@
   }
   <div class="p-5">
     <div class="absolute top-4 right-3 flex gap-1.5">
-      <ui-button (clicked)="handleEdit($event)" variant="secondary" [outlined]="true" size="small">
+      <app-ui-button (clicked)="handleEdit($event)" variant="secondary" [outlined]="true" size="small">
         <i-lucide [name]="icons.edit" class="size-4" />
-      </ui-button>
-      <ui-button (clicked)="handleDelete($event)" variant="danger" [outlined]="true" size="small">
+      </app-ui-button>
+      <app-ui-button (clicked)="handleDelete($event)" variant="danger" [outlined]="true" size="small">
         <i-lucide [name]="icons.trash" class="size-4" />
-      </ui-button>
+      </app-ui-button>
     </div>
     <div class="pr-16">
       <div class="flex items-center gap-3 mb-4">

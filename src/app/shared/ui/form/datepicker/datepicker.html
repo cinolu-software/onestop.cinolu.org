@@ -21,9 +21,10 @@
     </button>
   </div>
   <div
-    class="absolute opacity-0 z-50 bg-white border border-slate-200/80 rounded-xl shadow-2xl min-w-[280px] transition-all duration-200 ease-in-out translate-y-0"
     [class.opacity-100]="isOpen()"
-    [class.translate-y-1]="isOpen()">
+    [class.z-50]="isOpen()"
+    [class.translate-y-1]="isOpen()"
+    class="absolute opacity-0 -z-50 bg-white border border-slate-200/80 rounded-xl shadow-2xl min-w-[280px] transition-all duration-200 ease-in-out translate-y-0">
     <div class="flex items-center justify-between p-4 border-b border-slate-100">
       <button type="button" (click)="navigatePrevious()" class="ui-datepicker-nav-button">
         <i-lucide [name]="icons.ChevronLeft" class="size-4" />

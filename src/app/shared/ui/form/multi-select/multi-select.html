@@ -4,7 +4,7 @@
     {{ label() }}
   </label>
   }
-  <div [class]="selectClasses()" class="ui-multi-select-trigger" [class.ui-multi-select-trigger-disabled]="disabled()" (click)="toggleDropdown()" [id]="id()">
+  <div [class]="selectClasses()" class="ui-multi-select-trigger" [class.ui-multi-select-trigger-disabled]="disabled()" (click)="toggleDropdown()" (keyup.enter)="toggleDropdown()" (keyup.space)="toggleDropdown()" [id]="id()" [tabindex]="disabled() ? -1 : 0" role="button" [attr.aria-expanded]="isOpen()" [attr.aria-haspopup]="'listbox'">
     <div class="ui-multi-select-content">
       @if (value.length === 0) {
       <span class="ui-multi-select-placeholder">{{ placeholder() }}</span>
@@ -57,7 +57,12 @@
       class="ui-multi-select-option"
       [class.ui-multi-select-option-selected]="isSelected(option.value)"
       [class.ui-multi-select-option-disabled]="option.disabled"
-      (click)="!option.disabled && toggleOption(option.value)">
+      (click)="!option.disabled && toggleOption(option.value)"
+      (keyup.enter)="!option.disabled && toggleOption(option.value)"
+      (keyup.space)="!option.disabled && toggleOption(option.value)"
+      [tabindex]="option.disabled ? -1 : 0"
+      role="option"
+      [attr.aria-selected]="isSelected(option.value)">
       <input
         type="checkbox"
         [checked]="isSelected(option.value)"

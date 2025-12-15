@@ -4,7 +4,7 @@ import { UiButton } from '../form/button/button';
 import { ConfirmationService } from '@shared/services/confirmation';
 
 @Component({
-  selector: 'ui-confirm-dialog',
+  selector: 'app-ui-confirm-dialog',
   imports: [UiButton, LucideAngularModule],
   templateUrl: './confirm-dialog.html'
 })

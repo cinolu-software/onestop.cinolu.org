@@ -1,5 +1,4 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { LucideAngularModule, ChevronDown, House } from 'lucide-angular';
 import { filter } from 'rxjs';
@@ -11,7 +10,7 @@ import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [ RouterModule, LucideAngularModule],
+  imports: [RouterModule, LucideAngularModule],
   templateUrl: './sidebar.html'
 })
 export class Sidebar {

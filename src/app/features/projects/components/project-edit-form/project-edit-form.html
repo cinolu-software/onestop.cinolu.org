@@ -9,7 +9,7 @@
           <label for="name" class="text-sm font-semibold text-gray-700">
             Nom du projet<span class="text-red-500 ml-1">*</span>
           </label>
-          <ui-input
+          <app-ui-input
             id="name"
             formControlName="name"
             class="w-full"
@@ -19,7 +19,7 @@
           <label for="duration_hours" class="text-sm font-semibold text-gray-700"
             >Durée estimée (en heures)</label
           >
-          <ui-input
+          <app-ui-input
             id="duration_hours"
             type="number"
             formControlName="duration_hours"
@@ -30,7 +30,7 @@
           <label for="program" class="text-sm font-semibold text-gray-700">
             Programme associé<span class="text-red-500 ml-1">*</span>
           </label>
-          <ui-select
+          <app-ui-select
             [filter]="true"
             inputId="program"
             [options]="programOptions()"
@@ -42,7 +42,7 @@
           <label for="project_manager" class="text-sm font-semibold text-gray-700"
             >Chef de projet</label
           >
-          <ui-select
+          <app-ui-select
             inputId="project_manager"
             [options]="staffOptions()"
             [filter]="true"
@@ -54,7 +54,7 @@
           <label for="categories" class="text-sm font-semibold text-gray-700">
             Catégories<span class="text-red-500 ml-1">*</span>
           </label>
-          <ui-multi-select
+          <app-ui-multi-select
             [inputId]="'categories'"
             [autocomplete]="'off'"
             [showHeader]="false"
@@ -67,13 +67,13 @@
           <label for="started_at" class="text-sm font-semibold text-gray-700">
             Date de début<span class="text-red-500 ml-1">*</span>
           </label>
-          <ui-datepicker formControlName="started_at" class="w-full" />
+          <app-ui-datepicker formControlName="started_at" class="w-full" />
         </div>
         <div class="flex flex-col gap-2">
           <label for="ended_at" class="text-sm font-semibold text-gray-700">
             Date de fin<span class="text-red-500 ml-1">*</span>
           </label>
-          <ui-datepicker formControlName="ended_at" class="w-full" />
+          <app-ui-datepicker formControlName="ended_at" class="w-full" />
         </div>
       </div>
     </div>
@@ -86,57 +86,57 @@
           <label for="description" class="text-sm font-semibold text-gray-700">
             Présentation générale<span class="text-red-500 ml-1">*</span>
           </label>
-          <ui-textarea
+          <app-ui-textarea
             id="description"
             formControlName="description"
             [rows]="6"
             class="w-full"
-            placeholder="Présentez le projet de manière claire et concise..."></ui-textarea>
+            placeholder="Présentez le projet de manière claire et concise..."></app-ui-textarea>
         </div>
         <div class="flex flex-col gap-2">
           <label for="context" class="text-sm font-semibold text-gray-700"
             >Contexte et justification</label
           >
-          <ui-textarea
+          <app-ui-textarea
             id="context"
             formControlName="context"
             [rows]="6"
             class="w-full"
-            placeholder="Expliquez le contexte et la raison d'être du projet..."></ui-textarea>
+            placeholder="Expliquez le contexte et la raison d'être du projet..."></app-ui-textarea>
         </div>
         <div class="flex flex-col gap-2">
           <label for="objectives" class="text-sm font-semibold text-gray-700"
             >Objectifs visés</label
           >
-          <ui-textarea
+          <app-ui-textarea
             id="objectives"
             formControlName="objectives"
             [rows]="6"
             class="w-full"
-            placeholder="Décrivez les objectifs que le projet vise à atteindre..."></ui-textarea>
+            placeholder="Décrivez les objectifs que le projet vise à atteindre..."></app-ui-textarea>
         </div>
         <div class="flex flex-col gap-2">
           <label for="selection_criteria" class="text-sm font-semibold text-gray-700"
             >Critères d'éligibilité</label
           >
-          <ui-textarea
+          <app-ui-textarea
             id="selection_criteria"
             formControlName="selection_criteria"
             [rows]="6"
             class="w-full"
-            placeholder="Spécifiez les critères de sélection ou d'éligibilité..."></ui-textarea>
+            placeholder="Spécifiez les critères de sélection ou d'éligibilité..."></app-ui-textarea>
         </div>
       </div>
     </div>
     <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
-      <ui-button
+      <app-ui-button
         [size]="'small'"
         [loading]="updateProjectStore.isLoading()"
         [disabled]="updateProjectStore.isLoading() || form.invalid"
         type="submit"
         variant="primary">
         Modifier le projet
-      </ui-button>
+      </app-ui-button>
     </div>
   </div>
 </form>

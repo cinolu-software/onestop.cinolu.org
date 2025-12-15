@@ -14,29 +14,29 @@
     <div class="bg-white rounded-2xl shadow-xl shadow-gray-900/5 border border-gray-100 overflow-hidden">
       <div class="p-8 sm:p-10">
         <form [formGroup]="form" class="flex flex-col gap-5" (ngSubmit)="onSignIn()" novalidate>
-          <ui-input
+          <app-ui-input
             [id]="'email'"
             label="Adresse email"
             type="email"
             formControlName="email"
             placeholder="votre@email.com"
             [invalid]="(form.get('email')?.invalid && form.get('email')?.touched) || false" />
-          <ui-password
+          <app-ui-password
             label="Mot de passe"
             [id]="'password'"
             formControlName="password"
             placeholder="••••••••"
             [invalid]="(form.get('password')?.invalid && form.get('password')?.touched) || false" />
           <div class="mt-2 flex flex-col gap-10">
-            <ui-button
+            <app-ui-button
               class="w-full"
               type="submit"
               [variant]="'primary'"
               [disabled]="store.isLoading() || form.invalid"
               [loading]="store.isLoading()">
               Se connecter
-            </ui-button>
-            <ui-button
+            </app-ui-button>
+            <app-ui-button
               class="w-full"
               type="button"
               [variant]="'primary'"
@@ -44,7 +44,7 @@
               (clicked)="signinWithGoogle()">
               <img ngSrc="/images/google.svg" alt="Google" width="18" height="18" class="mr-2" />
               Continuer avec Google
-            </ui-button>
+            </app-ui-button>
           </div>
         </form>
       </div>

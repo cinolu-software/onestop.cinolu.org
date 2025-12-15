@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { ArrowLeft, LucideAngularModule } from 'lucide-angular';
 
 @Component({
-  selector: 'ui-back-button',
+  selector: 'app-ui-back-button',
   imports: [LucideAngularModule],
   templateUrl: './back-button.html',
   styles: ``,

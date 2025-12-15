@@ -1,0 +1,21 @@
+@layer utilities {
+  .pagination {
+    @apply flex items-center justify-center gap-6 py-4;
+  }
+
+  .pagination-button {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 text-sm font-medium transition-all duration-150 hover:bg-gray-50 hover:border-gray-300 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-200;
+  }
+
+  .pagination-info {
+    @apply flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200;
+  }
+
+  .pagination-page-count {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  .pagination-item-count {
+    @apply text-xs text-gray-500 border-l border-gray-300 pl-3;
+  }
+}

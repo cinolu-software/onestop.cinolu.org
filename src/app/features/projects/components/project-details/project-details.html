@@ -114,57 +114,57 @@
   </div>
 </div>
 
-<ui-accordion [multiple]="true">
-  <ui-accordion-panel value="0">
-    <ui-accordion-header>
+<app-ui-accordion [multiple]="true">
+  <app-ui-accordion-panel value="0">
+    <app-ui-accordion-header>
       <div class="flex items-center gap-2 w-full py-2 px-2">
         <i-lucide [img]="icons.FileText" class="w-5 h-5 text-secondary-600" />
         <h5 class="font-medium text-gray-900">Présentation générale</h5>
       </div>
-    </ui-accordion-header>
-    <ui-accordion-content>
+    </app-ui-accordion-header>
+    <app-ui-accordion-content>
       <p class="text-gray-700 leading-relaxed whitespace-pre-line">
         {{ project().description || 'Aucune présentation disponible pour le moment.' }}
       </p>
-    </ui-accordion-content>
-  </ui-accordion-panel>
-  <ui-accordion-panel value="1">
-    <ui-accordion-header>
+    </app-ui-accordion-content>
+  </app-ui-accordion-panel>
+  <app-ui-accordion-panel value="1">
+    <app-ui-accordion-header>
       <div class="flex items-center gap-2 w-full py-2 px-2">
         <i-lucide [img]="icons.BookOpen" class="w-5 h-5 text-primary-600" />
         <h5 class="font-medium text-gray-900">Contexte et justification</h5>
       </div>
-    </ui-accordion-header>
-    <ui-accordion-content>
+    </app-ui-accordion-header>
+    <app-ui-accordion-content>
       <p class="text-gray-700 leading-relaxed whitespace-pre-line">
         {{ project().context || 'Aucun contexte défini pour le moment.' }}
       </p>
-    </ui-accordion-content>
-  </ui-accordion-panel>
-  <ui-accordion-panel value="2">
-    <ui-accordion-header>
+    </app-ui-accordion-content>
+  </app-ui-accordion-panel>
+  <app-ui-accordion-panel value="2">
+    <app-ui-accordion-header>
       <div class="flex items-center gap-2 w-full py-2 px-2">
         <i-lucide [img]="icons.Target" class="w-5 h-5 text-secondary-600" />
         <h5 class="font-medium text-gray-900">Objectifs visés</h5>
       </div>
-    </ui-accordion-header>
-    <ui-accordion-content>
+    </app-ui-accordion-header>
+    <app-ui-accordion-content>
       <p class="text-gray-700 leading-relaxed whitespace-pre-line">
         {{ project().objectives || 'Aucun objectif défini pour le moment.' }}
       </p>
-    </ui-accordion-content>
-  </ui-accordion-panel>
-  <ui-accordion-panel value="3">
-    <ui-accordion-header>
+    </app-ui-accordion-content>
+  </app-ui-accordion-panel>
+  <app-ui-accordion-panel value="3">
+    <app-ui-accordion-header>
       <div class="flex items-center gap-2 w-full py-2 px-2">
         <i-lucide [img]="icons.SquareCheckBig" class="w-5 h-5 text-primary-600" />
         <h5 class="font-medium text-gray-900">Critères d'éligibilité</h5>
       </div>
-    </ui-accordion-header>
-    <ui-accordion-content>
+    </app-ui-accordion-header>
+    <app-ui-accordion-content>
       <p class="text-gray-700 leading-relaxed whitespace-pre-line">
         {{ project().selection_criteria || "Aucun critère d'éligibilité défini pour le moment." }}
       </p>
-    </ui-accordion-content>
-  </ui-accordion-panel>
-</ui-accordion>
+    </app-ui-accordion-content>
+  </app-ui-accordion-panel>
+</app-ui-accordion>

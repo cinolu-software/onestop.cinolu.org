@@ -25,14 +25,14 @@
   </div>
 
   <div class="px-6 my-4">
-    <ui-tabs [tabs]="tabsConfig()" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+    <app-ui-tabs [tabs]="tabsConfig()" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
   </div>
 
   <div class="px-4 sm:px-6 mt-6">
     @if (isLoading && articleCount === 0) {
-    <ui-table-skeleton [rows]="10" [columns]="5" />
+    <app-ui-table-skeleton [rows]="10" [columns]="5" />
     } @if (articleCount > 0) {
-    <div class="ui-table-wrapper">
+    <div class="ui-table-wrapper scrollbar-hide">
       <table class="ui-table">
         <thead class="ui-table-head">
           <tr class="ui-table-head-row">
@@ -47,21 +47,21 @@
           @for (article of articles; track article.id) {
           <tr class="ui-table-row">
             <td class="ui-table-cell">
-              <ui-avatar [image]="article | apiIMG : 'article'" [size]="48" />
+              <app-ui-avatar [image]="article | apiIMG : 'article'" [size]="48" />
             </td>
             <td class="ui-table-cell">
               <p class="font-semibold text-gray-900 w-full md:w-48 line-clamp-2">
                 {{ article.title | titlecase }}
               </p>
             </td>
-            <td class="ui-table-cell text-sm text-gray-600">
-              {{ article.created_at | date : 'dd MMM yyyy' }}
+            <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
+              {{ article.created_at | date : 'longDate' }}
             </td>
             <td class="ui-table-cell">
               @if (isPublished(article)) {
-              <ui-badge [showDot]="true" [variant]="'success'" label="Publié" />
+              <app-ui-badge [showDot]="true" [variant]="'success'" label="Publié" />
               } @else {
-              <ui-badge [showDot]="true" label="Brouillon" />
+              <app-ui-badge [showDot]="true" label="Brouillon" />
               }
             </td>
             <td class="ui-table-cell">
@@ -89,7 +89,7 @@
     </div>
     }
     <div class="flex flex-col justify-end items-end">
-      <ui-pagination
+      <app-ui-pagination
         [currentPage]="currentPage()"
         [totalItems]="articleCount"
         [itemsPerPage]="itemsPerPage"
@@ -106,7 +106,7 @@
     <p class="text-gray-500 text-center max-w-lg mb-8 text-base leading-relaxed">
       Nous n'avons trouvé aucun article correspondant à vos critères.<br />
     </p>
-    <ui-button
+    <app-ui-button
       (clicked)="resetFilters()"
       variant="secondary"
       [outlined]="true"
@@ -115,8 +115,8 @@
         <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
         <span>Réinitialiser les filtres</span>
       </span>
-    </ui-button>
+    </app-ui-button>
   </div>
   }
-  <ui-confirm-dialog />
+  <app-ui-confirm-dialog />
 </div>

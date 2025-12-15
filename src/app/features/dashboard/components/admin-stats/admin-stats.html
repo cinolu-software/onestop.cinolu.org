@@ -6,12 +6,12 @@
       Performance Globale : {{ year().getFullYear() }}
     </label>
   </div>
-  <ui-datepicker [id]="'indicator-year'" [view]="'year'" [(ngModel)]="year" />
+  <app-ui-datepicker [id]="'indicator-year'" [view]="'year'" [(ngModel)]="year" />
 </div>
 @if (reportStore.isLoading()) {
 <app-performance-skeleton />
 } @else if (reportStore.report().length === 0) {
-<ui-empty-state [year]="year().getFullYear()" />
+<app-ui-empty-state [year]="year().getFullYear()" />
 } @else {
 <app-performance-overview
   [year]="year().getFullYear()"

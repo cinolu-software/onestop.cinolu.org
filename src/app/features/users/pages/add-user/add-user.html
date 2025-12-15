@@ -1,9 +1,7 @@
 <div class="pt-32 dashboard-main-content flex flex-col gap-6">
   <div class="mb-2">
     <h5 class="text-3xl font-bold text-gray-800">Ajouter un utilisateur</h5>
-    <p class="text-gray-600 mt-1">
-      Créez un nouveau compte utilisateur avec les informations requises
-    </p>
+    <p class="text-gray-600 mt-1">Créez un nouveau compte utilisateur avec les informations requises</p>
   </div>
 
   <form [formGroup]="addUserForm" (ngSubmit)="onAddUser()">
@@ -17,23 +15,19 @@
             <label for="email" class="text-sm font-semibold text-gray-700">
               Email<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-input id="email" formControlName="email" placeholder="exemple@email.com" />
+            <app-ui-input id="email" formControlName="email" placeholder="exemple@email.com" />
           </div>
           <div class="flex flex-col gap-2">
             <label for="name" class="text-sm font-semibold text-gray-700">
               Nom complet<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-input
-              id="name"
-              [disabled]="true"
-              formControlName="name"
-              placeholder="Nom de l'utilisateur" />
+            <app-ui-input id="name" [disabled]="true" formControlName="name" placeholder="Nom de l'utilisateur" />
           </div>
           <div class="flex flex-col gap-2">
             <label for="gender" class="text-sm font-semibold text-gray-700">
               Genre<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-select
+            <app-ui-select
               inputId="gender"
               [options]="genders"
               formControlName="gender"
@@ -43,32 +37,25 @@
             <label for="phone_number" class="text-sm font-semibold text-gray-700">
               Numéro de téléphone<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-input
-              id="phone_number"
-              formControlName="phone_number"
-              placeholder="+243 XXX XXX XXX" />
+            <app-ui-input id="phone_number" formControlName="phone_number" placeholder="+243 XXX XXX XXX" />
           </div>
           <div class="flex flex-col gap-2">
             <label for="city" class="text-sm font-semibold text-gray-700">
               Ville<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-input id="city" formControlName="city" placeholder="Ex: Kinshasa" />
+            <app-ui-input id="city" formControlName="city" placeholder="Ex: Kinshasa" />
           </div>
           <div class="flex flex-col gap-2">
             <label for="country" class="text-sm font-semibold text-gray-700">
               Pays<span class="text-red-500 ml-1">*</span>
             </label>
-            <input
-              ui-input
-              id="country"
-              formControlName="country"
-              placeholder="Ex: République Démocratique du Congo" />
+            <app-ui-input id="country" formControlName="country" placeholder="Ex: République Démocratique du Congo" />
           </div>
           <div class="flex flex-col gap-2">
             <label for="birth_date" class="text-sm font-semibold text-gray-700">
               Date de naissance<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-datepicker
+            <app-ui-datepicker
               id="birth_date"
               formControlName="birth_date"
               showIcon
@@ -79,7 +66,7 @@
             <label for="role" class="text-sm font-semibold text-gray-700">
               Rôles<span class="text-red-500 ml-1">*</span>
             </label>
-            <ui-multi-select
+            <app-ui-multi-select
               [options]="roleOptions()"
               formControlName="roles"
               placeholder="Sélectionner un ou plusieurs rôles" />
@@ -87,14 +74,14 @@
         </div>
       </div>
       <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
-        <ui-button
+        <app-ui-button
           [size]="'small'"
           [loading]="store.isLoading()"
           [disabled]="addUserForm.invalid || store.isLoading()"
           variant="primary"
           type="submit">
           Enregistrer l'utilisateur
-        </ui-button>
+        </app-ui-button>
       </div>
     </div>
   </form>

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChevronDown, LucideAngularModule } from 'lucide-angular';
 
 @Component({
-  selector: 'ui-accordion',
+  selector: 'app-ui-accordion',
   imports: [CommonModule],
   template: `<div class="space-y-2"><ng-content /></div>`
 })
@@ -32,7 +32,7 @@ export class UiAccordion {
 }
 
 @Component({
-  selector: 'ui-accordion-panel',
+  selector: 'app-ui-accordion-panel',
   imports: [CommonModule],
   template: `
     <div class="border border-gray-200 rounded-lg mb-3 overflow-hidden">
@@ -54,7 +54,7 @@ export class UiAccordionPanel {
 }
 
 @Component({
-  selector: 'ui-accordion-header',
+  selector: 'app-ui-accordion-header',
   imports: [LucideAngularModule],
   template: `
     <button
@@ -76,7 +76,7 @@ export class UiAccordionHeader {
 }
 
 @Component({
-  selector: 'ui-accordion-content',
+  selector: 'app-ui-accordion-content',
   imports: [CommonModule],
   template: `
     @if (panel?.isActive()) {

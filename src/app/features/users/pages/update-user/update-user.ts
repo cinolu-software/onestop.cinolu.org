@@ -1,16 +1,6 @@
 import { Component, computed, effect, inject } from '@angular/core';
-import {
-  LucideAngularModule,
-  Locate,
-  TriangleAlert,
-  Phone,
-  Mail,
-  User,
-  Calendar,
-  MapPin
-} from 'lucide-angular';
+import { LucideAngularModule, Locate, TriangleAlert, Phone, Mail, User, Calendar, MapPin } from 'lucide-angular';
 import { CommonModule, Location, NgOptimizedImage } from '@angular/common';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsersStore } from '../../store/users.store';
 import { RolesStore } from '../../store/roles.store';
@@ -29,7 +19,6 @@ import { UiButton, UiDatepicker, UiInput, UiMultiSelect, UiSelect } from '@share
     CommonModule,
     UiButton,
     UiInput,
-    NgxPaginationModule,
     ReactiveFormsModule,
     NgOptimizedImage,
     ApiImgPipe,

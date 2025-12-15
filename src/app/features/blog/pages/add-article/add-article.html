@@ -1,7 +1,7 @@
 <section class="dashboard-main-content">
   <form [formGroup]="form" (ngSubmit)="onAddArticle()">
     <div class="flex flex-col gap-6">
-      <ui-input
+      <app-ui-input
         label="Titre de l'article"
         [id]="'title'"
         formControlName="title"
@@ -9,7 +9,7 @@
         class="w-full" />
 
       <div class="grid md:grid-cols-2 gap-6">
-        <ui-multi-select
+        <app-ui-multi-select
           label="Tags de l'article"
           [id]="'tags'"
           [options]="tagOptions()"
@@ -17,20 +17,20 @@
           formControlName="tags"
           [display]="'chip'"
           class="w-full" />
-        <ui-datepicker
+        <app-ui-datepicker
           label="Date de publication"
           [id]="'published_at'"
           formControlName="published_at"
           [placeholder]="'Sélectionnez une date'"
           class="w-full" />
       </div>
-      <ui-textarea
+      <app-ui-textarea
         label="Résumé"
         [id]="'summary'"
         formControlName="summary"
         [rows]="6"
-        [placeholder]="'Rédigez un résumé captivant de votre article...'"></ui-textarea>
-      <ui-text-editor
+        [placeholder]="'Rédigez un résumé captivant de votre article...'"></app-ui-textarea>
+      <app-ui-text-editor
         label="Contenu de l'article"
         formControlName="content"
         [minHeight]="'400px'"
@@ -43,7 +43,7 @@
         <span>Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires</span>
       </div>
       <div class="flex items-center gap-3">
-        <ui-button
+        <app-ui-button
           [type]="'submit'"
           [variant]="'primary'"
           [size]="'small'"
@@ -53,7 +53,7 @@
             <i-lucide [img]="icons.check" [size]="16" />
             <span>Publier l'article</span>
           </span>
-        </ui-button>
+        </app-ui-button>
       </div>
     </div>
   </form>

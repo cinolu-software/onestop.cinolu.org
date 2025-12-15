@@ -6,7 +6,7 @@ import { LucideAngularModule, Calendar, ChevronLeft, ChevronRight } from 'lucide
 export type DatePickerView = 'date' | 'month' | 'year';
 
 @Component({
-  selector: 'ui-datepicker',
+  selector: 'app-ui-datepicker',
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './datepicker.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiDatepicker), multi: true }]

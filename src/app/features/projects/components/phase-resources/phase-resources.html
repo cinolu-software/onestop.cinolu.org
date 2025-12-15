@@ -1,13 +1,13 @@
 <div class="space-y-6">
   <!-- Action Buttons -->
   <div class="flex gap-2.5">
-    <ui-button (clicked)="showFileUpload.set(true)" variant="primary" [size]="'small'">
+    <app-ui-button (clicked)="showFileUpload.set(true)" variant="primary" [size]="'small'">
       <span class="flex items-center gap-2">
         <i-lucide [name]="icons.upload" class="size-4" />
         <span class="font-medium">Télécharger un fichier</span>
       </span>
-    </ui-button>
-    <ui-button
+    </app-ui-button>
+    <app-ui-button
       (clicked)="showResourceForm.set(true); editingResourceId.set(null); resetForms()"
       variant="primary"
       [outlined]="true"
@@ -16,7 +16,7 @@
         <i-lucide [name]="icons.link" class="size-4" />
         <span class="font-medium">Ajouter un lien</span>
       </span>
-    </ui-button>
+    </app-ui-button>
   </div>
   @if (showFileUpload()) {
   <div
@@ -28,7 +28,7 @@
           <label for="file-title" class="font-medium text-sm text-gray-700">
             Titre <span class="text-red-500">*</span>
           </label>
-          <ui-input id="file-title" formControlName="title" placeholder="Nom du fichier" />
+          <app-ui-input id="file-title" formControlName="title" placeholder="Nom du fichier" />
         </div>
         <div class="flex flex-col gap-2 md:col-span-2">
           <label for="file-upload" class="font-medium text-sm text-gray-700">
@@ -41,7 +41,7 @@
                 !selectedFile(),
               'border-primary-500 bg-primary-50/40': selectedFile()
             }">
-            <ui-input
+            <app-ui-input
               #fileInput
               formControlName="file"
               id="file-upload"
@@ -77,14 +77,14 @@
         </div>
       </div>
       <div class="flex justify-end gap-3 pt-3">
-        <ui-button
+        <app-ui-button
           size="small"
           [outlined]="true"
           variant="secondary"
           (clicked)="showFileUpload.set(false); resetForms()">
           <span>Annuler</span>
-        </ui-button>
-        <ui-button
+        </app-ui-button>
+        <app-ui-button
           type="button"
           size="small"
           variant="primary"
@@ -92,7 +92,7 @@
           [loading]="resourcesStore.isLoading()"
           (clicked)="onUploadFile()">
           <span>Télécharger</span>
-        </ui-button>
+        </app-ui-button>
       </div>
     </form>
   </div>
@@ -108,7 +108,7 @@
           <label for="resource-title" class="font-medium text-sm text-gray-700">
             Titre <span class="text-red-500">*</span>
           </label>
-          <ui-input
+          <app-ui-input
             id="resource-title"
             formControlName="title"
             placeholder="Titre de la ressource" />
@@ -117,7 +117,7 @@
           <label for="resource-type" class="font-medium text-sm text-gray-700">
             Type <span class="text-red-500">*</span>
           </label>
-          <ui-select
+          <app-ui-select
             inputId="resource-type"
             formControlName="type"
             [options]="resourceTypes"
@@ -126,13 +126,13 @@
             <ng-template let-type pTemplate="selectedItem">
               {{ getResourceTypeLabel(type) }}
             </ng-template>
-          </ui-select>
+          </app-ui-select>
         </div>
         <div class="flex flex-col gap-2">
           <label for="resource" class="font-medium text-sm text-gray-700">
             URL <span class="text-red-500">*</span>
           </label>
-          <ui-input
+          <app-ui-input
             id="resource"
             type="url"
             formControlName="url"
@@ -140,21 +140,21 @@
         </div>
       </div>
       <div class="flex justify-end gap-3 pt-3">
-        <ui-button
+        <app-ui-button
           size="small"
           [outlined]="true"
           variant="secondary"
           (clicked)="showResourceForm.set(false); resetForms()">
           <span>Annuler</span>
-        </ui-button>
-        <ui-button
+        </app-ui-button>
+        <app-ui-button
           type="submit"
           size="small"
           variant="primary"
           [disabled]="resourceForm.invalid || resourcesStore.isLoading()"
           [loading]="resourcesStore.isLoading()">
           <span>{{ editingResourceId() ? 'Mettre à jour' : 'Ajouter la ressource' }}</span>
-        </ui-button>
+        </app-ui-button>
       </div>
     </form>
   </div>
@@ -209,12 +209,12 @@
           </div>
         </div>
         <div class="flex items-center gap-1.5">
-          <ui-button [outlined]="true" (clicked)="onEditResource(resource)">
+          <app-ui-button [outlined]="true" (clicked)="onEditResource(resource)">
             <i-lucide [name]="icons.edit" class="size-4" />
-          </ui-button>
-          <ui-button [outlined]="true" variant="danger" (clicked)="onDeleteResource(resource.id)">
+          </app-ui-button>
+          <app-ui-button [outlined]="true" variant="danger" (clicked)="onDeleteResource(resource.id)">
             <i-lucide [name]="icons.trash" class="size-4" />
-          </ui-button>
+          </app-ui-button>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ export class AppConfigService {
 
   set config(value: unknown) {
     const currentConfig = this.#config.getValue();
-    const newConfig = this.deepMerge({}, currentConfig, value);
+    const newConfig = this.deepMerge({}, currentConfig as Record<string, unknown>, value as Record<string, unknown>);
     this.#config.next(newConfig);
   }
 
@@ -21,7 +21,7 @@ export class AppConfigService {
     this.#config.next(this.#initialConfig);
   }
 
-  private deepMerge(target: any, ...sources: any[]): any {
+  private deepMerge(target: Record<string, unknown>, ...sources: Record<string, unknown>[]): Record<string, unknown> {
     if (!sources.length) return target;
     const source = sources.shift();
     if (this.#isObject(target) && this.#isObject(source)) {
@@ -30,7 +30,7 @@ export class AppConfigService {
           if (!target[key]) {
             Object.assign(target, { [key]: {} });
           }
-          this.deepMerge(target[key], source[key]);
+          this.deepMerge(target[key] as Record<string, unknown>, source[key] as Record<string, unknown>);
         } else {
           Object.assign(target, { [key]: source[key] });
         }

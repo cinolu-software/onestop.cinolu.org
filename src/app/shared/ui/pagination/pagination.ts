@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule, ChevronLeft, ChevronRight } from 'lucide-angular';
 
 @Component({
-  selector: 'ui-pagination',
+  selector: 'app-ui-pagination',
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './pagination.html'
 })

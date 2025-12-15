@@ -1,9 +1,9 @@
-import { Component, input, output, forwardRef, computed } from '@angular/core';
+import { Component, input, output, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'ui-input',
+  selector: 'app-ui-input',
   imports: [CommonModule],
   templateUrl: './input.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiInput), multi: true }]

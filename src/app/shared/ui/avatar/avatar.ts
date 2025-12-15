@@ -3,7 +3,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { ImageOff, LucideAngularModule } from 'lucide-angular';
 
 @Component({
-  selector: 'ui-avatar',
+  selector: 'app-ui-avatar',
   imports: [NgOptimizedImage, LucideAngularModule],
   templateUrl: './avatar.html'
 })

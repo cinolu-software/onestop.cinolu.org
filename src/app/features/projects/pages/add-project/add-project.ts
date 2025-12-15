@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectsStore } from '../../store/projects.store';
 import { CategoriesStore } from '../../store/project-categories.store';

@@ -17,7 +17,7 @@ import {
 } from 'lucide-angular';
 
 @Component({
-  selector: 'ui-text-editor',
+  selector: 'app-ui-text-editor',
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './text-editor.html',
   providers: [

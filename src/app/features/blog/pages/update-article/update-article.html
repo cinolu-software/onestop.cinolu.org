@@ -1,6 +1,6 @@
 <section class="pt-32 dashboard-main-content flex flex-col gap-4">
   @let article = store.article(); @let isLoading = store.isLoading();
-  <ui-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+  <app-ui-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
 
   @if (isLoading) {
   <div class="bg-white rounded-xl shadow-sm p-6">
