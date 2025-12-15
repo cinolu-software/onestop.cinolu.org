@@ -1,76 +1,68 @@
 <section class="pt-32 dashboard-main-content flex flex-col gap-6">
-  <form class="w-full" [formGroup]="form" (ngSubmit)="onAddProject()">
-    <div class="mb-8">
-      <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">Informations essentielles</h6>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <app-ui-input
-          label="Titre du projet"
-          id="name"
-          formControlName="name"
-          class="w-full"
-          placeholder="Ex: Programme d'incubation 2024" />
-        <app-ui-input
-          label="Durée estimée (en heures)"
-          id="duration_hours"
-          formControlName="duration_hours"
-          class="w-full"
-          placeholder="Ex: 120" />
-        <app-ui-select
-          label="Programme associé"
-          inputId="program"
-          [options]="programOptions()"
-          formControlName="program"
-          placeholder="Sélectionner un programme"
-          class="w-full" />
-        <app-ui-select
-          label="Chef de projet"
-          inputId="project_manager"
-          [options]="staffOptions()"
-          formControlName="project_manager"
-          placeholder="Sélectionner un responsable"
-          class="w-full" />
-        <app-ui-multi-select
-          label="Catégories"
-          inputId="categories"
-          [options]="categoryOptions()"
-          formControlName="categories"
-          placeholder="Choisir une ou plusieurs catégories"
-          class="w-full" />
-        <app-ui-datepicker
-          label="Date de lancement"
-          showIcon
-          iconDisplay="input"
-          formControlName="started_at"
-          class="w-full" />
-        <app-ui-datepicker label="Date de clôture" showIcon iconDisplay="input" formControlName="ended_at" class="w-full" />
-      </div>
+  <form [formGroup]="form" (ngSubmit)="onAddProject()">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <app-ui-input
+        [id]="'name'"
+        label="Titre du projet"
+        formControlName="name"
+        placeholder="Ex: Programme d'incubation 2024" />
+      <app-ui-input
+        label="Durée estimée (en heures)"
+        [id]="'duration_hours'"
+        formControlName="duration_hours"
+        placeholder="Ex: 120" />
+      <app-ui-select
+        label="Programme associé"
+        [id]="'program'"
+        [options]="programOptions()"
+        formControlName="program"
+        placeholder="Sélectionner un programme" />
+      <app-ui-select
+        label="Chef de projet"
+        [id]="'project_manager'"
+        [options]="staffOptions()"
+        formControlName="project_manager"
+        placeholder="Sélectionner un responsable" />
+      <app-ui-multi-select
+        label="Catégories"
+        [id]="'categories'"
+        [options]="categoryOptions()"
+        formControlName="categories"
+        placeholder="Choisir une ou plusieurs catégories" />
+      <app-ui-datepicker
+        [id]="'started_at'"
+        label="Date de lancement"
+        showIcon
+        iconDisplay="input"
+        formControlName="started_at" />
+      <app-ui-datepicker
+        [id]="'ended_at'"
+        label="Date de clôture"
+        showIcon
+        iconDisplay="input"
+        formControlName="ended_at" />
     </div>
     <div>
-      <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">Présentation détaillée</h6>
       <div class="grid grid-cols-1 gap-6">
         <app-ui-textarea
           label="Présentation générale"
-          id="description"
+          [id]="'description'"
           formControlName="description"
-          class="w-full"
           placeholder="Présentez le projet de manière claire et concise..." />
         <app-ui-textarea
           label="Contexte et justification"
-          id="context"
+          [id]="'context'"
           formControlName="context"
-          class="w-full"
           placeholder="Décrivez le contexte dans lequel s'inscrit ce projet..." />
         <app-ui-textarea
           label="Objectifs visés"
-          id="objectives"
+          [id]="'objectives'"
           formControlName="objectives"
-          class="w-full"
           placeholder="Listez les objectifs principaux et les résultats attendus..." />
         <app-ui-textarea
           label="Critères d'éligibilité"
-          id="selection_criteria"
+          [id]="'selection_criteria'"
           formControlName="selection_criteria"
-          class="w-full"
           placeholder="Définissez les conditions d'accès et les prérequis..." />
       </div>
     </div>
