@@ -1,4 +1,4 @@
-import { Component, input, forwardRef, signal, effect, ViewChild, ElementRef } from '@angular/core';
+import { Component, input, forwardRef, signal, effect, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
@@ -18,7 +18,7 @@ import {
   templateUrl: './text-editor.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiTextEditor), multi: true }]
 })
-export class UiTextEditor implements ControlValueAccessor {
+export class UiTextEditor implements ControlValueAccessor, AfterViewInit {
   @ViewChild('editor', { static: false }) editorElement!: ElementRef<HTMLDivElement>;
 
   placeholder = input<string>('Start typing...');
@@ -26,7 +26,7 @@ export class UiTextEditor implements ControlValueAccessor {
   id = input<string>('');
   invalid = input<boolean>(false);
   minHeight = input<string>('300px');
-  value = '';
+  value = signal('');
   isFocused = signal(false);
   icons = { Bold, Italic, Underline, List, TextAlignCenter, TextAlignStart, TextAlignEnd };
 
@@ -39,13 +39,28 @@ export class UiTextEditor implements ControlValueAccessor {
         this.editorElement.nativeElement.contentEditable = 'false';
       }
     });
+
+    // Update editor content when value changes and editor is available
+    effect(() => {
+      const currentValue = this.value();
+      if (this.editorElement && currentValue !== undefined) {
+        const editorContent = this.editorElement.nativeElement.innerHTML;
+        if (editorContent !== currentValue) {
+          this.editorElement.nativeElement.innerHTML = currentValue || '';
+        }
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    // Set initial value if it was set before view init
+    if (this.editorElement && this.value()) {
+      this.editorElement.nativeElement.innerHTML = this.value();
+    }
   }
 
   writeValue(value: string): void {
-    this.value = value || '';
-    if (this.editorElement) {
-      this.editorElement.nativeElement.innerHTML = this.value;
-    }
+    this.value.set(value || '');
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -64,8 +79,9 @@ export class UiTextEditor implements ControlValueAccessor {
 
   onInput(): void {
     if (this.editorElement) {
-      this.value = this.editorElement.nativeElement.innerHTML;
-      this.onChange(this.value);
+      const newValue = this.editorElement.nativeElement.innerHTML;
+      this.value.set(newValue);
+      this.onChange(newValue);
     }
   }
 
