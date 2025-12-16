@@ -6,13 +6,13 @@ import { EventsStore } from '../../store/events.store';
 import { SubprogramsStore } from '@features/programs/store/subprograms.store';
 import { UsersStore } from '@features/users/store/users.store';
 import { CategoriesStore } from '../../store/event-categories.store';
-import { UiButton, UiInput, UiMultiSelect, UiSelect, UiTextarea } from '@shared/ui';
+import { UiButton, UiDatepicker, UiInput, UiMultiSelect, UiSelect, UiTextarea } from '@shared/ui';
 
 @Component({
   selector: 'app-event-edit-form',
   templateUrl: './event-edit-form.html',
   providers: [EventsStore, CategoriesStore, UsersStore, SubprogramsStore],
-  imports: [FormsModule, ReactiveFormsModule, UiSelect, UiMultiSelect, UiInput, UiButton, UiTextarea]
+  imports: [FormsModule, ReactiveFormsModule, UiSelect, UiMultiSelect, UiInput, UiButton, UiTextarea, UiDatepicker]
 })
 export class EventEditFormComponent {
   event = input.required<IEvent>();

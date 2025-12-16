@@ -12,7 +12,8 @@ import {
   MapPin,
   SquareCheckBig,
   Target,
-  User
+  User,
+  CircleCheckBig
 } from 'lucide-angular';
 import { UiAccordion, UiAccordionPanel, UiAccordionHeader, UiAccordionContent } from '@shared/ui';
 
@@ -24,15 +25,16 @@ import { UiAccordion, UiAccordionPanel, UiAccordionHeader, UiAccordionContent } 
 export class EventDetailsComponent {
   event = input.required<IEvent>();
   icons = {
-    folder: FolderOpen,
-    user: User,
-    clock: Clock,
-    calendar: Calendar,
-    flag: Flag,
-    fileText: FileText,
-    bookOpen: BookOpen,
-    target: Target,
-    checkSquare: SquareCheckBig,
-    mapPin: MapPin
+    FolderOpen,
+    User,
+    Clock,
+    Calendar,
+    Flag,
+    FileText,
+    BookOpen,
+    Target,
+    SquareCheckBig,
+    MapPin,
+    CircleCheckBig
   };
 }

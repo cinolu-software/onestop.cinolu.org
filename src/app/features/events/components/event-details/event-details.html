@@ -1,16 +1,15 @@
-<div
-  class="relative bg-linear-to-br from-primary-500 via-primary-600 to-primary-700 rounded-2xl shadow-lg overflow-hidden">
-  <div class="relative px-8 py-10">
+<div class="relative bg-primary-600 rounded-2xl shadow-lg overflow-hidden">
+  <div class="relative px-4 md:px-8 py-4 md:py-10">
     <div class="flex items-start justify-between gap-6 mb-8">
       <div class="flex-1">
         <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full mb-4">
-          <i-lucide [name]="icons.folder" class="w-4 h-4 text-white" />
+          <i-lucide [name]="icons.FolderOpen" class="w-4 h-4 text-white" />
           <span class="text-sm font-medium text-white">{{ event().program.name || 'Programme' }}</span>
         </div>
-        <h1 class="text-4xl font-bold text-white mb-4 leading-tight">{{ event().name }}</h1>
+        <h1 class="text-2xl md:text-4xl font-bold text-white mb-4 leading-tight">{{ event().name }}</h1>
         <div class="flex flex-wrap gap-2">
           @for (category of event().categories; track category.id) {
-          <span class="px-4 py-2 bg-white/90 text-primary-700 rounded-full text-sm font-semibold shadow-sm">
+          <span class="px-4 py-2 bg-white/90 text-primary-700 rounded-full text-xs md:text-sm font-semibold shadow-sm">
             {{ category.name }}
           </span>
           }
@@ -21,7 +20,7 @@
         <div class="text-xs text-white/80 mb-2">Responsable</div>
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-            <i-lucide [name]="icons.user" class="w-5 h-5 text-white" />
+            <i-lucide [img]="icons.User" class="size-5 text-white" />
           </div>
           <div class="font-semibold text-white">{{ event().event_manager?.name }}</div>
         </div>
@@ -31,24 +30,24 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8 border-t border-white/20">
       <div class="flex items-center gap-4">
         <div
-          class="flex items-center justify-center w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-          <i-lucide [name]="icons.calendar" class="w-6 h-6 text-white" />
+          class="flex items-center justify-center size-10 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+          <i-lucide [img]="icons.Calendar" class="size-5 text-white" />
         </div>
         <div>
           <div class="text-xs text-white/70 mb-1">Date de lancement</div>
-          <div class="text-lg font-bold text-white">
+          <div class="text-sm md:text-base font-bold text-white">
             {{ event().started_at | date : 'dd MMM yyyy' }}
           </div>
         </div>
       </div>
       <div class="flex items-center gap-4">
         <div
-          class="flex items-center justify-center w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-          <i-lucide [name]="icons.flag" class="w-6 h-6 text-white" />
+          class="flex items-center justify-center size-10 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+          <i-lucide [img]="icons.Flag" class="size-5 text-white" />
         </div>
         <div>
           <div class="text-xs text-white/70 mb-1">Date de clôture</div>
-          <div class="text-lg font-bold text-white">
+          <div class="text-sm md:text-base font-bold text-white">
             {{ event().ended_at | date : 'dd MMM yyyy' }}
           </div>
         </div>
@@ -63,7 +62,7 @@
     <div class="relative">
       <div
         class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl mb-3 group-hover:scale-105 transition-transform">
-        <i-lucide [name]="icons.clock" class="w-5 h-5 text-primary-600" />
+        <i-lucide [img]="icons.Clock" class="w-5 h-5 text-primary-600" />
       </div>
       <div class="text-xs font-medium text-gray-500 mb-1.5">Durée estimée</div>
       <div class="text-2xl font-semibold text-gray-900">
@@ -78,7 +77,7 @@
     <div class="relative">
       <div
         class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl mb-3 group-hover:scale-105 transition-transform">
-        <i-lucide [name]="icons.user" class="w-5 h-5 text-primary-600" />
+        <i-lucide [img]="icons.User" class="w-5 h-5 text-primary-600" />
       </div>
       <div class="text-xs font-medium text-gray-500 mb-1.5">Responsable</div>
       <div class="text-base font-semibold text-gray-900 truncate">
@@ -91,7 +90,7 @@
     <div class="relative">
       <div
         class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl mb-3 group-hover:scale-105 transition-transform">
-        <i-lucide [name]="icons.mapPin" class="w-5 h-5 text-primary-600" />
+        <i-lucide [img]="icons.MapPin" class="w-5 h-5 text-primary-600" />
       </div>
       <div class="text-xs font-medium text-gray-500 mb-1.5">Lieu</div>
       <div class="text-base font-semibold text-gray-900 truncate">
@@ -104,7 +103,7 @@
     <div class="relative">
       <div
         class="inline-flex items-center justify-center w-11 h-11 bg-primary-50 rounded-xl mb-3 group-hover:scale-105 transition-transform">
-        <i-lucide [name]="icons.folder" class="w-5 h-5 text-primary-600" />
+        <i-lucide [img]="icons.FolderOpen" class="w-5 h-5 text-primary-600" />
       </div>
       <div class="text-xs font-medium text-gray-500 mb-1.5">Programme</div>
       <div class="text-base font-semibold text-gray-900 truncate">
@@ -118,7 +117,7 @@
   <app-ui-accordion-panel value="0">
     <app-ui-accordion-header>
       <div class="flex items-center gap-2 w-full py-2 px-2">
-        <i-lucide [name]="icons.fileText" class="w-5 h-5 text-secondary-600" />
+        <i-lucide [img]="icons.FileText" class="w-5 h-5 text-secondary-600" />
         <h5 class="font-medium text-gray-900">Présentation générale</h5>
       </div>
     </app-ui-accordion-header>
@@ -131,7 +130,7 @@
   <app-ui-accordion-panel value="1">
     <app-ui-accordion-header>
       <div class="flex items-center gap-2 w-full py-2 px-2">
-        <i-lucide [name]="icons.bookOpen" class="w-5 h-5 text-primary-600" />
+        <i-lucide [img]="icons.BookOpen" class="w-5 h-5 text-primary-600" />
         <h5 class="font-medium text-gray-900">Contexte et justification</h5>
       </div>
     </app-ui-accordion-header>
@@ -144,7 +143,7 @@
   <app-ui-accordion-panel value="2">
     <app-ui-accordion-header>
       <div class="flex items-center gap-2 w-full py-2 px-2">
-        <i-lucide [name]="icons.target" class="w-5 h-5 text-secondary-600" />
+        <i-lucide [img]="icons.Target" class="w-5 h-5 text-secondary-600" />
         <h5 class="font-medium text-gray-900">Objectifs visés</h5>
       </div>
     </app-ui-accordion-header>
@@ -157,7 +156,7 @@
   <app-ui-accordion-panel value="3">
     <app-ui-accordion-header>
       <div class="flex items-center gap-2 w-full py-2 px-2">
-        <i-lucide [name]="icons.checkSquare" class="w-5 h-5 text-primary-600" />
+        <i-lucide [img]="icons.SquareCheckBig" class="w-5 h-5 text-primary-600" />
         <h5 class="font-medium text-gray-900">Critères d'éligibilité</h5>
       </div>
     </app-ui-accordion-header>

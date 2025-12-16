@@ -1,6 +1,6 @@
 @let isLoading = store.isLoading(); @let userCount = store.users()[1]; @let users = store.users()[0];
-<div class="relative bg-white rounded-xl shadow-sm pb-12">
-  <div class="px-6 pt-6 pb-4 border-b border-gray-100">
+<div class="dashboard-main-content">
+  <div>
     <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
       <div>
         <h5 class="text-2xl font-bold text-gray-900 mb-1">Utilisateurs</h5>
@@ -31,7 +31,7 @@
     </form>
   </div>
 
-  <div class="px-4 sm:px-6 mt-6">
+  <div class="mt-6">
     @if (isLoading && userCount === 0) {
     <app-ui-table-skeleton [rows]="10" [columns]="4" />
     } @if (userCount > 0) {
@@ -51,7 +51,9 @@
             <td class="ui-table-cell">
               <div class="flex items-center gap-3">
                 <app-ui-avatar [image]="user | apiIMG : 'user'" [label]="user.name" />
-                <p class="font-semibold text-gray-900 w-full md:w-48 line-clamp-2">{{ user.name | titlecase }}</p>
+                <p class="font-semibold text-gray-900 w-32 md:w-48 line-clamp-1 md:line-clamp-2">
+                  {{ user.name | titlecase }}
+                </p>
               </div>
             </td>
             <td class="ui-table-cell">

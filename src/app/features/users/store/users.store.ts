@@ -44,14 +44,14 @@ export const UsersStore = signalStore(
     ),
     loadStaff: rxMethod<void>(
       pipe(
-        tap(() => patchState(store, { isLoadingStaff: true } as Partial<IUsersStore>)),
+        tap(() => patchState(store, { isLoading: true } as Partial<IUsersStore>)),
         switchMap(() =>
           _http.get<{ data: IUser[] }>('users/find-staff').pipe(
             map(({ data }) => {
-              patchState(store, { isLoadingStaff: false, staff: data } as Partial<IUsersStore>);
+              patchState(store, { isLoading: false, staff: data } as Partial<IUsersStore>);
             }),
             catchError(() => {
-              patchState(store, { isLoadingStaff: false, staff: [] } as Partial<IUsersStore>);
+              patchState(store, { isLoading: false, staff: [] } as Partial<IUsersStore>);
               return of(null);
             })
           )

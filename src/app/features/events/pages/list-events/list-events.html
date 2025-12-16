@@ -1,123 +1,121 @@
 @let isLoading = store.isLoading(); @let eventCount = store.events()[1]; @let events = store.events()[0];
-<div class="relative bg-white rounded-xl shadow-sm pb-12">
-  <div class="px-6 pt-6 pb-4 border-b border-gray-100">
-    <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
-      <div>
-        <h5 class="text-2xl font-bold text-gray-900 mb-1">Événements</h5>
+<div class="dashboard-main-content">
+  <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
+    <h5 class="text-2xl font-bold text-gray-900 mb-1">Événements</h5>
+    <a [routerLink]="'/events/add'" class="ui-button ui-button-small ui-button-primary"> Nouvel événement </a>
+  </div>
+  <form [formGroup]="searchForm" class="search-input-wrapper">
+    <div class="search-input-group">
+      <div class="search-input-icon">
+        <i-lucide [name]="icons.Search" class="search-input-icon-svg" />
       </div>
-      <a [routerLink]="'/events/add'" class="ui-button ui-button-small ui-button-primary"> Nouvel événement </a>
+      <label for="event-search-input" class="sr-only">Rechercher un événement</label>
+      <input
+        type="text"
+        id="event-search-input"
+        name="q"
+        formControlName="q"
+        placeholder="Rechercher une catégorie..."
+        class="search-input"
+        autocomplete="off" />
     </div>
-    <form [formGroup]="searchForm" class="search-input-wrapper">
-      <div class="search-input-group">
-        <div class="search-input-icon">
-          <i-lucide [name]="icons.Search" class="search-input-icon-svg" />
-        </div>
-        <label for="event-search-input" class="sr-only">Rechercher un événement</label>
-        <input
-          type="text"
-          id="event-search-input"
-          name="q"
-          formControlName="q"
-          placeholder="Rechercher une catégorie..."
-          class="search-input"
-          autocomplete="off" />
-      </div>
-    </form>
-  </div>
+  </form>
+</div>
 
-  <div class="px-6 my-4">
-    <app-ui-tabs [tabs]="tabsConfig()" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
-  </div>
+<div class="my-4">
+  <app-ui-tabs [tabs]="tabsConfig()" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+</div>
 
-  <div class="px-4 sm:px-6 mt-6">
-    @if (isLoading && eventCount === 0) {
-    <app-ui-table-skeleton [rows]="10" [columns]="6" />
-    } @if (eventCount > 0) {
-    <div class="ui-table-wrapper scrollbar-hide">
-      <table class="ui-table">
-        <thead class="ui-table-head">
-          <tr class="ui-table-head-row">
-            <th class="ui-table-header">Image</th>
-            <th class="ui-table-header">Nom</th>
-            <th class="ui-table-header">Début</th>
-            <th class="ui-table-header">Fin</th>
-            <th class="ui-table-header">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="ui-table-body">
-          @for (event of events; track event.id) {
-          <tr class="ui-table-row">
-            <td class="ui-table-cell">
-              <app-ui-avatar [image]="event | apiIMG : 'event'" [size]="50" />
-            </td>
-            <td class="ui-table-cell">
-              <p class="font-semibold text-gray-900 w-full md:w-48 line-clamp-2">
+<div class="mt-6">
+  @if (isLoading && eventCount === 0) {
+  <app-ui-table-skeleton [rows]="10" [columns]="6" />
+  } @if (eventCount > 0) {
+  <div class="ui-table-wrapper scrollbar-hide">
+    <table class="ui-table">
+      <thead class="ui-table-head">
+        <tr class="ui-table-head-row">
+          <th class="ui-table-header">Événement</th>
+          <th class="ui-table-header">Début</th>
+          <th class="ui-table-header">Fin</th>
+          <th class="ui-table-header">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="ui-table-body">
+        @for (event of events; track event.id) {
+        <tr class="ui-table-row">
+          <td class="ui-table-cell">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <app-ui-avatar [image]="event | apiIMG : 'event'" [label]="event.name" />
+              </div>
+              <p class="font-semibold text-gray-900 w-32 md:w-48 line-clamp-1 md:line-clamp-2">
                 {{ event.name | titlecase }}
               </p>
-            </td>
-            <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
-              {{ event.started_at | date }}
-            </td>
-            <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
-              {{ event.ended_at | date }}
-            </td>
-            <td class="ui-table-cell">
-              <div class="flex flex-col md:flex-row md:items-center gap-2">
-                <button
-                  (click)="onShowcase(event.id)"
-                  [class]="event.is_highlighted ? 'action-button-highlight' : 'action-button-highlight-default'">
-                  <i-lucide [img]="icons.Star" class="size-4" />
-                  En avant
-                </button>
-                <button (click)="onPublish(event.id)" class="action-button-active">
-                  <i-lucide [name]="icons.Eye" class="size-4" />
-                  {{ event.is_published ? 'Depublier' : 'Publier' }}
-                </button>
-                <a [routerLink]="['/events/edit', event.slug]" class="action-button-default">
-                  <i-lucide [name]="icons.Pencil" class="size-4" />
-                  Modifier
-                </a>
-                <button (click)="onDelete(event.id)" class="action-button-danger">
-                  <i-lucide [name]="icons.Trash" class="size-4" />
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-    }
-    <div class="flex flex-col justify-end items-end">
-      <app-ui-pagination
-        [currentPage]="currentPage()"
-        [totalItems]="eventCount"
-        [itemsPerPage]="itemsPerPage"
-        (pageChange)="onPageChange($event)" />
-    </div>
-  </div>
-  @if (eventCount === 0 && !isLoading) {
-  <div class="mx-6 flex flex-col items-start justify-center p px-8">
-    <div
-      class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 shadow-inner border border-primary-100">
-      <i-lucide [name]="icons.Search" class="w-10 h-10 stroke-[1.5] text-primary-500" />
-    </div>
-    <h3 class="text-2xl font-bold text-gray-900 mb-2">Aucun événement trouvé</h3>
-    <p class="text-gray-500 max-w-lg mb-8 text-base leading-relaxed">
-      Nous n'avons trouvé aucun événement correspondant à vos critères.<br />
-    </p>
-    <app-ui-button
-      (clicked)="onResetFilters()"
-      variant="secondary"
-      [outlined]="true"
-      styleClass="text-base font-medium px-6 py-2.5 rounded-md shadow">
-      <span class="flex items-center gap-2">
-        <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
-        <span>Réinitialiser les filtres</span>
-      </span>
-    </app-ui-button>
+            </div>
+          </td>
+          <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
+            {{ event.started_at | date }}
+          </td>
+          <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
+            {{ event.ended_at | date }}
+          </td>
+          <td class="ui-table-cell">
+            <div class="flex items-center gap-1.5">
+              <button
+                (click)="onShowcase(event.id)"
+                [class]="event.is_highlighted ? 'action-button-highlight' : 'action-button-highlight-default'">
+                <i-lucide [img]="icons.Star" class="size-4" />
+                En avant
+              </button>
+              <button (click)="onPublish(event.id)" class="action-button-active">
+                <i-lucide [name]="icons.Eye" class="size-4" />
+                {{ event.is_published ? 'Depublier' : 'Publier' }}
+              </button>
+              <div class="h-6 w-px bg-gray-200"></div>
+              <a [routerLink]="['/events/edit', event.slug]" class="action-button-default">
+                <i-lucide [name]="icons.Pencil" class="size-4" />
+                Modifier
+              </a>
+              <button (click)="onDelete(event.id)" class="action-button-danger">
+                <i-lucide [name]="icons.Trash" class="size-4" />
+                Supprimer
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
   </div>
   }
-  <app-ui-confirm-dialog />
+  <div class="flex flex-col justify-end items-end">
+    <app-ui-pagination
+      [currentPage]="currentPage()"
+      [totalItems]="eventCount"
+      [itemsPerPage]="itemsPerPage"
+      (pageChange)="onPageChange($event)" />
+  </div>
 </div>
+@if (eventCount === 0 && !isLoading) {
+<div class="mx-6 flex flex-col items-start justify-center p px-8">
+  <div
+    class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 shadow-inner border border-primary-100">
+    <i-lucide [name]="icons.Search" class="w-10 h-10 stroke-[1.5] text-primary-500" />
+  </div>
+  <h3 class="text-2xl font-bold text-gray-900 mb-2">Aucun événement trouvé</h3>
+  <p class="text-gray-500 max-w-lg mb-8 text-base leading-relaxed">
+    Nous n'avons trouvé aucun événement correspondant à vos critères.<br />
+  </p>
+  <app-ui-button
+    (clicked)="onResetFilters()"
+    variant="secondary"
+    [outlined]="true"
+    styleClass="text-base font-medium px-6 py-2.5 rounded-md shadow">
+    <span class="flex items-center gap-2">
+      <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
+      <span>Réinitialiser les filtres</span>
+    </span>
+  </app-ui-button>
+</div>
+}
+<app-ui-confirm-dialog />

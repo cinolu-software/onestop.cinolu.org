@@ -1,140 +1,132 @@
 @let isLoading = store.isLoading(); @let categoryCount = store.categories()[1]; @let categories = store.categories()[0];
-<div class="relative bg-white rounded-xl shadow-sm pb-12">
-  <div class="px-6 pt-6 pb-4 border-b border-gray-100">
-    <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
-      <div>
-        <h5 class="text-2xl font-bold text-gray-900 mb-1">Catégories</h5>
+<div class="dashboard-main-content">
+  <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
+    <h5 class="text-2xl font-bold text-gray-900 mb-1">Catégories</h5>
+    <button class="ui-button ui-button-small ui-button-primary" (click)="onToggleForm()">
+      {{ formVisible() ? 'Fermer' : 'Nouvelle catégorie' }}
+    </button>
+  </div>
+  <form [formGroup]="searchForm" class="search-input-wrapper">
+    <div class="search-input-group">
+      <div class="search-input-icon">
+        <i-lucide [name]="icons.Search" class="search-input-icon-svg" />
       </div>
-      <button class="ui-button ui-button-small ui-button-primary" (click)="onToggleForm()">
-        {{ formVisible() ? 'Fermer' : 'Nouvelle catégorie' }}
-      </button>
+      <label for="category-search-input" class="sr-only">Rechercher une catégorie</label>
+      <input
+        id="category-search-input"
+        type="text"
+        name="q"
+        formControlName="q"
+        placeholder="Rechercher une catégorie..."
+        class="search-input"
+        autocomplete="off" />
     </div>
-    <form [formGroup]="searchForm" class="search-input-wrapper">
-      <div class="search-input-group">
-        <div class="search-input-icon">
-          <i-lucide [name]="icons.Search" class="search-input-icon-svg" />
-        </div>
-        <label for="category-search-input" class="sr-only">Rechercher une catégorie</label>
-        <input
-          id="category-search-input"
-          type="text"
-          name="q"
-          formControlName="q"
-          placeholder="Rechercher une catégorie..."
-          class="search-input"
-          autocomplete="off" />
+  </form>
+</div>
+
+<div class="px-6">
+  <div
+    class="rounded-2xl border border-gray-200 bg-linear-to-br from-gray-50 to-white shadow-sm transition-all duration-500 ease-in-out overflow-hidden"
+    [style.maxHeight]="formVisible() ? '400px' : '0px'"
+    [style.opacity]="formVisible() ? 1 : 0"
+    [style.padding]="formVisible() ? '24px' : '0 24px'"
+    [style.marginTop]="formVisible() ? '24px' : '0px'">
+    <form class="space-y-6" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+      <div class="flex flex-col gap-1">
+        <h6 class="text-lg font-bold text-gray-900">
+          {{ formMode() === 'edit' ? 'Modifier la catégorie' : 'Ajouter une catégorie' }}
+        </h6>
+      </div>
+      <div class="space-y-2">
+        <app-ui-input
+          [id]="'name'"
+          name="name"
+          label="Nom de la catégorie"
+          formControlName="name"
+          placeholder="Ex: Formation, Incubation, Accélération..." />
+      </div>
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+        <app-ui-button type="button" size="small" variant="secondary" [outlined]="true" (clicked)="onCancelForm()">
+          Annuler
+        </app-ui-button>
+        <app-ui-button
+          [id]="'submit-category'"
+          type="submit"
+          size="small"
+          variant="primary"
+          [disabled]="categoryForm.invalid || store.isLoading()"
+          [loading]="store.isLoading()">
+          {{ formMode() === 'edit' ? 'Mettre à jour' : 'Ajouter' }}
+        </app-ui-button>
       </div>
     </form>
   </div>
+</div>
 
-  <div class="px-6">
-    <div
-      class="rounded-2xl border border-gray-200 bg-linear-to-br from-gray-50 to-white shadow-sm transition-all duration-500 ease-in-out overflow-hidden"
-      [style.maxHeight]="formVisible() ? '400px' : '0px'"
-      [style.opacity]="formVisible() ? 1 : 0"
-      [style.padding]="formVisible() ? '24px' : '0 24px'"
-      [style.marginTop]="formVisible() ? '24px' : '0px'">
-      <form class="space-y-6" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
-        <div class="flex flex-col gap-1">
-          <h6 class="text-lg font-bold text-gray-900">
-            {{ formMode() === 'edit' ? 'Modifier la catégorie' : 'Ajouter une catégorie' }}
-          </h6>
-        </div>
-        <div class="space-y-2">
-          <app-ui-input
-            [id]="'name'"
-            name="name"
-            label="Nom de la catégorie"
-            formControlName="name"
-            placeholder="Ex: Formation, Incubation, Accélération..." />
-        </div>
-        <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-          <app-ui-button type="button" size="small" variant="secondary" [outlined]="true" (clicked)="onCancelForm()">
-            Annuler
-          </app-ui-button>
-          <app-ui-button
-            [id]="'submit-category'"
-            type="submit"
-            size="small"
-            variant="primary"
-            [disabled]="categoryForm.invalid || store.isLoading()"
-            [loading]="store.isLoading()">
-            {{ formMode() === 'edit' ? 'Mettre à jour' : 'Ajouter' }}
-          </app-ui-button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="px-4 sm:px-6 mt-6">
-    @if (isLoading && categoryCount === 0) {
-    <app-ui-table-skeleton [rows]="10" [columns]="2" />
-    } @if (categoryCount > 0) {
-    <div class="ui-table-wrapper scrollbar-hide">
-      <table class="ui-table">
-        <thead class="ui-table-head">
-          <tr class="ui-table-head-row">
-            <th class="ui-table-header">#ID</th>
-            <th class="ui-table-header">Nom</th>
-            <th class="ui-table-header">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="ui-table-body">
-          @for (category of categories; track category.id) {
-          <tr class="ui-table-row">
-            <td class="ui-table-cell">
-              <p class="font-semibold text-sm">{{ category.id }}</p>
-            </td>
-            <td class="ui-table-cell">
-              <p class="font-semibold text-gray-900">{{ category.name | titlecase }}</p>
-            </td>
-            <td class="ui-table-cell">
-              <div class="flex items-center gap-1">
-                <button (click)="onToggleForm(category)" class="action-button-default">
-                  <i-lucide [name]="icons.Pencil" class="size-4" />
-                  Modifier
-                </button>
-                <button (click)="onDelete(category.id)" class="action-button-danger">
-                  <i-lucide [name]="icons.Trash" class="size-4" />
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-    }
-    <div class="flex flex-col justify-end items-end">
-      <app-ui-pagination
-        [currentPage]="currentPage()"
-        [totalItems]="categoryCount"
-        [itemsPerPage]="itemsPerPage"
-        (pageChange)="onPageChange($event)" />
-    </div>
-  </div>
-  @if (categoryCount === 0 && !isLoading) {
-  <div class="mx-6 mt-16 flex flex-col items-center justify-center py-20 px-8">
-    <div
-      class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 shadow-inner border border-primary-100">
-      <i-lucide [name]="icons.Search" class="w-10 h-10 stroke-[1.5] text-primary-500" />
-    </div>
-    <h3 class="text-2xl font-bold text-gray-900 mb-2 text-center">Aucune catégorie trouvée</h3>
-    <p class="text-gray-500 text-center max-w-lg mb-8 text-base leading-relaxed">
-      Nous n'avons trouvé aucune catégorie correspondant à vos critères.<br />
-    </p>
-    <app-ui-button
-      (clicked)="onResetFilters()"
-      variant="secondary"
-      [outlined]="true"
-      styleClass="text-base font-medium px-6 py-2.5 rounded-md shadow">
-      <span class="flex items-center gap-2">
-        <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
-        <span>Réinitialiser les filtres</span>
-      </span>
-    </app-ui-button>
+<div class="mt-6">
+  @if (isLoading && categoryCount === 0) {
+  <app-ui-table-skeleton [rows]="10" [columns]="2" />
+  } @if (categoryCount > 0) {
+  <div class="ui-table-wrapper scrollbar-hide">
+    <table class="ui-table">
+      <thead class="ui-table-head">
+        <tr class="ui-table-head-row">
+          <th class="ui-table-header">Nom</th>
+          <th class="ui-table-header">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="ui-table-body">
+        @for (category of categories; track category.id) {
+        <tr class="ui-table-row">
+          <td class="ui-table-cell">
+            <p class="font-semibold text-gray-900">{{ category.name | titlecase }}</p>
+          </td>
+          <td class="ui-table-cell">
+            <div class="flex items-center gap-1">
+              <button (click)="onToggleForm(category)" class="action-button-default">
+                <i-lucide [name]="icons.Pencil" class="size-4" />
+                Modifier
+              </button>
+              <button (click)="onDelete(category.id)" class="action-button-danger">
+                <i-lucide [name]="icons.Trash" class="size-4" />
+                Supprimer
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
   </div>
   }
-  <app-ui-confirm-dialog />
+  <div class="flex flex-col justify-end items-end">
+    <app-ui-pagination
+      [currentPage]="currentPage()"
+      [totalItems]="categoryCount"
+      [itemsPerPage]="itemsPerPage"
+      (pageChange)="onPageChange($event)" />
+  </div>
 </div>
+@if (categoryCount === 0 && !isLoading) {
+<div class="mx-6 mt-16 flex flex-col items-center justify-center py-20 px-8">
+  <div
+    class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 shadow-inner border border-primary-100">
+    <i-lucide [name]="icons.Search" class="w-10 h-10 stroke-[1.5] text-primary-500" />
+  </div>
+  <h3 class="text-2xl font-bold text-gray-900 mb-2 text-center">Aucune catégorie trouvée</h3>
+  <p class="text-gray-500 text-center max-w-lg mb-8 text-base leading-relaxed">
+    Nous n'avons trouvé aucune catégorie correspondant à vos critères.<br />
+  </p>
+  <app-ui-button
+    (clicked)="onResetFilters()"
+    variant="secondary"
+    [outlined]="true"
+    styleClass="text-base font-medium px-6 py-2.5 rounded-md shadow">
+    <span class="flex items-center gap-2">
+      <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
+      <span>Réinitialiser les filtres</span>
+    </span>
+  </app-ui-button>
+</div>
+}
+<app-ui-confirm-dialog />

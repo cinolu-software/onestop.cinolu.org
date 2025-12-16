@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, output, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, ChartColumn, ChevronDown, Lock, AlertTriangle } from 'lucide-angular';
+import { LucideAngularModule, ChartColumn, Lock, TriangleAlert } from 'lucide-angular';
 import { MetricsMap, groupIndicatorsByCategory, calculateGroupMetrics } from '../../helpers';
 import { IIndicator, IMetric } from '../../models';
 import { CircularProgressComponent } from '../circular-progress/circular-progress';
@@ -20,15 +20,7 @@ export class MetricsTableComponent {
   saveKPIs = output<void>();
   saveReports = output<void>();
   saveAll = output<void>();
-  icons = {
-    barChart: ChartColumn,
-    lock: Lock,
-    alertTriangle: AlertTriangle
-  };
-
-  iconsChevron = {
-    chevron: ChevronDown
-  };
+  icons = { ChartColumn, Lock, TriangleAlert };
   #metricsVersion = signal(0);
   totalIndicators = computed(() => this.indicators().length);
   groupedIndicators = computed(() => {
@@ -79,23 +71,19 @@ export class MetricsTableComponent {
     return this.#existingTargets().has(indicatorId);
   }
 
-  // Check if an indicator has its own predefined target
   hasIndicatorTarget(indicatorId: string): boolean {
     const indicator = this.indicators().find((i) => i.id === indicatorId);
     return !!indicator?.target && indicator.target > 0;
   }
 
-  // Get the indicator's predefined target limit
   getIndicatorTargetLimit(indicatorId: string): number | null {
     const indicator = this.indicators().find((i) => i.id === indicatorId);
     return indicator?.target ?? null;
   }
 
-  // Calculate impact percentage (how much of the indicator's global target this project contributes)
   calculateImpactPercentage(indicatorId: string): number {
     const indicatorLimit = this.getIndicatorTargetLimit(indicatorId);
     if (!indicatorLimit || indicatorLimit === 0) return 0;
-
     const projectAchieved = this.metricsMap()[indicatorId]?.achieved ?? 0;
     return Math.round((projectAchieved / indicatorLimit) * 100);
   }

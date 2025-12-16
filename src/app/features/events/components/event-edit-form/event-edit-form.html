@@ -1,69 +1,93 @@
-<form class="w-full" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<form class="border border-gray-200 rounded-lg p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <app-ui-input
       label="Titre de l'événement"
       [id]="'name'"
       formControlName="name"
+      class="w-full"
       placeholder="Ex: Atelier de formation entrepreneuriale" />
-    <app-ui-input label="Lieu de l'événement" [id]="'place'" formControlName="place" placeholder="Ex: Kinshasa, RDC" />
+    <app-ui-input
+      label="Lieu de l'événement"
+      [id]="'place'"
+      formControlName="place"
+      class="w-full"
+      placeholder="Ex: Kinshasa, RDC" />
     <app-ui-input
       label="Durée estimée (en heures)"
       [id]="'duration_hours'"
       type="number"
       formControlName="duration_hours"
+      class="w-full"
       placeholder="Ex: 8" />
     <app-ui-select
-      [filter]="true"
+      [id]="'program_id'"
       label="Programme associé"
-      [id]="'program'"
+      [filter]="true"
+      [optionLabel]="'name'"
+      [optionValue]="'id'"
+      [options]="programsStore.allSubprograms()"
       formControlName="program"
-      placeholder="Sélectionner un programme" />
+      placeholder="Sélectionner un programme"
+      class="w-full" />
     <app-ui-select
-      [id]="'event_manager'"
+      [id]="'event_manager_id'"
       label="Responsable de l'événement"
+      [optionLabel]="'name'"
+      [optionValue]="'id'"
+      [options]="usersStore.staff()"
+      [filter]="true"
       formControlName="event_manager"
-      placeholder="Sélectionner un responsable" />
+      placeholder="Sélectionner un responsable"
+      class="w-full" />
     <app-ui-multi-select
+      [id]="'categories_ids'"
       label="Catégories"
-      [id]="'categories'"
+      [optionLabel]="'name'"
+      [optionValue]="'id'"
+      [options]="categoriesStore.allCategories()"
       formControlName="categories"
       placeholder="Choisir une ou plusieurs catégories" />
-
-    <div class="grid grid-cols-1 gap-6 col-span-2">
-      <app-ui-textarea
-        label="Présentation générale"
-        [id]="'description'"
-        [rows]="6"
-        formControlName="description"
-        placeholder="Présentez l'événement de manière claire et concise..." />
-      <app-ui-textarea
-        label="Contexte et justification"
-        [id]="'context'"
-        [rows]="6"
-        formControlName="context"
-        placeholder="Décrivez le contexte dans lequel s'inscrit cet événement..." />
-      <app-ui-textarea
-        label="Objectifs visés"
-        [id]="'objectives'"
-        [rows]="6"
-        formControlName="objectives"
-        placeholder="Listez les objectifs principaux et les résultats attendus..." />
-      <app-ui-textarea
-        label="Critères d'éligibilité"
-        [id]="'selection_criteria'"
-        [rows]="6"
-        formControlName="selection_criteria"
-        placeholder="Définissez les conditions d'accès et les prérequis..." />
-    </div>
+    <app-ui-datepicker [id]="'started_at'" label="Date de début" formControlName="started_at" class="w-full" />
+    <app-ui-datepicker [id]="'ended_at'" label="Date de fin" formControlName="ended_at" class="w-full" />
+  </div>
+  <div class="grid grid-cols-1 gap-6">
+    <app-ui-textarea
+      [id]="'description'"
+      label="Présentation générale"
+      formControlName="description"
+      [rows]="6"
+      class="w-full"
+      placeholder="Présentez l'événement de manière claire et concise..."></app-ui-textarea>
+    <app-ui-textarea
+      [id]="'context'"
+      label="Contexte et justification"
+      formControlName="context"
+      [rows]="6"
+      class="w-full"
+      placeholder="Expliquez le contexte et la raison d'être de l'événement..."></app-ui-textarea>
+    <app-ui-textarea
+      [id]="'objectives'"
+      label="Objectifs visés"
+      formControlName="objectives"
+      [rows]="6"
+      class="w-full"
+      placeholder="Décrivez les objectifs que l'événement vise à atteindre..."></app-ui-textarea>
+    <app-ui-textarea
+      [id]="'selection_criteria'"
+      label="Critères d'éligibilité"
+      formControlName="selection_criteria"
+      [rows]="6"
+      class="w-full"
+      placeholder="Spécifiez les critères de sélection ou d'éligibilité..."></app-ui-textarea>
   </div>
   <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
     <app-ui-button
       [size]="'small'"
       [loading]="store.isLoading()"
       [disabled]="store.isLoading() || form.invalid"
-      variant="primary"
-      type="submit">
-      {{ store.isLoading() ? 'Modification...' : "Modifier l'événement" }}
+      type="submit"
+      variant="primary">
+      Modifier l'événement
     </app-ui-button>
   </div>
 </form>

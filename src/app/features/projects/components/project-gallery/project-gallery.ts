@@ -1,15 +1,15 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { IProject, IImage } from '@shared/models';
-import { LucideAngularModule, Trash2 } from 'lucide-angular';
+import { LucideAngularModule, Trash2, Image } from 'lucide-angular';
 import { FileUpload } from '@shared/ui';
 import { ApiImgPipe } from '@shared/pipes';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-project-gallery',
   templateUrl: './project-gallery.html',
-  imports: [CommonModule, NgOptimizedImage, LucideAngularModule, FileUpload, ApiImgPipe]
+  imports: [NgOptimizedImage, LucideAngularModule, FileUpload, ApiImgPipe]
 })
 export class ProjectGalleryComponent {
   project = input.required<IProject>();
@@ -18,12 +18,9 @@ export class ProjectGalleryComponent {
   coverUploaded = output<void>();
   galleryUploaded = output<void>();
   deleteImage = output<string>();
-
   url = `${environment.apiUrl}projects/cover/`;
   galleryUrl = `${environment.apiUrl}projects/gallery/`;
-  icons = {
-    trash: Trash2
-  };
+  icons = { Trash2, Image };
 
   onCoverUploaded(): void {
     this.coverUploaded.emit();

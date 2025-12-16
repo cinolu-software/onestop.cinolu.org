@@ -1,7 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { IEvent, IImage } from '@shared/models';
-import { LucideAngularModule, Trash2 } from 'lucide-angular';
+import { Image, LucideAngularModule, Trash } from 'lucide-angular';
 import { FileUpload } from '@shared/ui';
 import { ApiImgPipe } from '@shared/pipes';
 import { environment } from '@env/environment';
@@ -20,9 +20,7 @@ export class EventGalleryComponent {
   deleteImage = output<string>();
   url = `${environment.apiUrl}events/cover/`;
   galleryUrl = `${environment.apiUrl}events/gallery/`;
-  icons = {
-    trash: Trash2
-  };
+  icons = { Image, Trash };
 
   onCoverUploaded(): void {
     this.coverUploaded.emit();

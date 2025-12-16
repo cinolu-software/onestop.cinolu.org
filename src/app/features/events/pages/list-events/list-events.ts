@@ -103,12 +103,7 @@ export class ListEvents {
 
   onResetFilters(): void {
     this.searchForm.patchValue({ q: '' });
-    this.queryParams.update((qp) => ({
-      ...qp,
-      q: null,
-      page: null,
-      filter: 'all'
-    }));
+    this.queryParams.update((qp) => ({ ...qp, q: null, page: null, filter: 'all' }));
     this.updateRoute();
   }
 
