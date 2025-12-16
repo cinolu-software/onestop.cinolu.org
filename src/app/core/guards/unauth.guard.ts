@@ -8,6 +8,6 @@ export const unauthGuard: CanActivateFn = () => {
   const user = authStore.user();
   const roles = user?.roles as unknown as string[];
   const hasRights = roles?.includes('admin') || roles?.includes('staff');
-  if (hasRights && !authStore.isLoading()) return router.parseUrl('/');
+  if (hasRights) return router.parseUrl('/');
   return true;
 };
