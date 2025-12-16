@@ -1,19 +1,20 @@
-<form class="border border-gray-200 rounded-lg p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+<form class="border border-gray-200 rounded-lg p-4 md:bg-white md:p-6" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <app-ui-input
+      [required]="true"
       label="Nom du projet"
       [id]="'name'"
       formControlName="name"
-      class="w-full"
       placeholder="Ex: Programme de mentorat entrepreneurial" />
     <app-ui-input
+      [required]="true"
       label="Durée estimée (en heures)"
       [id]="'duration_hours'"
-      type="number"
+      [type]="'number'"
       formControlName="duration_hours"
-      class="w-full"
       placeholder="Ex: 100" />
     <app-ui-select
+      [required]="true"
       [id]="'program_id'"
       label="Programme associé"
       [filter]="true"
@@ -21,8 +22,7 @@
       [optionValue]="'id'"
       [options]="programsStore.allSubprograms()"
       formControlName="program"
-      placeholder="Sélectionner un programme"
-      class="w-full" />
+      placeholder="Sélectionner un programme" />
     <app-ui-select
       [id]="'project_manager_id'"
       label="Chef de projet"
@@ -31,9 +31,9 @@
       [options]="usersStore.staff()"
       [filter]="true"
       formControlName="project_manager"
-      placeholder="Sélectionner un chef de projet"
-      class="w-full" />
+      placeholder="Sélectionner un chef de projet" />
     <app-ui-multi-select
+      [required]="true"
       [id]="'categories_ids'"
       label="Catégories"
       [optionLabel]="'name'"
@@ -41,40 +41,37 @@
       [options]="categoriesStore.allCategories()"
       formControlName="categories"
       placeholder="Choisir une ou plusieurs catégories" />
-    <app-ui-datepicker [id]="'started_at'" label="Date de début" formControlName="started_at" class="w-full" />
-    <app-ui-datepicker [id]="'ended_at'" label="Date de fin" formControlName="ended_at" class="w-full" />
+    <app-ui-datepicker [required]="true" [id]="'started_at'" label="Date de début" formControlName="started_at" />
+    <app-ui-datepicker [required]="true" [id]="'ended_at'" label="Date de fin" formControlName="ended_at" />
   </div>
   <div class="grid grid-cols-1 gap-6">
     <app-ui-textarea
+      [required]="true"
       [id]="'description'"
       label="Présentation générale"
       formControlName="description"
       [rows]="6"
-      class="w-full"
       placeholder="Présentez le projet de manière claire et concise..."></app-ui-textarea>
     <app-ui-textarea
       [id]="'context'"
       label="Contexte et justification"
       formControlName="context"
       [rows]="6"
-      class="w-full"
       placeholder="Expliquez le contexte et la raison d'être du projet..."></app-ui-textarea>
     <app-ui-textarea
       [id]="'objectives'"
       label="Objectifs visés"
       formControlName="objectives"
       [rows]="6"
-      class="w-full"
       placeholder="Décrivez les objectifs que le projet vise à atteindre..."></app-ui-textarea>
     <app-ui-textarea
       [id]="'selection_criteria'"
       label="Critères d'éligibilité"
       formControlName="selection_criteria"
       [rows]="6"
-      class="w-full"
       placeholder="Spécifiez les critères de sélection ou d'éligibilité..."></app-ui-textarea>
   </div>
-  <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
+  <div class="flex justify-end gap-3 border-t border-gray-200 pt-6">
     <app-ui-button
       [size]="'small'"
       [loading]="updateProjectStore.isLoading()"

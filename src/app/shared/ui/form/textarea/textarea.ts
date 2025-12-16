@@ -15,6 +15,7 @@ export class UiTextarea implements ControlValueAccessor {
   id = input<string>('');
   rows = input<number>(4);
   invalid = input<boolean>(false);
+  required = input<boolean>(false);
   value = '';
 
   onChange!: (value: string) => void;

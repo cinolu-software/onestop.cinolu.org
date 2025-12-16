@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'app-event-details-skeleton',
   templateUrl: './event-details-skeleton.html'
 })
-export class EventDetailsSkeletonComponent {}
+export class EventDetailsSkeleton {}

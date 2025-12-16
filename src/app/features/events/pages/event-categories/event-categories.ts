@@ -1,6 +1,5 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { LucideAngularModule, Trash, Search, Funnel, Pencil } from 'lucide-angular';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ICategory } from '@shared/models';
@@ -17,16 +16,7 @@ import { UiInput } from '@shared/ui/form/input/input';
   selector: 'app-event-categories',
   templateUrl: './event-categories.html',
   providers: [CategoriesStore, ConfirmationService],
-  imports: [
-    LucideAngularModule,
-    CommonModule,
-    UiButton,
-    ReactiveFormsModule,
-    UiConfirmDialog,
-    UiPagination,
-    UiTableSkeleton,
-    UiInput
-  ]
+  imports: [LucideAngularModule, UiButton, ReactiveFormsModule, UiConfirmDialog, UiPagination, UiTableSkeleton, UiInput]
 })
 export class EventCategories {
   #route = inject(ActivatedRoute);
@@ -39,37 +29,40 @@ export class EventCategories {
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q')
   });
-  searchForm: FormGroup = this.#fb.group({
-    q: [this.queryParams().q || '']
-  });
-  categoryForm: FormGroup = this.#fb.group({
-    id: [''],
-    name: ['', Validators.required]
-  });
+  searchForm: FormGroup;
+  createForm: FormGroup;
+  updateForm: FormGroup;
   icons = { Pencil, Trash, Search, Funnel };
   itemsPerPage = 10;
-  formVisible = signal(false);
-  formMode = signal<'create' | 'edit'>('create');
-  editingCategory = signal<ICategory | null>(null);
+  isCreating = signal(false);
+  editingCategoryId = signal<string | null>(null);
 
-  currentPage = computed(() => {
-    const page = this.queryParams().page;
-    return page ? parseInt(page, 10) : 1;
-  });
+  currentPage = computed(() => Number(this.queryParams().page) || 1);
 
   constructor() {
-    effect(() => {
-      this.updateRouteAndCategories();
+    this.searchForm = this.#fb.group({
+      q: [this.queryParams().q || '']
     });
-    const searchInput = this.searchForm.get('q');
-    searchInput?.valueChanges
+    this.createForm = this.#fb.group({
+      name: ['', Validators.required]
+    });
+    this.updateForm = this.#fb.group({
+      name: ['', Validators.required]
+    });
+
+    effect(() => {
+      this.store.loadAll(this.queryParams());
+    });
+    const searchValue = this.searchForm.get('q');
+    searchValue?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
       .subscribe((searchValue: string) => {
-        const nextQ = searchValue ? searchValue.trim() : null;
-        this.queryParams.update((qp) => {
-          if (qp.q === nextQ && qp.page === null) return qp;
-          return { ...qp, page: null, q: nextQ };
-        });
+        this.queryParams.update((qp) => ({
+          ...qp,
+          q: searchValue ? searchValue.trim() : null,
+          page: null
+        }));
+        this.updateRoute();
       });
   }
 
@@ -78,11 +71,17 @@ export class EventCategories {
       ...qp,
       page: currentPage === 1 ? null : currentPage.toString()
     }));
+    this.updateRoute();
   }
 
-  resetFilters(): void {
+  onResetFilters(): void {
     this.searchForm.patchValue({ q: '' });
-    this.queryParams.set({ page: null, q: null });
+    this.queryParams.update((qp) => ({
+      ...qp,
+      q: null,
+      page: null
+    }));
+    this.updateRoute();
   }
 
   updateRoute(): void {
@@ -90,47 +89,49 @@ export class EventCategories {
     this.#router.navigate(['/event-categories'], { queryParams });
   }
 
-  updateRouteAndCategories(): void {
-    this.updateRoute();
-    this.store.loadAll(this.queryParams());
-  }
-
-  onToggleForm(category: ICategory | null = null): void {
-    if (category) {
-      this.formMode.set('edit');
-      this.editingCategory.set(category);
-      this.categoryForm.patchValue({ id: category.id, name: category.name });
-      this.formVisible.set(true);
-      return;
+  onToggleCreation(): void {
+    this.isCreating.update((visible) => !visible);
+    if (!this.isCreating()) {
+      this.createForm.reset({ name: '' });
     }
-    this.formMode.set('create');
-    this.editingCategory.set(null);
-    this.categoryForm.reset({ id: '', name: '' });
-    this.formVisible.update((v) => !v);
   }
 
-  onCancelForm(): void {
-    this.formVisible.set(false);
-    this.formMode.set('create');
-    this.editingCategory.set(null);
-    this.categoryForm.reset({ id: '', name: '' });
+  onCancelCreation(): void {
+    this.isCreating.set(false);
+    this.createForm.reset({ name: '' });
   }
 
-  onSubmit(): void {
-    if (this.categoryForm.invalid) return;
-    const { id, name } = this.categoryForm.value;
-    if (this.formMode() === 'edit' && id) {
-      this.store.update({
-        id,
-        payload: { id, name },
-        onSuccess: () => this.onCancelForm()
-      });
-      return;
-    }
+  onCreate(): void {
+    if (this.createForm.invalid) return;
+    const { name } = this.createForm.value;
     this.store.create({
       payload: { name },
-      onSuccess: () => this.onCancelForm()
+      onSuccess: () => this.onCancelCreation()
     });
+  }
+
+  onEdit(category: ICategory): void {
+    this.editingCategoryId.set(category.id);
+    this.updateForm.patchValue({ name: category.name });
+  }
+
+  onCancelUpdate(): void {
+    this.editingCategoryId.set(null);
+    this.updateForm.reset({ name: '' });
+  }
+
+  onUpdate(): void {
+    if (this.updateForm.invalid) return;
+    const { name } = this.updateForm.value;
+    this.store.update({
+      id: this.editingCategoryId() || '',
+      payload: { name },
+      onSuccess: () => this.onCancelUpdate()
+    });
+  }
+
+  isEditing(categoryId: string): boolean {
+    return this.editingCategoryId() === categoryId;
   }
 
   onDelete(categoryId: string): void {

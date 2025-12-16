@@ -1,88 +1,58 @@
-<div class="pt-32 dashboard-main-content flex flex-col gap-6">
-  <div class="mb-2">
-    <h5 class="text-3xl font-bold text-gray-800">Ajouter un utilisateur</h5>
-    <p class="text-gray-600 mt-1">Créez un nouveau compte utilisateur avec les informations requises</p>
-  </div>
-
-  <form [formGroup]="addUserForm" (ngSubmit)="onAddUser()">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-      <div class="mb-8">
-        <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">
-          Informations personnelles
-        </h6>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="flex flex-col gap-2">
-            <label for="email" class="text-sm font-semibold text-gray-700">
-              Email<span class="text-red-500 ml-1">*</span>
-            </label>
-            <app-ui-input id="email" formControlName="email" placeholder="exemple@email.com" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="name" class="text-sm font-semibold text-gray-700">
-              Nom complet<span class="text-red-500 ml-1">*</span>
-            </label>
-            <app-ui-input id="name" [disabled]="true" formControlName="name" placeholder="Nom de l'utilisateur" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="gender" class="text-sm font-semibold text-gray-700">
-              Genre<span class="text-red-500 ml-1">*</span>
-            </label>
-            <app-ui-select
-              inputId="gender"
-              [options]="genders"
-              formControlName="gender"
-              placeholder="Sélectionner un genre" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="phone_number" class="text-sm font-semibold text-gray-700">
-              Numéro de téléphone<span class="text-red-500 ml-1">*</span>
-            </label>
-            <app-ui-input id="phone_number" formControlName="phone_number" placeholder="+243 XXX XXX XXX" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="city" class="text-sm font-semibold text-gray-700">
-              Ville<span class="text-red-500 ml-1">*</span>
-            </label>
-            <app-ui-input id="city" formControlName="city" placeholder="Ex: Kinshasa" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="country" class="text-sm font-semibold text-gray-700">
-              Pays<span class="text-red-500 ml-1">*</span>
-            </label>
-            <app-ui-input id="country" formControlName="country" placeholder="Ex: République Démocratique du Congo" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="birth_date" class="text-sm font-semibold text-gray-700">
-              Date de naissance<span class="text-red-500 ml-1">*</span>
-            </label>
-            <app-ui-datepicker
-              id="birth_date"
-              formControlName="birth_date"
-              showIcon
-              iconDisplay="input"
-              placeholder="JJ/MM/AAAA" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="role" class="text-sm font-semibold text-gray-700">
-              Rôles<span class="text-red-500 ml-1">*</span>
-            </label>
-            <app-ui-multi-select
-              [options]="roleOptions()"
-              formControlName="roles"
-              placeholder="Sélectionner un ou plusieurs rôles" />
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
-        <app-ui-button
-          [size]="'small'"
-          [loading]="store.isLoading()"
-          [disabled]="addUserForm.invalid || store.isLoading()"
-          variant="primary"
-          type="submit">
-          Enregistrer l'utilisateur
-        </app-ui-button>
-      </div>
+<section class="pt-32 dashboard-main-content flex flex-col gap-6">
+  <form class="w-full" [formGroup]="addUserForm" (ngSubmit)="onAddUser()">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <app-ui-input
+        [id]="'email'"
+        label="Email"
+        [required]="true"
+        formControlName="email"
+        placeholder="exemple@email.com" />
+      <app-ui-input
+        [id]="'name'"
+        label="Nom complet"
+        [required]="true"
+        formControlName="name"
+        placeholder="Nom de l'utilisateur" />
+      <app-ui-select
+        [id]="'gender'"
+        label="Genre"
+        [required]="true"
+        [options]="genders"
+        formControlName="gender"
+        placeholder="Sélectionner un genre" />
+      <app-ui-input
+        [id]="'phone_number'"
+        label="Numéro de téléphone"
+        [required]="true"
+        formControlName="phone_number"
+        placeholder="+243 XXX XXX XXX" />
+      <app-ui-input [id]="'city'" label="Ville" [required]="true" formControlName="city" placeholder="Ex: Kinshasa" />
+      <app-ui-input
+        [id]="'country'"
+        label="Pays"
+        [required]="true"
+        formControlName="country"
+        placeholder="Ex: République Démocratique du Congo" />
+      <app-ui-datepicker [id]="'birth_date'" label="Date de naissance" formControlName="birth_date" class="w-full" />
+      <app-ui-multi-select
+        [id]="'roles'"
+        label="Rôles"
+        [required]="true"
+        [optionLabel]="'name'"
+        [optionValue]="'id'"
+        [options]="rolesStore.allRoles()"
+        formControlName="roles"
+        placeholder="Sélectionner un ou plusieurs rôles" />
+    </div>
+    <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
+      <app-ui-button
+        [size]="'small'"
+        [loading]="store.isLoading()"
+        [disabled]="store.isLoading() || addUserForm.invalid"
+        variant="primary"
+        type="submit">
+        Créer l'utilisateur
+      </app-ui-button>
     </div>
   </form>
-</div>
+</section>

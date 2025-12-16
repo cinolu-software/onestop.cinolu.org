@@ -1,7 +1,9 @@
 <div class="ui-select-wrapper" [class.ui-select-disabled]="disabled()">
   @if (label()) {
   <p class="ui-select-label">
-    {{ label() }}
+    {{ label() }} @if (required()) {
+    <span class="text-red-500">*</span>
+    }
   </p>
   }
   <div class="ui-select-container">

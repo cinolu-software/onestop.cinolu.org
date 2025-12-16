@@ -1,84 +1,86 @@
-<section class="pt-32 dashboard-main-content flex flex-col gap-6">
-  <form class="w-full" [formGroup]="form" (ngSubmit)="onAddEvent()">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <app-ui-input
-        [id]="'name'"
-        label="Titre de l'événement"
-        [required]="true"
-        formControlName="name"
-        placeholder="Ex: Atelier de formation entrepreneuriale" />
-      <app-ui-input
-        [id]="'place'"
-        label="Lieu de l'événement"
-        formControlName="place"
-        placeholder="Ex: Kinshasa, RDC" />
-      <app-ui-input
-        [id]="'duration_hours'"
-        label="Durée estimée (en heures)"
-        formControlName="duration_hours"
-        placeholder="Ex: 8" />
-      <app-ui-select
-        [id]="'program'"
-        label="Programme associé"
-        [filter]="true"
-        [optionLabel]="'name'"
-        [optionValue]="'id'"
-        [options]="programsStore.allSubprograms()"
-        formControlName="program"
-        placeholder="Sélectionner un programme" />
-      <app-ui-select
-        [id]="'event_manager'"
-        label="Responsable de l'événement"
-        [optionLabel]="'name'"
-        [optionValue]="'id'"
-        [options]="usersStore.staff()"
-        formControlName="event_manager"
-        placeholder="Sélectionner un responsable" />
-
-      <app-ui-multi-select
-        [id]="'categories'"
-        [options]="categoriesStore.allCategories()"
-        [optionValue]="'id'"
-        [optionLabel]="'name'"
-        formControlName="categories"
-        placeholder="Choisir une ou plusieurs catégories" />
-      <app-ui-datepicker
-        [id]="'started_at'"
-        label="Date de début"
-        showIcon
-        iconDisplay="input"
-        formControlName="started_at" />
-      <app-ui-datepicker
-        [id]="'ended_at'"
-        label="Date de fin"
-        showIcon
-        iconDisplay="input"
-        formControlName="ended_at" />
-      <div class="grid grid-cols-1 gap-6 col-span-2">
-        <app-ui-textarea
-          [id]="'description'"
-          [rows]="6"
-          label="Présentation générale"
-          [required]="true"
-          formControlName="description"
-          placeholder="Présentez l'événement de manière claire et concise..." />
-        <app-ui-textarea
-          [id]="'selection_criteria'"
-          [rows]="6"
-          label="Critères d'éligibilité"
-          formControlName="selection_criteria"
-          placeholder="Définissez les conditions d'accès et les prérequis..." />
-      </div>
-    </div>
-    <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
-      <app-ui-button
-        [size]="'small'"
-        [loading]="eventsStore.isLoading()"
-        [disabled]="eventsStore.isLoading() || form.invalid"
-        variant="primary"
-        type="submit">
-        Créer l'événement
-      </app-ui-button>
-    </div>
-  </form>
-</section>
+<form class="border border-gray-200 rounded-lg p-4 md:bg-white md:p-6" [formGroup]="form" (ngSubmit)="onAddEvent()">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <app-ui-input
+      [required]="true"
+      label="Titre de l'événement"
+      [id]="'name'"
+      formControlName="name"
+      placeholder="Ex: Atelier de formation entrepreneuriale" />
+    <app-ui-input label="Lieu de l'événement" [id]="'place'" formControlName="place" placeholder="Ex: Kinshasa, RDC" />
+    <app-ui-input
+      [required]="true"
+      label="Durée estimée (en heures)"
+      [id]="'duration_hours'"
+      type="number"
+      formControlName="duration_hours"
+      placeholder="Ex: 8" />
+    <app-ui-select
+      [required]="true"
+      [id]="'program_id'"
+      label="Programme associé"
+      [filter]="true"
+      [optionLabel]="'name'"
+      [optionValue]="'id'"
+      [options]="programsStore.allSubprograms()"
+      formControlName="program"
+      placeholder="Sélectionner un programme" />
+    <app-ui-select
+      [required]="false"
+      [id]="'event_manager_id'"
+      label="Responsable de l'événement"
+      [optionLabel]="'name'"
+      [optionValue]="'id'"
+      [options]="usersStore.staff()"
+      [filter]="true"
+      formControlName="event_manager"
+      placeholder="Sélectionner un responsable" />
+    <app-ui-multi-select
+      [required]="true"
+      [id]="'categories_ids'"
+      label="Catégories"
+      [optionLabel]="'name'"
+      [optionValue]="'id'"
+      [options]="categoriesStore.allCategories()"
+      formControlName="categories"
+      placeholder="Choisir une ou plusieurs catégories" />
+    <app-ui-datepicker [required]="true" [id]="'started_at'" label="Date de début" formControlName="started_at" />
+    <app-ui-datepicker [required]="true" [id]="'ended_at'" label="Date de fin" formControlName="ended_at" />
+  </div>
+  <div class="grid grid-cols-1 gap-6">
+    <app-ui-textarea
+      [required]="true"
+      [id]="'description'"
+      label="Présentation générale"
+      formControlName="description"
+      [rows]="6"
+      placeholder="Présentez l'événement de manière claire et concise..."></app-ui-textarea>
+    <app-ui-textarea
+      [id]="'context'"
+      label="Contexte et justification"
+      formControlName="context"
+      [rows]="6"
+      placeholder="Expliquez le contexte et la raison d'être de l'événement..." />
+    <app-ui-textarea
+      [id]="'objectives'"
+      label="Objectifs visés"
+      formControlName="objectives"
+      [rows]="6"
+      placeholder="Décrivez les objectifs que l'événement vise à atteindre..." />
+    <app-ui-textarea
+      [id]="'selection_criteria'"
+      label="Critères d'éligibilité"
+      formControlName="selection_criteria"
+      [rows]="6"
+      placeholder="Spécifiez les critères de sélection ou d'éligibilité..." />
+  </div>
+  <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
+    <app-ui-button
+      [size]="'small'"
+      [loading]="store.isLoading()"
+      [disabled]="store.isLoading() || form.invalid"
+      type="submit"
+      variant="primary">
+      Ajouter l'événement
+    </app-ui-button>
+  </div>
+</form>

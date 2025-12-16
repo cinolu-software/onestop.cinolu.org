@@ -2,69 +2,81 @@
   <form [formGroup]="form" (ngSubmit)="onAddProject()">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <app-ui-input
+        [required]="true"
         [id]="'name'"
         label="Titre du projet"
         formControlName="name"
         placeholder="Ex: Programme d'incubation 2024" />
       <app-ui-input
+        [required]="true"
         label="Durée estimée (en heures)"
         [id]="'duration_hours'"
         formControlName="duration_hours"
         placeholder="Ex: 120" />
       <app-ui-select
+        [required]="true"
         label="Programme associé"
         [id]="'program'"
-        [options]="programOptions()"
+        [options]="programsStore.allSubprograms()"
+        [optionLabel]="'name'"
+        [optionValue]="'id'"
         formControlName="program"
         placeholder="Sélectionner un programme" />
       <app-ui-select
+        [required]="true"
         label="Chef de projet"
         [id]="'project_manager'"
-        [options]="staffOptions()"
+        [options]="usersStore.staff()"
+        [optionLabel]="'name'"
+        [optionValue]="'id'"
         formControlName="project_manager"
         placeholder="Sélectionner un responsable" />
       <app-ui-multi-select
+        [required]="true"
         label="Catégories"
         [id]="'categories'"
-        [options]="categoryOptions()"
+        [options]="categoriesStore.allCategories()"
+        [optionLabel]="'name'"
+        [optionValue]="'id'"
         formControlName="categories"
         placeholder="Choisir une ou plusieurs catégories" />
       <app-ui-datepicker
+        [required]="true"
         [id]="'started_at'"
         label="Date de lancement"
         showIcon
         iconDisplay="input"
         formControlName="started_at" />
       <app-ui-datepicker
+        [required]="true"
         [id]="'ended_at'"
         label="Date de clôture"
         showIcon
         iconDisplay="input"
         formControlName="ended_at" />
     </div>
-    <div>
-      <div class="grid grid-cols-1 gap-6">
-        <app-ui-textarea
-          label="Présentation générale"
-          [id]="'description'"
-          formControlName="description"
-          placeholder="Présentez le projet de manière claire et concise..." />
-        <app-ui-textarea
-          label="Contexte et justification"
-          [id]="'context'"
-          formControlName="context"
-          placeholder="Décrivez le contexte dans lequel s'inscrit ce projet..." />
-        <app-ui-textarea
-          label="Objectifs visés"
-          [id]="'objectives'"
-          formControlName="objectives"
-          placeholder="Listez les objectifs principaux et les résultats attendus..." />
-        <app-ui-textarea
-          label="Critères d'éligibilité"
-          [id]="'selection_criteria'"
-          formControlName="selection_criteria"
-          placeholder="Définissez les conditions d'accès et les prérequis..." />
-      </div>
+    <div class="grid grid-cols-1 gap-6">
+      <app-ui-textarea
+        [required]="true"
+        label="Présentation générale"
+        [id]="'description'"
+        formControlName="description"
+        placeholder="Présentez le projet de manière claire et concise..." />
+      <app-ui-textarea
+        label="Contexte et justification"
+        [id]="'context'"
+        formControlName="context"
+        placeholder="Décrivez le contexte dans lequel s'inscrit ce projet..." />
+      <app-ui-textarea
+        label="Objectifs visés"
+        [id]="'objectives'"
+        formControlName="objectives"
+        placeholder="Listez les objectifs principaux et les résultats attendus..." />
+      <app-ui-textarea
+        label="Critères d'éligibilité"
+        [id]="'selection_criteria'"
+        formControlName="selection_criteria"
+        placeholder="Définissez les conditions d'accès et les prérequis..." />
     </div>
     <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
       <app-ui-button

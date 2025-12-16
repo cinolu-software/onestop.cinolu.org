@@ -78,7 +78,7 @@ export const TagsStore = signalStore(
         )
       )
     ),
-    update: rxMethod<{ id: string; payload: { id: string; name: string }; onSuccess: () => void }>(
+    update: rxMethod<{ id: string; payload: { name: string }; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(({ id, payload, onSuccess }) =>

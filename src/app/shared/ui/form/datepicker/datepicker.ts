@@ -16,6 +16,7 @@ export class UiDatepicker implements ControlValueAccessor {
   label = input<string>('');
   placeholder = input<string>('');
   disabled = input<boolean>(false);
+  required = input<boolean>(false);
   id = input<string>('');
   invalid = input<boolean>(false);
   dateFormat = input<string>('');

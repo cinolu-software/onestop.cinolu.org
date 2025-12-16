@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'app-project-details-skeleton',
   templateUrl: './project-details-skeleton.html'
 })
-export class ProjectDetailsSkeletonComponent {}
+export class ProjectDetailsSkeleton {}

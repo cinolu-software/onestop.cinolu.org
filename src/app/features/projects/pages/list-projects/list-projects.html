@@ -20,114 +20,115 @@
         autocomplete="off" />
     </div>
   </form>
-</div>
-<div class="my-4">
-  <app-ui-tabs
-    [tabs]="tabsConfig()"
-    [activeTab]="activeTab()"
-    [isLoading]="isLoading"
-    (tabChange)="onTabChange($event)" />
-</div>
-<div class="mt-6">
-  @if (isLoading && projectCount === 0) {
-  <app-ui-table-skeleton [rows]="10" [columns]="5" />
-  } @if (projectCount > 0) {
-  <div class="ui-table-wrapper scrollbar-hide">
-    <table class="ui-table">
-      <thead class="ui-table-head">
-        <tr class="ui-table-head-row">
-          <th class="ui-table-header">Projet</th>
-          <th class="ui-table-header">Début</th>
-          <th class="ui-table-header">Fin</th>
-          <th class="ui-table-header">Statut</th>
-          <th class="ui-table-header">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="ui-table-body">
-        @for (project of projects; track project.id) {
-        <tr class="ui-table-row">
-          <td class="ui-table-cell">
-            <div class="flex items-center gap-3">
-              <div class="relative">
-                <app-ui-avatar [image]="project | apiIMG : 'project'" [label]="project.name" />
+  <div class="my-6">
+    <app-ui-tabs
+      [tabs]="tabsConfig()"
+      [activeTab]="activeTab()"
+      [isLoading]="isLoading"
+      (tabChange)="onTabChange($event)" />
+  </div>
+  <div class="mt-6">
+    @if (isLoading && projectCount === 0) {
+    <app-ui-table-skeleton [rows]="10" [columns]="5" />
+    } @if (projectCount > 0) {
+    <div class="ui-table-wrapper scrollbar-hide">
+      <table class="ui-table">
+        <thead class="ui-table-head">
+          <tr class="ui-table-head-row">
+            <th class="ui-table-header">Projet</th>
+            <th class="ui-table-header">Début</th>
+            <th class="ui-table-header">Fin</th>
+            <th class="ui-table-header">Statut</th>
+            <th class="ui-table-header">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="ui-table-body">
+          @for (project of projects; track project.id) {
+          <tr class="ui-table-row">
+            <td class="ui-table-cell">
+              <div class="flex items-center gap-3">
+                <div class="relative">
+                  <app-ui-avatar [image]="project | apiIMG : 'project'" [label]="project.name" />
+                </div>
+                <p class="font-semibold capitalize text-gray-900 w-32 md:w-48 line-clamp-1 md:line-clamp-2">
+                  {{ project.name }}
+                </p>
               </div>
-              <p class="font-semibold text-gray-900 w-32 md:w-48 line-clamp-1 md:line-clamp-2">
-                {{ project.name | titlecase }}
-              </p>
-            </div>
-          </td>
-          <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
-            {{ project.started_at | date : 'dd MMM yyyy' }}
-          </td>
-          <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
-            {{ project.ended_at | date : 'dd MMM yyyy' }}
-          </td>
-          <td class="ui-table-cell">
-            @if (project.is_published) {
-            <app-ui-badge [variant]="'success'" [showDot]="true" [label]="'Publié'" />
-            } @else {
-            <app-ui-badge [showDot]="true" [label]="'Brouillon'" />
-            }
-          </td>
-          <td class="ui-table-cell">
-            <div class="flex items-center gap-2">
-              <button
-                (click)="onShowcase(project.id)"
-                [class]="project.is_highlighted ? 'action-button-highlight' : 'action-button-highlight-default'">
-                <i-lucide [name]="icons.Star" class="size-4" [class.fill-current]="project.is_highlighted" />
-                En avant
-              </button>
-              <button (click)="onPublish(project.id)" class="action-button-active">
-                <i-lucide [name]="icons.Eye" class="size-4" />
-                Publié
-              </button>
-              <div class="h-6 w-px bg-gray-200"></div>
-              <div class="flex items-center gap-1">
-                <button [routerLink]="['/projects/edit', project.slug]" class="action-button-default">
-                  <i-lucide [name]="icons.Pencil" class="size-4" />
-                  Modifier
+            </td>
+            <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
+              {{ project.started_at | date : 'dd MMM yyyy' }}
+            </td>
+            <td class="ui-table-cell text-sm text-gray-600 whitespace-nowrap">
+              {{ project.ended_at | date : 'dd MMM yyyy' }}
+            </td>
+            <td class="ui-table-cell">
+              @if (project.is_published) {
+              <app-ui-badge [variant]="'success'" [showDot]="true" [label]="'Publié'" />
+              } @else {
+              <app-ui-badge [showDot]="true" [label]="'Brouillon'" />
+              }
+            </td>
+            <td class="ui-table-cell">
+              <div class="flex items-center gap-2">
+                <button
+                  (click)="onShowcase(project.id)"
+                  [class]="project.is_highlighted ? 'action-button-highlight' : 'action-button-highlight-default'">
+                  <i-lucide [name]="icons.Star" class="size-4" [class.fill-current]="project.is_highlighted" />
+                  En avant
                 </button>
-                <button (click)="onDelete(project.id)" class="action-button-danger">
-                  <i-lucide [name]="icons.Trash" class="size-4" />
-                  Supprimer
+                <button
+                  (click)="onPublish(project.id)"
+                  [class]="project.is_published ? 'action-button-active' : 'action-button-default'">
+                  <i-lucide [name]="icons.Eye" class="size-4" />
+                  {{ project.is_published ? 'Dépublier' : 'Publier' }}
                 </button>
+                <div class="h-6 w-px bg-gray-200"></div>
+                <div class="flex items-center gap-1">
+                  <button [routerLink]="['/projects/edit', project.slug]" class="action-button-default">
+                    <i-lucide [name]="icons.Pencil" class="size-4" />
+                    Modifier
+                  </button>
+                  <button (click)="onDelete(project.id)" class="action-button-danger">
+                    <i-lucide [name]="icons.Trash" class="size-4" />
+                    Supprimer
+                  </button>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+    <div class="flex flex-col justify-end items-end">
+      <app-ui-pagination
+        [currentPage]="currentPage()"
+        [totalItems]="projectCount"
+        [itemsPerPage]="itemsPerPage"
+        (pageChange)="onPageChange($event)" />
+    </div>
+  </div>
+  @if (projectCount === 0 && !isLoading) {
+  <div class="flex flex-col items-start">
+    <div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 border border-primary-100">
+      <i-lucide [name]="icons.Search" class="w-10 h-10 stroke-[1.5] text-primary-500" />
+    </div>
+    <h3 class="text-2xl font-bold text-gray-900 mb-2">Aucun projet trouvé</h3>
+    <p class="text-gray-500 max-w-lg mb-8 text-base leading-relaxed">
+      Nous n'avons trouvé aucun projet correspondant à vos critères.<br />
+    </p>
+    <app-ui-button
+      (clicked)="onResetFilters()"
+      variant="secondary"
+      [outlined]="true"
+      styleClass="text-base font-medium px-6 py-2.5 rounded-md shadow">
+      <span class="flex items-center gap-2">
+        <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
+        <span>Réinitialiser les filtres</span>
+      </span>
+    </app-ui-button>
   </div>
   }
-  <div class="flex flex-col justify-end items-end">
-    <app-ui-pagination
-      [currentPage]="currentPage()"
-      [totalItems]="projectCount"
-      [itemsPerPage]="itemsPerPage"
-      (pageChange)="onPageChange($event)" />
-  </div>
+  <app-ui-confirm-dialog />
 </div>
-@if (projectCount === 0 && !isLoading) {
-<div class="mx-6 flex flex-col items-start">
-  <div
-    class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 shadow-inner border border-primary-100">
-    <i-lucide [name]="icons.Search" class="w-10 h-10 stroke-[1.5] text-primary-500" />
-  </div>
-  <h3 class="text-2xl font-bold text-gray-900 mb-2">Aucun projet trouvé</h3>
-  <p class="text-gray-500 max-w-lg mb-8 text-base leading-relaxed">
-    Nous n'avons trouvé aucun projet correspondant à vos critères.<br />
-  </p>
-  <app-ui-button
-    (clicked)="onResetFilters()"
-    variant="secondary"
-    [outlined]="true"
-    styleClass="text-base font-medium px-6 py-2.5 rounded-md shadow">
-    <span class="flex items-center gap-2">
-      <i-lucide [name]="icons.Funnel" class="w-5 h-5 text-primary-500" />
-      <span>Réinitialiser les filtres</span>
-    </span>
-  </app-ui-button>
-</div>
-}
-<app-ui-confirm-dialog />

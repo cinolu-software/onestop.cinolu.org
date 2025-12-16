@@ -1,12 +1,7 @@
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-  <!-- Section: Image de couverture -->
+<div class="rounded-xl shadow-sm border border-gray-200 p-4">
   <div class="mb-10">
-    <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">
-      Image de couverture
-    </h6>
-    <p class="text-sm text-gray-600 mb-4">
-      Cette image sera utilisée comme couverture principale de l'article
-    </p>
+    <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">Image de couverture</h6>
+    <p class="text-sm text-gray-600 mb-4">Cette image sera utilisée comme couverture principale de l'article</p>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1">
         <div
@@ -33,24 +28,16 @@
         <div class="h-20 bg-gray-200 animate-pulse rounded-lg w-full"></div>
         } @else {
         <div class="md:w-3/5">
-          <app-ui-file-upload
-            [name]="'article'"
-            [url]="url + article().id"
-            (loaded)="onCoverUploaded()" />
+          <app-ui-file-upload [name]="'article'" [url]="url + article().id" (loaded)="onCoverUploaded()" />
         </div>
         }
       </div>
     </div>
   </div>
 
-  <!-- Section: Galerie d'images -->
   <div>
-    <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">
-      Galerie d'images
-    </h6>
-    <p class="text-sm text-gray-600 mb-4">
-      Ajoutez plusieurs images pour présenter votre article de manière visuelle
-    </p>
+    <h6 class="text-lg font-semibold text-gray-800 mb-5 pb-2 border-b border-gray-200">Galerie d'images</h6>
+    <p class="text-sm text-gray-600 mb-4">Ajoutez plusieurs images pour présenter votre article de manière visuelle</p>
     <div class="mb-6">
       @if (isLoading()) {
       <div class="h-20 bg-gray-200 animate-pulse rounded-lg w-full"></div>
@@ -66,7 +53,7 @@
     </div>
 
     @if (gallery().length > 0) {
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       @for (image of gallery(); track image.id) {
       <div class="relative group">
         <div
@@ -77,13 +64,12 @@
             fill
             [ngSrc]="image | apiIMG : 'gallery'"
             [alt]="article().title + ' gallery image'" />
-          <div
-            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition flex items-center justify-center">
+          <div class="absolute inset-0 group-hover:bg-opacity-30 transition flex items-center justify-center">
             <button
               type="button"
               (click)="onDeleteImage(image.id)"
               class="opacity-0 group-hover:opacity-100 transition transform scale-90 group-hover:scale-100 p-2 bg-red-500 hover:bg-red-600 rounded-full shadow-lg">
-              <i-lucide [name]="icons.trash" class="w-5 h-5 text-white" />
+              <i-lucide [name]="icons.Trash2" class="w-5 h-5 text-white" />
             </button>
           </div>
         </div>
@@ -91,10 +77,9 @@
       }
     </div>
     } @else {
-    <div
-      class="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-      <i class="pi pi-images text-5xl text-gray-300 mb-3"></i>
-      <p class="text-gray-500 font-medium">Aucune image dans la galerie</p>
+    <div class="flex flex-col py-12 px-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+      <i-lucide [img]="icons.Image" class="w-10 h-10 text-gray-400 mb-3" />
+      <p class="text-gray-500 font-medium">Aucune image dans la galeriee</p>
       <p class="text-gray-400 text-sm mt-1">Commencez par ajouter des images ci-dessus</p>
     </div>
     }

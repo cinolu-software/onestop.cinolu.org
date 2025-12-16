@@ -14,7 +14,7 @@ import { UiButton, UiDatepicker, UiInput, UiMultiSelect, UiSelect, UiTextarea } 
   providers: [EventsStore, CategoriesStore, UsersStore, SubprogramsStore],
   imports: [FormsModule, ReactiveFormsModule, UiSelect, UiMultiSelect, UiInput, UiButton, UiTextarea, UiDatepicker]
 })
-export class EventEditFormComponent {
+export class EventUpdateForm {
   event = input.required<IEvent>();
   #fb = inject(FormBuilder);
   store = inject(EventsStore);
@@ -42,7 +42,7 @@ export class EventEditFormComponent {
       description: ['', Validators.required],
       context: [''],
       objectives: [''],
-      duration_hours: [null],
+      duration_hours: [null, Validators.required],
       selection_criteria: [''],
       started_at: ['', Validators.required],
       ended_at: ['', Validators.required],

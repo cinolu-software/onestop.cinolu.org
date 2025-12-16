@@ -12,7 +12,7 @@ import { UiButton } from '../form/button/button';
   templateUrl: './metrics-table.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MetricsTableComponent {
+export class UiMetricsTable {
   indicators = input.required<IIndicator[]>();
   metricsMap = input.required<MetricsMap>();
   existingMetrics = input<IMetric[]>([]);

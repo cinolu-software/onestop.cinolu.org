@@ -1,11 +1,4 @@
-import {
-  Component,
-  input,
-  OnInit,
-  output,
-  viewChild,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, input, OnInit, output, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FilePondComponent, FilePondModule, registerPlugin } from 'ngx-filepond';
 import imagePreview from 'filepond-plugin-image-preview';
 registerPlugin(imagePreview);
@@ -14,7 +7,7 @@ registerPlugin(imagePreview);
   selector: 'app-ui-file-upload',
   imports: [FilePondModule],
   templateUrl: './file-upload.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileUpload implements OnInit {
   pond = viewChild<FilePondComponent>('pond');
@@ -35,23 +28,23 @@ export class FileUpload implements OnInit {
       instantUpload: this.multiple(),
       allowRemove: true,
       allowMultiple: this.multiple(),
+      onprocessfiles: () => {
+        this.handleLoaded();
+      },
       server: {
         process: {
           url: this.url(),
           method: 'POST',
-          withCredentials: true,
-          onload: () => {
-            this.handleLoaded();
-          },
-        },
-      },
+          withCredentials: true
+        }
+      }
     };
   }
 
   handleLoaded(): void {
+    this.loaded.emit();
     setTimeout(() => {
       this.pond()?.['pond']?.removeFiles();
     }, 3000);
-    this.loaded.emit();
   }
 }

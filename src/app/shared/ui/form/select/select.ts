@@ -22,6 +22,7 @@ export class UiSelect implements ControlValueAccessor {
   id = input<string>('');
   invalid = input<boolean>(false);
   filter = input<boolean>(false);
+  required = input<boolean>(false);
   optionLabel = input<string>('');
   optionValue = input<string>('');
   icons = { ChevronDown };

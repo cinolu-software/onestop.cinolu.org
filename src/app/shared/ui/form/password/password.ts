@@ -1,4 +1,4 @@
-import { Component, input, output, forwardRef, signal } from '@angular/core';
+import { Component, input, forwardRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
@@ -7,18 +7,15 @@ import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
   selector: 'app-ui-password',
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './password.html',
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiPassword), multi: true }
-  ]
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiPassword), multi: true }]
 })
 export class UiPassword implements ControlValueAccessor {
   placeholder = input<string>('');
   disabled = input<boolean>(false);
   id = input<string>('');
   invalid = input<boolean>(false);
+  required = input<boolean>(false);
   autocomplete = input<string>('current-password');
-  focused = output<FocusEvent>();
-  blurred = output<FocusEvent>();
   value = '';
   label = input<string>('');
   isMasked = signal<boolean>(true);

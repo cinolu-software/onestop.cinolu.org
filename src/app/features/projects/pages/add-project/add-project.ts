@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectsStore } from '../../store/projects.store';
 import { CategoriesStore } from '../../store/project-categories.store';
@@ -15,38 +15,16 @@ import { UiButton, UiDatepicker, UiInput, UiMultiSelect, UiSelect, UiTextarea } 
 })
 export class AddProjectComponent {
   #fb = inject(FormBuilder);
-  form: FormGroup;
+  form: FormGroup = this.#initForm();
   store = inject(ProjectsStore);
   categoriesStore = inject(CategoriesStore);
   programsStore = inject(SubprogramsStore);
   usersStore = inject(UsersStore);
 
-  programOptions = computed(() =>
-    this.programsStore.allSubprograms().map((program) => ({
-      label: program.name,
-      value: program.id
-    }))
-  );
-
-  staffOptions = computed(() =>
-    this.usersStore.staff().map((user) => ({
-      label: user.name || user.email,
-      value: user.id
-    }))
-  );
-
-  categoryOptions = computed(() =>
-    this.categoriesStore.allCategories().map((cat) => ({
-      label: cat.name,
-      value: cat.id
-    }))
-  );
-
   constructor() {
     effect(() => {
       this.programsStore.loadUnpaginated();
     });
-    this.form = this.#initForm();
     this.categoriesStore.loadUnpaginated();
     this.usersStore.loadStaff();
   }
@@ -63,7 +41,7 @@ export class AddProjectComponent {
       ended_at: [null, Validators.required],
       program: ['', Validators.required],
       categories: [[], Validators.required],
-      project_manager: ['']
+      project_manager: ['', Validators.required]
     });
   }
 

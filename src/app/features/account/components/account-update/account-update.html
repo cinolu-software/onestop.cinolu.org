@@ -9,14 +9,21 @@
     class="flex flex-col gap-6 border border-gray-200 rounded-xl p-6">
     <div class="flex flex-col gap-6">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <app-ui-input [id]="'name'" label="Nom complet" formControlName="name" placeholder="Entrez votre nom complet" />
+        <app-ui-input
+          [required]="true"
+          [id]="'name'"
+          label="Nom complet"
+          formControlName="name"
+          placeholder="Entrez votre nom complet" />
         <app-ui-select
+          [required]="true"
           [id]="'gender'"
           label="Genre"
           [options]="genderOptions"
           formControlName="gender"
           placeholder="Sélectionner votre genre" />
         <app-ui-datepicker
+          [required]="true"
           [id]="'birth_date'"
           label="Date de naissance"
           formControlName="birth_date"
@@ -25,11 +32,13 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <app-ui-input
           [id]="'email'"
+          [required]="true"
           label="Adresse e-mail"
           type="email"
           formControlName="email"
           placeholder="exemple@mail.com" />
         <app-ui-input
+          [required]="true"
           [id]="'phone_number'"
           label="Numéro de téléphone"
           formControlName="phone_number"
@@ -37,6 +46,7 @@
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <app-ui-input
+          [required]="true"
           [id]="'country'"
           label="Pays"
           formControlName="country"
@@ -65,6 +75,7 @@
       <div class="space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <app-ui-input
+            [required]="true"
             [id]="'password'"
             label="Nouveau mot de passe"
             type="password"
@@ -73,6 +84,7 @@
             placeholder="Entrez votre nouveau mot de passe"
             [invalid]="(passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched) || false" />
           <app-ui-input
+            [required]="true"
             [id]="'password_confirm'"
             label="Confirmer le mot de passe"
             type="password"

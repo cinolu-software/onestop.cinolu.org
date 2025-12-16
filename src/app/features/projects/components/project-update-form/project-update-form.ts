@@ -36,12 +36,12 @@ export class ProjectUpdateForm {
 
   #initForm(): FormGroup {
     return this.#fb.group({
-      id: ['', Validators.required],
+      id: [''],
       name: ['', Validators.required],
       description: ['', Validators.required],
       context: [''],
       objectives: [''],
-      duration_hours: [null],
+      duration_hours: [null, Validators.required],
       selection_criteria: [''],
       started_at: ['', Validators.required],
       ended_at: ['', Validators.required],
@@ -63,6 +63,10 @@ export class ProjectUpdateForm {
   }
 
   onSubmit(): void {
-    if (this.form.valid) this.updateProjectStore.update(this.form.value);
+    if (!this.form.valid) return;
+    this.updateProjectStore.update({
+      ...this.form.value,
+      duration_hours: Number(this.form.value.duration_hours)
+    });
   }
 }

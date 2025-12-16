@@ -1,7 +1,9 @@
 <div class="space-y-2">
   @if (label()) {
   <label [for]="id()" class="block text-sm font-semibold text-gray-700">
-    {{ label() }}
+    {{ label() }} @if (required()) {
+    <span class="text-red-500">*</span>
+    }
   </label>
   }
   <input
@@ -13,7 +15,5 @@
     [autocomplete]="'off'"
     [class]="inputClasses()"
     [value]="value"
-    (input)="onInput($event)"
-    (blur)="onTouched(); blurred.emit($event)"
-    (focus)="focused.emit($event)" />
+    (input)="onInput($event)" />
 </div>

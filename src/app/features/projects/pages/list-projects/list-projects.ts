@@ -1,6 +1,5 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { LucideAngularModule, Trash, Search, Eye, Star, Funnel, Pencil } from 'lucide-angular';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProjectsStore } from '../../store/projects.store';
@@ -12,6 +11,7 @@ import { ConfirmationService } from '@shared/services/confirmation';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IndicatorsStore } from '@features/programs/store/indicators.store';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-list-projects',
@@ -19,7 +19,7 @@ import { IndicatorsStore } from '@features/programs/store/indicators.store';
   providers: [ProjectsStore, IndicatorsStore],
   imports: [
     LucideAngularModule,
-    CommonModule,
+    DatePipe,
     UiButton,
     ReactiveFormsModule,
     UiConfirmDialog,

@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IndicatorsStore } from '../../store/indicators.store';
@@ -20,7 +19,6 @@ import { SelectOption } from '@shared/ui/form/select/select';
   selector: 'app-update-program-page',
   providers: [ProgramsStore, IndicatorsStore, ProgramCategoriesStore],
   imports: [
-    CommonModule,
     UiTabs,
     ReactiveFormsModule,
     UiButton,
@@ -54,7 +52,6 @@ export class UpdateProgram {
       value: cat
     }))
   );
-
   tabs = [
     { label: 'Modifier le programme', name: 'edit', icon: SquarePen },
     { label: 'Sous programmes', name: 'subprograms', icon: Tag },

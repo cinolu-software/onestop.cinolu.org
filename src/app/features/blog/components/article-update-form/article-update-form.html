@@ -1,11 +1,13 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="flex flex-col gap-6">
     <app-ui-input
+      [required]="true"
       label="Titre de l'article"
       [id]="'title'"
       formControlName="title"
       [placeholder]="'Ex: Les tendances du développement web en 2025'" />
     <app-ui-multi-select
+      [required]="true"
       label="Tags de l'article"
       [required]="true"
       [id]="'tags'"
@@ -20,21 +22,15 @@
       [placeholder]="'Commencez à écrire votre article...'"
       [id]="'content'" />
 
-    <div class="px-8 py-6 border-t border-gray-100 flex items-center justify-between">
-      <div class="flex items-center gap-2 text-sm text-gray-600">
-        <i-lucide [img]="icons.Info" [size]="16" />
-        <span>Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <app-ui-button
-          [type]="'submit'"
-          [variant]="'primary'"
-          [size]="'small'"
-          [loading]="updateStore.isLoading()"
-          [disabled]="updateStore.isLoading() || form.invalid">
-          Mettre à jour
-        </app-ui-button>
-      </div>
+    <div class="flex justify-end gap-3 border-t border-gray-100 pt-6">
+      <app-ui-button
+        [type]="'submit'"
+        [variant]="'primary'"
+        [size]="'small'"
+        [loading]="updateStore.isLoading()"
+        [disabled]="updateStore.isLoading() || form.invalid">
+        Mettre à jour
+      </app-ui-button>
     </div>
   </div>
 </form>

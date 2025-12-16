@@ -1,11 +1,10 @@
-import { Component, input, output, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-ui-input',
-  imports: [CommonModule],
   templateUrl: './input.html',
+  imports: [],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiInput), multi: true }]
 })
 export class UiInput implements ControlValueAccessor {
@@ -16,9 +15,9 @@ export class UiInput implements ControlValueAccessor {
   id = input<string>('');
   label = input<string>('');
   invalid = input<boolean>(false);
-  focused = output<FocusEvent>();
-  blurred = output<FocusEvent>();
+  required = input<boolean>(false);
   value = '';
+
   onChange!: (value: string) => void;
   onTouched!: () => void;
 

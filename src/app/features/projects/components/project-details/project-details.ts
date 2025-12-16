@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { IProject } from '@shared/models';
 import {
@@ -14,13 +13,14 @@ import {
   User
 } from 'lucide-angular';
 import { UiAccordion, UiAccordionPanel, UiAccordionHeader, UiAccordionContent } from '@shared/ui';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-project-details',
   templateUrl: './project-details.html',
-  imports: [UiAccordion, UiAccordionPanel, UiAccordionHeader, UiAccordionContent, LucideAngularModule, CommonModule]
+  imports: [UiAccordion, DatePipe, UiAccordionPanel, UiAccordionHeader, UiAccordionContent, LucideAngularModule]
 })
-export class ProjectDetailsComponent {
+export class ProjectDetails {
   project = input.required<IProject>();
   icons = { FolderOpen, User, Clock, Calendar, Flag, FileText, BookOpen, Target, SquareCheckBig };
 }

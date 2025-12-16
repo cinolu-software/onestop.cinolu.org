@@ -27,6 +27,7 @@ export class UiMultiSelect implements ControlValueAccessor {
   options = input<SelectOption[] | unknown[]>([]);
   placeholder = input<string>('Select items');
   disabled = input<boolean>(false);
+  required = input<boolean>(false);
   id = input<string>('');
   invalid = input<boolean>(false);
   display = input<'comma' | 'chip'>('comma');

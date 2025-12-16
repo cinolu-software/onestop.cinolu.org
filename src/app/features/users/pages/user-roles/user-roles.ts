@@ -38,37 +38,36 @@ export class UserRoles {
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q')
   });
-  searchForm: FormGroup = this.#fb.group({
-    q: [this.queryParams().q || '']
-  });
-  roleForm: FormGroup = this.#fb.group({
-    id: [''],
-    name: ['', Validators.required]
-  });
+  searchForm: FormGroup;
+  createForm: FormGroup;
+  updateForm: FormGroup;
   icons = { Pencil, Trash, Search, Funnel };
   itemsPerPage = 10;
-  formVisible = signal(false);
-  formMode = signal<'create' | 'edit'>('create');
-  editingRole = signal<IRole | null>(null);
+  isCreating = signal(false);
+  editingRoleId = signal<string | null>(null);
 
-  currentPage = computed(() => {
-    const page = this.queryParams().page;
-    return page ? parseInt(page, 10) : 1;
-  });
+  currentPage = computed(() => Number(this.queryParams().page) || 1);
 
   constructor() {
-    effect(() => {
-      this.updateRouteAndRoles();
+    this.searchForm = this.#fb.group({
+      q: [this.queryParams().q || '']
     });
-    const searchInput = this.searchForm.get('q');
-    searchInput?.valueChanges
+    this.createForm = this.#fb.group({
+      name: ['', Validators.required]
+    });
+    this.updateForm = this.#fb.group({
+      name: ['', Validators.required]
+    });
+
+    effect(() => {
+      this.store.loadAll(this.queryParams());
+    });
+    const searchValue = this.searchForm.get('q');
+    searchValue?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
       .subscribe((searchValue: string) => {
-        const nextQ = searchValue ? searchValue.trim() : null;
-        this.queryParams.update((qp) => {
-          if (qp.q === nextQ && qp.page === null) return qp;
-          return { ...qp, page: null, q: nextQ };
-        });
+        this.queryParams.update((qp) => ({ ...qp, q: searchValue ? searchValue.trim() : null, page: null }));
+        this.updateRoute();
       });
   }
 
@@ -77,11 +76,13 @@ export class UserRoles {
       ...qp,
       page: currentPage === 1 ? null : currentPage.toString()
     }));
+    this.updateRoute();
   }
 
-  resetFilters(): void {
+  onResetFilters(): void {
     this.searchForm.patchValue({ q: '' });
-    this.queryParams.set({ page: null, q: null });
+    this.queryParams.update((qp) => ({ ...qp, q: null, page: null }));
+    this.updateRoute();
   }
 
   updateRoute(): void {
@@ -89,51 +90,54 @@ export class UserRoles {
     this.#router.navigate(['/roles'], { queryParams });
   }
 
-  updateRouteAndRoles(): void {
-    this.updateRoute();
-    this.store.loadAll(this.queryParams());
-  }
-
-  onToggleForm(role: IRole | null = null): void {
-    if (role) {
-      this.formMode.set('edit');
-      this.editingRole.set(role);
-      this.roleForm.patchValue({ id: role.id, name: role.name });
-      this.formVisible.set(true);
-      return;
+  onToggleCreation(): void {
+    this.isCreating.update((visible) => !visible);
+    if (!this.isCreating()) {
+      this.createForm.reset({ name: '' });
     }
-    this.formMode.set('create');
-    this.editingRole.set(null);
-    this.roleForm.reset({ id: '', name: '' });
-    this.formVisible.update((v) => !v);
   }
 
-  onCancelForm(): void {
-    this.formVisible.set(false);
-    this.formMode.set('create');
-    this.editingRole.set(null);
-    this.roleForm.reset({ id: '', name: '' });
+  onCancelCreation(): void {
+    this.isCreating.set(false);
+    this.createForm.reset({ name: '' });
   }
 
-  onSubmit(): void {
-    if (this.roleForm.invalid) return;
-    const { id, name } = this.roleForm.value;
-    if (this.formMode() === 'edit' && id) {
-      this.store.update({
-        payload: { id, name },
-        onSuccess: () => this.onCancelForm()
-      });
-      return;
-    }
+  onCreate(): void {
+    if (this.createForm.invalid) return;
+    const { name } = this.createForm.value;
     this.store.create({
       payload: { name },
-      onSuccess: () => this.onCancelForm()
+      onSuccess: () => this.onCancelCreation()
     });
+  }
+
+  onEdit(role: IRole): void {
+    this.editingRoleId.set(role.id);
+    this.updateForm.patchValue({ name: role.name });
+  }
+
+  onCancelUpdate(): void {
+    this.editingRoleId.set(null);
+    this.updateForm.reset({ name: '' });
+  }
+
+  onUpdate(): void {
+    if (this.updateForm.invalid) return;
+    const { name } = this.updateForm.value;
+    this.store.update({
+      id: this.editingRoleId() || '',
+      payload: { name },
+      onSuccess: () => this.onCancelUpdate()
+    });
+  }
+
+  isEditing(roleId: string): boolean {
+    return this.editingRoleId() === roleId;
   }
 
   onDelete(roleId: string): void {
     this.#confirmationService.confirm({
-      header: 'Confirmer la suppression',
+      header: 'Confirmation',
       message: 'Êtes-vous sûr de vouloir supprimer ce rôle ?',
       acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',

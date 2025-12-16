@@ -1,89 +1,44 @@
-import { Component, computed, effect, inject } from '@angular/core';
-import { LucideAngularModule, Locate, TriangleAlert, Phone, Mail, User, Calendar, MapPin } from 'lucide-angular';
-import { CommonModule, Location, NgOptimizedImage } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UsersStore } from '../../store/users.store';
-import { RolesStore } from '../../store/roles.store';
-import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
-import { GENDERS } from '@shared/data/genders.data';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IRole } from '@shared/models';
-import { UiButton, UiDatepicker, UiInput, UiMultiSelect, UiSelect } from '@shared/ui';
+import { ChartColumn, SquarePen } from 'lucide-angular';
+import { UiTabs } from '@shared/ui';
+import { UsersStore } from '../../store/users.store';
+import { UserDetails } from '../../components/user-details/user-details';
+import { UserEditForm } from '../../components/user-edit-form/user-edit-form';
+import { UserDetailsSkeleton } from '../../ui/user-details-skeleton/user-details-skeleton';
 
 @Component({
   selector: 'app-user-update',
   templateUrl: './update-user.html',
-  providers: [UsersStore, RolesStore],
-  imports: [
-    LucideAngularModule,
-    CommonModule,
-    UiButton,
-    UiInput,
-    ReactiveFormsModule,
-    NgOptimizedImage,
-    ApiImgPipe,
-    UiDatepicker,
-    UiMultiSelect,
-    UiSelect
-  ]
+  providers: [UsersStore],
+  imports: [UiTabs, UserDetails, UserEditForm, UserDetailsSkeleton]
 })
-export class UpdateUser {
-  #fb = inject(FormBuilder);
-  #location = inject(Location);
-  genders = GENDERS;
-  updateUserForm: FormGroup;
-  store = inject(UsersStore);
-  rolesStore = inject(RolesStore);
+export class UpdateUser implements OnInit {
   #route = inject(ActivatedRoute);
-
-  roleOptions = computed(() =>
-    this.rolesStore.allRoles().map((role) => ({
-      label: role.name,
-      value: role.id
-    }))
-  );
-
-  icons = {
-    locate: Locate,
-    alert: TriangleAlert,
-    phone: Phone,
-    email: Mail,
-    user: User,
-    calendar: Calendar,
-    mapPin: MapPin
-  };
+  #email = this.#route.snapshot.params['email'];
+  usersStore = inject(UsersStore);
+  activeTab = signal('details');
+  tabs = [
+    { label: "Fiche d'utilisateur", name: 'details', icon: ChartColumn },
+    { label: 'Mettre à jour', name: 'edit', icon: SquarePen }
+  ];
 
   constructor() {
-    this.updateUserForm = this.#fb.group({
-      id: ['', Validators.required],
-      email: ['', [Validators.required]],
-      name: ['', Validators.required],
-      phone_number: ['', Validators.required],
-      gender: ['', Validators.required],
-      city: ['', Validators.required],
-      country: ['', Validators.required],
-      birth_date: ['', Validators.required],
-      roles: [[], Validators.required]
-    });
-    const email = this.#route.snapshot.params['email'];
-    if (email) this.store.loadOne(email);
-    this.rolesStore.loadUnpaginated();
+    this.#watchUserChanges();
+  }
+
+  ngOnInit(): void {
+    this.usersStore.loadOne(this.#email);
+  }
+
+  #watchUserChanges(): void {
     effect(() => {
-      const user = this.store.user();
+      const user = this.usersStore.user();
       if (!user) return;
-      this.updateUserForm.patchValue({
-        ...user,
-        birth_date: user.birth_date ? new Date(user.birth_date) : '',
-        roles: user.roles.map((role: IRole) => role.id)
-      });
     });
   }
 
-  onUpdateUser(): void {
-    this.store.update(this.updateUserForm.value);
-  }
-
-  onGoBack(): void {
-    this.#location.back();
+  onTabChange(tab: string): void {
+    this.activeTab.set(tab);
   }
 }

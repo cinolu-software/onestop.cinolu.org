@@ -2,58 +2,53 @@
   <form [formGroup]="form" (ngSubmit)="onAddArticle()">
     <div class="flex flex-col gap-6">
       <app-ui-input
+        [required]="true"
         label="Titre de l'article"
         [id]="'title'"
         formControlName="title"
-        [placeholder]="'Ex: Les tendances du développement web en 2025'"
-        class="w-full" />
+        [placeholder]="'Ex: Les tendances du développement web en 2025'" />
       <div class="grid md:grid-cols-2 gap-6">
         <app-ui-multi-select
+          [required]="true"
           label="Tags de l'article"
           [id]="'tags'"
-          [options]="tagOptions()"
+          [options]="tagsStore.allTags()"
+          [optionLabel]="'name'"
+          [optionValue]="'id'"
           [placeholder]="'Sélectionnez des tags'"
           formControlName="tags"
-          [display]="'chip'"
-          class="w-full" />
+          [display]="'chip'" />
         <app-ui-datepicker
+          [required]="true"
           label="Date de publication"
           [id]="'published_at'"
           formControlName="published_at"
-          [placeholder]="'Sélectionnez une date'"
-          class="w-full" />
+          [placeholder]="'Sélectionnez une date'" />
       </div>
       <app-ui-textarea
+        [required]="true"
         label="Résumé"
         [id]="'summary'"
         formControlName="summary"
         [rows]="6"
         [placeholder]="'Rédigez un résumé captivant de votre article...'"></app-ui-textarea>
       <app-ui-text-editor
+        [required]="true"
         label="Contenu de l'article"
         formControlName="content"
         [minHeight]="'400px'"
         [placeholder]="'Commencez à écrire votre article...'"
         [id]="'content'" />
     </div>
-    <div class="py-6 border-t border-gray-100 flex items-center justify-between">
-      <div class="flex items-center gap-2 text-sm text-gray-600">
-        <i-lucide [img]="icons.info" [size]="16" />
-        <span>Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <app-ui-button
-          [type]="'submit'"
-          [variant]="'primary'"
-          [size]="'small'"
-          [loading]="store.isLoading()"
-          [disabled]="store.isLoading() || form.invalid">
-          <span class="flex items-center gap-2">
-            <i-lucide [img]="icons.check" [size]="16" />
-            <span>Publier l'article</span>
-          </span>
-        </app-ui-button>
-      </div>
+    <div class="flex justify-end gap-3 border-t border-gray-100 pt-6">
+      <app-ui-button
+        [type]="'submit'"
+        [variant]="'primary'"
+        [size]="'small'"
+        [loading]="store.isLoading()"
+        [disabled]="store.isLoading() || form.invalid">
+        Publier l'article
+      </app-ui-button>
     </div>
   </form>
 </section>

@@ -1,7 +1,9 @@
 <div class="flex flex-col gap-2">
   @if (label()) {
   <label [for]="id()" class="block text-sm font-semibold text-gray-700">
-    {{ label() }}
+    {{ label() }} @if (required()) {
+    <span class="text-red-500">*</span>
+    }
   </label>
   }
   <textarea

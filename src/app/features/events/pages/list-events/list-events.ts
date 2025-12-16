@@ -1,6 +1,5 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { LucideAngularModule, Trash, Search, Eye, Star, Funnel, Pencil } from 'lucide-angular';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EventsStore } from '../../store/events.store';
@@ -12,6 +11,7 @@ import { UiAvatar, UiButton, UiConfirmDialog, UiPagination, UiTabs } from '@shar
 import { ConfirmationService } from '@shared/services/confirmation';
 import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
 import { IndicatorsStore } from '@features/programs/store/indicators.store';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-events-list',
@@ -19,7 +19,7 @@ import { IndicatorsStore } from '@features/programs/store/indicators.store';
   providers: [EventsStore, IndicatorsStore],
   imports: [
     LucideAngularModule,
-    CommonModule,
+    DatePipe,
     UiButton,
     ReactiveFormsModule,
     RouterLink,

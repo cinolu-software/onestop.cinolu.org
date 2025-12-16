@@ -1,6 +1,5 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { LucideAngularModule, Trash, Search, Eye, Star, Funnel, Pencil } from 'lucide-angular';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProgramsStore } from '../../store/programs.store';
@@ -11,6 +10,7 @@ import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
 import { ConfirmationService } from '@shared/services/confirmation';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-list-programs',
@@ -18,7 +18,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providers: [ProgramsStore],
   imports: [
     LucideAngularModule,
-    CommonModule,
     UiButton,
     ReactiveFormsModule,
     UiConfirmDialog,
@@ -28,7 +27,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     UiTabs,
     UiPagination,
     UiTableSkeleton,
-    UiBadge
+    UiBadge,
+    DatePipe
   ]
 })
 export class ListPrograms {

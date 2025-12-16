@@ -1,6 +1,5 @@
 import { Component, Input, inject, signal } from '@angular/core';
 import { LucideAngularModule, Pencil, Trash, Eye, Star, Search, Funnel, Plus } from 'lucide-angular';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubprogramsStore } from '../../store/subprograms.store';
 import { ISubprogram } from '@shared/models';
@@ -10,6 +9,7 @@ import { IProgram } from '@shared/models';
 import { ConfirmationService } from '@shared/services/confirmation';
 import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
 import { UiButton, UiInput, UiConfirmDialog, FileUpload, UiAvatar, UiTextarea, UiBadge } from '@ui';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-list-subprograms',
@@ -17,7 +17,7 @@ import { UiButton, UiInput, UiConfirmDialog, FileUpload, UiAvatar, UiTextarea, U
   providers: [SubprogramsStore],
   imports: [
     LucideAngularModule,
-    CommonModule,
+    DatePipe,
     UiButton,
     UiInput,
     ReactiveFormsModule,

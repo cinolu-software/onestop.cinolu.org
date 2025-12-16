@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TagsStore } from '../../store/tag.store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterArticlesTagsDto } from '../../dto/filter-tags.dto';
-import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { UiButton, UiConfirmDialog, UiInput, UiPagination } from '@shared/ui';
@@ -22,8 +21,7 @@ import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
     UiInput,
     UiConfirmDialog,
     UiPagination,
-    UiTableSkeleton,
-    CommonModule
+    UiTableSkeleton
   ],
   templateUrl: './article-tags.html'
 })
@@ -34,7 +32,8 @@ export class ArticleTags {
   #confirmationService = inject(ConfirmationService);
   #destroyRef = inject(DestroyRef);
   searchForm: FormGroup;
-  tagForm: FormGroup;
+  createForm: FormGroup;
+  updateForm: FormGroup;
   store = inject(TagsStore);
   itemsPerPage = 10;
   icons = { Pencil, Trash, Plus, Search, Funnel };
@@ -43,19 +42,19 @@ export class ArticleTags {
     q: this.#route.snapshot.queryParamMap.get('q')
   });
   currentPage = computed(() => Number(this.queryParams().page) || 1);
-  formVisible = signal(false);
-  formMode = signal<'create' | 'edit'>('create');
-  editingTag = signal<ITag | null>(null);
+  isCreating = signal(false);
+  editingTagId = signal<string | null>(null);
 
   constructor() {
     this.searchForm = this.#fb.group({
       q: [this.queryParams().q || '']
     });
-    this.tagForm = this.#fb.group({
-      id: [''],
+    this.createForm = this.#fb.group({
       name: ['', Validators.required]
     });
-
+    this.updateForm = this.#fb.group({
+      name: ['', Validators.required]
+    });
     effect(() => {
       this.store.loadAll(this.queryParams());
     });
@@ -107,52 +106,48 @@ export class ArticleTags {
     });
   }
 
-  onToggleForm(tag: ITag | null = null): void {
-    if (tag) {
-      this.formMode.set('edit');
-      this.editingTag.set(tag);
-      this.tagForm.patchValue({
-        id: tag.id,
-        name: tag.name
-      });
-      this.formVisible.set(true);
-      return;
+  onToggleCreation(): void {
+    this.isCreating.update((visible) => !visible);
+    if (!this.isCreating()) {
+      this.createForm.reset({ name: '' });
     }
-
-    this.formMode.set('create');
-    this.editingTag.set(null);
-    this.tagForm.reset({
-      id: '',
-      name: ''
-    });
-    this.formVisible.update((visible) => !visible);
   }
 
-  onCancelForm(): void {
-    this.formVisible.set(false);
-    this.formMode.set('create');
-    this.editingTag.set(null);
-    this.tagForm.reset({
-      id: '',
-      name: ''
-    });
+  onCancelCreation(): void {
+    this.isCreating.set(false);
+    this.createForm.reset({ name: '' });
   }
 
-  onSubmit(): void {
-    if (this.tagForm.invalid) return;
-    const { id, name } = this.tagForm.value;
-    if (this.formMode() === 'edit' && id) {
-      this.store.update({
-        id,
-        payload: { id, name },
-        onSuccess: () => this.onCancelForm()
-      });
-      return;
-    }
-
+  onCreate(): void {
+    if (this.createForm.invalid) return;
+    const { name } = this.createForm.value;
     this.store.create({
       payload: { name },
-      onSuccess: () => this.onCancelForm()
+      onSuccess: () => this.onCancelCreation()
     });
+  }
+
+  onEdit(tag: ITag): void {
+    this.editingTagId.set(tag.id);
+    this.updateForm.patchValue({ name: tag.name });
+  }
+
+  onCancelUpdate(): void {
+    this.editingTagId.set(null);
+    this.updateForm.reset({ name: '' });
+  }
+
+  onUpdate(): void {
+    if (this.updateForm.invalid) return;
+    const { name } = this.updateForm.value;
+    this.store.update({
+      id: this.editingTagId() || '',
+      payload: { name },
+      onSuccess: () => this.onCancelUpdate()
+    });
+  }
+
+  isEditing(tagId: string): boolean {
+    return this.editingTagId() === tagId;
   }
 }

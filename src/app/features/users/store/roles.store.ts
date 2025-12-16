@@ -79,11 +79,11 @@ export const RolesStore = signalStore(
         )
       )
     ),
-    update: rxMethod<{ payload: RoleDto; onSuccess: () => void }>(
+    update: rxMethod<{ id: string; payload: RoleDto; onSuccess: () => void }>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
-        switchMap(({ payload, onSuccess }) =>
-          _http.patch<{ data: IRole }>(`roles/${payload.id}`, payload).pipe(
+        switchMap(({ id, payload, onSuccess }) =>
+          _http.patch<{ data: IRole }>(`roles/${id}`, payload).pipe(
             map(({ data }) => {
               const [roles, count] = store.roles();
               const updated = roles.map((r) => (r.id === data.id ? data : r));

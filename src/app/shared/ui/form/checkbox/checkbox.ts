@@ -11,6 +11,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class UiCheckbox implements ControlValueAccessor {
   label = input<string>('');
   disabled = input<boolean>(false);
+  required = input<boolean>(false);
   id = input<string>('');
   name = input<string>('');
   invalid = input<boolean>(false);

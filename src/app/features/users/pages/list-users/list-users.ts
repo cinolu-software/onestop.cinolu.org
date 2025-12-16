@@ -1,16 +1,16 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { LucideAngularModule, Trash, Download, Search, Funnel, Pencil } from 'lucide-angular';
-import { UsersStore } from '../../store/users.store';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FilterUsersDto } from '../../dto/users/filter-users.dto';
+import { UsersStore } from '../../store/users.store';
 import { ApiImgPipe } from '@shared/pipes/api-img.pipe';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { FilterUsersDto } from '../../dto/users/filter-users.dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { UiAvatar, UiButton, UiConfirmDialog, UiPagination } from '@shared/ui';
-import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
 import { ConfirmationService } from '@shared/services/confirmation';
+import { UiTableSkeleton } from '@shared/ui/table-skeleton/table-skeleton';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-list-users',
@@ -18,15 +18,15 @@ import { ConfirmationService } from '@shared/services/confirmation';
   providers: [UsersStore],
   imports: [
     LucideAngularModule,
-    CommonModule,
+    DatePipe,
     UiButton,
-    ApiImgPipe,
-    UiAvatar,
     ReactiveFormsModule,
+    RouterLink,
     UiConfirmDialog,
+    UiAvatar,
+    ApiImgPipe,
     UiPagination,
-    UiTableSkeleton,
-    RouterLink
+    UiTableSkeleton
   ]
 })
 export class ListUsers {
@@ -35,35 +35,33 @@ export class ListUsers {
   #fb = inject(FormBuilder);
   #confirmationService = inject(ConfirmationService);
   #destroyRef = inject(DestroyRef);
+  searchForm: FormGroup;
   store = inject(UsersStore);
+  itemsPerPage = 40;
+  icons = { Pencil, Trash, Search, Funnel, Download };
   queryParams = signal<FilterUsersDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q')
   });
-  searchForm: FormGroup = this.#fb.group({
-    q: [this.queryParams().q || '']
-  });
-  icons = { Trash, Download, Search, Funnel, Pencil };
-  itemsPerPage = 10;
-
-  currentPage = computed(() => {
-    const page = this.queryParams().page;
-    return page ? parseInt(page, 10) : 1;
-  });
+  currentPage = computed(() => Number(this.queryParams().page) || 1);
 
   constructor() {
-    effect(() => {
-      this.updateRouteAndUsers();
+    this.searchForm = this.#fb.group({
+      q: [this.queryParams().q || '']
     });
-    const searchInput = this.searchForm.get('q');
-    searchInput?.valueChanges
+    effect(() => {
+      this.store.loadAll(this.queryParams());
+    });
+    const searchValue = this.searchForm.get('q');
+    searchValue?.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntilDestroyed(this.#destroyRef))
       .subscribe((searchValue: string) => {
-        const nextQ = searchValue ? searchValue.trim() : null;
-        this.queryParams.update((qp) => {
-          if (qp.q === nextQ && qp.page === null) return qp;
-          return { ...qp, page: null, q: nextQ };
-        });
+        this.queryParams.update((qp) => ({
+          ...qp,
+          q: searchValue ? searchValue.trim() : null,
+          page: null
+        }));
+        this.updateRoute();
       });
   }
 
@@ -72,11 +70,7 @@ export class ListUsers {
       ...qp,
       page: currentPage === 1 ? null : currentPage.toString()
     }));
-  }
-
-  resetFilters(): void {
-    this.searchForm.patchValue({ q: '' });
-    this.queryParams.set({ page: null, q: null });
+    this.updateRoute();
   }
 
   updateRoute(): void {
@@ -84,9 +78,10 @@ export class ListUsers {
     this.#router.navigate(['/users'], { queryParams });
   }
 
-  updateRouteAndUsers(): void {
+  onResetFilters(): void {
+    this.searchForm.patchValue({ q: '' });
+    this.queryParams.update((qp) => ({ ...qp, q: null, page: null }));
     this.updateRoute();
-    this.store.loadAll(this.queryParams());
   }
 
   onDownloadUsers(): void {
@@ -95,7 +90,7 @@ export class ListUsers {
 
   onDelete(userId: string): void {
     this.#confirmationService.confirm({
-      header: 'Confirmer la suppression',
+      header: 'Confirmation',
       message: 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?',
       acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',

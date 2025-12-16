@@ -17,7 +17,7 @@ import { UiButton, UiDatepicker, UiInput, UiMultiSelect, UiSelect, UiTextarea } 
 export class AddEventComponent {
   #fb = inject(FormBuilder);
   form: FormGroup;
-  eventsStore = inject(EventsStore);
+  store = inject(EventsStore);
   categoriesStore = inject(CategoriesStore);
   programsStore = inject(SubprogramsStore);
   usersStore = inject(UsersStore);
@@ -38,7 +38,7 @@ export class AddEventComponent {
       place: [''],
       context: [''],
       objectives: [''],
-      duration_hours: [null],
+      duration_hours: [null, Validators.required],
       selection_criteria: [''],
       started_at: [null, Validators.required],
       ended_at: [null, Validators.required],
@@ -50,6 +50,6 @@ export class AddEventComponent {
 
   onAddEvent(): void {
     if (!this.form.valid) return;
-    this.eventsStore.create(this.form.value);
+    this.store.create(this.form.value);
   }
 }

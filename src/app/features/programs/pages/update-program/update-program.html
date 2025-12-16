@@ -1,10 +1,10 @@
-<div class="bg-white rounded-xl shadow-sm border border-gray-100">
+<div class="border border-gray-200 rounded-lg p-4 md:bg-white md:p-6">
   @let program = store.program();
-  <div class="px-6 pt-6">
+  <div class="pt-6">
     <app-ui-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
   </div>
   @if (activeTab() === 'edit') {
-  <div class="p-6 flex flex-col gap-6">
+  <div class="pt-6 flex flex-col gap-6">
     <p class="text-sm font-semibold text-gray-700">Logo du programme</p>
     <div class="w-full md:w-md">
       @if (store.isLoading()) {
@@ -34,11 +34,7 @@
           formControlName="description"
           placeholder="Description détaillée du programme..." />
       </div>
-      <div class="flex items-center flex-wrap gap-4 justify-between pt-4 border-t border-gray-100">
-        <div class="flex items-center gap-2 text-sm text-gray-500">
-          <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-          <span>Champs obligatoires</span>
-        </div>
+      <div class="flex justify-end pt-4 border-t border-gray-100">
         <app-ui-button
           [size]="'small'"
           type="submit"
@@ -51,11 +47,11 @@
     </form>
   </div>
   } @if (activeTab() === 'subprograms') {
-  <div class="px-8 pb-10">
+  <div class="">
     <app-list-subprograms [program]="program" />
   </div>
   } @if (activeTab() === 'indicators') {
-  <div class="p-6 space-y-6">
+  <div class="pt-6 space-y-6">
     <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <app-ui-datepicker

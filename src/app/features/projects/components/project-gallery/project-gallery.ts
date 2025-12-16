@@ -11,7 +11,7 @@ import { environment } from '@env/environment';
   templateUrl: './project-gallery.html',
   imports: [NgOptimizedImage, LucideAngularModule, FileUpload, ApiImgPipe]
 })
-export class ProjectGalleryComponent {
+export class ProjectGallery {
   project = input.required<IProject>();
   gallery = input.required<IImage[]>();
   isLoading = input<boolean>(false);

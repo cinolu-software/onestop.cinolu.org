@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { IEvent } from '@shared/models';
 import {
@@ -16,13 +15,14 @@ import {
   CircleCheckBig
 } from 'lucide-angular';
 import { UiAccordion, UiAccordionPanel, UiAccordionHeader, UiAccordionContent } from '@shared/ui';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.html',
-  imports: [UiAccordion, UiAccordionPanel, UiAccordionHeader, UiAccordionContent, LucideAngularModule, CommonModule]
+  imports: [UiAccordion, DatePipe, UiAccordionPanel, UiAccordionHeader, UiAccordionContent, LucideAngularModule]
 })
-export class EventDetailsComponent {
+export class EventDetails {
   event = input.required<IEvent>();
   icons = {
     FolderOpen,

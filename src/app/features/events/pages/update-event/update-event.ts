@@ -6,24 +6,17 @@ import { MetricsMap, totalMetrics, achievementRate, metricsMap, metricsMapToDto 
 import { IEvent } from '@shared/models';
 import { IndicatorsStore } from '@features/programs/store/indicators.store';
 import { EventsStore } from '../../store/events.store';
-import { EventDetailsComponent } from '../../components/event-details/event-details';
+import { EventDetails } from '../../components/event-details/event-details';
 import { EventGalleryComponent } from '../../components/event-gallery/event-gallery';
-import { EventEditFormComponent } from '../../components/event-edit-form/event-edit-form';
-import { EventDetailsSkeletonComponent } from '../../ui/event-details-skeleton/event-details-skeleton';
+import { EventUpdateForm } from '../../components/event-update-form/event-edit-form';
+import { EventDetailsSkeleton } from '../../ui/event-details-skeleton/event-details-skeleton';
 import { GalleryStore } from '../../store/event-gallery.store';
 
 @Component({
   selector: 'app-event-update',
   templateUrl: './update-event.html',
   providers: [EventsStore, IndicatorsStore, GalleryStore],
-  imports: [
-    UiTabs,
-    MetricsTableComponent,
-    EventDetailsComponent,
-    EventGalleryComponent,
-    EventEditFormComponent,
-    EventDetailsSkeletonComponent
-  ]
+  imports: [UiTabs, MetricsTableComponent, EventDetails, EventGalleryComponent, EventUpdateForm, EventDetailsSkeleton]
 })
 export class UpdateEvent implements OnInit {
   #route = inject(ActivatedRoute);

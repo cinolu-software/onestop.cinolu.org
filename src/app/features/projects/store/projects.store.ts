@@ -94,7 +94,6 @@ export const ProjectsStore = signalStore(
             map(({ data }) => {
               _toast.showSuccess('Le projet a été mis à jour avec succès');
               _router.navigate(['/projects']);
-              // update list if present
               const [list, count] = store.projects();
               const updated = list.map((p) => (p.id === data.id ? data : p));
               patchState(store, { isLoading: false, project: data, projects: [updated, count] });

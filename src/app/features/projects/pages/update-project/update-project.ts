@@ -1,33 +1,25 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SquarePen, Images, ChartColumn } from 'lucide-angular';
-import { UiTabs, MetricsTableComponent } from '@shared/ui';
+import { UiTabs } from '@shared/ui';
 import { totalMetrics, achievementRate, metricsMap, metricsMapToDto } from '@shared/helpers';
 import { IProject } from '@shared/models';
 import { IndicatorsStore } from '@features/programs/store/indicators.store';
 import { GalleryStore } from '../../store/project-gallery.store';
 import { ProjectsStore } from '../../store/projects.store';
 import { ProjectMetricsStore } from '../../store/project-metrics.store';
-import { ProjectDetailsComponent } from '../../components/project-details/project-details';
-import { ProjectGalleryComponent } from '../../components/project-gallery/project-gallery';
+import { ProjectDetails } from '../../components/project-details/project-details';
+import { ProjectGallery } from '../../components/project-gallery/project-gallery';
 import { ProjectUpdateForm } from '../../components/project-update-form/project-update-form';
-import { ProjectDetailsSkeletonComponent } from '../../ui/project-details-skeleton/project-details-skeleton';
+import { ProjectDetailsSkeleton } from '../../ui/project-details-skeleton/project-details-skeleton';
+import { UiMetricsTable } from '@shared/ui/metrics-table/metrics-table';
 
 @Component({
   selector: 'app-project-update',
   templateUrl: './update-project.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [IndicatorsStore, GalleryStore, ProjectsStore, ProjectMetricsStore],
-  imports: [
-    CommonModule,
-    UiTabs,
-    MetricsTableComponent,
-    ProjectDetailsComponent,
-    ProjectGalleryComponent,
-    ProjectUpdateForm,
-    ProjectDetailsSkeletonComponent
-  ]
+  imports: [UiTabs, UiMetricsTable, ProjectDetails, ProjectGallery, ProjectUpdateForm, ProjectDetailsSkeleton]
 })
 export class UpdateProject implements OnInit {
   #route = inject(ActivatedRoute);
