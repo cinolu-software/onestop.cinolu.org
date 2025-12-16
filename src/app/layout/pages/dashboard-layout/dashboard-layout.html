@@ -1,12 +1,12 @@
 @if (true) {
-<aside class="hidden lg:block w-[22vw] z-30 overflow-y-auto">
+<aside class="hidden lg:block">
   <app-sidebar />
 </aside>
-<main class="lg:ml-[18vw] min-h-screen py-10 lg:px-8 bg-gray-100">
+<main class="py-10 bg-gray-100">
   <app-topbar />
-  <div class="px-7 mt-12 md:mt-20">
+  <div class="lg:ml-[28vw] xl:ml-[25vw] px-8 lg:px-0 lg:mr-6 xl:mr-10 min-h-screen mt-12 md:mt-20">
     <router-outlet />
   </div>
+  <app-ui-back-button />
 </main>
-<app-ui-back-button />
 }
