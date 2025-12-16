@@ -1,4 +1,4 @@
-import { authGuard, unauthGuard } from '@core/guards';
+import { authGuard } from '@core/guards';
 import { Layout } from './layout/layout';
 import { Routes } from '@angular/router';
 
@@ -61,7 +61,6 @@ export const routes: Routes = [
   {
     path: 'sign-in',
     title: 'Connexion',
-    canActivate: [unauthGuard],
     loadChildren: () => import('@features/sign-in/sign-in.route').then((m) => m.signInRoutes)
   },
   {
