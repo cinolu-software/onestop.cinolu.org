@@ -7,7 +7,7 @@ export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
   const user = authStore.user();
   const roles = user?.roles as unknown as string[];
-  const hasRights = roles?.includes('admin') || roles?.includes('staff');
-  if (!authStore.isLoading() && !hasRights) return router.parseUrl('/sign-in');
+  const hasRights = roles?.includes('admin') || roles?.includes('staff') || false;
+  if (!hasRights) return router.parseUrl('/sign-in');
   return true;
 };
