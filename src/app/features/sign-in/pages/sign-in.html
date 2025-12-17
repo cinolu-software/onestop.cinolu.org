@@ -1,55 +1,43 @@
-<div
-  class="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 via-white to-slate-50 px-4 py-12">
+<div class="min-h-screen flex items-center justify-center px-4 py-12">
   <div class="w-full max-w-md">
-    @if (isCheckingAuth()) {
-    <div class="flex flex-col items-center justify-center gap-4">
-      <i-lucide
-        [name]="icons.Loader2"
-        class="size-8 text-primary-600 animate-spin"
-        [strokeWidth]="2"
-        aria-hidden="true" />
-      <p class="text-gray-600 font-medium">Vérification de l'authentification...</p>
-    </div>
-    } @else {
     <div class="mb-8 flex flex-col items-center justify-center gap-3">
       <div class="flex items-center gap-3">
         <img ngSrc="/images/logo/logo-g.png" width="40" height="50" alt="Company Logo" />
         <span class="font-bold text-2xl text-gray-900">Se connecter</span>
       </div>
-      <div class="flex items-center gap-2 text-primary-600 font-medium text-sm">
-        <i-lucide [name]="icons.Lock" class="size-5" [strokeWidth]="2" aria-hidden="true" />
-        <span>Connectez-vous à votre espace d'administration</span>
-      </div>
     </div>
-    <div class="bg-white rounded-2xl shadow-xl shadow-gray-900/5 border border-gray-100 overflow-hidden">
-      <div class="p-8 sm:p-10">
-        <form [formGroup]="form" class="flex flex-col gap-5" (ngSubmit)="onSignIn()" novalidate>
-          <app-ui-input
-            [id]="'email'"
-            label="Adresse email"
-            type="email"
-            formControlName="email"
-            placeholder="votre@email.com"
-            [invalid]="(form.get('email')?.invalid && form.get('email')?.touched) || false" />
-          <app-ui-password
-            label="Mot de passe"
-            [id]="'password'"
-            formControlName="password"
-            placeholder="••••••••"
-            [invalid]="(form.get('password')?.invalid && form.get('password')?.touched) || false" />
-          <div class="mt-2">
-            <app-ui-button
-              class="w-full"
-              type="submit"
-              [variant]="'primary'"
-              [disabled]="store.isLoading() || form.invalid"
-              [loading]="store.isLoading()">
-              Se connecter
-            </app-ui-button>
-          </div>
-        </form>
+    <div class="p-8 bg-white rounded-2xl shadow-xl shadow-gray-900/5 border border-gray-100 overflow-hidden">
+      <div class="mb-8 flex flex-col items-center justify-center gap-3">
+        <div class="flex flex-col gap-2 text-red-600 font-medium rounded bg-red-50 border border-red-200 p-4">
+          <i-lucide [name]="icons.CircleAlert" class="size-5" />
+          <span class="text-sm"> Espace administrateur réservé aux membres autorisés de l’équipe. </span>
+        </div>
       </div>
+      <form [formGroup]="form" class="flex flex-col gap-5" (ngSubmit)="onSignIn()" novalidate>
+        <app-ui-input
+          [id]="'email'"
+          label="Adresse email"
+          type="email"
+          formControlName="email"
+          placeholder="votre@email.com"
+          [invalid]="(form.get('email')?.invalid && form.get('email')?.touched) || false" />
+        <app-ui-password
+          label="Mot de passe"
+          [id]="'password'"
+          formControlName="password"
+          placeholder="••••••••"
+          [invalid]="(form.get('password')?.invalid && form.get('password')?.touched) || false" />
+        <div class="mt-2 flex flex-col gap-10">
+          <app-ui-button
+            class="w-full"
+            type="submit"
+            [variant]="'primary'"
+            [disabled]="store.isLoading() || form.invalid"
+            [loading]="store.isLoading()">
+            Se connecter
+          </app-ui-button>
+        </div>
+      </form>
     </div>
-    }
   </div>
 </div>

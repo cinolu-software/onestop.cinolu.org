@@ -9,13 +9,11 @@ import { IUser } from '@shared/models';
 
 interface IAuthStore {
   user: IUser | null;
-  isLoading: boolean;
-  isInitialized: boolean;
 }
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
-  withState<IAuthStore>({ user: null, isLoading: false, isInitialized: false }),
+  withState<IAuthStore>({ user: null }),
   withProps(() => ({
     _http: inject(HttpClient),
     _toast: inject(ToastrService),
@@ -24,14 +22,13 @@ export const AuthStore = signalStore(
   withMethods(({ _http, _toast, _router, ...store }) => ({
     getProfile: rxMethod<void>(
       pipe(
-        tap(() => patchState(store, { isLoading: true })),
         exhaustMap(() =>
           _http.get<{ data: IUser }>('auth/profile').pipe(
             tap(({ data }) => {
-              patchState(store, { user: data, isLoading: false, isInitialized: true });
+              patchState(store, { user: data });
             }),
             catchError(() => {
-              patchState(store, { user: null, isLoading: false, isInitialized: true });
+              patchState(store, { user: null });
               return of(null);
             })
           )
@@ -56,7 +53,7 @@ export const AuthStore = signalStore(
       )
     ),
     setUser: (user: IUser | null) => {
-      patchState(store, { user, isInitialized: true });
+      patchState(store, { user });
     }
   }))
 );

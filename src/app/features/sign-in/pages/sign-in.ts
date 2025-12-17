@@ -1,36 +1,24 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
-import { LucideAngularModule, Mail, Lock, ArrowRight, CircleAlert, Loader2 } from 'lucide-angular';
+import { LucideAngularModule, CircleAlert } from 'lucide-angular';
 import { UiInput, UiPassword, UiButton } from '@ui';
 import { SignInStore } from '../store/sign-in.store';
 import { AuthStore } from '@core/auth/auth.store';
 import { environment } from '@env/environment';
-import { computed } from '@angular/core';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.html',
   providers: [SignInStore],
-  imports: [
-    ReactiveFormsModule,
-    NgOptimizedImage,
-    LucideAngularModule,
-    UiInput,
-    UiPassword,
-    UiButton
-  ]
+  imports: [ReactiveFormsModule, NgOptimizedImage, LucideAngularModule, UiInput, UiPassword, UiButton]
 })
 export class SignIn {
   #formBuilder: FormBuilder = inject(FormBuilder);
   form: FormGroup;
   store = inject(SignInStore);
   authStore = inject(AuthStore);
-  icons = { Mail, Lock, CircleAlert, ArrowRight, Loader2 };
-  
-  isCheckingAuth = computed(() => 
-    this.authStore.isLoading() || !this.authStore.isInitialized()
-  );
+  icons = { CircleAlert };
 
   constructor() {
     this.form = this.#formBuilder.group({
