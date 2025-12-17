@@ -1,10 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
-import { LucideAngularModule, Mail, Lock, ArrowRight, CircleAlert } from 'lucide-angular';
+import { LucideAngularModule, Mail, Lock, ArrowRight, CircleAlert, Loader2 } from 'lucide-angular';
 import { UiInput, UiPassword, UiButton } from '@ui';
 import { SignInStore } from '../store/sign-in.store';
+import { AuthStore } from '@core/auth/auth.store';
 import { environment } from '@env/environment';
+import { computed } from '@angular/core';
 
 @Component({
   selector: 'app-sign-in',
@@ -23,7 +25,12 @@ export class SignIn {
   #formBuilder: FormBuilder = inject(FormBuilder);
   form: FormGroup;
   store = inject(SignInStore);
-  icons = { Mail, Lock, CircleAlert, ArrowRight };
+  authStore = inject(AuthStore);
+  icons = { Mail, Lock, CircleAlert, ArrowRight, Loader2 };
+  
+  isCheckingAuth = computed(() => 
+    this.authStore.isLoading() || !this.authStore.isInitialized()
+  );
 
   constructor() {
     this.form = this.#formBuilder.group({
