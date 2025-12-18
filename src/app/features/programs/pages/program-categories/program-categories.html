@@ -1,7 +1,12 @@
 @let isLoading = store.isLoading(); @let categoryCount = store.categories()[1]; @let categories = store.categories()[0];
 <div class="dashboard-main-content">
   <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
-    <h5 class="text-2xl font-bold text-gray-900 mb-1">Catégories</h5>
+    <h5 class="text-2xl flex items-center gap-2 font-bold text-gray-900 mb-1">
+      Catégories
+      <span class="p-2 text-xs size-8 text-white bg-primary-600 rounded-full text-center">
+        {{ categoryCount }}
+      </span>
+    </h5>
     <button class="ui-button ui-button-small ui-button-primary" (click)="onToggleCreation()">
       {{ isCreating() ? 'Fermer' : 'Nouvelle catégorie' }}
     </button>

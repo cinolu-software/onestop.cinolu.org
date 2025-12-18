@@ -1,7 +1,12 @@
 @let isLoading = store.isLoading(); @let roleCount = store.roles()[1]; @let roles = store.roles()[0];
 <div class="dashboard-main-content">
   <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-4">
-    <h5 class="text-2xl font-bold text-gray-900 mb-1">Rôles utilisateurs</h5>
+    <h5 class="text-2xl flex items-center gap-2 font-bold text-gray-900 mb-1">
+      Rôles
+      <span class="p-2 text-xs size-8 text-white bg-primary-600 rounded-full text-center">
+        {{ roleCount }}
+      </span>
+    </h5>
     <button class="ui-button ui-button-small ui-button-primary" (click)="onToggleCreation()">
       {{ isCreating() ? 'Fermer' : 'Nouveau rôle' }}
     </button>

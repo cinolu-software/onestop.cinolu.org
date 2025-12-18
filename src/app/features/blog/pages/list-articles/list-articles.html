@@ -22,7 +22,11 @@
   </form>
 
   <div class="my-6">
-    <app-ui-tabs [tabs]="tabsConfig()" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+    <app-ui-tabs
+      [counter]="articleCount"
+      [tabs]="tabsConfig()"
+      [activeTab]="activeTab()"
+      (tabChange)="onTabChange($event)" />
   </div>
 
   <div class="mt-6">
@@ -68,7 +72,7 @@
                   <i-lucide [img]="icons.Star" class="size-4" />
                   En avant
                 </button>
-                <a [routerLink]="['/blog/articles/edit', article.slug]" class="action-button-default">
+                <a [routerLink]="['/blog/articles/update', article.slug]" class="action-button-default">
                   <i-lucide [name]="icons.Pencil" class="size-4" />
                   Modifier
                 </a>

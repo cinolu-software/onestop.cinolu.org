@@ -22,6 +22,7 @@
   </form>
   <div class="my-6">
     <app-ui-tabs
+      [counter]="programCount"
       [tabs]="tabsConfig()"
       [activeTab]="activeTab()"
       [isLoading]="isLoading"
@@ -81,7 +82,7 @@
                 </div>
                 <div class="h-6 w-px bg-gray-200"></div>
                 <div class="flex items-center gap-1">
-                  <button [routerLink]="['/programs/edit', program.slug]" class="action-button-default">
+                  <button [routerLink]="['/programs/update', program.slug]" class="action-button-default">
                     <i-lucide [name]="icons.Pencil" class="size-4" />
                     Modifier
                   </button>

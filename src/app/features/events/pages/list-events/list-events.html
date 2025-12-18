@@ -22,7 +22,11 @@
   </form>
 
   <div class="my-6">
-    <app-ui-tabs [tabs]="tabsConfig()" [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+    <app-ui-tabs
+      [counter]="eventCount"
+      [tabs]="tabsConfig()"
+      [activeTab]="activeTab()"
+      (tabChange)="onTabChange($event)" />
   </div>
 
   <div class="mt-6">
@@ -73,7 +77,7 @@
                   {{ event.is_published ? 'Depublier' : 'Publier' }}
                 </button>
                 <div class="h-6 w-px bg-gray-200"></div>
-                <a [routerLink]="['/events/edit', event.slug]" class="action-button-default">
+                <a [routerLink]="['/events/update', event.slug]" class="action-button-default">
                   <i-lucide [name]="icons.Pencil" class="size-4" />
                   Modifier
                 </a>
