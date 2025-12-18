@@ -2,12 +2,14 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthStore } from '../auth/auth.store';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = (_, state) => {
   const authStore = inject(AuthStore);
   const router = inject(Router);
-  const user = authStore.user();
-  const roles = user?.roles as unknown as string[];
-  const hasRights = roles?.includes('admin') || roles?.includes('staff');
-  if (!hasRights) return router.createUrlTree(['/sign-in']);
+  const hasRights = authStore.hasRights();
+  if (!hasRights) {
+    return router.navigate(['/sign-in'], {
+      queryParams: { redirect: state.url }
+    });
+  }
   return true;
 };
