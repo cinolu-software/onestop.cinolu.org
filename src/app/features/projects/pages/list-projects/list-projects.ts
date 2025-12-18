@@ -42,7 +42,7 @@ export class ListProjects {
   queryParams = signal<FilterProjectsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
     q: this.#route.snapshot.queryParamMap.get('q'),
-    filter: this.#route.snapshot.queryParamMap.get('filter') as FilterProjectsDto['filter']
+    filter: this.#route.snapshot.queryParamMap.get('filter')
   });
   searchForm: FormGroup = this.#fb.group({
     q: [this.queryParams().q || '']

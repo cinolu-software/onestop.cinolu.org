@@ -11,8 +11,7 @@ export const LINKS: ILink[] = [
   {
     name: 'Mon compte',
     path: '/account',
-    icon: UserCog,
-    exactUrl: true
+    icon: UserCog
   },
   {
     name: 'Les programmes',
