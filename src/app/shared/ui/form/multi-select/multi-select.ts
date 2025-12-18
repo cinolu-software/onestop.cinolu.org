@@ -9,7 +9,6 @@ import {
   HostListener,
   inject
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChevronDown, LucideAngularModule } from 'lucide-angular';
@@ -18,7 +17,7 @@ import { UiCheckbox } from '../checkbox/checkbox';
 
 @Component({
   selector: 'app-ui-multi-select',
-  imports: [CommonModule, FormsModule, LucideAngularModule, UiCheckbox],
+  imports: [FormsModule, LucideAngularModule, UiCheckbox],
   templateUrl: './multi-select.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiMultiSelect), multi: true }]
 })
@@ -42,7 +41,6 @@ export class UiMultiSelect implements ControlValueAccessor {
 
   constructor() {
     effect(() => {
-      // Update checkbox values when options change
       this.normalizedOptions();
       this.updateCheckboxValues();
     });
@@ -93,7 +91,7 @@ export class UiMultiSelect implements ControlValueAccessor {
     }
     const firstLabel = labels[0];
     const othersCount = labels.length - 1;
-    return `${firstLabel} et ${othersCount} autre.s`;
+    return `${firstLabel} et ${othersCount}`;
   });
 
   onChange!: (value: unknown[]) => void;

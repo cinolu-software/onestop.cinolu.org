@@ -1,10 +1,9 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { LucideAngularModule, ChevronLeft, ChevronRight } from 'lucide-angular';
 
 @Component({
   selector: 'app-ui-pagination',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [LucideAngularModule],
   templateUrl: './pagination.html'
 })
 export class UiPagination {

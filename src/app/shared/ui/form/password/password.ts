@@ -1,11 +1,10 @@
 import { Component, input, forwardRef, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
   selector: 'app-ui-password',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [LucideAngularModule],
   templateUrl: './password.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiPassword), multi: true }]
 })
@@ -50,7 +49,7 @@ export class UiPassword implements ControlValueAccessor {
     this.isMasked.update((masked) => !masked);
   }
 
-  inputClasses() {
+  inputClasses(): string {
     const baseClasses = 'ui-input ui-password';
     const invalidClass = this.invalid() ? 'ui-input-invalid' : '';
     const disabledClass = this.disabled() ? 'ui-input-disabled' : '';

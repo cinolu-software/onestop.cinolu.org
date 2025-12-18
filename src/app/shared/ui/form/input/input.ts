@@ -4,7 +4,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'app-ui-input',
   templateUrl: './input.html',
-  imports: [],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiInput), multi: true }]
 })
 export class UiInput implements ControlValueAccessor {
@@ -43,7 +42,7 @@ export class UiInput implements ControlValueAccessor {
     this.onChange(this.value);
   }
 
-  inputClasses() {
+  inputClasses(): string {
     const baseClasses = 'ui-input';
     const invalidClass = this.invalid() ? 'ui-input-invalid' : '';
     const disabledClass = this.disabled() ? 'ui-input-disabled' : '';

@@ -1,4 +1,4 @@
-import { Component, input, forwardRef, computed } from '@angular/core';
+import { Component, input, forwardRef, computed, signal, ElementRef, HostListener, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChevronDown, LucideAngularModule } from 'lucide-angular';
 
@@ -27,6 +27,8 @@ export class UiSelect implements ControlValueAccessor {
   optionValue = input<string>('');
   icons = { ChevronDown };
   value: unknown = '';
+  isOpen = signal(false);
+  #elementRef = inject(ElementRef);
 
   normalizedOptions = computed(() => {
     const opts = this.options();
@@ -43,8 +45,29 @@ export class UiSelect implements ControlValueAccessor {
     return opts as SelectOption[];
   });
 
+  selectedOption = computed(() => {
+    return this.normalizedOptions().find((opt) => String(opt.value) === String(this.value));
+  });
+
+  displayText = computed(() => {
+    const selected = this.selectedOption();
+    return selected ? selected.label : '';
+  });
+
   #onChangeCallback!: (value: unknown) => void;
   onTouched!: () => void;
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.isOpen()) {
+      return;
+    }
+    const target = event.target as HTMLElement;
+    const element = this.#elementRef.nativeElement;
+    if (!element.contains(target)) {
+      this.isOpen.set(false);
+    }
+  }
 
   writeValue(value: unknown): void {
     this.value = value ?? '';
@@ -62,16 +85,33 @@ export class UiSelect implements ControlValueAccessor {
     void _isDisabled;
   }
 
-  onChange(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.value = target.value;
-    this.#onChangeCallback(this.value);
+  toggleDropdown(): void {
+    if (!this.disabled()) {
+      this.isOpen.set(!this.isOpen());
+      if (this.isOpen()) {
+        this.onTouched();
+      }
+    }
   }
 
-  selectClasses() {
+  selectOption(option: SelectOption): void {
+    if (option.disabled) {
+      return;
+    }
+    this.value = option.value;
+    this.#onChangeCallback(this.value);
+    this.isOpen.set(false);
+    this.onTouched();
+  }
+
+  selectClasses(): string {
     const baseClasses = 'ui-select';
     const invalidClass = this.invalid() ? 'ui-select-invalid' : '';
     const disabledClass = this.disabled() ? 'ui-select-disabled' : '';
     return [baseClasses, invalidClass, disabledClass].filter(Boolean).join(' ');
+  }
+
+  isSelected(optionValue: unknown): boolean {
+    return String(this.value) === String(optionValue);
   }
 }

@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { LucideAngularModule, LucideIconData } from 'lucide-angular';
 
 @Component({
   selector: 'app-ui-tabs',
-  imports: [LucideAngularModule, CommonModule],
+  imports: [LucideAngularModule],
   templateUrl: './tabs.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -13,6 +12,7 @@ export class UiTabs {
   activeTab = input.required<string>();
   tabChange = output<string>();
   isLoading = input<boolean>(false);
+  counter = input<number>(0);
 
   onTabChange(tabName: string) {
     this.tabChange.emit(tabName);

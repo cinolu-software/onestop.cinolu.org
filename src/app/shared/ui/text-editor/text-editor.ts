@@ -1,5 +1,4 @@
 import { Component, input, forwardRef, signal, effect, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   LucideAngularModule,
@@ -14,7 +13,7 @@ import {
 
 @Component({
   selector: 'app-ui-text-editor',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [LucideAngularModule],
   templateUrl: './text-editor.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiTextEditor), multi: true }]
 })
@@ -40,7 +39,6 @@ export class UiTextEditor implements ControlValueAccessor, AfterViewInit {
       }
     });
 
-    // Update editor content when value changes and editor is available
     effect(() => {
       const currentValue = this.value();
       if (this.editorElement && currentValue !== undefined) {
@@ -53,7 +51,6 @@ export class UiTextEditor implements ControlValueAccessor, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Set initial value if it was set before view init
     if (this.editorElement && this.value()) {
       this.editorElement.nativeElement.innerHTML = this.value();
     }

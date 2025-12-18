@@ -1,5 +1,4 @@
 import { Component, input, forwardRef, signal, computed, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideAngularModule, Calendar, ChevronLeft, ChevronRight } from 'lucide-angular';
 
@@ -7,7 +6,7 @@ export type DatePickerView = 'date' | 'month' | 'year';
 
 @Component({
   selector: 'app-ui-datepicker',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [LucideAngularModule],
   templateUrl: './datepicker.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiDatepicker), multi: true }]
 })
@@ -149,7 +148,6 @@ export class UiDatepicker implements ControlValueAccessor {
       this.#onChangeCallback(newDate);
       this.closeCalendar();
     } else {
-      // Switch to date view
       this.currentViewDate.set(newDate);
     }
   }
@@ -257,7 +255,7 @@ export class UiDatepicker implements ControlValueAccessor {
       .replace('dd', day.toString().padStart(2, '0'));
   }
 
-  inputClasses() {
+  inputClasses(): string {
     const baseClasses = 'ui-datepicker';
     const invalidClass = this.invalid() ? 'ui-datepicker-invalid' : '';
     const disabledClass = this.disabled() ? 'ui-datepicker-disabled' : '';

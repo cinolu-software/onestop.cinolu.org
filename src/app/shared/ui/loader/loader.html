@@ -1,8 +1,0 @@
-<div class="flex items-center justify-center" [class]="containerClass()">
-  <div class="loader" [style.width.px]="size()" [style.height.px]="size()">
-    <div class="spinner" [ngClass]="spinnerColorClass()"></div>
-  </div>
-  @if (message()) {
-  <p class="mt-4 text-sm text-gray-600">{{ message() }}</p>
-  }
-</div>

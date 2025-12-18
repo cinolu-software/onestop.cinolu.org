@@ -1,10 +1,8 @@
 import { Component, input, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-ui-textarea',
-  imports: [CommonModule],
   templateUrl: './textarea.html',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UiTextarea), multi: true }]
 })

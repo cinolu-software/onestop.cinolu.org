@@ -1,19 +1,10 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-type ButtonVariant =
-  | 'primary'
-  | 'secondary'
-  | 'danger'
-  | 'info'
-  | 'contrast'
-  | 'success'
-  | 'outlined';
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'info' | 'contrast' | 'success' | 'outlined';
 type ButtonSize = 'small' | 'medium' | 'large';
 
 @Component({
   selector: 'app-ui-button',
-  imports: [CommonModule],
   templateUrl: './button.html'
 })
 export class UiButton {
@@ -32,15 +23,13 @@ export class UiButton {
     }
   }
 
-  buttonClasses() {
+  buttonClasses(): string {
     const baseClasses = 'ui-button w-full';
     const variantClass = `ui-button-${this.variant()}`;
     const sizeClass = `ui-button-${this.size()}`;
     const outlinedClass = this.outlined() ? 'ui-button-outlined' : '';
     const textClass = this.text() ? 'ui-button-text' : '';
     const disabledClass = this.disabled() ? 'ui-button-disabled' : '';
-    return [baseClasses, variantClass, sizeClass, outlinedClass, textClass, disabledClass]
-      .filter(Boolean)
-      .join(' ');
+    return [baseClasses, variantClass, sizeClass, outlinedClass, textClass, disabledClass].filter(Boolean).join(' ');
   }
 }
