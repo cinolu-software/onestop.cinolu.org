@@ -39,7 +39,7 @@ export class ListEvents {
   #destroyRef = inject(DestroyRef);
   searchForm: FormGroup;
   store = inject(EventsStore);
-  itemsPerPage = 10;
+  itemsPerPage = 20;
   icons = { Pencil, Trash, Search, Eye, Star, Funnel };
   queryParams = signal<FilterEventsDto>({
     page: this.#route.snapshot.queryParamMap.get('page'),
