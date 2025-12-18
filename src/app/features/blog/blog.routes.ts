@@ -7,8 +7,7 @@ export const blogRoutes: Routes = [
       {
         path: '',
         title: 'Liste des articles',
-        loadComponent: () =>
-          import('./pages/list-articles/list-articles').then((c) => c.ListArticles)
+        loadComponent: () => import('./pages/list-articles/list-articles').then((c) => c.ListArticles)
       },
       {
         path: 'add',
@@ -16,10 +15,9 @@ export const blogRoutes: Routes = [
         loadComponent: () => import('./pages/add-article/add-article').then((c) => c.AddArticle)
       },
       {
-        path: 'edit/:slug',
+        path: 'update/:slug',
         title: 'Modifier un article',
-        loadComponent: () =>
-          import('./pages/update-article/update-article').then((c) => c.UpdateArticle)
+        loadComponent: () => import('./pages/update-article/update-article').then((c) => c.UpdateArticle)
       }
     ]
   },

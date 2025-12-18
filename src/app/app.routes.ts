@@ -6,13 +6,13 @@ export const routes: Routes = [
   {
     path: '',
     component: Layout,
-    data: { layout: 'dashboard-layout' },
+    data: { layout: 'sidebar-layout' },
     canActivate: [authGuard],
     loadChildren: () => import('@features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes)
   },
   {
     component: Layout,
-    data: { layout: 'dashboard-layout' },
+    data: { layout: 'sidebar-layout' },
     canActivate: [authGuard],
     path: '',
     title: 'Les programmes',
@@ -20,7 +20,7 @@ export const routes: Routes = [
   },
   {
     component: Layout,
-    data: { layout: 'dashboard-layout' },
+    data: { layout: 'sidebar-layout' },
     canActivate: [authGuard],
     path: 'blog',
     title: 'Blog',
@@ -28,7 +28,7 @@ export const routes: Routes = [
   },
   {
     component: Layout,
-    data: { layout: 'dashboard-layout' },
+    data: { layout: 'sidebar-layout' },
     canActivate: [authGuard],
     path: '',
     title: 'Projets',
@@ -36,7 +36,7 @@ export const routes: Routes = [
   },
   {
     component: Layout,
-    data: { layout: 'dashboard-layout' },
+    data: { layout: 'sidebar-layout' },
     canActivate: [authGuard],
     path: '',
     title: 'Événements',
@@ -44,7 +44,7 @@ export const routes: Routes = [
   },
   {
     component: Layout,
-    data: { layout: 'dashboard-layout' },
+    data: { layout: 'sidebar-layout' },
     canActivate: [authGuard],
     path: '',
     title: 'Utilisateurs',
@@ -54,7 +54,7 @@ export const routes: Routes = [
     component: Layout,
     path: 'account',
     title: 'Mon compte',
-    data: { layout: 'dashboard-layout' },
+    data: { layout: 'sidebar-layout' },
     canActivate: [authGuard],
     loadChildren: () => import('@features/account/account.routes').then((m) => m.accountRoutes)
   },

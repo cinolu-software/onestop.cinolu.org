@@ -15,7 +15,7 @@ export const eventsRoutes: Routes = [
         loadComponent: () => import('./pages/add-event/add-event').then((c) => c.AddEventComponent)
       },
       {
-        path: 'edit/:slug',
+        path: 'update/:slug',
         title: 'Modifier un événement',
         loadComponent: () => import('./pages/update-event/update-event').then((c) => c.UpdateEvent)
       }
