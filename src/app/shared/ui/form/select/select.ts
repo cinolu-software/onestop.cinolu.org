@@ -26,7 +26,7 @@ export class UiSelect implements ControlValueAccessor {
   optionLabel = input<string>('');
   optionValue = input<string>('');
   icons = { ChevronDown };
-  value: unknown = '';
+  value = signal<unknown>('');
   isOpen = signal(false);
   #elementRef = inject(ElementRef);
 
@@ -46,7 +46,7 @@ export class UiSelect implements ControlValueAccessor {
   });
 
   selectedOption = computed(() => {
-    return this.normalizedOptions().find((opt) => String(opt.value) === String(this.value));
+    return this.normalizedOptions().find((opt) => String(opt.value) === String(this.value()));
   });
 
   displayText = computed(() => {
@@ -70,7 +70,7 @@ export class UiSelect implements ControlValueAccessor {
   }
 
   writeValue(value: unknown): void {
-    this.value = value ?? '';
+    this.value.set(value ?? '');
   }
 
   registerOnChange(fn: (value: unknown) => void): void {
@@ -98,8 +98,8 @@ export class UiSelect implements ControlValueAccessor {
     if (option.disabled) {
       return;
     }
-    this.value = option.value;
-    this.#onChangeCallback(this.value);
+    this.value.set(option.value);
+    this.#onChangeCallback(this.value());
     this.isOpen.set(false);
     this.onTouched();
   }
@@ -112,6 +112,6 @@ export class UiSelect implements ControlValueAccessor {
   }
 
   isSelected(optionValue: unknown): boolean {
-    return String(this.value) === String(optionValue);
+    return String(this.value()) === String(optionValue);
   }
 }
