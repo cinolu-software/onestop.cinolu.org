@@ -34,7 +34,7 @@ export class UiMultiSelect implements ControlValueAccessor {
   optionValue = input<string>('');
   icons = { ChevronDown };
 
-  value: unknown[] = [];
+  value = signal<unknown[]>([]);
   isOpen = signal(false);
   checkboxValues: Record<string, boolean> = {};
   #elementRef = inject(ElementRef);
@@ -76,7 +76,7 @@ export class UiMultiSelect implements ControlValueAccessor {
 
   selectedLabels = computed(() => {
     const selectedOptions = this.normalizedOptions().filter((opt) =>
-      this.value.some((v) => String(v) === String(opt.value))
+      this.value().some((v) => String(v) === String(opt.value))
     );
     return selectedOptions.map((opt) => opt.label);
   });
@@ -98,7 +98,7 @@ export class UiMultiSelect implements ControlValueAccessor {
   onTouched!: () => void;
 
   writeValue(value: unknown[]): void {
-    this.value = value || [];
+    this.value.set(value || []);
     this.updateCheckboxValues();
   }
 
@@ -128,25 +128,25 @@ export class UiMultiSelect implements ControlValueAccessor {
   }
 
   isSelected(optionValue: unknown): boolean {
-    return this.value.some((v) => String(v) === String(optionValue));
+    return this.value().some((v) => String(v) === String(optionValue));
   }
 
   toggleOption(optionValue: unknown): void {
     if (this.isSelected(optionValue)) {
-      this.value = this.value.filter((v) => String(v) !== String(optionValue));
+      this.value.update((current) => current.filter((v) => String(v) !== String(optionValue)));
     } else {
-      this.value = [...this.value, optionValue];
+      this.value.update((current) => [...current, optionValue]);
     }
     this.updateCheckboxValues();
-    this.onChange(this.value);
+    this.onChange(this.value());
     this.onTouched();
   }
 
   removeItem(optionValue: unknown, event: Event): void {
     event.stopPropagation();
-    this.value = this.value.filter((v) => String(v) !== String(optionValue));
+    this.value.update((current) => current.filter((v) => String(v) !== String(optionValue)));
     this.updateCheckboxValues();
-    this.onChange(this.value);
+    this.onChange(this.value());
     this.onTouched();
   }
 
@@ -164,13 +164,13 @@ export class UiMultiSelect implements ControlValueAccessor {
   onCheckboxChange(optionValue: unknown, checked: boolean): void {
     if (checked) {
       if (!this.isSelected(optionValue)) {
-        this.value = [...this.value, optionValue];
+        this.value.update((current) => [...current, optionValue]);
       }
     } else {
-      this.value = this.value.filter((v) => String(v) !== String(optionValue));
+      this.value.update((current) => current.filter((v) => String(v) !== String(optionValue)));
     }
     this.updateCheckboxValues();
-    this.onChange(this.value);
+    this.onChange(this.value());
     this.onTouched();
   }
 }

@@ -15,7 +15,7 @@
       (keyup.space)="toggleDropdown()"
       [id]="id()"
       [tabindex]="disabled() ? -1 : 0">
-      @if (value.length === 0) {
+      @if (value().length === 0) {
       <span class="ui-multi-select-placeholder">{{ placeholder() }}</span>
       } @else { @if (display() === 'comma') {
       <span class="ui-multi-select-value-comma">{{ displayText() }}</span>
